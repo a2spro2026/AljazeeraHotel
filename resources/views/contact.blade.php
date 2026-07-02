@@ -9,11 +9,11 @@
     .info-card h4{color:#fff;font-size:16px;margin-bottom:6px;letter-spacing:1px}
     .info-card p{color:var(--text-muted);font-size:14px}
     .c-form{background:rgba(255,255,255,.03);border:1px solid rgba(201,162,39,.15);border-radius:14px;padding:32px}
-    .c-form h3{font-family:'Cormorant Garamond',serif;font-size:28px;color:#fff;margin-bottom:22px}
+    .c-form h3{font-family:'Cormorant Garamond',serif;font-size:28px;color:#fff;margin-bottom:22px;text-align:center}
     .c-form input,.c-form textarea{
         width:100%;margin-bottom:16px;padding:13px 15px;border-radius:8px;
         background:rgba(0,0,0,.25);border:1px solid rgba(201,162,39,.2);
-        color:var(--cream);font-family:'Montserrat',sans-serif;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;
+        color:var(--cream);font-family:'Montserrat',sans-serif;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;text-align:center;
     }
     .c-form input:focus,.c-form textarea:focus{border-color:var(--gold);box-shadow:0 0 12px rgba(201,162,39,.3)}
     .c-form textarea{min-height:130px;resize:vertical}

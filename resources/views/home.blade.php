@@ -73,7 +73,7 @@
     .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
 
     /* ---- SERVICES ---- */
-    .section{padding:90px 48px;max-width:1240px;margin:0 auto}
+    .section{padding:90px 48px;max-width:var(--content-max,1140px);margin:0 auto;width:100%}
     .section-title{text-align:center;margin-bottom:56px}
     .section-title h2{
         font-family:'Cormorant Garamond',serif;font-size:44px;color:#fff;letter-spacing:4px;

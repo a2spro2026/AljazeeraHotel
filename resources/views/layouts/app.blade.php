@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Al Jazeera Hotel') — Al Jazeera Hotel</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +16,7 @@
             --gold-light:#e6c75a;
             --cream:#f5f1e6;
             --text-muted:#b9bfd0;
+            --content-max:1140px;
         }
         *{margin:0;padding:0;box-sizing:border-box}
         html{scroll-behavior:smooth}
@@ -183,6 +185,7 @@
             padding:40px 48px;text-align:center;color:var(--text-muted);font-size:13px;
         }
         footer .gold{color:var(--gold)}
+        footer .site-copyright{margin-top:14px;font-size:13px;letter-spacing:.3px;color:var(--text-muted)}
 
         @media(max-width:860px){
             .navbar{padding:14px 22px}
@@ -206,9 +209,26 @@
             .mega-grid{grid-template-columns:1fr}
         }
     </style>
+    @include('partials.data-center-styles')
     @stack('styles')
 </head>
 <body>
+<script>
+(function(){
+    var V='aj_reset_v3';
+    if(localStorage.getItem('aj_data_version')!==V){
+        ['aj_frns','aj_bons','aj_regls','aj_cfg_hotel','aj_cfg_users','aj_cfg_commerciaux','aj_cfg_auth','aj_ch_resa','aj_ch_status','aj_public_resa'].forEach(function(k){localStorage.removeItem(k);});
+        for(var i=localStorage.length-1;i>=0;i--){
+            var k=localStorage.key(i);
+            var v=localStorage.getItem(k);
+            if(v&&/khadija@gds\.com/i.test(v)){
+                localStorage.setItem(k,v.replace(/khadija@gds\.com/gi,'Direction'));
+            }
+        }
+        localStorage.setItem('aj_data_version',V);
+    }
+})();
+</script>
     <nav class="navbar" id="navbar">
         <a href="{{ route('home') }}" class="brand">
             <img src="{{ asset('images/logo.png') }}" alt="Al Jazeera Hotel" class="brand-mark">
@@ -239,7 +259,7 @@
                             @endif
                             <label class="field">
                                 <span class="fi">&#128100;</span>
-                                <input type="text" name="login" placeholder="Identifiant" autocomplete="username" required>
+                                <input type="text" name="login" placeholder="{{ $space[0] }}" autocomplete="username" required>
                             </label>
                             <label class="field">
                                 <span class="fi">&#128274;</span>
@@ -270,7 +290,7 @@
     <footer>
         <p class="serif" style="font-size:22px;color:#fff;margin-bottom:8px">Al Jazeera Hotel</p>
         <p>Luxe, confort et élégance au cœur de la ville.</p>
-        <p style="margin-top:14px">&copy; {{ date('Y') }} <span class="gold">Al Jazeera Hotel</span> — Tous droits réservés.</p>
+        @include('partials.copyright')
     </footer>
 
     <script>

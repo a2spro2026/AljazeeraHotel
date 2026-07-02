@@ -4,22 +4,23 @@ return [
 
     'admin' => [
         'label'    => 'Direction',
-        'login'    => env('SPACE_DIRECTION_LOGIN', 'direction'),
-        'password' => env('SPACE_DIRECTION_PASSWORD', 'Direction@2026'),
+        'login'    => env('SPACE_DIRECTION_LOGIN', 'Direction'),
+        'password' => env('SPACE_DIRECTION_PASSWORD', 'password'),
         'route'    => 'admin',
+        'manager_logins' => ['Direction'],
     ],
 
     'facturation' => [
         'label'    => 'Facturation',
-        'login'    => env('SPACE_FACTURATION_LOGIN', 'facturation'),
-        'password' => env('SPACE_FACTURATION_PASSWORD', 'Facture@2026'),
+        'login'    => env('SPACE_FACTURATION_LOGIN', 'Facturation'),
+        'password' => env('SPACE_FACTURATION_PASSWORD', 'password'),
         'route'    => 'facturation',
     ],
 
     'commercial' => [
         'label'    => 'Commercial',
-        'login'    => env('SPACE_COMMERCIAL_LOGIN', 'commercial'),
-        'password' => env('SPACE_COMMERCIAL_PASSWORD', 'Commercial@2026'),
+        'login'    => env('SPACE_COMMERCIAL_LOGIN', 'Commercial'),
+        'password' => env('SPACE_COMMERCIAL_PASSWORD', 'password'),
         'route'    => 'commercial',
     ],
 

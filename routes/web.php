@@ -30,8 +30,16 @@ Route::post('/espace/{space}/login', function (Request $request, string $space) 
         'password' => 'required|string',
     ]);
 
+    $legacyLogins = ['khadija@gds.com'];
+    if (in_array(strtolower($credentials['login']), array_map('strtolower', $legacyLogins), true)) {
+        return redirect()->route('home')
+            ->with('login_space', $space)
+            ->with('login_error', 'Identifiant obsolète. Utilisez : '.$config['login']);
+    }
+
     if ($credentials['login'] === $config['login'] && $credentials['password'] === $config['password']) {
         $request->session()->put("space_$space", true);
+        $request->session()->put("space_{$space}_login", $config['login']);
 
         return redirect()->route($config['route']);
     }
@@ -44,6 +52,7 @@ Route::post('/espace/{space}/login', function (Request $request, string $space) 
 // Déconnexion d'un espace
 Route::post('/espace/{space}/logout', function (Request $request, string $space) {
     $request->session()->forget("space_$space");
+    $request->session()->forget("space_{$space}_login");
 
     return redirect()->route('home');
 })->name('space.logout');
@@ -63,6 +72,11 @@ foreach ($protected as $name => $view) {
             return redirect()->route('home')
                 ->with('login_space', $name)
                 ->with('login_error', "Veuillez vous connecter à l'espace $label.");
+        }
+
+        $storedLogin = session("space_{$name}_login");
+        if ($name === 'admin' && $storedLogin && strcasecmp($storedLogin, 'khadija@gds.com') === 0) {
+            session(['space_admin_login' => config('admin_spaces.admin.login', 'Direction')]);
         }
 
         return view($view);
