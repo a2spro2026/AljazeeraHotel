@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+    Options -MultiViews -Indexes
+    RewriteEngine On
+
+    # Autoriser les fichiers et dossiers existants à la racine
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Toutes les autres requêtes vers le dossier public
+    RewriteRule ^(.*)$ public/$1 [L,QSA]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    # Fallback si mod_rewrite n'est pas disponible
+    DirectoryIndex index.php
+</IfModule>
