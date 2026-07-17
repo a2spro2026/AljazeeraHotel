@@ -10,94 +10,118 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root{
-            --navy:#0a1736;--navy-deep:#060f24;--panel:#0d1b3d;
-            --gold:#c9a227;--gold-light:#e6c75a;--gold-pale:#f3e4a8;
-            --cream:#f5f1e6;--muted:#aab0c4;
-            --sb-w:300px;--topbar-h:78px;
-            --content-max:1140px;
+            --navy:#0a1736;--navy-deep:#060f24;--navy-mid:#0f2a5c;
+            --gold:#c5a059;--gold-light:#d4b06a;--gold-pale:#f3e4a8;
+            --cream:#f5f1e6;--muted:#6b7280;--text-dark:#1a2332;
+            --surface:#f7f5f0;--white:#ffffff;--panel:var(--white);
+            --sb-w:280px;--topbar-h:74px;--content-max:1280px;
+            --border-gold:rgba(197,160,89,.18);
+            --shadow-soft:0 4px 20px rgba(0,0,0,.06);
+            --shadow-card:0 8px 32px rgba(197,160,89,.1);
         }
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Montserrat',sans-serif;background:var(--navy-deep);color:var(--cream)}
+        html{scroll-behavior:smooth}
+        body{font-family:'Montserrat',sans-serif;background:var(--surface);color:var(--text-dark)}
         a{text-decoration:none;color:inherit}
         .serif{font-family:'Cormorant Garamond',serif}
         .admin-wrap{display:flex;min-height:100vh}
 
-        /* SIDEBAR — navigation professionnelle */
+        @keyframes navShimmer{
+            0%{background-position:200% center}
+            100%{background-position:-200% center}
+        }
+        @keyframes brandPulse{
+            0%,100%{box-shadow:0 0 12px rgba(197,160,89,.35),0 0 28px rgba(197,160,89,.15)}
+            50%{box-shadow:0 0 22px rgba(212,176,106,.65),0 0 48px rgba(197,160,89,.35)}
+        }
+
+        /* SIDEBAR — style lumineux (interface publique) */
         .sidebar{
             width:var(--sb-w);flex-shrink:0;
-            background:
-                radial-gradient(ellipse 90% 60% at 0% 0%, rgba(201,162,39,.09) 0%, transparent 50%),
-                radial-gradient(ellipse 70% 50% at 100% 100%, rgba(40,80,160,.12) 0%, transparent 45%),
-                linear-gradient(180deg, #0c1a38 0%, var(--navy-deep) 100%);
-            border-right:1px solid rgba(255,255,255,.06);
-            box-shadow:8px 0 40px rgba(0,0,0,.4);
+            background:linear-gradient(180deg,rgba(255,255,255,.99) 0%,rgba(247,245,240,.97) 100%);
+            border-right:1px solid var(--border-gold);
+            box-shadow:4px 0 32px rgba(10,23,54,.06),0 0 60px rgba(197,160,89,.04);
             display:flex;flex-direction:column;
             position:fixed;top:0;bottom:0;left:0;z-index:40;
             transition:transform .35s cubic-bezier(.4,0,.2,1);
+        }
+        .sidebar::after{
+            content:'';position:absolute;top:0;right:0;bottom:0;width:1px;pointer-events:none;
+            background:linear-gradient(180deg,transparent,rgba(197,160,89,.25),var(--gold),rgba(197,160,89,.25),transparent);
+            background-size:100% 200%;animation:navShimmer 8s linear infinite;opacity:.6;
         }
         .admin-wrap.sb-collapsed .sidebar{transform:translateX(-100%)}
         .sb-brand{
             position:relative;z-index:1;cursor:pointer;
             display:flex;align-items:center;gap:14px;
-            padding:24px 20px 20px;
-            border-bottom:1px solid rgba(255,255,255,.06);
+            padding:20px 18px 18px;
+            border-bottom:1px solid var(--border-gold);
             transition:background .25s ease;
         }
-        .sb-brand:hover{background:rgba(255,255,255,.03)}
+        .sb-brand:hover{background:rgba(197,160,89,.06)}
         .sb-logo-wrap{
             flex-shrink:0;width:52px;height:52px;border-radius:14px;
-            background:linear-gradient(145deg, rgba(201,162,39,.2), rgba(10,23,54,.8));
-            border:1px solid rgba(201,162,39,.35);
+            background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(247,245,240,.9));
+            border:1px solid rgba(197,160,89,.3);
             display:flex;align-items:center;justify-content:center;padding:5px;
+            box-shadow:0 0 20px rgba(197,160,89,.15);
+            position:relative;
+        }
+        .sb-logo-wrap::before{
+            content:'';position:absolute;inset:-3px;border-radius:16px;
+            background:radial-gradient(circle,rgba(212,176,106,.3),transparent 70%);
+            animation:brandPulse 3.5s ease-in-out infinite;z-index:-1;
         }
         .sb-brand img{height:40px;width:auto;border-radius:5px}
         .sb-brand-text{display:flex;flex-direction:column;gap:3px;min-width:0}
         .sb-est{
             font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:2.8px;text-transform:uppercase;
-            color:rgba(201,162,39,.75);font-weight:600;
+            color:var(--gold);font-weight:600;
         }
         .sb-brand-text b{
-            font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;letter-spacing:.5px;
-            color:#fff;line-height:1.1;
+            font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:.5px;
+            color:var(--text-dark);line-height:1.1;
         }
-        .sb-stars{font-size:8px;letter-spacing:2px;color:var(--gold);opacity:.7}
+        .sb-stars{font-size:8px;letter-spacing:2px;color:var(--gold-light)}
         .sb-nav{
             flex:1;overflow-y:auto;overflow-x:hidden;
-            padding:16px 12px 12px;display:flex;flex-direction:column;gap:8px;
+            padding:14px 10px 12px;display:flex;flex-direction:column;gap:6px;
             position:relative;z-index:1;
-            scrollbar-width:thin;scrollbar-color:rgba(201,162,39,.25) transparent;
+            scrollbar-width:thin;scrollbar-color:rgba(197,160,89,.25) transparent;
         }
         .sb-nav::-webkit-scrollbar{width:3px}
-        .sb-nav::-webkit-scrollbar-thumb{background:rgba(201,162,39,.3);border-radius:3px}
+        .sb-nav::-webkit-scrollbar-thumb{background:rgba(197,160,89,.3);border-radius:3px}
         .sb-section-label{
             font-family:'Montserrat',sans-serif;font-size:9px;font-weight:600;
             letter-spacing:2.2px;text-transform:uppercase;
-            color:rgba(170,176,196,.65);padding:10px 10px 6px;
+            color:var(--gold);padding:14px 12px 8px;
             display:flex;align-items:center;gap:8px;
+            opacity:.9;
         }
         .sb-section-label::before{
-            content:'';width:4px;height:4px;border-radius:50%;
-            background:var(--gold);opacity:.6;flex-shrink:0;
+            content:'';width:14px;height:1px;border-radius:1px;
+            background:linear-gradient(90deg,var(--gold),transparent);flex-shrink:0;
         }
-        .sb-section-label:first-child{padding-top:2px}
+        .sb-section-label:first-child{padding-top:4px}
         .sb-group{
-            background:rgba(255,255,255,.025);
-            border:1px solid rgba(255,255,255,.06);
-            border-radius:14px;padding:4px;margin-bottom:2px;
-            transition:border-color .25s, box-shadow .25s;
+            background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.75) 100%);
+            border:1px solid rgba(197,160,89,.14);
+            border-radius:14px;padding:5px;margin-bottom:4px;
+            box-shadow:0 2px 10px rgba(10,23,54,.03);
+            transition:border-color .25s,box-shadow .25s;
         }
         .sb-group:has(.sb-item.active),
         .sb-group:has(.sb-sub.open){
-            border-color:rgba(201,162,39,.18);
-            box-shadow:0 4px 20px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.04);
+            border-color:rgba(197,160,89,.32);
+            box-shadow:0 6px 20px rgba(197,160,89,.1),inset 0 1px 0 rgba(255,255,255,.95);
         }
-        .sb-group:has(.sb-item.active) .sb-parent{color:var(--gold-pale)}
+        .sb-group:has(.sb-item.active) .sb-parent{color:var(--navy-mid)}
         .sb-item,.sb-parent{
             display:flex;align-items:center;gap:11px;
             padding:10px 12px;border-radius:10px;
-            color:rgba(245,241,230,.82);font-size:13px;font-weight:500;
+            color:#5c6478;font-size:13px;font-weight:500;
             cursor:pointer;border:1px solid transparent;
-            transition:background .22s ease, color .22s ease, border-color .22s ease;
+            transition:background .22s ease,color .22s ease,border-color .22s ease,box-shadow .22s ease;
             position:relative;
         }
         .sb-item .lbl,.sb-parent .lbl{
@@ -107,122 +131,194 @@
         .ic-wrap{
             flex-shrink:0;width:34px;height:34px;border-radius:10px;
             display:flex;align-items:center;justify-content:center;
-            background:rgba(255,255,255,.04);
-            border:1px solid rgba(255,255,255,.08);
-            color:var(--gold-light);
+            background:rgba(197,160,89,.1);
+            border:1px solid rgba(197,160,89,.18);
+            color:var(--gold);
             transition:all .22s ease;
         }
         .ic-wrap svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
 
-        /* Tableau de bord */
         .sb-item.sb-pilot{
             margin-bottom:4px;padding:12px 14px;
-            background:linear-gradient(135deg, rgba(201,162,39,.14) 0%, rgba(201,162,39,.04) 100%);
-            border:1px solid rgba(201,162,39,.22);
+            background:linear-gradient(135deg,rgba(197,160,89,.12) 0%,rgba(197,160,89,.04) 100%);
+            border:1px solid rgba(197,160,89,.22);
             min-height:50px;
         }
-        .sb-item.sb-pilot .lbl{font-weight:600;font-size:13.5px;color:#fff}
+        .sb-item.sb-pilot .lbl{font-weight:600;font-size:13.5px;color:var(--text-dark)}
         .sb-item.sb-pilot .ic-wrap{
-            background:rgba(201,162,39,.18);border-color:rgba(201,162,39,.35);
-            box-shadow:0 0 16px rgba(201,162,39,.15);
+            background:rgba(197,160,89,.15);border-color:rgba(197,160,89,.3);
+            box-shadow:0 0 12px rgba(197,160,89,.12);
         }
         .sb-item.sb-pilot:hover{
-            background:linear-gradient(135deg, rgba(201,162,39,.2) 0%, rgba(201,162,39,.08) 100%);
-            border-color:rgba(201,162,39,.35);
+            background:linear-gradient(135deg,rgba(197,160,89,.18) 0%,rgba(197,160,89,.08) 100%);
+            border-color:rgba(197,160,89,.35);
         }
         .sb-item.sb-pilot.active{
-            background:linear-gradient(135deg, #c9a227 0%, #e6c75a 100%);
-            border-color:rgba(255,255,255,.2);
-            box-shadow:0 6px 24px rgba(201,162,39,.35);
+            background:linear-gradient(135deg,var(--gold-light),var(--gold));
+            border-color:rgba(255,255,255,.4);
+            box-shadow:0 6px 24px rgba(197,160,89,.3);
             color:#1a1304;
         }
         .sb-item.sb-pilot.active .lbl{color:#1a1304;font-weight:700}
-        .sb-item.sb-pilot.active .ic-wrap{color:#1a1304;background:rgba(26,19,4,.1);border-color:rgba(26,19,4,.2)}
+        .sb-item.sb-pilot.active .ic-wrap{color:#1a1304;background:rgba(26,19,4,.08);border-color:rgba(26,19,4,.15)}
+
+        .sb-item:hover{
+            background:rgba(197,160,89,.08);
+            color:var(--text-dark);
+            border-color:rgba(197,160,89,.14);
+        }
+        .sb-item:hover .ic-wrap{
+            border-color:rgba(197,160,89,.4);
+            background:rgba(197,160,89,.16);
+            color:var(--gold);
+        }
+        .sb-item.active:not(.sb-pilot){
+            background:linear-gradient(135deg,rgba(197,160,89,.16) 0%,rgba(197,160,89,.07) 100%);
+            color:var(--navy-mid);
+            border-color:rgba(197,160,89,.3);
+            box-shadow:0 4px 16px rgba(197,160,89,.1),inset 0 1px 0 rgba(255,255,255,.8);
+        }
+        .sb-item.active:not(.sb-pilot) .lbl{font-weight:600;color:var(--navy-mid)}
+        .sb-item.active:not(.sb-pilot) .ic-wrap{
+            background:linear-gradient(135deg,var(--gold),var(--gold-light));
+            border-color:transparent;color:#1a1304;
+            box-shadow:0 4px 12px rgba(197,160,89,.3);
+        }
+        .sb-group.sb-group-flat{
+            background:linear-gradient(180deg,#fff 0%,rgba(247,245,240,.85) 100%);
+            padding:6px;
+        }
+        .sb-group.sb-group-flat .sb-item{padding:11px 12px;margin-bottom:2px}
+        .sb-group.sb-group-flat .sb-item:last-child{margin-bottom:0}
 
         .sb-item::before,.sb-parent::before{display:none}
         .sb-item::after{display:none}
-        .sb-parent:hover{background:rgba(255,255,255,.04);color:#fff}
-        .sb-parent:hover .ic-wrap{border-color:rgba(201,162,39,.3);background:rgba(201,162,39,.08)}
-        .sb-parent.expanded{background:rgba(201,162,39,.06);color:var(--gold-pale)}
-        .sb-parent.expanded .ic-wrap{border-color:rgba(201,162,39,.35);background:rgba(201,162,39,.1)}
+        .sb-parent:hover{background:rgba(197,160,89,.08);color:var(--text-dark)}
+        .sb-parent:hover .ic-wrap{border-color:rgba(197,160,89,.35);background:rgba(197,160,89,.14)}
+        .sb-parent.expanded{
+            background:linear-gradient(135deg,rgba(197,160,89,.12),rgba(197,160,89,.05));
+            color:var(--navy-mid);
+            border-color:rgba(197,160,89,.2);
+        }
+        .sb-parent.expanded .ic-wrap{
+            border-color:rgba(197,160,89,.4);
+            background:rgba(197,160,89,.18);
+            box-shadow:0 0 14px rgba(197,160,89,.15);
+        }
         .sb-parent .caret{
             margin-left:auto;flex-shrink:0;width:22px;height:22px;
             display:flex;align-items:center;justify-content:center;border-radius:6px;
-            background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
-            font-size:9px;color:rgba(201,162,39,.8);
-            transition:transform .3s cubic-bezier(.4,0,.2,1);
+            background:rgba(197,160,89,.08);border:1px solid rgba(197,160,89,.15);
+            font-size:9px;color:var(--gold);
+            transition:transform .3s cubic-bezier(.4,0,.2,1),background .2s,border-color .2s;
         }
-        .sb-parent.expanded .caret{transform:rotate(180deg);background:rgba(201,162,39,.15);border-color:rgba(201,162,39,.3)}
+        .sb-parent.expanded .caret{transform:rotate(180deg);background:rgba(197,160,89,.18);border-color:rgba(197,160,89,.35)}
         .sb-parent .sb-badge{
             font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;
-            background:rgba(255,255,255,.06);color:rgba(170,176,196,.8);
-            border:1px solid rgba(255,255,255,.08);margin-left:4px;flex-shrink:0;
+            background:rgba(197,160,89,.08);color:var(--muted);
+            border:1px solid rgba(197,160,89,.15);margin-left:4px;flex-shrink:0;
         }
         .sb-group:has(.sb-item.active) .sb-parent .sb-badge,
-        .sb-parent.expanded .sb-badge{background:rgba(201,162,39,.15);color:var(--gold-light);border-color:rgba(201,162,39,.25)}
+        .sb-parent.expanded .sb-badge{background:rgba(197,160,89,.18);color:var(--gold);border-color:rgba(197,160,89,.3)}
 
         .sb-sub{
-            display:none;flex-direction:column;gap:1px;
-            padding:2px 8px 8px 46px;position:relative;
+            display:none;flex-direction:column;gap:2px;
+            padding:4px 8px 10px 46px;position:relative;
+            margin-top:2px;
         }
         .sb-sub::before{
-            content:'';position:absolute;left:28px;top:4px;bottom:10px;width:1px;
-            background:linear-gradient(180deg, rgba(201,162,39,.35), rgba(201,162,39,.08));
+            content:'';position:absolute;left:28px;top:2px;bottom:12px;width:2px;border-radius:2px;
+            background:linear-gradient(180deg,var(--gold),rgba(197,160,89,.15));
+            opacity:.55;
         }
-        .sb-sub.open{display:flex}
+        .sb-sub.open{display:flex;animation:sbSubIn .28s ease}
+        @keyframes sbSubIn{
+            from{opacity:0;transform:translateY(-4px)}
+            to{opacity:1;transform:translateY(0)}
+        }
         .sb-sub .sb-item{
-            padding:8px 10px 8px 12px;border-radius:8px;min-height:36px;
-            font-size:12px;color:rgba(245,241,230,.72);
+            padding:9px 12px 9px 14px;border-radius:9px;min-height:38px;
+            font-size:12px;color:var(--muted);
+            background:rgba(255,255,255,.45);
+            border:1px solid transparent;
         }
-        .sb-sub .sb-item .lbl{font-size:12px;font-weight:400}
+        .sb-sub .sb-item .lbl{font-size:12px;font-weight:500}
+        .sb-sub .sb-item .ic-wrap{display:none}
         .sb-dot{
-            flex-shrink:0;width:6px;height:6px;border-radius:50%;
-            border:1.5px solid rgba(201,162,39,.45);margin-left:-20px;margin-right:4px;
+            flex-shrink:0;width:7px;height:7px;border-radius:50%;
+            border:1.5px solid rgba(197,160,89,.45);margin-left:-22px;margin-right:6px;
+            background:transparent;
             transition:all .2s ease;
         }
-        .sb-sub .sb-item:hover{background:rgba(255,255,255,.05);color:#fff}
-        .sb-sub .sb-item:hover .sb-dot{border-color:var(--gold-light);background:rgba(201,162,39,.3)}
-        .sb-sub .sb-item.active{
-            background:rgba(201,162,39,.12);color:var(--gold-pale);font-weight:500;
-            border:1px solid rgba(201,162,39,.2);
+        .sb-sub .sb-item:hover{
+            background:rgba(197,160,89,.1);color:var(--text-dark);
+            border-color:rgba(197,160,89,.18);
         }
-        .sb-sub .sb-item.active .sb-dot{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(201,162,39,.5)}
+        .sb-sub .sb-item:hover .sb-dot{border-color:var(--gold);background:rgba(197,160,89,.35);box-shadow:0 0 8px rgba(197,160,89,.35)}
+        .sb-sub .sb-item.active{
+            background:linear-gradient(135deg,rgba(197,160,89,.18),rgba(197,160,89,.08));
+            color:var(--navy-mid);font-weight:600;
+            border:1px solid rgba(197,160,89,.28);
+            box-shadow:0 2px 10px rgba(197,160,89,.1);
+        }
+        .sb-sub .sb-item.active .lbl{font-weight:600}
+        .sb-sub .sb-item.active .sb-dot{background:var(--gold);border-color:var(--gold);box-shadow:0 0 10px rgba(197,160,89,.45)}
 
         .sb-foot{
-            position:relative;z-index:1;padding:16px 14px 18px;
-            border-top:1px solid rgba(255,255,255,.06);
-            background:rgba(0,0,0,.2);
+            position:relative;z-index:1;padding:14px 14px 16px;
+            border-top:1px solid var(--border-gold);
+            background:linear-gradient(180deg,rgba(247,245,240,.7),rgba(255,255,255,.95));
         }
+        .sb-profile{
+            display:flex;align-items:center;gap:10px;padding:10px 8px 12px;margin-bottom:8px;
+            border-bottom:1px solid var(--border-gold);
+        }
+        .sb-profile-av{
+            width:36px;height:36px;border-radius:50%;flex-shrink:0;
+            background:linear-gradient(135deg,var(--gold),var(--gold-light));
+            color:#1a1304;font-weight:700;font-size:14px;
+            display:flex;align-items:center;justify-content:center;
+            box-shadow:0 4px 12px rgba(197,160,89,.3);
+        }
+        .sb-profile-info{flex:1;min-width:0}
+        .sb-profile-info b{display:block;font-size:13px;color:var(--text-dark);line-height:1.2}
+        .sb-profile-info span{font-size:10px;color:var(--muted)}
+        .sb-profile-caret{font-size:10px;color:var(--gold)}
         .sb-foot-note{
             font-size:9px;letter-spacing:1.8px;text-transform:uppercase;
-            color:rgba(170,176,196,.5);text-align:center;margin-bottom:10px;
+            color:var(--muted);text-align:center;margin-bottom:10px;
             font-family:'Montserrat',sans-serif;font-weight:500;
         }
         .logout-btn{
             width:100%;
-            background:rgba(180,60,60,.12);
-            border:1px solid rgba(230,120,120,.25);color:#e8a0a0;
+            background:rgba(255,255,255,.9);
+            border:1px solid rgba(200,80,80,.25);color:#c05050;
             padding:11px 14px;border-radius:10px;
             font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;
             letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .22s ease;
         }
         .logout-btn:hover{
-            background:rgba(200,70,70,.22);border-color:rgba(240,150,150,.4);color:#fff;
+            background:rgba(200,70,70,.08);border-color:rgba(200,80,80,.4);color:#a03030;
         }
 
         /* MAIN */
-        .main{flex:1;margin-left:var(--sb-w);display:flex;flex-direction:column;min-width:0;transition:margin-left .35s cubic-bezier(.4,0,.2,1)}
+        .main{flex:1;margin-left:var(--sb-w);display:flex;flex-direction:column;min-width:0;transition:margin-left .35s cubic-bezier(.4,0,.2,1);background:var(--surface)}
         .admin-wrap.sb-collapsed .main{margin-left:0}
         .topbar{
             display:flex;align-items:center;justify-content:space-between;gap:16px;
-            padding:16px 28px;
-            background:rgba(8,16,36,.88);
-            backdrop-filter:blur(16px);
-            border-bottom:1px solid rgba(255,255,255,.06);
-            box-shadow:0 2px 20px rgba(0,0,0,.2);
+            padding:12px 28px;
+            background:linear-gradient(180deg,rgba(255,255,255,.99) 0%,rgba(247,245,240,.96) 100%);
+            backdrop-filter:blur(18px) saturate(1.4);
+            border-bottom:1px solid transparent;
+            box-shadow:0 4px 24px rgba(10,23,54,.05);
             position:sticky;top:0;z-index:30;
         }
-        .topbar h1{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:.3px;color:#fff;line-height:1.2}
+        .topbar::after{
+            content:'';position:absolute;left:0;right:0;bottom:0;height:1px;
+            background:linear-gradient(90deg,transparent,rgba(197,160,89,.15),var(--gold),rgba(212,176,106,.8),var(--gold),rgba(197,160,89,.15),transparent);
+            background-size:200% 100%;animation:navShimmer 6s linear infinite;opacity:.85;
+        }
+        .topbar h1{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:.3px;color:var(--text-dark);line-height:1.2}
         .topbar-left{display:flex;align-items:center;gap:14px;min-width:0}
         .topbar-brand{
             display:flex;align-items:center;gap:12px;cursor:pointer;
@@ -230,107 +326,130 @@
             transition:all .25s ease;min-width:0;
         }
         .topbar-brand:hover{
-            background:rgba(201,162,39,.08);border-color:rgba(201,162,39,.2);
-            box-shadow:0 0 18px rgba(201,162,39,.15);
+            background:rgba(197,160,89,.06);border-color:rgba(197,160,89,.18);
+            box-shadow:0 0 18px rgba(197,160,89,.1);
         }
         .top-logo-wrap{
             flex-shrink:0;width:44px;height:44px;border-radius:11px;
-            background:radial-gradient(circle at 30% 30%, rgba(230,199,90,.3), rgba(10,23,54,.85));
-            border:1px solid rgba(201,162,39,.4);
-            box-shadow:0 0 16px rgba(201,162,39,.3);
+            background:linear-gradient(145deg,#fff,rgba(247,245,240,.95));
+            border:1px solid rgba(197,160,89,.3);
+            box-shadow:0 2px 14px rgba(197,160,89,.12);
             display:flex;align-items:center;justify-content:center;padding:5px;
         }
         .top-logo-wrap img{height:32px;width:auto;border-radius:4px}
         .topbar-brand-text{display:flex;flex-direction:column;gap:1px;min-width:0}
         .topbar-brand-text .top-est{
-            font-family:'Playfair Display',serif;font-size:10px;letter-spacing:2.5px;
-            text-transform:uppercase;color:var(--gold-light);opacity:.85;
+            font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:2.5px;
+            text-transform:uppercase;color:var(--gold);font-weight:600;
         }
         .topbar-brand-text h1{font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:320px}
         .topbar .who{display:flex;align-items:center;gap:12px}
         .topbar .who img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
-        .topbar .who b{font-size:14px;color:#fff;display:block}
+        .topbar .who b{font-size:14px;color:var(--text-dark);display:block}
         .topbar .who span{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1px}
         .hamb{display:none;background:none;border:none;color:var(--gold);font-size:24px;cursor:pointer;padding:4px}
         .sb-toggle{
             flex-shrink:0;width:42px;height:42px;border-radius:11px;cursor:pointer;
             display:flex;align-items:center;justify-content:center;
-            background:linear-gradient(145deg, rgba(201,162,39,.15), rgba(10,23,54,.6));
-            border:1px solid rgba(201,162,39,.35);color:var(--gold-light);
-            box-shadow:0 2px 12px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.06);
+            background:linear-gradient(145deg,#fff,rgba(247,245,240,.95));
+            border:1px solid rgba(197,160,89,.25);color:var(--gold);
+            box-shadow:0 2px 14px rgba(197,160,89,.1);
             transition:all .28s ease;
         }
         .sb-toggle:hover{
-            border-color:rgba(201,162,39,.55);color:#fff;
-            box-shadow:0 4px 18px rgba(201,162,39,.25);
+            border-color:rgba(197,160,89,.45);color:var(--text-dark);
+            box-shadow:0 4px 18px rgba(197,160,89,.2);
             transform:scale(1.04);
         }
         .sb-toggle svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
         .sb-toggle .ico-expand{display:none}
         .sb-toggle.is-collapsed .ico-collapse{display:none}
         .sb-toggle.is-collapsed .ico-expand{display:block}
-        .content{padding:30px;flex:1;display:flex;flex-direction:column;align-items:center}
+        .content{padding:30px;flex:1;display:flex;flex-direction:column;align-items:center;background:var(--surface)}
         .panel{width:100%;max-width:var(--content-max);margin-left:auto;margin-right:auto}
-        .panel#ch-etat{max-width:1320px}
-        .panel-stack{width:100%;display:flex;flex-direction:column;gap:0}
-        .block{width:100%}
-        .content.dash-view{padding-top:150px}
-        .content.ech-view{padding-top:248px}
-        @media(max-width:1200px){.content.ech-view{padding-top:320px}}
-        @media(max-width:600px){.content.ech-view{padding-top:380px}}
+        .panel#ch-etat{max-width:100%}
+        .content.dash-view,.content.kpi-view,.content.ch-view{padding-top:150px}
+        .content.ech-view{padding-top:12px}
+        @media(max-width:1200px){
+            .content.ch-view{padding-top:260px}
+            .content.kpi-view{padding-top:150px}
+            .content.ech-view{padding-top:12px}
+        }
+        @media(max-width:640px){
+            .content.ch-view{padding-top:360px}
+            .content.kpi-view{padding-top:260px}
+        }
+        @media(max-width:600px){.content.ech-view{padding-top:12px}}
 
         .panel{display:none;animation:fade .35s ease}
         .panel.active{display:block}
+        #ch-etat.panel,#ch-etat.panel.active{animation:none!important;transform:none!important}
         @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-        .panel h2{font-family:'Cormorant Garamond',serif;font-size:30px;color:#fff;margin-bottom:6px;text-align:center}
+        .panel h2{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--text-dark);margin-bottom:6px;text-align:center;letter-spacing:1px}
         .panel .sub{color:var(--muted);font-size:14px;margin-bottom:26px;text-align:center}
 
         .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;margin-bottom:30px}
-        .dash-kpi{
+        /* Barres KPI fixes — toutes sections */
+        .dash-kpi,.ch-kpi,.section-kpi{
             position:fixed;top:var(--topbar-h);left:var(--sb-w);right:0;z-index:25;
-            padding:22px 32px 24px;
-            background:linear-gradient(180deg, rgba(8,16,38,.97) 0%, rgba(6,15,36,.94) 100%);
-            border-bottom:1px solid rgba(201,162,39,.18);
-            box-shadow:0 12px 40px rgba(0,0,0,.22);
+            padding:18px 32px 20px;
+            background:linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(247,245,240,.96) 100%);
+            border-bottom:1px solid var(--border-gold);
+            box-shadow:0 8px 32px rgba(10,23,54,.06);
             backdrop-filter:blur(16px);
             transition:left .35s cubic-bezier(.4,0,.2,1);
         }
-        .admin-wrap.sb-collapsed .dash-kpi{left:0}
-        .dash-kpi.hidden{display:none}
+        .admin-wrap.sb-collapsed .dash-kpi,
+        .admin-wrap.sb-collapsed .ch-kpi,
+        .admin-wrap.sb-collapsed .section-kpi{left:0}
+        .dash-kpi.hidden,.ch-kpi.hidden,.section-kpi.hidden{display:none!important}
+        @media(max-width:900px){
+            .dash-kpi,.ch-kpi,.section-kpi{left:0;padding:18px 20px}
+        }
         .dash-kpi .cards{
             display:grid;grid-template-columns:repeat(5, minmax(0, 1fr));
             gap:20px;margin-bottom:0;max-width:100%;
         }
-        @media(max-width:1200px){.dash-kpi .cards{grid-template-columns:repeat(3, minmax(0, 1fr))}}
-        @media(max-width:900px){.dash-kpi{left:0;padding:18px 20px}}
+        .section-kpi .cards{
+            display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+            gap:16px;margin-bottom:0;max-width:100%;
+        }
+        .section-kpi[data-cols="3"] .cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+        @media(max-width:1200px){
+            .dash-kpi .cards{grid-template-columns:repeat(3, minmax(0, 1fr))}
+            .section-kpi .cards,.section-kpi[data-cols="3"] .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+        }
         @media(max-width:768px){.dash-kpi .cards{grid-template-columns:repeat(2, minmax(0, 1fr));gap:14px}}
+        @media(max-width:640px){.section-kpi .cards{grid-template-columns:1fr}}
+        /* Aucune carte ne bascule au survol */
+        .card,.card:hover,
+        .section-kpi .card,.dash-kpi .card,
+        .cd-card,.cd-card:hover,
+        .ch-cat-card,.ch-cat-card:hover,
+        .ch-etage-card,.ch-etage-card:hover,
+        .rm-card,.rm-card:hover,
+        .ech-kpi .ek-card,.ech-kpi .ek-card:hover{
+            transform:none!important;translate:none!important;
+        }
 
-        /* KPI — éclairage stylé hôtel */
+        /* KPI — cartes lumineuses */
         @keyframes kpiGlow{
-            0%,100%{box-shadow:0 4px 24px rgba(0,0,0,.2), 0 0 20px rgba(201,162,39,.08), inset 0 1px 0 rgba(255,255,255,.06)}
-            50%{box-shadow:0 6px 28px rgba(0,0,0,.22), 0 0 32px rgba(201,162,39,.14), inset 0 1px 0 rgba(255,255,255,.08)}
-        }
-        @keyframes textShine{
-            0%,100%{text-shadow:0 0 12px rgba(255,255,255,.25), 0 0 24px rgba(201,162,39,.15)}
-            50%{text-shadow:0 0 18px rgba(255,255,255,.4), 0 0 36px rgba(201,162,39,.28)}
-        }
-        @keyframes goldPulse{
-            0%,100%{text-shadow:0 0 14px rgba(230,199,90,.45), 0 0 28px rgba(201,162,39,.25)}
-            50%{text-shadow:0 0 22px rgba(243,228,168,.65), 0 0 42px rgba(201,162,39,.4)}
+            0%,100%{box-shadow:var(--shadow-soft),0 0 16px rgba(197,160,89,.06)}
+            50%{box-shadow:0 8px 28px rgba(197,160,89,.12),0 0 24px rgba(197,160,89,.08)}
         }
         .dash-kpi .card{
             position:relative;overflow:hidden;
             padding:18px 16px 16px 18px;border-radius:14px;
-            background:linear-gradient(160deg, rgba(26,48,92,.94) 0%, rgba(14,28,58,.97) 50%, rgba(10,20,44,.98) 100%);
-            border:1px solid rgba(201,162,39,.22);
-            box-shadow:0 4px 24px rgba(0,0,0,.2), 0 0 20px rgba(201,162,39,.08), inset 0 1px 0 rgba(255,255,255,.06);
-            transition:transform .35s cubic-bezier(.4,0,.2,1), box-shadow .35s ease, border-color .35s ease;
+            background:var(--white);
+            border:1px solid var(--border-gold);
+            box-shadow:var(--shadow-soft);
+            transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s ease,border-color .35s ease;
             min-height:100px;
             animation:kpiGlow 4s ease-in-out infinite;
         }
         .dash-kpi .card::before{
             content:'';position:absolute;inset:0;pointer-events:none;border-radius:14px;
-            background:radial-gradient(ellipse 80% 60% at 100% 0%, rgba(201,162,39,.08) 0%, transparent 55%);
+            background:radial-gradient(ellipse 80% 60% at 100% 0%,rgba(197,160,89,.06) 0%,transparent 55%);
         }
         .dash-kpi .card .kpi-accent{
             position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0;
@@ -343,79 +462,66 @@
         .dash-kpi .card.kpi-soldedu .kpi-accent{background:linear-gradient(180deg,#e0c8f8,#a87fe0);box-shadow:0 0 16px rgba(168,127,224,.55)}
         .dash-kpi .card.kpi-caisse .kpi-accent{background:linear-gradient(180deg,var(--gold-light),var(--gold));box-shadow:0 0 18px rgba(201,162,39,.75)}
         .dash-kpi .card:hover{
-            transform:translateY(-4px);
-            border-color:rgba(201,162,39,.45);
-            box-shadow:0 18px 44px rgba(0,0,0,.3), 0 0 40px rgba(201,162,39,.2), inset 0 1px 0 rgba(255,255,255,.1);
+            transform:none;
+            border-color:rgba(197,160,89,.35);
+            box-shadow:0 8px 28px rgba(197,160,89,.1);
             animation:none;
         }
         .dash-kpi .kpi-icon-wrap{
             position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:10px;
             display:flex;align-items:center;justify-content:center;
-            background:linear-gradient(145deg, rgba(201,162,39,.15), rgba(201,162,39,.04));
-            border:1px solid rgba(201,162,39,.25);
-            color:var(--gold-light);
-            box-shadow:0 0 14px rgba(201,162,39,.2), inset 0 1px 0 rgba(255,255,255,.1);
-            filter:drop-shadow(0 0 6px rgba(201,162,39,.35));
+            background:rgba(197,160,89,.1);
+            border:1px solid rgba(197,160,89,.22);
+            color:var(--gold);
             transition:all .35s ease;
         }
         .dash-kpi .kpi-icon-wrap svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
         .dash-kpi .card:hover .kpi-icon-wrap{
-            color:#fff;border-color:rgba(201,162,39,.5);
-            background:linear-gradient(145deg, rgba(201,162,39,.28), rgba(201,162,39,.1));
-            box-shadow:0 0 22px rgba(201,162,39,.45), inset 0 1px 0 rgba(255,255,255,.15);
-            filter:drop-shadow(0 0 10px rgba(201,162,39,.55));
+            color:var(--navy-mid);border-color:rgba(197,160,89,.4);
+            background:rgba(197,160,89,.18);
         }
         .dash-kpi .kpi-body{position:relative;z-index:1;padding-right:44px}
         .dash-kpi .card .l{
             display:block;margin:0 0 10px;
             font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;
             letter-spacing:2px;text-transform:uppercase;
-            color:rgba(230,199,90,.85);
-            text-shadow:0 0 10px rgba(201,162,39,.25);
+            color:var(--gold);
         }
         .dash-kpi .card .n{
-            font-family:'Playfair Display',serif;font-size:clamp(22px, 1.85vw, 28px);
-            font-weight:700;line-height:1;color:#fff;letter-spacing:-.2px;
-            text-shadow:0 0 12px rgba(255,255,255,.25), 0 0 24px rgba(201,162,39,.15);
-            animation:textShine 3.5s ease-in-out infinite;
+            font-family:'Cormorant Garamond',serif;font-size:clamp(22px,1.85vw,28px);
+            font-weight:700;line-height:1;color:var(--navy-mid);letter-spacing:-.2px;
         }
         .dash-kpi .card .n.money{
             display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;
-            font-variant-numeric:tabular-nums;animation:none;
+            font-variant-numeric:tabular-nums;
         }
         .dash-kpi .card .n.money .amt{
-            font-family:'Playfair Display',serif;font-size:clamp(20px, 1.7vw, 26px);
-            font-weight:700;color:#f3e4a8;
-            text-shadow:0 0 14px rgba(230,199,90,.5), 0 0 28px rgba(201,162,39,.3);
-            animation:goldPulse 3s ease-in-out infinite;
+            font-family:'Cormorant Garamond',serif;font-size:clamp(20px,1.7vw,26px);
+            font-weight:700;color:var(--navy-mid);
         }
         .dash-kpi .card .n.money .unit{
             font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;
-            letter-spacing:2px;color:rgba(230,199,90,.9);text-transform:uppercase;
-            text-shadow:0 0 8px rgba(201,162,39,.35);
+            letter-spacing:2px;color:var(--muted);text-transform:uppercase;
         }
         .dash-kpi .card .kpi-shine{
             position:absolute;inset:0;pointer-events:none;
-            background:linear-gradient(105deg, transparent 35%, rgba(255,255,255,.06) 50%, transparent 65%);
+            background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.4) 50%,transparent 65%);
             transform:translateX(-100%);transition:transform .7s ease;
         }
         .dash-kpi .card:hover .kpi-shine{transform:translateX(100%)}
-        .dash-kpi .card.kpi-chambres .n{text-shadow:0 0 12px rgba(168,196,255,.35), 0 0 24px rgba(91,141,239,.2)}
-        .dash-kpi .card.kpi-occupees .n{text-shadow:0 0 12px rgba(158,232,184,.35), 0 0 24px rgba(60,184,120,.2)}
-        .dash-kpi .card.kpi-charges .n.money .amt{text-shadow:0 0 14px rgba(255,176,176,.45), 0 0 28px rgba(208,96,96,.25)}
-        .dash-kpi .card.kpi-soldedu .n.money .amt{text-shadow:0 0 14px rgba(212,184,240,.45), 0 0 28px rgba(155,111,212,.25)}
         #dashboard.panel.active{min-height:calc(100vh - var(--topbar-h) - 130px)}
-        .card{background:var(--panel);border:1px solid rgba(201,162,39,.15);border-radius:14px;padding:22px}
-        .card .n{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--gold);line-height:1}
+        .card{background:var(--white);border:1px solid var(--border-gold);border-radius:14px;padding:22px;box-shadow:var(--shadow-soft)}
+        .card .n{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--navy-mid);line-height:1}
         .card .l{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-top:6px}
 
-        .block{background:var(--panel);border:1px solid rgba(201,162,39,.15);border-radius:14px;padding:22px;margin-bottom:22px}
-        .block h3{font-size:16px;color:#fff;margin-bottom:16px;letter-spacing:.5px;text-align:center}
+        .block{background:var(--white);border:1px solid var(--border-gold);border-radius:14px;padding:22px;margin-bottom:22px;box-shadow:var(--shadow-soft)}
+        .block h3{font-size:16px;color:var(--text-dark);margin-bottom:16px;letter-spacing:.5px;text-align:center;font-weight:600}
         table{width:100%;border-collapse:collapse}
-        th,td{padding:12px 14px;text-align:center;vertical-align:middle;font-size:13.5px;border-bottom:1px solid rgba(255,255,255,.06)}
-        th{color:var(--gold);text-transform:uppercase;font-size:11px;letter-spacing:1px}
-        td{color:var(--cream)}
+        th,td{padding:12px 14px;text-align:center;vertical-align:middle;font-size:13.5px;border-bottom:1px solid rgba(0,0,0,.06)}
+        th{color:var(--gold);text-transform:uppercase;font-size:11px;letter-spacing:1px;background:rgba(197,160,89,.06)}
+        td{color:var(--text-dark)}
         tr:last-child td{border-bottom:none}
+        tr:hover td{background:rgba(197,160,89,.04)}
         .tag{padding:3px 11px;border-radius:20px;font-size:11px;white-space:nowrap}
         .tag.ok{background:rgba(80,200,120,.15);color:#7fd99b}
         .tag.warn{background:rgba(230,199,90,.15);color:var(--gold-light)}
@@ -425,38 +531,38 @@
         .row-head{display:flex;align-items:center;justify-content:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 
         /* SUB-TABS & FORMS (Fournisseur) */
-        .subtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;border-bottom:1px solid rgba(201,162,39,.15);padding-bottom:12px}
-        .subtab{background:rgba(255,255,255,.03);border:1px solid rgba(201,162,39,.2);color:var(--cream);padding:10px 16px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .2s}
-        .subtab:hover{border-color:var(--gold)}
-        .subtab.active{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304;font-weight:600;box-shadow:0 0 14px rgba(201,162,39,.4)}
+        .subtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;border-bottom:1px solid var(--border-gold);padding-bottom:12px}
+        .subtab{background:var(--white);border:1px solid var(--border-gold);color:var(--text-dark);padding:10px 16px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .2s}
+        .subtab:hover{border-color:var(--gold);background:rgba(197,160,89,.06)}
+        .subtab.active{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304;font-weight:600;box-shadow:0 4px 16px rgba(197,160,89,.25)}
         .subpanel{display:none}
         .subpanel.active{display:block;animation:fade .3s ease}
         .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:16px}
         .form-flex{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:4px;justify-content:center}
         .form-flex .field{display:flex;flex-direction:column;margin-bottom:0}
-        .ibtn{background:transparent;border:1px solid rgba(201,162,39,.3);color:var(--cream);width:32px;height:32px;border-radius:7px;cursor:pointer;font-size:14px;margin-right:5px;transition:all .2s}
-        .ibtn:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,162,39,.12)}
-        .ibtn.del:hover{border-color:#e89;color:#e89;background:rgba(230,120,120,.12)}
+        .ibtn{background:var(--white);border:1px solid var(--border-gold);color:var(--text-dark);width:32px;height:32px;border-radius:7px;cursor:pointer;font-size:14px;margin-right:5px;transition:all .2s}
+        .ibtn:hover{border-color:var(--gold);color:var(--gold);background:rgba(197,160,89,.08)}
+        .ibtn.del:hover{border-color:#e89;color:#c05050;background:rgba(230,120,120,.08)}
         .actions{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 4px;justify-content:center;align-items:center}
         .actions .ibtn{align-self:center;flex-shrink:0}
         .btn{border:none;cursor:pointer;padding:10px 18px;border-radius:8px;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;transition:all .2s}
         .btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304}
-        .btn.ghost{background:transparent;border:1px solid rgba(201,162,39,.4);color:var(--gold)}
-        .btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(201,162,39,.3)}
-        .tbtn{background:transparent;border:1px solid rgba(201,162,39,.3);color:var(--cream);padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;margin-right:4px;transition:all .2s}
+        .btn.ghost{background:var(--white);border:1px solid rgba(197,160,89,.35);color:var(--gold)}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(197,160,89,.25)}
+        .tbtn{background:var(--white);border:1px solid var(--border-gold);color:var(--text-dark);padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;margin-right:4px;transition:all .2s}
         .tbtn:hover{border-color:var(--gold);color:var(--gold)}
-        .tbtn.del:hover{border-color:#e89;color:#e89}
-        .table-wrap{overflow-x:auto}
+        .tbtn.del:hover{border-color:#e89;color:#c05050}
+        .table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border-gold);background:var(--white)}
         .empty-row td{text-align:center;color:var(--muted);padding:22px}
         .bal-list{display:flex;flex-direction:column;gap:8px;margin:6px 0 16px}
-        .bal-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:rgba(0,0,0,.2);border:1px solid rgba(201,162,39,.15);border-radius:10px;padding:12px 14px;justify-content:center}
-        .bal-row label.chk{display:flex;align-items:center;gap:8px;font-size:14px;color:#fff;min-width:180px}
-        .bal-row .mnt{color:var(--cream);font-weight:600;font-size:14px;min-width:130px}
-        .bal-row .sld{color:var(--gold);font-weight:600;font-size:14px;min-width:130px}
-        .bal-row input.pay{width:130px;background:rgba(0,0,0,.25);border:1px solid rgba(201,162,39,.2);border-radius:7px;padding:8px 10px;color:var(--cream);font-size:13px;outline:none}
+        .bal-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--white);border:1px solid var(--border-gold);border-radius:10px;padding:12px 14px;justify-content:center;box-shadow:var(--shadow-soft)}
+        .bal-row label.chk{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-dark);min-width:180px}
+        .bal-row .mnt{color:var(--text-dark);font-weight:600;font-size:14px;min-width:130px}
+        .bal-row .sld{color:var(--navy-mid);font-weight:600;font-size:14px;min-width:130px}
+        .bal-row input.pay{width:130px;background:var(--white);border:1px solid var(--border-gold);border-radius:7px;padding:8px 10px;color:var(--text-dark);font-size:13px;outline:none}
         .bal-block{margin-bottom:14px}
-        .ra-bons-wrap{margin:10px 0 4px;padding:12px 14px;background:rgba(0,0,0,.18);border:1px solid rgba(201,162,39,.12);border-radius:10px}
-        .ra-bons-wrap .hint{margin-bottom:8px;color:var(--gold-light);font-weight:600}
+        .ra-bons-wrap{margin:10px 0 4px;padding:12px 14px;background:rgba(247,245,240,.8);border:1px solid var(--border-gold);border-radius:10px}
+        .ra-bons-wrap .hint{margin-bottom:8px;color:var(--gold);font-weight:600}
         .ra-bons-table{width:100%;border-collapse:collapse;margin-top:4px}
         .ra-bons-table th,.ra-bons-table td{font-size:12.5px;padding:9px 10px;text-align:center}
         .ra-bons-table th{color:var(--gold);font-size:10px;text-transform:uppercase;letter-spacing:1px}
@@ -466,9 +572,9 @@
         .ech-sticky{
             position:fixed;top:var(--topbar-h);left:var(--sb-w);right:0;z-index:25;
             padding:16px 32px 14px;
-            background:linear-gradient(180deg,rgba(8,16,38,.97) 0%,rgba(6,15,36,.94) 100%);
-            border-bottom:1px solid rgba(201,162,39,.18);
-            box-shadow:0 12px 40px rgba(0,0,0,.22);
+            background:linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(247,245,240,.96) 100%);
+            border-bottom:1px solid var(--border-gold);
+            box-shadow:0 8px 32px rgba(10,23,54,.06);
             backdrop-filter:blur(16px);
             transition:left .35s cubic-bezier(.4,0,.2,1);
         }
@@ -479,7 +585,7 @@
         .ech-leg{
             display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:20px;
             font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
-            background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.06);color:var(--cream);
+            background:var(--white);border:1px solid var(--border-gold);color:var(--text-dark);
         }
         .ech-leg i{width:10px;height:10px;border-radius:50%;flex-shrink:0;box-shadow:0 0 8px currentColor}
         .ech-leg.st-occupee i{background:#45c878;color:#45c878}
@@ -494,41 +600,39 @@
         @media(max-width:600px){.ech-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}}
         .ech-kpi .ek-card{
             position:relative;overflow:hidden;padding:16px 14px 14px 16px;border-radius:12px;
-            background:linear-gradient(155deg,rgba(24,44,84,.92),rgba(10,20,44,.96));
-            border:1px solid rgba(201,162,39,.14);
-            box-shadow:0 4px 20px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.04);
+            background:var(--white);
+            border:1px solid var(--border-gold);
+            box-shadow:var(--shadow-soft);
             transition:transform .3s ease,box-shadow .3s ease;
         }
-        .ech-kpi .ek-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.25)}
+        .ech-kpi .ek-card:hover{transform:none;box-shadow:0 4px 18px rgba(197,160,89,.08)}
         .ech-kpi .ek-accent{position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:0 3px 3px 0}
-        .ech-kpi .ek-lbl{display:block;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:rgba(170,176,196,.9);margin-bottom:8px}
-        .ech-kpi .ek-val{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff;line-height:1}
+        .ech-kpi .ek-lbl{display:block;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+        .ech-kpi .ek-val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--navy-mid);line-height:1}
         .ech-kpi .ek-card.ek-total .ek-accent{background:linear-gradient(180deg,#c8dcff,#6b9ef5);box-shadow:0 0 12px rgba(107,158,245,.5)}
         .ech-kpi .ek-card.ek-dispo .ek-accent{background:linear-gradient(180deg,#f5e6a0,#e6c75a);box-shadow:0 0 12px rgba(230,199,90,.5)}
         .ech-kpi .ek-card.ek-occu .ek-accent{background:linear-gradient(180deg,#b0f0c8,#45c878);box-shadow:0 0 12px rgba(69,200,120,.5)}
         .ech-kpi .ek-card.ek-resa .ek-accent{background:linear-gradient(180deg,#a8c8ff,#5b9ef5);box-shadow:0 0 12px rgba(91,158,245,.5)}
         .ech-kpi .ek-card.ek-nett .ek-accent{background:linear-gradient(180deg,#b8c0d0,#8a94a8);box-shadow:0 0 12px rgba(138,148,168,.4)}
         .ech-kpi .ek-card.ek-maint .ek-accent{background:linear-gradient(180deg,#ffc0c0,#e07070);box-shadow:0 0 12px rgba(224,112,112,.5)}
-        .ech-kpi .ek-card.ek-dispo .ek-val{color:#f3e4a8;text-shadow:0 0 14px rgba(230,199,90,.35)}
-        .ech-kpi .ek-card.ek-occu .ek-val{color:#9ee8b8;text-shadow:0 0 14px rgba(69,200,120,.3)}
-        .ech-kpi .ek-card.ek-resa .ek-val{color:#a8c8ff;text-shadow:0 0 14px rgba(91,158,245,.3)}
-        .ech-filters{
-            display:flex;flex-wrap:wrap;gap:8px;margin-bottom:0;padding-bottom:0;border-bottom:none;
-        }
+        .ech-kpi .ek-card.ek-dispo .ek-val{color:var(--gold)}
+        .ech-kpi .ek-card.ek-occu .ek-val{color:#2a9d5c}
+        .ech-kpi .ek-card.ek-resa .ek-val{color:#4a7fd4}
         .ech-filter{
-            background:rgba(255,255,255,.03);border:1px solid rgba(201,162,39,.18);color:var(--cream);
+            background:var(--white);border:1px solid var(--border-gold);color:var(--text-dark);
             padding:8px 16px;border-radius:20px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;
             letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:all .25s ease;
         }
-        .ech-filter:hover{border-color:rgba(201,162,39,.45);color:#fff}
-        .ech-filter.active{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304;border-color:transparent;box-shadow:0 0 16px rgba(201,162,39,.35)}
+        .ech-filter:hover{border-color:rgba(197,160,89,.45);background:rgba(197,160,89,.06)}
+        .ech-filter.active{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304;border-color:transparent;box-shadow:0 4px 16px rgba(197,160,89,.25)}
+        .ech-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:0;padding-bottom:0;border-bottom:none}
         .ech-section{margin-bottom:36px}
         .ech-section-head{
             display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-bottom:12px;
-            border-bottom:1px solid rgba(201,162,39,.1);
+            border-bottom:1px solid var(--border-gold);
         }
         .ech-section-head h3{
-            font-family:'Cormorant Garamond',serif;font-size:22px;color:#fff;margin:0;letter-spacing:.3px;
+            font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text-dark);margin:0;letter-spacing:.3px;
         }
         .ech-section-head .ech-count{
             font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:1.5px;
@@ -542,9 +646,9 @@
         .rm-card{
             position:relative;border-radius:12px;overflow:hidden;cursor:pointer;
             display:flex;flex-direction:column;height:100%;
-            background:linear-gradient(165deg,rgba(18,34,68,.95),rgba(8,16,36,.98));
-            border:1px solid rgba(255,255,255,.06);
-            box-shadow:0 4px 20px rgba(0,0,0,.2);
+            background:var(--white);
+            border:1px solid var(--border-gold);
+            box-shadow:var(--shadow-soft);
             transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s ease,border-color .35s ease;
         }
         .rm-card::after{
@@ -586,18 +690,18 @@
         .rm-card.st-reservee::before{background:linear-gradient(180deg,#a8c8ff,#5b9ef5);box-shadow:0 0 16px rgba(91,158,245,.6)}
         .rm-card.st-nettoyage::before{background:linear-gradient(180deg,#c0c8d8,#8a94a8);box-shadow:0 0 12px rgba(138,148,168,.5)}
         .rm-card.st-maintenance::before{background:linear-gradient(180deg,#ffc0c0,#e07070);box-shadow:0 0 16px rgba(224,112,112,.6)}
-        .rm-card:hover{transform:translateY(-4px)}
-        .rm-card.st-occupee:hover{box-shadow:0 14px 36px rgba(0,0,0,.28),0 0 32px rgba(69,200,120,.38)}
-        .rm-card.st-disponible:hover{box-shadow:0 14px 36px rgba(0,0,0,.28),0 0 32px rgba(230,199,90,.36)}
-        .rm-card.st-reservee:hover{box-shadow:0 14px 36px rgba(0,0,0,.28),0 0 32px rgba(91,158,245,.38)}
-        .rm-card.st-nettoyage:hover{box-shadow:0 14px 36px rgba(0,0,0,.28),0 0 28px rgba(138,148,168,.28)}
-        .rm-card.st-maintenance:hover{box-shadow:0 14px 36px rgba(0,0,0,.28),0 0 32px rgba(224,112,112,.38)}
+        .rm-card:hover{transform:none!important}
+        .rm-card.st-occupee:hover{box-shadow:0 4px 18px rgba(0,0,0,.2),0 0 24px rgba(69,200,120,.28)}
+        .rm-card.st-disponible:hover{box-shadow:0 4px 18px rgba(0,0,0,.2),0 0 24px rgba(230,199,90,.28)}
+        .rm-card.st-reservee:hover{box-shadow:0 4px 18px rgba(0,0,0,.2),0 0 24px rgba(91,158,245,.28)}
+        .rm-card.st-nettoyage:hover{box-shadow:0 4px 18px rgba(0,0,0,.2),0 0 20px rgba(138,148,168,.25)}
+        .rm-card.st-maintenance:hover{box-shadow:0 4px 18px rgba(0,0,0,.2),0 0 24px rgba(224,112,112,.28)}
         .rm-img{position:relative;height:118px;overflow:hidden}
-        .rm-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-        .rm-card:hover .rm-img img{transform:scale(1.06)}
+        .rm-img img{width:100%;height:100%;object-fit:cover;transform:none!important;transition:none!important}
+        .rm-card:hover .rm-img img{transform:none!important}
         .rm-img::after{
             content:'';position:absolute;inset:0;
-            background:linear-gradient(180deg,transparent 35%,rgba(6,12,28,.88) 100%);
+            background:linear-gradient(180deg,transparent 35%,rgba(26,35,50,.55) 100%);
         }
         .rm-badge{
             display:block;width:100%;margin-top:auto;flex-shrink:0;
@@ -635,16 +739,15 @@
             letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px;
         }
         .rm-body h4{
-            font-family:'Cormorant Garamond',serif;font-size:17px;color:#fff;margin:0 0 5px;line-height:1.2;
+            font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--text-dark);margin:0 0 5px;line-height:1.2;
         }
         .rm-desc{
-            font-size:11.5px;line-height:1.45;color:rgba(170,176,196,.92);margin:0 0 8px;
+            font-size:11.5px;line-height:1.45;color:var(--muted);margin:0 0 8px;
             display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
         }
         .rm-foot{display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;margin-bottom:0}
         .rm-price{
-            font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--gold-light);
-            text-shadow:0 0 12px rgba(201,162,39,.25);
+            font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--navy-mid);
         }
         .rm-unit{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:600;letter-spacing:.8px;color:var(--muted);text-transform:uppercase}
         .rm-card.hidden-filter{display:none}
@@ -652,49 +755,51 @@
         /* Modal chambres */
         .rm-modal-overlay{
             display:none;position:fixed;inset:0;z-index:60;
-            background:rgba(4,10,24,.72);backdrop-filter:blur(6px);
+            background:rgba(10,23,54,.45);backdrop-filter:blur(8px);
             align-items:center;justify-content:center;padding:24px;
         }
         .rm-modal-overlay.show{display:flex}
         .rm-modal{
             position:relative;width:min(720px,100%);max-height:90vh;overflow-y:auto;
-            background:linear-gradient(165deg,rgba(18,34,68,.98),rgba(8,16,36,.99));
-            border:1px solid rgba(201,162,39,.25);border-radius:16px;
-            box-shadow:0 24px 64px rgba(0,0,0,.45),0 0 40px rgba(201,162,39,.08);
+            background:linear-gradient(165deg,#fff,rgba(247,245,240,.98));
+            border:1px solid rgba(197,160,89,.25);border-radius:16px;
+            box-shadow:0 24px 64px rgba(0,0,0,.12),0 0 60px rgba(197,160,89,.08);
             padding:28px 28px 24px;animation:fade .3s ease;
         }
         .rm-modal-close{
             position:absolute;top:14px;right:16px;width:34px;height:34px;border-radius:8px;
-            background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-            color:var(--cream);font-size:22px;line-height:1;cursor:pointer;transition:all .2s;
+            background:var(--white);border:1px solid var(--border-gold);
+            color:var(--text-dark);font-size:22px;line-height:1;cursor:pointer;transition:all .2s;
         }
-        .rm-modal-close:hover{border-color:var(--gold);color:#fff}
-        .rm-msg{text-align:center;padding:28px 16px 12px}
-        .rm-msg .rm-msg-dot{
-            width:56px;height:56px;border-radius:50%;margin:0 auto 18px;
-            display:flex;align-items:center;justify-content:center;font-size:26px;
-            box-shadow:0 0 28px currentColor;
-        }
+        .rm-modal-close:hover{border-color:var(--gold);color:var(--gold)}
         .rm-msg h3{
-            font-family:'Cormorant Garamond',serif;font-size:32px;color:#fff;margin:0 0 8px;
+            font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--text-dark);margin:0 0 8px;
         }
-        .rm-msg.st-occupee .rm-msg-dot{background:rgba(69,200,120,.18);color:#9ee8b8;box-shadow:0 0 28px rgba(69,200,120,.45)}
-        .rm-msg.st-reservee .rm-msg-dot{background:rgba(91,158,245,.18);color:#a8c8ff;box-shadow:0 0 28px rgba(91,158,245,.45)}
-        .rm-msg.st-nettoyage .rm-msg-dot{background:rgba(138,148,168,.18);color:#c0c8d8;box-shadow:0 0 28px rgba(138,148,168,.35)}
-        .rm-msg.st-maintenance .rm-msg-dot{background:rgba(224,112,112,.18);color:#ffc0c0;box-shadow:0 0 28px rgba(224,112,112,.45)}
-        .rm-form-head{margin-bottom:20px;padding-right:36px}
-        .rm-form-head h3{font-family:'Cormorant Garamond',serif;font-size:26px;color:#fff;margin:0 0 4px}
+        .rm-form-head h3{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--text-dark);margin:0 0 4px}
         .rm-form-head p{color:var(--muted);font-size:13px;margin:0}
         .rm-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
         @media(max-width:600px){.rm-form-grid{grid-template-columns:1fr}}
         .rm-form-grid .field.span2{grid-column:1/-1}
         .rm-form-grid .field input[readonly]{opacity:.75;cursor:default}
         .rm-form-grid .field textarea,.rm-form-grid .field select{
-            width:100%;background:rgba(0,0,0,.28);border:1px solid rgba(201,162,39,.22);
-            border-radius:8px;padding:10px 12px;color:#e8eaf0;font-size:13px;font-family:inherit;
-            resize:vertical;min-height:72px;
+            width:100%;background:var(--white);border:1px solid var(--border-gold);
+            border-radius:8px;padding:10px 12px;color:var(--text-dark);font-size:13px;font-family:inherit;
+            resize:vertical;min-height:72px;outline:none;
         }
         .rm-form-grid .field select{min-height:auto;cursor:pointer}
+        .rm-form-grid .field input{
+            width:100%;background:var(--white);border:1px solid var(--border-gold);
+            border-radius:8px;padding:11px 13px;color:var(--text-dark);font-size:14px;outline:none;
+        }
+        .rm-form-grid .field input:focus,
+        .rm-form-grid .field textarea:focus,
+        .rm-form-grid .field select:focus{
+            border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.12);
+        }
+        .rm-edit-simple .field label{
+            color:var(--gold);font-weight:600;font-size:11px;letter-spacing:1px;
+            text-transform:uppercase;margin-bottom:6px;display:block;text-align:left;
+        }
         .rm-form-totals{
             display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;
             margin:18px 0 20px;padding:16px;background:rgba(0,0,0,.22);
@@ -766,41 +871,43 @@
         /* ===== CHAMBRES DISPONIBLES & CARROUSEL ===== */
         .cd-section{margin-bottom:36px}
         .cd-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(201,162,39,.12)}
-        .cd-section-head h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:#fff;margin:0}
+        .cd-section-head h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--text-dark);margin:0}
         .cd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-        .cd-card{background:linear-gradient(165deg,rgba(14,28,58,.92),rgba(8,16,36,.96));border:1px solid rgba(201,162,39,.16);border-radius:12px;overflow:hidden}
+        .cd-card{background:var(--white);border:1px solid var(--border-gold);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-soft);transform:none!important;transition:box-shadow .2s,border-color .2s}
+        .cd-card:hover{transform:none!important;box-shadow:0 8px 24px rgba(197,160,89,.1);border-color:rgba(197,160,89,.35)}
         .cd-card-img{position:relative;height:120px;overflow:hidden}
         .cd-card-img img{width:100%;height:100%;object-fit:cover}
-        .cd-card-img .cd-num{position:absolute;bottom:8px;left:10px;font-size:11px;color:var(--gold);letter-spacing:1px}
+        .cd-card-img .cd-num{position:absolute;bottom:8px;left:10px;font-size:11px;color:var(--gold);letter-spacing:1px;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,.4)}
         .cd-card-body{padding:12px 14px 14px}
-        .cd-card-body h4{font-family:'Cormorant Garamond',serif;font-size:17px;color:#fff;margin:0 0 6px}
+        .cd-card-body h4{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--text-dark);margin:0 0 6px}
         .cd-card-body p{font-size:11px;color:var(--muted);line-height:1.45;margin:0 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
         .cd-card-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
-        .cd-price{font-size:12px;font-weight:700;color:var(--gold-light)}
-        .cd-edit-btn{width:32px;height:32px;border-radius:8px;border:1px solid rgba(201,162,39,.35);background:rgba(0,0,0,.35);color:var(--gold-light);cursor:pointer}
-        .cd-edit-btn:hover{background:rgba(201,162,39,.25);color:#fff}
+        .cd-price{font-size:12px;font-weight:700;color:var(--navy-mid)}
+        .cd-edit-btn{width:32px;height:32px;border-radius:8px;border:1px solid rgba(197,160,89,.35);background:var(--white);color:var(--gold);cursor:pointer;transition:all .2s}
+        .cd-edit-btn:hover{background:rgba(197,160,89,.12);color:var(--navy-mid)}
 
         .cfg-car-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
-        .cfg-car-tab{padding:10px 16px;border-radius:10px;border:1px solid rgba(201,162,39,.22);background:rgba(0,0,0,.2);color:var(--muted);cursor:pointer;font-size:12px;font-weight:600;letter-spacing:.6px;text-transform:uppercase}
-        .cfg-car-tab.active{background:rgba(201,162,39,.18);border-color:rgba(201,162,39,.45);color:var(--gold-light)}
+        .cfg-car-tab{padding:10px 16px;border-radius:10px;border:1px solid var(--border-gold);background:var(--white);color:var(--muted);cursor:pointer;font-size:12px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;transition:all .2s}
+        .cfg-car-tab.active{background:linear-gradient(135deg,rgba(197,160,89,.14),rgba(197,160,89,.06));border-color:rgba(197,160,89,.4);color:var(--navy-mid)}
         .cfg-car-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:18px}
         @media(max-width:700px){.cfg-car-meta{grid-template-columns:1fr}}
         .cfg-car-slides{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-        .cfg-car-slide{background:rgba(0,0,0,.22);border:1px solid rgba(201,162,39,.15);border-radius:12px;padding:12px}
-        .cfg-car-slide-preview{height:120px;border-radius:8px;overflow:hidden;margin-bottom:10px;background:#142858}
+        .cfg-car-slide{background:var(--white);border:1px solid var(--border-gold);border-radius:12px;padding:12px;box-shadow:var(--shadow-soft)}
+        .cfg-car-slide-preview{height:120px;border-radius:8px;overflow:hidden;margin-bottom:10px;background:#e5e7eb}
         .cfg-car-slide-preview img{width:100%;height:100%;object-fit:cover}
         .cfg-car-slide .field{margin-bottom:10px}
         .cfg-car-slide .field label{font-size:10px}
-        .cfg-car-slide .field input,.cfg-car-slide .field textarea{width:100%;background:rgba(0,0,0,.28);border:1px solid rgba(201,162,39,.2);border-radius:8px;padding:8px 10px;color:#e8eaf0;font-size:12px}
+        .cfg-car-slide .field input,.cfg-car-slide .field textarea{width:100%;background:var(--white);border:1px solid var(--border-gold);border-radius:8px;padding:8px 10px;color:var(--text-dark);font-size:12px}
         .cfg-car-slide .field textarea{min-height:64px;resize:vertical}
         .cfg-car-slide-actions{display:flex;gap:8px;justify-content:flex-end}
-        .cfg-id-field input{font-weight:600;color:var(--gold-light)}
+        .cfg-id-field input{font-weight:600;color:var(--navy-mid)}
         .cfg-list-head{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
         .field{margin-bottom:14px}
-        .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;text-align:center}
-        .field input,.field select{width:100%;background:rgba(0,0,0,.25);border:1px solid rgba(201,162,39,.2);
-            border-radius:8px;padding:11px 13px;color:var(--cream);font-family:inherit;font-size:14px;outline:none;text-align:center}
-        .field input:focus,.field select:focus{border-color:var(--gold)}
+        .field label{display:block;font-size:12px;color:var(--gold);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;text-align:center}
+        .field input,.field select{width:100%;background:var(--white);border:1px solid var(--border-gold);
+            border-radius:8px;padding:11px 13px;color:var(--text-dark);font-family:inherit;font-size:14px;outline:none;text-align:center;transition:border-color .2s,box-shadow .2s}
+        .field input:focus,.field select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.1)}
+        .field input[readonly]{background:rgba(247,245,240,.8);opacity:.85}
 
         /* ===== FRNS — cadres & tableaux pleine largeur ===== */
         .panel.frns-panel{max-width:min(100%,1480px);width:100%}
@@ -1034,34 +1141,30 @@
         .bl-main-row:hover td{background:rgba(201,162,39,.06)}
         .bl-modal-overlay{
             display:none;position:fixed;inset:0;z-index:60;
-            background:rgba(4,10,24,.72);backdrop-filter:blur(6px);
+            background:rgba(10,23,54,.45);backdrop-filter:blur(8px);
             align-items:center;justify-content:center;padding:24px;
         }
         .bl-modal-overlay.show{display:flex}
         .bl-modal{
             position:relative;width:min(960px,100%);max-height:90vh;overflow-y:auto;
-            background:linear-gradient(165deg,rgba(18,34,68,.98),rgba(8,16,36,.99));
-            border:1px solid rgba(201,162,39,.25);border-radius:16px;
-            box-shadow:0 24px 64px rgba(0,0,0,.45);padding:26px 28px 24px;
+            background:linear-gradient(165deg,#fff,rgba(247,245,240,.98));
+            border:1px solid rgba(197,160,89,.25);border-radius:16px;
+            box-shadow:0 24px 64px rgba(0,0,0,.12);padding:26px 28px 24px;
         }
         .bl-modal-close{
             position:absolute;top:14px;right:16px;width:34px;height:34px;border-radius:8px;
-            background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-            color:var(--cream);font-size:22px;line-height:1;cursor:pointer;
+            background:var(--white);border:1px solid var(--border-gold);
+            color:var(--text-dark);font-size:22px;line-height:1;cursor:pointer;
         }
-        .bl-modal-close:hover{border-color:var(--gold);color:#fff}
+        .bl-modal-close:hover{border-color:var(--gold);color:var(--gold)}
         .bl-detail-head{margin:0 0 16px;padding-right:40px;text-align:center}
-        .bl-detail-head h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:#fff;margin:0 0 4px}
+        .bl-detail-head h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--text-dark);margin:0 0 4px}
         .bl-detail-head p{color:var(--muted);font-size:13px;margin:0}
-        .bl-detail-summary{
-            display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:20px;
-        }
         .bl-detail-summary .bl-sum-item{
             flex:1 1 140px;max-width:220px;text-align:center;padding:12px 14px;border-radius:10px;
-            background:rgba(0,0,0,.22);border:1px solid rgba(201,162,39,.15);
+            background:var(--white);border:1px solid var(--border-gold);box-shadow:var(--shadow-soft);
         }
-        .bl-detail-summary .bl-sum-item span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-        .bl-detail-summary .bl-sum-item strong{font-size:15px;color:var(--gold-light)}
+        .bl-detail-summary .bl-sum-item strong{font-size:15px;color:var(--navy-mid)}
         .bl-detail-section{margin-bottom:20px}
         .bl-detail-section h4{
             font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--gold);
@@ -1160,15 +1263,536 @@
             #stock-etat .ep-form-one .ep-f-charge{grid-column:span 2!important}
         }
 
-        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:35}
+        .overlay{display:none;position:fixed;inset:0;background:rgba(10,23,54,.25);z-index:35}
+
+        /* ===== Gestion des chambres (maquette) ===== */
+        .panel#ch-etat{max-width:100%;width:100%}
+        .content.ch-view{
+            padding-left:16px;padding-right:16px;padding-bottom:24px;
+            align-items:stretch;
+        }
+        .content.ch-view .panel#ch-etat{max-width:100%;margin:0}
+        /* ch-kpi hérite de la règle commune .dash-kpi,.ch-kpi,.section-kpi */
+        .ch-kpi{
+            background:linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(240,242,247,.97) 100%);
+            padding:16px 32px 18px;
+        }
+        @media(max-width:900px){.ch-kpi{padding:14px 20px 16px}}
+        .ch-manage-wrap{
+            display:block;position:relative;width:100%;
+            background:transparent;border-radius:0;overflow:visible;
+            min-height:auto;
+        }
+        .ch-manage-main{
+            width:100%;min-width:0;padding:16px 356px 28px 12px;
+            background:#f0f2f7;border-radius:16px;
+            box-sizing:border-box;
+        }
+        /* Panneau figé — hors flux, ne bouge jamais au filtre */
+        .ch-detail-panel,
+        .ch-detail-panel.is-open{
+            position:fixed!important;
+            top:calc(var(--topbar-h) + 132px);
+            right:18px;
+            bottom:18px;
+            left:auto;
+            width:340px!important;
+            max-width:340px!important;
+            min-height:0!important;
+            max-height:none!important;
+            height:auto;
+            margin:0!important;
+            flex:none!important;
+            align-self:auto!important;
+            display:flex!important;
+            flex-direction:column;
+            background:linear-gradient(165deg,#12182a 0%,#1a2236 48%,#162033 100%);
+            border:1px solid rgba(197,160,89,.28);
+            border-radius:18px;
+            overflow:hidden;
+            box-shadow:0 16px 48px rgba(10,23,54,.22),inset 0 1px 0 rgba(255,255,255,.06);
+            transform:none!important;
+            translate:none!important;
+            transition:none!important;
+            animation:none!important;
+            pointer-events:auto;opacity:1;
+            z-index:24;
+        }
+        .ch-detail-panel.is-open{
+            border-color:rgba(197,160,89,.45);
+            box-shadow:0 20px 56px rgba(10,23,54,.28),0 0 0 1px rgba(197,160,89,.12),inset 0 1px 0 rgba(255,255,255,.08);
+        }
+        .admin-wrap.sb-collapsed .ch-detail-panel,
+        .admin-wrap.sb-collapsed .ch-detail-panel.is-open{right:18px}
+        @media(max-width:1200px){
+            .ch-detail-panel,.ch-detail-panel.is-open{top:calc(var(--topbar-h) + 240px)}
+            .ch-manage-main{padding-right:320px}
+            .ch-detail-panel,.ch-detail-panel.is-open{width:300px!important;max-width:300px!important}
+        }
+        @media(max-width:900px){
+            .ch-manage-main{padding:16px 12px 28px}
+            .ch-detail-panel,.ch-detail-panel.is-open{
+                position:relative!important;
+                top:auto!important;right:auto!important;bottom:auto!important;
+                width:100%!important;max-width:100%!important;
+                height:auto;max-height:50vh;margin-bottom:14px!important;z-index:2;
+            }
+        }
+        #chDetailContent{min-height:0;flex:1;display:flex;flex-direction:column;overflow-y:auto}
+        .ch-detail-panel{display:flex;flex-direction:column}
+        .ch-dp-floor-bar{
+            flex-shrink:0;padding:14px 14px 12px;
+            display:flex;flex-direction:column;gap:8px;
+            background:linear-gradient(180deg,rgba(197,160,89,.12),rgba(255,255,255,.03));
+            border-bottom:1px solid rgba(197,160,89,.28);
+        }
+        .ch-dp-floor-bar label{
+            font-size:10px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;
+            color:var(--gold);margin:0;
+        }
+        .ch-dp-floor-bar select{
+            width:100%;padding:10px 12px;border-radius:10px;
+            border:1px solid rgba(197,160,89,.35);
+            background:rgba(10,18,36,.55);color:#f5f1e6;
+            font-size:13px;font-weight:500;outline:none;cursor:pointer;
+            appearance:auto;
+        }
+        .ch-dp-floor-bar select:focus{
+            border-color:var(--gold);box-shadow:0 0 0 2px rgba(197,160,89,.2);
+        }
+        .ch-dp-floor-bar select option{background:#1a2236;color:#f5f1e6}
+        .ch-dp-empty{
+            flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+            text-align:center;padding:40px 28px;gap:14px;
+        }
+        .ch-dp-empty-ico{
+            width:64px;height:64px;border-radius:18px;
+            display:flex;align-items:center;justify-content:center;font-size:28px;
+            background:rgba(197,160,89,.12);border:1px solid rgba(197,160,89,.3);
+            color:var(--gold-light);box-shadow:0 0 28px rgba(197,160,89,.15);
+        }
+        .ch-dp-empty h4{
+            margin:0;font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;
+            color:#f5f1e6;letter-spacing:.5px;
+        }
+        .ch-dp-empty p{margin:0;font-size:13px;line-height:1.55;color:rgba(245,241,230,.55);max-width:22ch}
+        .ch-dp-hero{
+            position:relative;height:168px;overflow:hidden;flex-shrink:0;
+            background:#0a1224;
+        }
+        .ch-dp-hero img{
+            width:100%;height:100%;object-fit:cover;object-position:center;
+            display:block;filter:saturate(1.05) brightness(.92);
+        }
+        .ch-dp-hero::after{
+            content:'';position:absolute;inset:0;
+            background:linear-gradient(180deg,rgba(10,18,36,.15) 0%,rgba(10,18,36,.35) 40%,rgba(18,24,42,.96) 100%);
+        }
+        .ch-dp-hero-top{
+            position:absolute;top:12px;left:12px;right:12px;z-index:2;
+            display:flex;align-items:center;justify-content:space-between;gap:8px;
+        }
+        .ch-dp-close{
+            width:34px;height:34px;border:1px solid rgba(255,255,255,.18);
+            background:rgba(10,18,36,.55);backdrop-filter:blur(8px);
+            border-radius:10px;cursor:pointer;font-size:18px;color:#f5f1e6;
+            display:flex;align-items:center;justify-content:center;line-height:1;
+            transition:background .2s,border-color .2s,color .2s;
+        }
+        .ch-dp-close:hover{background:rgba(197,160,89,.25);border-color:rgba(197,160,89,.5);color:var(--gold-light)}
+        .ch-dp-status{
+            padding:5px 12px;border-radius:999px;font-size:10px;font-weight:700;
+            letter-spacing:.8px;text-transform:uppercase;
+            backdrop-filter:blur(8px);border:1px solid transparent;
+        }
+        .ch-dp-status.st-disponible{background:rgba(209,250,229,.92);color:#047857}
+        .ch-dp-status.st-occupee{background:rgba(219,234,254,.92);color:#1d4ed8}
+        .ch-dp-status.st-reservee{background:rgba(255,237,213,.92);color:#c2410c}
+        .ch-dp-status.st-nettoyage{background:rgba(243,232,255,.92);color:#7c3aed}
+        .ch-dp-status.st-maintenance{background:rgba(254,226,226,.92);color:#dc2626}
+        .ch-dp-hero-info{
+            position:absolute;left:16px;right:16px;bottom:14px;z-index:2;
+        }
+        .ch-dp-hero-info .ch-dp-num{
+            font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;
+            color:#fff;line-height:1;letter-spacing:.5px;
+            text-shadow:0 2px 16px rgba(0,0,0,.45);
+        }
+        .ch-dp-hero-info .ch-dp-title{
+            margin-top:4px;font-size:13px;color:rgba(245,241,230,.82);
+            font-family:'Montserrat',sans-serif;letter-spacing:.2px;
+        }
+        .ch-dp-price-band{
+            display:flex;align-items:center;justify-content:space-between;gap:10px;
+            margin:-1px 14px 0;padding:12px 14px;position:relative;z-index:3;
+            background:linear-gradient(135deg,rgba(197,160,89,.18),rgba(197,160,89,.08));
+            border:1px solid rgba(197,160,89,.35);border-radius:12px;
+            box-shadow:0 8px 24px rgba(0,0,0,.18);
+        }
+        .ch-dp-price-band .lbl{
+            font-size:10px;letter-spacing:1.4px;text-transform:uppercase;
+            color:rgba(245,241,230,.55);font-weight:600;
+        }
+        .ch-dp-price-band .val{
+            font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;
+            color:var(--gold-light);line-height:1;
+        }
+        .ch-dp-price-band .val small{font-size:12px;font-weight:500;color:rgba(245,241,230,.5);margin-left:4px}
+        .ch-dp-body{padding:16px 16px 18px;flex:1;display:flex;flex-direction:column;gap:14px}
+        .ch-dp-specs{
+            display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
+            padding:0;border:none;font-size:10px;color:rgba(245,241,230,.55);
+        }
+        .ch-dp-specs span{
+            display:flex;flex-direction:column;align-items:flex-start;gap:4px;
+            padding:10px 12px;border-radius:10px;
+            background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+        }
+        .ch-dp-specs b{font-size:12px;color:#f5f1e6;font-weight:600}
+        .ch-dp-attrs{
+            padding:0;border:none;display:flex;flex-direction:column;gap:0;
+            background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;
+            overflow:hidden;
+        }
+        .ch-dp-row{
+            display:flex;justify-content:space-between;align-items:center;gap:10px;
+            padding:11px 14px;font-size:12px;
+            border-bottom:1px solid rgba(255,255,255,.06);
+        }
+        .ch-dp-row:last-child{border-bottom:none}
+        .ch-dp-row span{color:rgba(245,241,230,.5)}
+        .ch-dp-row strong{color:#f5f1e6;font-weight:600;text-align:right}
+        .ch-dp-desc{
+            margin:0;padding:0;border:none;font-size:12.5px;line-height:1.65;
+            color:rgba(245,241,230,.65);
+        }
+        .ch-dp-section-lbl{
+            display:block;margin-bottom:8px;
+            font-size:10px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;
+            color:var(--gold);
+        }
+        .ch-dp-equip{
+            padding:0;border:none;display:flex;flex-wrap:wrap;gap:8px;
+        }
+        .ch-dp-equip span{
+            width:38px;height:38px;border-radius:10px;
+            background:rgba(197,160,89,.1);border:1px solid rgba(197,160,89,.22);
+            display:flex;align-items:center;justify-content:center;font-size:15px;
+            transition:background .2s,border-color .2s;
+        }
+        .ch-dp-equip span:hover{
+            background:rgba(197,160,89,.2);border-color:rgba(197,160,89,.4);
+        }
+        .ch-dp-actions{
+            margin-top:auto;padding-top:4px;
+            display:flex;flex-direction:column;gap:8px;
+        }
+        .ch-dp-actions .ch-btn-primary{
+            width:100%;text-align:center;
+            background:linear-gradient(135deg,var(--gold),var(--gold-light));
+            color:#1a1304;border:none;box-shadow:0 8px 22px rgba(197,160,89,.28);
+        }
+        .ch-dp-actions .ch-btn-primary:hover{
+            background:linear-gradient(135deg,var(--gold-light),#f3e4a8);
+            transform:none;filter:brightness(1.03);
+        }
+        .ch-dp-actions .ch-btn-outline{
+            width:100%;text-align:center;
+            background:transparent;color:rgba(245,241,230,.85);
+            border:1px solid rgba(197,160,89,.35);
+        }
+        .ch-dp-actions .ch-btn-outline:hover{
+            border-color:var(--gold);color:var(--gold-light);background:rgba(197,160,89,.08);
+        }
+        .ch-dp-danger{
+            width:100%;padding:11px;border-radius:8px;
+            border:1px solid rgba(224,112,112,.35);
+            background:rgba(224,112,112,.08);color:#f0a0a0;
+            font-size:12px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s;
+        }
+        .ch-dp-danger:hover{background:rgba(224,112,112,.16);border-color:rgba(224,112,112,.55)}
+        #ch-etat .ch-detail-panel,
+        #ch-etat .ch-detail-panel.is-open{
+            position:fixed!important;
+            transform:none!important;
+            translate:none!important;
+            transition:none!important;
+            animation:none!important;
+        }
+        #ch-etat.panel.active{animation:none;transform:none;margin:0}
+        .ch-page-head{
+            display:flex;align-items:flex-start;justify-content:space-between;
+            gap:20px;flex-wrap:wrap;margin-bottom:24px;
+        }
+        .ch-page-head h2,.ch-breadcrumb{display:none}
+        .ch-page-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+        .ch-page-actions-only{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+        .ch-btn-primary{
+            background:#1a2236;color:#fff;border:none;border-radius:8px;
+            padding:11px 18px;font-size:12px;font-weight:600;cursor:pointer;
+            letter-spacing:.3px;transition:background .2s,transform .2s;
+        }
+        .ch-btn-primary:hover{background:#0f1524;transform:translateY(-1px)}
+        .ch-btn-outline{
+            background:#fff;color:#1a2332;border:1px solid #d1d5db;border-radius:8px;
+            padding:11px 18px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;
+        }
+        .ch-btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+        .ch-btn-icon{
+            position:relative;width:42px;height:42px;border-radius:8px;border:1px solid #e5e7eb;
+            background:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;
+        }
+        .ch-notif-badge{
+            position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 5px;
+            background:#dc2626;color:#fff;font-size:10px;font-weight:700;border-radius:10px;
+            display:flex;align-items:center;justify-content:center;
+        }
+        .ch-stats-row{
+            display:grid;
+            grid-template-columns:repeat(6,minmax(0,1fr));
+            gap:12px;margin:0;
+            align-items:stretch;
+        }
+        @media(max-width:1200px){.ch-stats-row{grid-template-columns:repeat(3,minmax(0,1fr))}}
+        @media(max-width:640px){.ch-stats-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        .ch-stat-card,
+        .ch-stat-card:hover,
+        .ch-stat-card:focus,
+        .ch-stat-card:active{
+            background:#fff;border-radius:12px;padding:16px 16px 14px;
+            box-shadow:0 1px 4px rgba(0,0,0,.06);display:flex;gap:14px;align-items:flex-start;
+            min-height:92px;
+            border:1px solid #eef0f4;
+            transform:none!important;translate:none!important;
+            transition:none!important;animation:none!important;
+            position:relative;order:0!important;
+            will-change:auto;
+        }
+        .ch-stat-ico{
+            width:42px;height:42px;border-radius:10px;flex-shrink:0;
+            display:flex;align-items:center;justify-content:center;font-size:18px;
+        }
+        .ch-stat-card.st-total .ch-stat-ico{background:#dbeafe;color:#2563eb}
+        .ch-stat-card.st-dispo .ch-stat-ico{background:#d1fae5;color:#059669}
+        .ch-stat-card.st-occu .ch-stat-ico{background:#dbeafe;color:#1d4ed8}
+        .ch-stat-card.st-resa .ch-stat-ico{background:#ffedd5;color:#d97706}
+        .ch-stat-card.st-nett .ch-stat-ico{background:#f3e8ff;color:#7c3aed}
+        .ch-stat-card.st-maint .ch-stat-ico{background:#fee2e2;color:#dc2626}
+        .ch-stat-body{min-width:0;flex:1}
+        .ch-stat-body b{
+            display:block;font-size:22px;font-weight:700;color:#1a2332;line-height:1.1;
+            font-variant-numeric:tabular-nums;min-height:1.1em;
+        }
+        .ch-stat-body span{display:block;font-size:11px;color:#6b7280;margin-top:2px}
+        .ch-stat-body small{
+            font-size:10px;color:#9ca3af;margin-top:4px;display:block;min-height:1.2em;
+        }
+        .ch-toolbar{
+            display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;
+            background:#fff;padding:12px 14px;border-radius:12px;
+            box-shadow:0 1px 4px rgba(0,0,0,.05);
+        }
+        .ch-search-wrap{
+            flex:1;min-width:200px;position:relative;display:flex;align-items:center;
+        }
+        .ch-search-ico{position:absolute;left:12px;font-size:14px;opacity:.45;pointer-events:none}
+        .ch-search-wrap input{
+            width:100%;padding:10px 12px 10px 36px;border:1px solid #e5e7eb;border-radius:8px;
+            font-size:13px;outline:none;background:#f9fafb;
+        }
+        .ch-search-wrap input:focus{border-color:var(--gold);background:#fff}
+        .ch-select{
+            padding:10px 14px;border:1px solid #e5e7eb;border-radius:8px;
+            font-size:12px;color:#374151;background:#fff;cursor:pointer;outline:none;
+        }
+        .ch-view-toggle{display:none!important}
+        .ch-room-grid{
+            display:grid;
+            grid-template-columns:repeat(3,minmax(0,1fr));
+            gap:14px;
+            align-items:start;
+            grid-auto-flow:dense;
+            grid-auto-rows:210px;
+        }
+        @media(max-width:1400px){.ch-room-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:1000px){.ch-room-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:600px){.ch-room-grid{grid-template-columns:1fr}}
+        .ch-room-card,
+        .ch-room-card:hover,
+        .ch-room-card:focus,
+        .ch-room-card:active,
+        .ch-room-card.is-selected,
+        .ch-room-card.hidden-filter{
+            background:#fff;border-radius:12px;overflow:hidden;cursor:pointer;
+            box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #eef0f4;
+            display:flex!important;flex-direction:column;position:relative;
+            transform:none!important;translate:none!important;
+            transition:none!important;animation:none!important;
+            will-change:auto;backface-visibility:hidden;
+            height:210px;min-height:210px;max-height:210px;
+            order:0!important;
+            margin:0!important;
+            top:auto!important;left:auto!important;
+        }
+        .ch-room-card.is-selected{border-color:var(--gold);box-shadow:0 0 0 2px rgba(197,160,89,.25)}
+        /* Case réservée : filtre = invisible, jamais de reflow */
+        .ch-room-card.hidden-filter{
+            visibility:hidden!important;
+            opacity:0!important;
+            pointer-events:none!important;
+            display:flex!important;
+            height:210px!important;min-height:210px!important;max-height:210px!important;
+        }
+        .ch-rc-img{position:relative;height:88px;aspect-ratio:auto;overflow:hidden;background:#e5e7eb;flex-shrink:0}
+        .ch-rc-img img{
+            width:100%;height:100%;object-fit:cover;object-position:center top;display:block;pointer-events:none;
+            transform:none!important;scale:1!important;transition:none!important;animation:none!important;
+        }
+        .ch-rc-badge{
+            position:absolute;top:8px;right:8px;z-index:2;padding:3px 8px;border-radius:20px;
+            font-size:9px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;
+        }
+        .ch-rc-badge.st-disponible{background:#d1fae5;color:#059669}
+        .ch-rc-badge.st-occupee{background:#dbeafe;color:#2563eb}
+        .ch-rc-badge.st-reservee{background:#ffedd5;color:#d97706}
+        .ch-rc-badge.st-nettoyage{background:#f3e8ff;color:#7c3aed}
+        .ch-rc-badge.st-maintenance{background:#fee2e2;color:#dc2626}
+        .ch-rc-body{padding:10px 12px 12px;flex:1;display:flex;flex-direction:column;min-height:0}
+        .ch-rc-num{font-size:17px;font-weight:700;color:#1a2332;line-height:1;margin-bottom:2px}
+        .ch-rc-title{font-family:'Cormorant Garamond',serif;font-size:13px;color:#4b5563;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .ch-rc-meta{display:flex;flex-wrap:wrap;gap:6px;font-size:10px;color:#6b7280;margin-bottom:8px}
+        .ch-rc-meta span{display:inline-flex;align-items:center;gap:3px}
+        .ch-rc-price{margin-top:auto;font-size:13px;font-weight:700;color:#1a2232}
+        .ch-rc-price small{font-size:10px;font-weight:500;color:#9ca3af}
+        .ch-cat-grid,.ch-etages-grid{
+            display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;
+        }
+        .ch-etages-row{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+            gap:14px;margin:0;
+            align-items:stretch;
+        }
+        .ch-etage-card,
+        .ch-etage-card:hover,
+        .ch-etage-card:focus{
+            background:#fff;border:1px solid var(--border-gold);border-radius:14px;
+            padding:16px 14px;cursor:pointer;
+            box-shadow:var(--shadow-soft);
+            transform:none!important;translate:none!important;
+            transition:none!important;animation:none!important;
+            min-height:96px;display:flex;flex-direction:column;gap:6px;
+            position:relative;overflow:hidden;
+        }
+        .ch-etage-card::before{
+            content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:0 3px 3px 0;
+            background:linear-gradient(180deg,var(--gold-light),var(--gold));
+        }
+        .ch-etage-card h3{
+            font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text-dark);
+            margin:0;padding-left:8px;line-height:1.1;
+        }
+        .ch-etage-card .et-count{
+            font-family:'Montserrat',sans-serif;font-size:28px;font-weight:700;
+            color:var(--navy-mid);padding-left:8px;line-height:1;
+            font-variant-numeric:tabular-nums;
+        }
+        .ch-etage-card p,.ch-etage-card .et-meta{
+            font-size:11px;color:var(--muted);margin:0;padding-left:8px;
+        }
+        .ch-etage-card:hover{border-color:rgba(197,160,89,.45);box-shadow:0 8px 24px rgba(197,160,89,.12)}
+        .ch-etage-card.is-dimmed{opacity:.35;pointer-events:none}
+        .ch-etage-card.is-active{border-color:var(--gold);box-shadow:0 0 0 2px rgba(197,160,89,.25)}
+        .ch-cat-card{
+            background:#fff;border:1px solid var(--border-gold);border-radius:14px;
+            padding:22px;cursor:pointer;transition:box-shadow .2s,border-color .2s;
+            box-shadow:var(--shadow-soft);
+            transform:none!important;
+        }
+        .ch-cat-card:hover{transform:none!important;box-shadow:0 8px 24px rgba(197,160,89,.12)}
+        .ch-cat-card h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text-dark);margin:0 0 8px}
+        .ch-cat-card p{font-size:13px;color:var(--muted);margin:0}
+        #ch-etages.panel.active{animation:none!important;transform:none!important}
+        #ch-etages .block{margin-top:0}
+        .ch-etages-toolbar{
+            display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+            margin-bottom:16px;
+        }
+        .ch-etages-toolbar .ch-search-wrap{flex:1;min-width:220px}
+        .ch-etages-toolbar .ch-select{min-width:160px}
+        #chEtagesTableBody .et-floor-cell{font-weight:600;color:var(--gold);white-space:nowrap}
+        #chEtagesTableBody .et-status{
+            display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;
+            letter-spacing:.3px;text-transform:uppercase;
+        }
+        #chEtagesTableBody .et-status.st-disponible{background:#d1fae5;color:#059669}
+        #chEtagesTableBody .et-status.st-occupee{background:#dbeafe;color:#2563eb}
+        #chEtagesTableBody .et-status.st-reservee{background:#ffedd5;color:#d97706}
+        #chEtagesTableBody .et-status.st-nettoyage{background:#f3e8ff;color:#7c3aed}
+        #chEtagesTableBody .et-status.st-maintenance{background:#fee2e2;color:#dc2626}
 
         .admin-footer{
             text-align:center;padding:18px 24px;margin-top:auto;
             font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.4px;
-            color:var(--muted);border-top:1px solid rgba(201,162,39,.12);
-            background:rgba(4,10,24,.6);
+            color:var(--muted);border-top:1px solid var(--border-gold);
+            background:linear-gradient(180deg,rgba(247,245,240,.95),rgba(255,255,255,.98));
         }
-        .admin-footer .site-copyright{margin:0;color:rgba(170,176,196,.85)}
+        .admin-footer .site-copyright{margin:0;color:var(--muted)}
+
+        /* ===== Harmonisation lumineuse — formulaires & composants restants ===== */
+        .rm-msg{text-align:center;padding:28px 16px 12px}
+        .rm-msg .rm-msg-dot{
+            width:56px;height:56px;border-radius:50%;margin:0 auto 18px;
+            display:flex;align-items:center;justify-content:center;font-size:26px;
+        }
+        .rm-msg.st-occupee .rm-msg-dot{background:rgba(69,200,120,.12);color:#2a9d5c}
+        .rm-msg.st-reservee .rm-msg-dot{background:rgba(91,158,245,.12);color:#4a7fd4}
+        .rm-msg.st-nettoyage .rm-msg-dot{background:rgba(138,148,168,.12);color:#6b7280}
+        .rm-msg.st-maintenance .rm-msg-dot{background:rgba(224,112,112,.12);color:#c05050}
+        .rm-form-head{margin-bottom:20px;padding-right:36px}
+        .rm-form-grid .field textarea,.rm-form-grid .field select,
+        .ba-lines-table .ba-inp,.rm-form-totals .ttl input,
+        .bal-row input.pay,.ba-lines-table .ba-inp{
+            background:var(--white)!important;color:var(--text-dark)!important;
+            border:1px solid var(--border-gold)!important;
+        }
+        .ba-lines-table .ba-inp.st{color:var(--navy-mid)!important;font-weight:600}
+        .rm-form-totals{background:rgba(247,245,240,.8);border:1px solid var(--border-gold)}
+        .rm-form-totals .ttl input{color:var(--navy-mid)!important;font-weight:700}
+        .rm-status-pick h4{color:var(--text-dark)}
+        .rm-st-btn{background:var(--white)}
+        .rm-edit-btn{background:var(--white);border:1px solid rgba(197,160,89,.35);color:var(--gold)}
+        .rm-edit-btn:hover{background:rgba(197,160,89,.12);color:var(--navy-mid)}
+        .rm-edit-preview{background:#e5e7eb;border:1px solid var(--border-gold)}
+        .ba-detail-row td{background:rgba(247,245,240,.6)}
+        .ba-lines-table tfoot td{color:var(--navy-mid)}
+        .ba-total-val{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--navy-mid)}
+        .btn.del:hover{color:#c05050;background:rgba(230,120,120,.08)}
+        .panel.frns-panel.frns-compact .field input,
+        .panel.frns-panel.frns-compact .field select,
+        .panel.frns-panel.frns-compact .bal-row input.pay{
+            background:var(--white);border-color:var(--border-gold);color:var(--text-dark);
+        }
+        .panel.frns-panel.frns-compact .field input[readonly]{background:rgba(247,245,240,.8)}
+        .panel.frns-panel.frns-compact .ba-lines-wrap,
+        .panel.frns-panel.frns-compact .table-wrap{
+            background:var(--white);border:1px solid var(--border-gold);
+        }
+        .panel.frns-panel.frns-compact .ba-lines-table thead th,
+        .panel.frns-panel.frns-compact .table-wrap thead th{
+            background:rgba(197,160,89,.08);color:var(--gold);
+        }
+        .panel.frns-panel.frns-compact .ba-lines-table .ba-inp{
+            background:var(--white);border-color:var(--border-gold);color:var(--text-dark);
+        }
+        #stock-mouvement .sm-f-etat .sm-etat-box{background:var(--white);border:1px solid var(--border-gold)}
+        #stock-mouvement .sm-form-one input[readonly]{background:rgba(247,245,240,.8)!important}
+        .st-etat.dispo{background:rgba(69,200,120,.12);color:#2a9d5c;border:1px solid rgba(69,200,120,.25)}
+        .st-etat.faible{background:rgba(197,160,89,.12);color:var(--gold);border:1px solid rgba(197,160,89,.25)}
+        .st-etat.rupture{background:rgba(224,112,112,.12);color:#c05050;border:1px solid rgba(224,112,112,.25)}
+        .st-statut.actif{color:#2a9d5c}
+        .bl-detail-summary{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:20px}
+        .bl-detail-summary .bl-sum-item span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
 
         @media(max-width:900px){
             .sidebar{transform:translateX(-100%)}
@@ -1176,11 +1800,70 @@
             .admin-wrap.sb-collapsed .sidebar{transform:translateX(-100%)}
             .main{margin-left:0}
             .admin-wrap.sb-collapsed .main{margin-left:0}
-            .dash-kpi{left:0}
+            .dash-kpi,.ch-kpi,.section-kpi{left:0}
             .ech-sticky{left:0;padding:14px 20px 12px}
             .hamb{display:block}
             .sb-toggle{display:none}
             .overlay.show{display:block}
+        }
+
+        /* ===== VERROUILLAGE DUR — cartes Gestion Chambres ===== */
+        #ch-etat.panel,#ch-etat.panel.active{
+            animation:none!important;transform:none!important;opacity:1!important;
+        }
+        #ch-etat .ch-manage-main .ch-stat-card,
+        #ch-etat .ch-manage-main .ch-stat-card:hover,
+        #ch-etat .ch-manage-main .ch-stat-card:focus,
+        #ch-etat .ch-manage-main .ch-stat-card:active,
+        #ch-etat .ch-manage-main .ch-room-card,
+        #ch-etat .ch-manage-main .ch-room-card:hover,
+        #ch-etat .ch-manage-main .ch-room-card:focus,
+        #ch-etat .ch-manage-main .ch-room-card:active,
+        #ch-etat .ch-manage-main .ch-room-card.is-selected{
+            transform:none!important;
+            translate:none!important;
+            scale:1!important;
+            transition:none!important;
+            animation:none!important;
+            top:auto!important;
+            bottom:auto!important;
+        }
+        #ch-etat .ch-manage-main .ch-room-card img,
+        #ch-etat .ch-manage-main .ch-room-card:hover img{
+            transform:none!important;scale:1!important;transition:none!important;
+        }
+        #ch-etat .ch-manage-main .ch-room-card.hidden-filter{
+            visibility:hidden!important;opacity:0!important;
+            pointer-events:none!important;display:flex!important;
+            height:210px!important;min-height:210px!important;
+        }
+        #ch-etat .ch-detail-panel,
+        #ch-etat .ch-detail-panel.is-open{
+            position:fixed!important;
+            transform:none!important;
+            translate:none!important;
+            transition:none!important;
+            animation:none!important;
+            top:calc(var(--topbar-h) + 132px)!important;
+            right:18px!important;
+            bottom:18px!important;
+            left:auto!important;
+            width:340px!important;
+        }
+        @media(max-width:1200px){
+            #ch-etat .ch-detail-panel,
+            #ch-etat .ch-detail-panel.is-open{
+                top:calc(var(--topbar-h) + 240px)!important;
+                width:300px!important;
+            }
+        }
+        @media(max-width:900px){
+            #ch-etat .ch-detail-panel,
+            #ch-etat .ch-detail-panel.is-open{
+                position:relative!important;
+                top:auto!important;right:auto!important;bottom:auto!important;
+                width:100%!important;
+            }
         }
     </style>
     @include('partials.data-center-styles')
@@ -1219,8 +1902,8 @@
                 <img src="{{ asset('images/logo.png') }}" alt="logo">
             </div>
             <div class="sb-brand-text">
-                <span class="sb-est">Al Jazeera Hotel</span>
-                <b>Direction</b>
+                <span class="sb-est">Hotel &amp; Resort</span>
+                <b>ALJAZEERA</b>
                 <span class="sb-stars">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
             </div>
         </div>
@@ -1231,6 +1914,34 @@
                     <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                 </span>
                 <span class="lbl">Tableau de bord</span>
+            </div>
+            <div class="sb-item" data-target="ch-reservations">
+                <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+                <span class="lbl">Réservations</span>
+            </div>
+            <div class="sb-item" data-target="ch-calendrier">
+                <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>
+                <span class="lbl">Calendrier</span>
+            </div>
+
+            <div class="sb-section-label">Hébergement</div>
+            <div class="sb-group sb-group-flat">
+                <div class="sb-item" data-target="ch-etat">
+                    <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 012 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg></span>
+                    <span class="lbl">Chambres</span>
+                </div>
+                <div class="sb-item" data-target="ch-categories">
+                    <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg></span>
+                    <span class="lbl">Catégories de chambres</span>
+                </div>
+                <div class="sb-item" data-target="ch-etages">
+                    <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5v13H3V8l9-5z"/><path d="M9 21V12h6v9"/></svg></span>
+                    <span class="lbl">Étages</span>
+                </div>
+                <div class="sb-item" data-target="ch-dispo">
+                    <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>
+                    <span class="lbl">Disponibilités</span>
+                </div>
             </div>
 
             <div class="sb-section-label">Achats &amp; Stock</div>
@@ -1280,21 +1991,7 @@
                 </div>
             </div>
 
-            <div class="sb-section-label">Exploitation</div>
-            <div class="sb-group">
-                <div class="sb-parent" id="chambresParent">
-                    <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 012 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg></span>
-                    <span class="lbl">Chambres</span>
-                    <span class="sb-badge">4</span>
-                    <span class="caret">&#9662;</span>
-                </div>
-                <div class="sb-sub" id="chambresSub">
-                    <div class="sb-item" data-target="ch-suivi"><span class="sb-dot"></span><span class="lbl">Suivi opérationnel</span></div>
-                    <div class="sb-item" data-target="ch-reservations"><span class="sb-dot"></span><span class="lbl">Réservations</span></div>
-                    <div class="sb-item" data-target="ch-etat"><span class="sb-dot"></span><span class="lbl">État chambres</span></div>
-                    <div class="sb-item" data-target="ch-dispo"><span class="sb-dot"></span><span class="lbl">Chambres disponibles</span></div>
-                </div>
-            </div>
+            <div class="sb-section-label">Personnel</div>
             <div class="sb-group">
                 <div class="sb-parent" id="persParent">
                     <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span>
@@ -1343,7 +2040,14 @@
             </div>
         </nav>
         <div class="sb-foot">
-            <div class="sb-foot-note">Espace Direction — Privé</div>
+            <div class="sb-profile">
+                <div class="sb-profile-av">{{ strtoupper(substr($adminLabel, 0, 1)) }}</div>
+                <div class="sb-profile-info">
+                    <b>{{ $adminLabel }}</b>
+                    <span>Administrateur</span>
+                </div>
+                <span class="sb-profile-caret">&#9662;</span>
+            </div>
             <form method="POST" action="{{ route('space.logout', 'admin') }}">
                 @csrf
                 <button type="submit" class="logout-btn">&#10132; Déconnexion</button>
@@ -1445,34 +2149,135 @@
             </div>
         </div>
 
-        <div class="ech-sticky hidden" id="echStickyBar">
-            <div class="ech-header">
-                <div class="ech-legend">
-                    <span class="ech-leg st-disponible"><i></i>Disponible</span>
-                    <span class="ech-leg st-occupee"><i></i>Occupée</span>
-                    <span class="ech-leg st-reservee"><i></i>Réservée</span>
-                    <span class="ech-leg st-nettoyage"><i></i>Nettoyage</span>
-                    <span class="ech-leg st-maintenance"><i></i>Maintenance</span>
+        {{-- Cartes analytiques Chambres — fixed comme le dashboard --}}
+        <div class="ch-kpi hidden" id="chKpiBar" aria-hidden="true">
+            <div class="ch-stats-row" id="chStatsRow">
+                <div class="ch-stat-card st-total" data-stat="total">
+                    <div class="ch-stat-ico">&#128719;</div>
+                    <div class="ch-stat-body">
+                        <span>Total chambres</span>
+                        <b id="statTotal">0</b>
+                        <small id="statTotalPct">Toutes catégories</small>
+                    </div>
+                </div>
+                <div class="ch-stat-card st-dispo" data-stat="disponible">
+                    <div class="ch-stat-ico">&#10003;</div>
+                    <div class="ch-stat-body">
+                        <span>Disponibles</span>
+                        <b id="statDispo">0</b>
+                        <small id="statDispoPct">0%</small>
+                    </div>
+                </div>
+                <div class="ch-stat-card st-occu" data-stat="occupee">
+                    <div class="ch-stat-ico">&#128100;</div>
+                    <div class="ch-stat-body">
+                        <span>Occupées</span>
+                        <b id="statOccu">0</b>
+                        <small id="statOccuPct">0%</small>
+                    </div>
+                </div>
+                <div class="ch-stat-card st-resa" data-stat="reservee">
+                    <div class="ch-stat-ico">&#128467;</div>
+                    <div class="ch-stat-body">
+                        <span>Réservées</span>
+                        <b id="statResa">0</b>
+                        <small id="statResaPct">0%</small>
+                    </div>
+                </div>
+                <div class="ch-stat-card st-nett" data-stat="nettoyage">
+                    <div class="ch-stat-ico">&#128736;</div>
+                    <div class="ch-stat-body">
+                        <span>Nettoyage</span>
+                        <b id="statNett">0</b>
+                        <small id="statNettPct">0%</small>
+                    </div>
+                </div>
+                <div class="ch-stat-card st-maint" data-stat="maintenance">
+                    <div class="ch-stat-ico">&#9881;</div>
+                    <div class="ch-stat-body">
+                        <span>Maintenance</span>
+                        <b id="statMaint">0</b>
+                        <small id="statMaintPct">0%</small>
+                    </div>
                 </div>
             </div>
-            <div class="ech-kpi" id="echKpi">
-                <div class="ek-card ek-total"><span class="ek-accent"></span><span class="ek-lbl">Total chambres</span><span class="ek-val" id="echTotal">22</span></div>
-                <div class="ek-card ek-dispo"><span class="ek-accent"></span><span class="ek-lbl">Disponibles</span><span class="ek-val" id="echDispo">0</span></div>
-                <div class="ek-card ek-occu"><span class="ek-accent"></span><span class="ek-lbl">Occupées</span><span class="ek-val" id="echOccu">0</span></div>
-                <div class="ek-card ek-resa"><span class="ek-accent"></span><span class="ek-lbl">Réservées</span><span class="ek-val" id="echResa">0</span></div>
-                <div class="ek-card ek-nett"><span class="ek-accent"></span><span class="ek-lbl">En nettoyage</span><span class="ek-val" id="echNett">0</span></div>
-                <div class="ek-card ek-maint"><span class="ek-accent"></span><span class="ek-lbl">En maintenance</span><span class="ek-val" id="echMaint">0</span></div>
-            </div>
-            <div class="ech-filters" id="echFilters">
-                <button type="button" class="ech-filter active" data-filter="all">Toutes</button>
-                <button type="button" class="ech-filter" data-filter="suite">Suites</button>
-                <button type="button" class="ech-filter" data-filter="familiale">Familiales</button>
-                <button type="button" class="ech-filter" data-filter="single">Singles</button>
-                <button type="button" class="ech-filter" data-filter="disponible">Disponibles</button>
-                <button type="button" class="ech-filter" data-filter="occupee">Occupées</button>
-                <button type="button" class="ech-filter" data-filter="reservee">Réservées</button>
+        </div>
+
+        {{-- KPI fixes — Facturation client --}}
+        <div class="section-kpi hidden" data-for="fact-clt" aria-hidden="true">
+            <div class="cards">
+                <div class="card"><div class="n">284 500 DH</div><div class="l">Chiffre du mois</div></div>
+                <div class="card"><div class="n">112</div><div class="l">Factures payées</div></div>
+                <div class="card"><div class="n">9</div><div class="l">Impayées</div></div>
+                <div class="card"><div class="n">18 200 DH</div><div class="l">En attente</div></div>
             </div>
         </div>
+
+        {{-- KPI fixes — Réservations --}}
+        <div class="section-kpi hidden" data-for="ch-reservations" aria-hidden="true">
+            <div class="cards">
+                <div class="card"><div class="n">28</div><div class="l">Réservations actives</div></div>
+                <div class="card"><div class="n">6</div><div class="l">Arrivées aujourd'hui</div></div>
+                <div class="card"><div class="n">4</div><div class="l">Départs aujourd'hui</div></div>
+                <div class="card"><div class="n">3</div><div class="l">En attente</div></div>
+            </div>
+        </div>
+
+        {{-- KPI fixes — Personnel --}}
+        <div class="section-kpi hidden" data-for="pers-fiche" aria-hidden="true">
+            <div class="cards">
+                <div class="card"><div class="n">48</div><div class="l">Employés</div></div>
+                <div class="card"><div class="n">41</div><div class="l">Présents</div></div>
+                <div class="card"><div class="n">5</div><div class="l">En congé</div></div>
+                <div class="card"><div class="n">2</div><div class="l">Absents</div></div>
+            </div>
+        </div>
+
+        {{-- KPI fixes — Caisse --}}
+        <div class="section-kpi hidden" data-for="mon-caisse" data-cols="3" aria-hidden="true">
+            <div class="cards">
+                <div class="card"><div class="n">24 800 DH</div><div class="l">Solde caisse</div></div>
+                <div class="card"><div class="n">+15 200 DH</div><div class="l">Entrées (jour)</div></div>
+                <div class="card"><div class="n">-8 600 DH</div><div class="l">Sorties (jour)</div></div>
+            </div>
+        </div>
+
+        {{-- KPI fixes — Trésorerie --}}
+        <div class="section-kpi hidden" data-for="mon-tresorerie" aria-hidden="true">
+            <div class="cards">
+                <div class="card"><div class="n">486 000 DH</div><div class="l">Solde actuel</div></div>
+                <div class="card"><div class="n">+312 500 DH</div><div class="l">Entrées (mois)</div></div>
+                <div class="card"><div class="n">-198 700 DH</div><div class="l">Sorties (mois)</div></div>
+                <div class="card"><div class="n">+113 800 DH</div><div class="l">Résultat net</div></div>
+            </div>
+        </div>
+
+        {{-- KPI fixes — Salaires --}}
+        <div class="section-kpi hidden" data-for="mon-salaires" aria-hidden="true">
+            <div class="cards">
+                <div class="card"><div class="n">48</div><div class="l">Bulletins</div></div>
+                <div class="card"><div class="n">312 000 DH</div><div class="l">Masse salariale</div></div>
+                <div class="card"><div class="n">44</div><div class="l">Payés</div></div>
+                <div class="card"><div class="n">4</div><div class="l">En attente</div></div>
+            </div>
+        </div>
+
+        {{-- KPI fixes — Charges --}}
+        <div class="section-kpi hidden" data-for="mon-charges" aria-hidden="true">
+            <div class="cards">
+                <div class="card"><div class="n">198 700 DH</div><div class="l">Charges du mois</div></div>
+                <div class="card"><div class="n">62%</div><div class="l">Charges fixes</div></div>
+                <div class="card"><div class="n">38%</div><div class="l">Charges variables</div></div>
+                <div class="card"><div class="n">3</div><div class="l">Échéances proches</div></div>
+            </div>
+        </div>
+
+        {{-- KPI fixes — Étages (cartes figées en ligne) --}}
+        <div class="section-kpi etages-kpi hidden" data-for="ch-etages" aria-hidden="true">
+            <div class="ch-etages-row" id="chEtagesGrid"></div>
+        </div>
+
+        <div class="ech-sticky hidden" id="echStickyBar" aria-hidden="true"></div>
 
         <div class="content">
 
@@ -1801,12 +2606,6 @@
             <section class="panel" id="fact-clt">
                 <h2 class="serif">Facture client</h2>
                 <p class="sub">Factures clients et encaissements</p>
-                <div class="cards">
-                    <div class="card"><div class="n">284 500 DH</div><div class="l">Chiffre du mois</div></div>
-                    <div class="card"><div class="n">112</div><div class="l">Factures payées</div></div>
-                    <div class="card"><div class="n">9</div><div class="l">Impayées</div></div>
-                    <div class="card"><div class="n">18 200 DH</div><div class="l">En attente</div></div>
-                </div>
                 <div class="block">
                     <div class="row-head"><h3>Dernières factures clients</h3><button class="btn-gold">+ Nouvelle facture</button></div>
                     <table>
@@ -1864,12 +2663,6 @@
             <section class="panel" id="ch-reservations">
                 <h2 class="serif">Gestion des Réservations</h2>
                 <p class="sub">Réservations clients — arrivées, séjours et départs</p>
-                <div class="cards">
-                    <div class="card"><div class="n">28</div><div class="l">Réservations actives</div></div>
-                    <div class="card"><div class="n">6</div><div class="l">Arrivées aujourd'hui</div></div>
-                    <div class="card"><div class="n">4</div><div class="l">Départs aujourd'hui</div></div>
-                    <div class="card"><div class="n">3</div><div class="l">En attente</div></div>
-                </div>
                 <div class="block">
                     <div class="row-head"><h3>Liste des réservations</h3><button class="btn-gold">+ Nouvelle réservation</button></div>
                     <table>
@@ -1881,12 +2674,101 @@
                 </div>
             </section>
 
+            <section class="panel" id="ch-calendrier">
+                <h2 class="serif">Calendrier</h2>
+                <p class="sub">Vue calendrier des réservations et disponibilités</p>
+                <div class="block"><p class="hint">Calendrier des arrivées, départs et occupation — à venir.</p></div>
+            </section>
+
             <section class="panel" id="ch-etat">
-                <div id="echSections"></div>
+                <div class="ch-manage-wrap">
+                    <div class="ch-manage-main">
+                        <div class="ch-toolbar">
+                            <div class="ch-search-wrap">
+                                <span class="ch-search-ico">&#128269;</span>
+                                <input type="search" id="chSearch" placeholder="Rechercher une chambre..." autocomplete="off">
+                            </div>
+                            <select id="chFilterFloor" class="ch-select" aria-label="Étage">
+                                <option value="">Étage : Tous</option>
+                            </select>
+                            <select id="chFilterCat" class="ch-select" aria-label="Catégorie">
+                                <option value="">Catégorie : Toutes</option>
+                                <option value="suite">Suites</option>
+                                <option value="familiale">Familiales</option>
+                                <option value="single">Singles</option>
+                            </select>
+                            <select id="chFilterStatus" class="ch-select" aria-label="Statut">
+                                <option value="">Statut : Tous</option>
+                                <option value="disponible">Disponible</option>
+                                <option value="occupee">Occupée</option>
+                                <option value="reservee">Réservée</option>
+                                <option value="nettoyage">Nettoyage</option>
+                                <option value="maintenance">Maintenance</option>
+                            </select>
+                        </div>
+                        <div id="echSections" class="ch-rooms-area"></div>
+                    </div>
+                </div>
+                <aside class="ch-detail-panel" id="chDetailPanel" aria-hidden="false">
+                    <div class="ch-dp-floor-bar">
+                        <label for="chDpFloorSelect">Étage</label>
+                        <select id="chDpFloorSelect" aria-label="Sélectionner un étage">
+                            <option value="">Choisir un étage…</option>
+                        </select>
+                        <label for="chDpRoomSelect">Chambre</label>
+                        <select id="chDpRoomSelect" aria-label="Sélectionner une chambre">
+                            <option value="">Choisir une chambre…</option>
+                        </select>
+                    </div>
+                    <div id="chDetailContent">
+                        <div class="ch-dp-empty">
+                            <div class="ch-dp-empty-ico">&#128719;</div>
+                            <h4>Fiche chambre</h4>
+                            <p>Sélectionnez un étage puis une chambre, ou cliquez une carte.</p>
+                        </div>
+                    </div>
+                </aside>
+            </section>
+
+            <section class="panel" id="ch-categories">
+                <h2 class="serif">Catégories de chambres</h2>
+                <p class="sub">Suites, Familiales et Singles — répartition du parc</p>
+                <div id="chCategoriesGrid" class="ch-cat-grid"></div>
+            </section>
+
+            <section class="panel" id="ch-etages">
+                <div class="block">
+                    <div class="ch-etages-toolbar">
+                        <div class="ch-search-wrap">
+                            <span class="ch-search-ico">&#128269;</span>
+                            <input type="search" id="etFloorSearch" placeholder="Rechercher par étage (ex: 1, 2e étage...)" autocomplete="off">
+                        </div>
+                        <select id="etFloorFilter" class="ch-select" aria-label="Filtrer par étage">
+                            <option value="">Étage : Tous</option>
+                        </select>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Étage</th>
+                                    <th>N° Chambre</th>
+                                    <th>Titre</th>
+                                    <th>Catégorie</th>
+                                    <th>Statut</th>
+                                    <th>Prix / nuit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="chEtagesTableBody">
+                                <tr class="empty-row"><td colspan="6">Aucune donnée.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </section>
 
             <section class="panel" id="ch-dispo">
-                <h2 class="serif">Chambres disponibles</h2>
+                <h2 class="serif">Disponibilités</h2>
                 <p class="sub">Catalogue public — photos, titres et descriptions affichés sur le site</p>
                 <div id="cdSections"></div>
             </section>
@@ -1895,12 +2777,6 @@
             <section class="panel" id="pers-fiche">
                 <h2 class="serif">Fiche Personnel</h2>
                 <p class="sub">Gestion des employés de l'hôtel</p>
-                <div class="cards">
-                    <div class="card"><div class="n">48</div><div class="l">Employés</div></div>
-                    <div class="card"><div class="n">41</div><div class="l">Présents</div></div>
-                    <div class="card"><div class="n">5</div><div class="l">En congé</div></div>
-                    <div class="card"><div class="n">2</div><div class="l">Absents</div></div>
-                </div>
                 <div class="block">
                     <div class="row-head"><h3>Liste du personnel</h3><button class="btn-gold">+ Ajouter</button></div>
                     <table>
@@ -1958,11 +2834,6 @@
             <section class="panel" id="mon-caisse">
                 <h2 class="serif">Caisse</h2>
                 <p class="sub">Mouvements de caisse journaliers</p>
-                <div class="cards">
-                    <div class="card"><div class="n">24 800 DH</div><div class="l">Solde caisse</div></div>
-                    <div class="card"><div class="n">+15 200 DH</div><div class="l">Entrées (jour)</div></div>
-                    <div class="card"><div class="n">-8 600 DH</div><div class="l">Sorties (jour)</div></div>
-                </div>
                 <div class="block">
                     <div class="row-head"><h3>Mouvements caisse</h3><button class="btn-gold">+ Mouvement</button></div>
                     <table>
@@ -1977,12 +2848,6 @@
             <section class="panel" id="mon-tresorerie">
                 <h2 class="serif">Trésorerie</h2>
                 <p class="sub">Suivi des flux financiers</p>
-                <div class="cards">
-                    <div class="card"><div class="n">486 000 DH</div><div class="l">Solde actuel</div></div>
-                    <div class="card"><div class="n">+312 500 DH</div><div class="l">Entrées (mois)</div></div>
-                    <div class="card"><div class="n">-198 700 DH</div><div class="l">Sorties (mois)</div></div>
-                    <div class="card"><div class="n">+113 800 DH</div><div class="l">Résultat net</div></div>
-                </div>
                 <div class="block">
                     <div class="row-head"><h3>Derniers mouvements</h3><button class="btn-gold">+ Mouvement</button></div>
                     <table>
@@ -1997,12 +2862,6 @@
             <section class="panel" id="mon-salaires">
                 <h2 class="serif">Salaires</h2>
                 <p class="sub">Bulletins de salaire et versements</p>
-                <div class="cards">
-                    <div class="card"><div class="n">48</div><div class="l">Bulletins</div></div>
-                    <div class="card"><div class="n">312 000 DH</div><div class="l">Masse salariale</div></div>
-                    <div class="card"><div class="n">44</div><div class="l">Payés</div></div>
-                    <div class="card"><div class="n">4</div><div class="l">En attente</div></div>
-                </div>
                 <div class="block">
                     <div class="row-head"><h3>Paies du mois</h3><button class="btn-gold">Générer les bulletins</button></div>
                     <table>
@@ -2017,12 +2876,6 @@
             <section class="panel" id="mon-charges">
                 <h2 class="serif">Charges</h2>
                 <p class="sub">Dépenses et charges fixes / variables</p>
-                <div class="cards">
-                    <div class="card"><div class="n">198 700 DH</div><div class="l">Charges du mois</div></div>
-                    <div class="card"><div class="n">62%</div><div class="l">Charges fixes</div></div>
-                    <div class="card"><div class="n">38%</div><div class="l">Charges variables</div></div>
-                    <div class="card"><div class="n">3</div><div class="l">Échéances proches</div></div>
-                </div>
                 <div class="block">
                     <div class="row-head"><h3>Détail des charges</h3><button class="btn-gold">+ Ajouter une charge</button></div>
                     <table>
@@ -2214,6 +3067,7 @@
     const adminWrap=document.querySelector('.admin-wrap');
     const sbToggle=document.getElementById('sbToggle');
     const dashKpiBar=document.getElementById('dashKpiBar');
+    const chKpiBar=document.getElementById('chKpiBar');
     const echStickyBar=document.getElementById('echStickyBar');
     const contentEl=document.querySelector('.content');
     function expandSubForItem(item){
@@ -2246,11 +3100,34 @@
         panels.forEach(p=>p.classList.toggle('active',p.id===targetId));
         title.textContent=label||(match?(match.querySelector('.lbl')||match).textContent.trim():'');
         if(dashKpiBar)dashKpiBar.classList.toggle('hidden',targetId!=='dashboard');
-        if(echStickyBar)echStickyBar.classList.toggle('hidden',targetId!=='ch-etat');
+        if(chKpiBar){
+            const showCh=targetId==='ch-etat';
+            chKpiBar.classList.toggle('hidden',!showCh);
+            chKpiBar.setAttribute('aria-hidden',showCh?'false':'true');
+        }
+        let sectionKpiShown=false;
+        document.querySelectorAll('.section-kpi').forEach(bar=>{
+            const show=bar.dataset.for===targetId;
+            bar.classList.toggle('hidden',!show);
+            bar.setAttribute('aria-hidden',show?'false':'true');
+            if(show)sectionKpiShown=true;
+        });
+        if(echStickyBar)echStickyBar.classList.add('hidden');
         if(contentEl){
             contentEl.classList.toggle('dash-view',targetId==='dashboard');
-            contentEl.classList.toggle('ech-view',targetId==='ch-etat');
+            contentEl.classList.toggle('ech-view',false);
+            contentEl.classList.toggle('ch-view',targetId==='ch-etat');
+            contentEl.classList.toggle('kpi-view',sectionKpiShown);
         }
+        const pageLabels={
+            'ch-etat':'Chambres',
+            'ch-categories':'Catégories de chambres',
+            'ch-etages':'Étages',
+            'ch-dispo':'Disponibilités',
+            'ch-reservations':'Réservations',
+            'ch-calendrier':'Calendrier'
+        };
+        if(pageLabels[targetId])title.textContent=pageLabels[targetId];
         if(typeof FRNS!=='undefined'){
             if(targetId==='dashboard')FRNS.renderDashboard();
             if(targetId==='bon'||targetId==='regl')FRNS.renderSelects();
@@ -2260,6 +3137,8 @@
         if(targetId==='stock-mouvement'&&typeof STOCK!=='undefined')STOCK.syncFromBons();
         if(targetId==='stock-etat'&&typeof ETAT!=='undefined')ETAT.render();
         if(targetId==='ch-etat'&&typeof CHETAT!=='undefined')CHETAT.render();
+        if(targetId==='ch-categories'&&typeof CHETAT!=='undefined')CHETAT.renderCategories();
+        if(targetId==='ch-etages'&&typeof CHETAT!=='undefined')CHETAT.renderEtages();
         if(targetId==='ch-dispo'&&typeof CHDISPO!=='undefined')CHDISPO.render();
         if(targetId==='configuration'&&typeof CFG!=='undefined'){
             CFG.render();
@@ -3536,10 +4415,11 @@ const CFG=(function(){
         {id:'fact-clt',label:'Facture client',section:'Facturation'},
         {id:'regl-clt',label:'Règl Client',section:'Facturation'},
         {id:'releve-clt',label:'Relevé Compte Clt',section:'Facturation'},
-        {id:'ch-suivi',label:'Suivi Opérationnel',section:'Exploitation'},
-        {id:'ch-reservations',label:'Gestion des Réservations',section:'Exploitation'},
-        {id:'ch-etat',label:'Etat Chambres',section:'Exploitation'},
-        {id:'ch-dispo',label:'Chambres Disponibles',section:'Exploitation'},
+        {id:'ch-etat',label:'Chambres',section:'Hébergement'},
+        {id:'ch-categories',label:'Catégories de chambres',section:'Hébergement'},
+        {id:'ch-etages',label:'Étages',section:'Hébergement'},
+        {id:'ch-dispo',label:'Disponibilités',section:'Hébergement'},
+        {id:'ch-calendrier',label:'Calendrier',section:'Pilotage'},
         {id:'pers-fiche',label:'Fiche Personnel',section:'Exploitation'},
         {id:'pers-taches',label:'Gestion des Taches',section:'Exploitation'},
         {id:'pers-suivi',label:'Suivi Journalier',section:'Exploitation'},
@@ -4074,82 +4954,301 @@ const CHETAT=(function(){
     };
     const MSG_ICON={occupee:'&#128719;',reservee:'&#128467;',nettoyage:'&#128736;',maintenance:'&#9888;'};
     const TYPE_LBL={suite:'Suite',familiale:'Familiale',single:'Single'};
+    const CAT_LBL={suite:'Suite',familiale:'Chambre Familiale',single:'Chambre Single'};
+    const CAT_TITLE={suite:'Suites',familiale:'Chambres Familiales',single:'Chambres Singles'};
+    const ROOM_META={
+        suite:{guests:3,size:'45 m²',view:'Vue panoramique',bed:'Lit King Size'},
+        familiale:{guests:4,size:'38 m²',view:'Vue jardin',bed:'2 lits doubles'},
+        single:{guests:2,size:'28 m²',view:'Vue ville',bed:'Lit Queen'}
+    };
+    const STAT_ICO={total:'&#128719;',disponible:'&#10003;',occupee:'&#128100;',reservee:'&#128467;',nettoyage:'&#128736;',maintenance:'&#9881;'};
     const TVA_RATE=.10;
     const K_RESA='aj_ch_resa';
     const K_STATUS='aj_ch_status';
-    const EDIT_ICON='<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>';
-    const SECTIONS=[
-        {key:'suite',title:'Suites'},
-        {key:'familiale',title:'Chambres Familiales'},
-        {key:'single',title:'Chambres Singles'}
-    ];
-    let ROOMS=[];
-    function loadCatalogRooms(){
-        const base=window.AJ_HOTEL?window.AJ_HOTEL.getCatalog():[];
-        return base.map(r=>({...r,status:r.status||'disponible'}));
-    }
-    let currentFilter='all',bound=false,currentRoom=null;
+    let ROOMS=[],currentFilter={q:'',floor:'',cat:'',status:''},viewMode='grid',selectedNum=null,bound=false,currentRoom=null;
+
     const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     const fmtP=n=>Number(n).toLocaleString('fr-FR')+' DH';
     const num=v=>Number(v)||0;
     const fmtAmt=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
     const today=()=>new Date().toISOString().slice(0,10);
+    const pct=(n,t)=>t?((n/t)*100).toFixed(1)+'%':'0%';
+    const floorLbl=f=>f===1?'1er étage':f+'e étage';
+
+    function loadCatalogRooms(){
+        const base=window.AJ_HOTEL?window.AJ_HOTEL.getCatalog():[];
+        return base.map(r=>({...r,status:r.status||'disponible',longDesc:r.longDesc||r.desc}));
+    }
     const getResas=()=>JSON.parse(localStorage.getItem(K_RESA)||'{}');
     const setResas=o=>localStorage.setItem(K_RESA,JSON.stringify(o));
     const getStatuses=()=>JSON.parse(localStorage.getItem(K_STATUS)||'{}');
     const setStatuses=o=>localStorage.setItem(K_STATUS,JSON.stringify(o));
-    const saveRoomStatus=(num,status)=>{
-        const s=getStatuses();s[num]=status;setStatuses(s);
-    };
-    const saveRoomData=(num,data)=>{
-        if(window.AJ_HOTEL)window.AJ_HOTEL.saveRoom(num,data);
-    };
+    const saveRoomStatus=(n,st)=>{const s=getStatuses();s[n]=st;setStatuses(s);};
+    const saveRoomData=(n,d)=>{if(window.AJ_HOTEL)window.AJ_HOTEL.saveRoom(n,d);};
     const roomByNum=n=>ROOMS.find(r=>r.num===n);
+    const metaFor=r=>ROOM_META[r.type]||ROOM_META.single;
 
-    function cardHtml(r){
-        return`<article class="rm-card st-${r.status}" data-num="${r.num}" data-type="${r.type}" data-status="${r.status}" role="button" tabindex="0">
-            <div class="rm-card-main">
-                <div class="rm-img"><img src="${r.img}" alt="${esc(r.title)}" loading="lazy"><span class="rm-num">${r.num}</span><button type="button" class="rm-edit-btn" title="Maintenance — modifier la chambre" aria-label="Modifier la chambre">${EDIT_ICON}</button></div>
-                <div class="rm-body"><span class="rm-type">${TYPE_LBL[r.type]} · Étage ${r.floor}</span><h4>${esc(r.title)}</h4><p class="rm-desc">${esc(r.desc)}</p><div class="rm-foot"><span class="rm-price">${fmtP(r.price)}</span><span class="rm-unit">/ nuit</span></div></div>
+    function syncFromStorage(){
+        const statuses=getStatuses(),resas=getResas(),statusMap={};
+        ROOMS.forEach(r=>{statusMap[r.num]=r.status;});
+        ROOMS=loadCatalogRooms();
+        ROOMS.forEach(r=>{
+            if(resas[r.num]?.validated)r.status=resas[r.num].statusChambre||'reservee';
+            else if(statuses[r.num])r.status=statuses[r.num];
+            else if(statusMap[r.num])r.status=statusMap[r.num];
+        });
+    }
+
+    function cardHtml(r,idx){
+        const m=metaFor(r);
+        return`<article class="ch-room-card st-${r.status}${selectedNum===r.num?' is-selected':''}" data-num="${r.num}" data-type="${r.type}" data-status="${r.status}" data-floor="${r.floor}" data-slot="${idx}" style="--ch-slot:${idx}" role="button" tabindex="0">
+            <div class="ch-rc-img">
+                <img src="${esc(r.img)}" alt="${esc(r.title)}" loading="lazy">
+                <span class="ch-rc-badge st-${r.status}">${STATUS[r.status]}</span>
             </div>
-            <span class="rm-badge">${STATUS[r.status]}</span>
+            <div class="ch-rc-body">
+                <div class="ch-rc-num">${esc(r.num)}</div>
+                <div class="ch-rc-title">${esc(r.title)}</div>
+                <div class="ch-rc-meta">
+                    <span>&#128101; ${m.guests}</span>
+                    <span>&#9632; ${m.size}</span>
+                    <span>&#127749; ${m.view}</span>
+                </div>
+                <div class="ch-rc-price">${fmtP(r.price)} <small>/ nuit</small></div>
+            </div>
         </article>`;
     }
 
-    function updateKpi(){
+    function renderStats(){
         const c={total:ROOMS.length,disponible:0,occupee:0,reservee:0,nettoyage:0,maintenance:0};
         ROOMS.forEach(r=>{if(c[r.status]!=null)c[r.status]++;});
-        const map={echTotal:c.total,echDispo:c.disponible,echOccu:c.occupee,echResa:c.reservee,echNett:c.nettoyage,echMaint:c.maintenance};
-        Object.entries(map).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
+        const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+        set('statTotal',c.total);
+        set('statDispo',c.disponible);
+        set('statOccu',c.occupee);
+        set('statResa',c.reservee);
+        set('statNett',c.nettoyage);
+        set('statMaint',c.maintenance);
+        set('statDispoPct',pct(c.disponible,c.total));
+        set('statOccuPct',pct(c.occupee,c.total));
+        set('statResaPct',pct(c.reservee,c.total));
+        set('statNettPct',pct(c.nettoyage,c.total));
+        set('statMaintPct',pct(c.maintenance,c.total));
     }
 
-    function applyFilter(filter){
-        currentFilter=filter;
-        document.querySelectorAll('.ech-filter').forEach(b=>b.classList.toggle('active',b.dataset.filter===filter));
-        const types=['suite','familiale','single'];
-        const stats=['disponible','occupee','reservee','nettoyage','maintenance'];
-        document.querySelectorAll('.ech-section').forEach(sec=>{
-            const type=sec.dataset.type;
-            let show=filter==='all'||(types.includes(filter)&&type===filter);
-            if(stats.includes(filter))show=true;
-            sec.style.display=show?'':'none';
-            sec.querySelectorAll('.rm-card').forEach(card=>{
-                let vis=true;
-                if(types.includes(filter))vis=card.dataset.type===filter;
-                else if(stats.includes(filter))vis=card.dataset.status===filter;
-                card.classList.toggle('hidden-filter',!vis);
-            });
+    function refreshCardDom(room){
+        const card=document.querySelector(`.ch-room-card[data-num="${room.num}"]`);
+        if(!card)return;
+        const wasHidden=card.classList.contains('hidden-filter');
+        const slot=card.dataset.slot||'0';
+        card.dataset.status=room.status;
+        card.dataset.type=room.type;
+        card.dataset.floor=String(room.floor);
+        card.className=`ch-room-card st-${room.status}${selectedNum===room.num?' is-selected':''}${wasHidden?' hidden-filter':''}`;
+        card.dataset.slot=slot;
+        card.style.setProperty('--ch-slot',slot);
+        card.style.transform='none';
+        card.style.translate='none';
+        const badge=card.querySelector('.ch-rc-badge');
+        if(badge){badge.className=`ch-rc-badge st-${room.status}`;badge.textContent=STATUS[room.status];}
+        const title=card.querySelector('.ch-rc-title');
+        if(title)title.textContent=room.title;
+        const price=card.querySelector('.ch-rc-price');
+        if(price)price.innerHTML=`${fmtP(room.price)} <small>/ nuit</small>`;
+        const img=card.querySelector('.ch-rc-img img');
+        if(img&&room.img)img.src=room.img;
+    }
+
+    function applyFilters(){
+        document.querySelectorAll('.ch-room-card').forEach(card=>{
+            const r=roomByNum(card.dataset.num);
+            const show=!!(r&&matchesFilter(r));
+            card.classList.toggle('hidden-filter',!show);
+            card.setAttribute('aria-hidden',show?'false':'true');
+            /* Verrouillage dur : jamais display:none (évite le reflow) */
+            card.style.display='flex';
+            card.style.visibility=show?'visible':'hidden';
+            card.style.opacity=show?'1':'0';
+            card.style.pointerEvents=show?'auto':'none';
+            card.style.transform='none';
+            card.style.translate='none';
+            card.style.position='relative';
+            card.style.top='auto';
+            card.style.left='auto';
+            card.style.order='0';
         });
-        if(stats.includes(filter)){
-            document.querySelectorAll('.ech-section').forEach(sec=>{
-                const vis=[...sec.querySelectorAll('.rm-card')].some(c=>!c.classList.contains('hidden-filter'));
-                sec.style.display=vis?'':'none';
-            });
-        }
+    }
+
+    function populateFloorFilter(){
+        const sel=document.getElementById('chFilterFloor');
+        if(!sel)return;
+        const floors=[...new Set(ROOMS.map(r=>r.floor))].sort((a,b)=>a-b);
+        const cur=sel.value;
+        sel.innerHTML='<option value="">Étage : Tous</option>'+floors.map(f=>`<option value="${f}">${floorLbl(f)}</option>`).join('');
+        if(cur)sel.value=cur;
+    }
+
+    function matchesFilter(r){
+        const q=currentFilter.q.toLowerCase();
+        if(q&&!(`${r.num} ${r.title} ${r.desc}`.toLowerCase().includes(q)))return false;
+        if(currentFilter.floor&&String(r.floor)!==currentFilter.floor)return false;
+        if(currentFilter.cat&&r.type!==currentFilter.cat)return false;
+        if(currentFilter.status&&r.status!==currentFilter.status)return false;
+        return true;
     }
 
     function openModal(){document.getElementById('rmModalOverlay')?.classList.add('show');}
     function closeModal(){document.getElementById('rmModalOverlay')?.classList.remove('show');currentRoom=null;}
+
+    function populateDetailFloorSelects(activeRoom){
+        const floorSel=document.getElementById('chDpFloorSelect');
+        const roomSel=document.getElementById('chDpRoomSelect');
+        if(!floorSel||!roomSel)return;
+        const floors=[...new Set(ROOMS.map(r=>r.floor))].sort((a,b)=>a-b);
+        const curFloor=activeRoom?String(activeRoom.floor):(floorSel.value||'');
+        floorSel.innerHTML='<option value="">Choisir un étage…</option>'+
+            floors.map(f=>`<option value="${f}">${floorLbl(f)}</option>`).join('');
+        if(curFloor&&floors.some(f=>String(f)===curFloor))floorSel.value=curFloor;
+        const floor=floorSel.value;
+        const roomsOnFloor=floor
+            ?ROOMS.filter(r=>String(r.floor)===String(floor)).slice().sort((a,b)=>String(a.num).localeCompare(String(b.num),undefined,{numeric:true}))
+            :[];
+        roomSel.innerHTML='<option value="">Choisir une chambre…</option>'+
+            roomsOnFloor.map(r=>`<option value="${esc(r.num)}">${esc(r.num)} — ${esc(r.title)}</option>`).join('');
+        roomSel.disabled=!floor;
+        if(activeRoom&&roomsOnFloor.some(r=>r.num===activeRoom.num))roomSel.value=activeRoom.num;
+    }
+
+    function bindDetailFloorSelects(){
+        const floorSel=document.getElementById('chDpFloorSelect');
+        const roomSel=document.getElementById('chDpRoomSelect');
+        if(!floorSel||floorSel.dataset.bound==='1')return;
+        floorSel.dataset.bound='1';
+        floorSel.addEventListener('change',()=>{
+            const floor=floorSel.value;
+            if(!floor){
+                selectedNum=null;
+                document.querySelectorAll('.ch-room-card.is-selected').forEach(c=>c.classList.remove('is-selected'));
+                populateDetailFloorSelects(null);
+                renderDetailEmpty();
+                return;
+            }
+            const first=ROOMS.filter(r=>String(r.floor)===String(floor))
+                .sort((a,b)=>String(a.num).localeCompare(String(b.num),undefined,{numeric:true}))[0];
+            if(first)showDetail(first);
+            else{
+                selectedNum=null;
+                populateDetailFloorSelects({floor:Number(floor)});
+                const box=document.getElementById('chDetailContent');
+                if(box)box.innerHTML=`<div class="ch-dp-empty"><div class="ch-dp-empty-ico">&#128719;</div><h4>Aucune chambre</h4><p>Pas de chambre sur cet étage.</p></div>`;
+            }
+        });
+        roomSel.addEventListener('change',()=>{
+            const num=roomSel.value;
+            if(!num){
+                selectedNum=null;
+                document.querySelectorAll('.ch-room-card.is-selected').forEach(c=>c.classList.remove('is-selected'));
+                const box=document.getElementById('chDetailContent');
+                if(box)box.innerHTML=`<div class="ch-dp-empty"><div class="ch-dp-empty-ico">&#128719;</div><h4>Fiche chambre</h4><p>Choisissez une chambre dans la liste.</p></div>`;
+                return;
+            }
+            const room=roomByNum(num);
+            if(room)showDetail(room);
+        });
+    }
+
+    function renderDetailEmpty(){
+        const box=document.getElementById('chDetailContent');
+        if(!box)return;
+        box.innerHTML=`<div class="ch-dp-empty">
+            <div class="ch-dp-empty-ico">&#128719;</div>
+            <h4>Fiche chambre</h4>
+            <p>Sélectionnez un étage puis une chambre, ou cliquez une carte.</p>
+        </div>`;
+    }
+
+    function closeDetail(){
+        selectedNum=null;
+        document.getElementById('chDetailPanel')?.classList.remove('is-open');
+        document.querySelector('.ch-manage-wrap')?.classList.remove('is-detail-open');
+        document.getElementById('chDetailPanel')?.setAttribute('aria-hidden','true');
+        document.querySelectorAll('.ch-room-card.is-selected').forEach(c=>c.classList.remove('is-selected'));
+        populateDetailFloorSelects(null);
+        const floorSel=document.getElementById('chDpFloorSelect');
+        const roomSel=document.getElementById('chDpRoomSelect');
+        if(floorSel)floorSel.value='';
+        if(roomSel){roomSel.innerHTML='<option value="">Choisir une chambre…</option>';roomSel.disabled=true;}
+        renderDetailEmpty();
+    }
+
+    function showDetail(room){
+        selectedNum=room.num;
+        const panel=document.getElementById('chDetailPanel');
+        const box=document.getElementById('chDetailContent');
+        if(!panel||!box)return;
+        document.querySelectorAll('.ch-room-card').forEach(c=>c.classList.toggle('is-selected',c.dataset.num===room.num));
+        populateDetailFloorSelects(room);
+        const m=metaFor(room);
+        box.innerHTML=`
+            <div class="ch-dp-hero">
+                <img src="${esc(room.img)}" alt="${esc(room.title)}">
+                <div class="ch-dp-hero-top">
+                    <span class="ch-dp-status st-${room.status}">${STATUS[room.status]}</span>
+                    <button type="button" class="ch-dp-close" id="chDpClose" aria-label="Fermer">&times;</button>
+                </div>
+                <div class="ch-dp-hero-info">
+                    <div class="ch-dp-num">${esc(room.num)}</div>
+                    <div class="ch-dp-title">${esc(room.title)}</div>
+                </div>
+            </div>
+            <div class="ch-dp-price-band">
+                <div>
+                    <div class="lbl">Tarif nuit</div>
+                    <div class="val">${fmtP(room.price)} <small>/ nuit</small></div>
+                </div>
+            </div>
+            <div class="ch-dp-body">
+                <div class="ch-dp-specs">
+                    <span>&#128101;<b>${m.guests} Pers.</b></span>
+                    <span>&#9632;<b>${m.size}</b></span>
+                    <span>&#128719;<b>${m.bed}</b></span>
+                    <span>&#127749;<b>${m.view}</b></span>
+                </div>
+                <div class="ch-dp-attrs">
+                    <div class="ch-dp-row"><span>Catégorie</span><strong>${esc(CAT_LBL[room.type]||room.title)}</strong></div>
+                    <div class="ch-dp-row"><span>Étage</span><strong>${floorLbl(room.floor)}</strong></div>
+                    <div class="ch-dp-row"><span>Statut</span><strong>${STATUS[room.status]}</strong></div>
+                </div>
+                <div>
+                    <span class="ch-dp-section-lbl">Description</span>
+                    <p class="ch-dp-desc">${esc(room.longDesc||room.desc)}</p>
+                </div>
+                <div>
+                    <span class="ch-dp-section-lbl">Équipements</span>
+                    <div class="ch-dp-equip">
+                        <span title="Wi-Fi">&#128246;</span><span title="TV">&#128250;</span><span title="Parking">&#127359;</span>
+                        <span title="Coffre">&#128274;</span><span title="Café">&#9749;</span><span title="Climatisation">&#10052;</span>
+                    </div>
+                </div>
+                <div class="ch-dp-actions">
+                    <button type="button" class="ch-btn-primary" id="chDpEdit">Modifier</button>
+                    <button type="button" class="ch-btn-outline" id="chDpDetails">Détails</button>
+                    <button type="button" class="ch-dp-danger" id="chDpHors">Mettre hors service</button>
+                </div>
+            </div>`;
+        panel.classList.add('is-open');
+        panel.setAttribute('aria-hidden','false');
+        document.querySelector('.ch-manage-wrap')?.classList.add('is-detail-open');
+        document.getElementById('chDpClose')?.addEventListener('click',closeDetail);
+        document.getElementById('chDpEdit')?.addEventListener('click',()=>showEditRoom(room));
+        document.getElementById('chDpDetails')?.addEventListener('click',()=>onRoomClick(room));
+        document.getElementById('chDpHors')?.addEventListener('click',()=>{
+            if(confirm('Mettre la chambre '+room.num+' hors service (maintenance) ?')){
+                changeRoomStatus(room,'maintenance');
+                showDetail(roomByNum(room.num)||room);
+            }
+        });
+    }
 
     function showMessage(room,status){
         const box=document.getElementById('rmModalContent');
@@ -4190,12 +5289,8 @@ const CHETAT=(function(){
     function calcTotals(){
         const nuits=num(document.getElementById('rf_nuits')?.value);
         const tarif=num(document.getElementById('rf_tarif')?.value);
-        const ht=nuits*tarif;
-        const tva=ht*TVA_RATE;
-        const ttc=ht+tva;
-        const htEl=document.getElementById('rf_ht');
-        const tvaEl=document.getElementById('rf_tva');
-        const ttcEl=document.getElementById('rf_ttc');
+        const ht=nuits*tarif,tva=ht*TVA_RATE,ttc=ht+tva;
+        const htEl=document.getElementById('rf_ht'),tvaEl=document.getElementById('rf_tva'),ttcEl=document.getElementById('rf_ttc');
         if(htEl)htEl.value=fmtAmt(ht)+' DH';
         if(tvaEl)tvaEl.value=fmtAmt(tva)+' DH';
         if(ttcEl)ttcEl.value=fmtAmt(ttc)+' DH';
@@ -4215,10 +5310,9 @@ const CHETAT=(function(){
         };
     }
 
-    function setFormReadonly(readonly){
+    function setFormReadonly(ro){
         ['rf_date','rf_nom','rf_cin','rf_personnes','rf_nuits','rf_tarif'].forEach(id=>{
-            const el=document.getElementById(id);
-            if(el)el.readOnly=readonly;
+            const el=document.getElementById(id);if(el)el.readOnly=ro;
         });
     }
 
@@ -4228,9 +5322,8 @@ const CHETAT=(function(){
         setResas(resas);
         room.status=status;
         saveRoomStatus(room.num,status);
-        updateKpi();
-        refreshCards();
         closeModal();
+        render();
         alert('Réservation validée — Statut : '+STATUS[status]);
     }
 
@@ -4239,14 +5332,9 @@ const CHETAT=(function(){
         room.status=newStatus;
         saveRoomStatus(room.num,newStatus);
         const resas=getResas();
-        if(newStatus==='disponible'||newStatus==='nettoyage'||newStatus==='maintenance'){
-            delete resas[room.num];
-            setResas(resas);
-        }
-        updateKpi();
-        refreshCards();
+        if(newStatus==='disponible'||newStatus==='nettoyage'||newStatus==='maintenance'){delete resas[room.num];setResas(resas);}
         closeModal();
-        alert('Statut mis à jour : '+STATUS[newStatus]);
+        render();
     }
 
     function showAdminStatusPanel(room){
@@ -4286,20 +5374,18 @@ const CHETAT=(function(){
             btn.addEventListener('click',()=>confirmReservation(room,d,btn.dataset.st));
         });
         document.getElementById('rfRetour')?.addEventListener('click',()=>showForm(room,d));
+        openModal();
     }
 
     function showForm(room,prefill){
         currentRoom=room;
-        const saved=getResas()[room.num];
-        const data=prefill||saved;
+        const saved=getResas()[room.num],data=prefill||saved;
         const box=document.getElementById('rmModalContent');
         if(!box)return;
         box.innerHTML=formHtml(room,data);
         calcTotals();
         if(saved?.validated&&!prefill)setFormReadonly(true);
-        ['rf_nuits','rf_tarif','rf_personnes'].forEach(id=>{
-            document.getElementById(id)?.addEventListener('input',calcTotals);
-        });
+        ['rf_nuits','rf_tarif','rf_personnes'].forEach(id=>document.getElementById(id)?.addEventListener('input',calcTotals));
         document.getElementById('rfValider')?.addEventListener('click',()=>{
             const d=getFormData();
             if(!d.nom){alert('Veuillez saisir le nom du client.');return;}
@@ -4316,29 +5402,15 @@ const CHETAT=(function(){
     function printForm(room,isPdf){
         const d=getFormData();
         const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Réservation Chambre ${esc(room.num)}</title>
-        <style>body{font-family:Georgia,serif;padding:32px;color:#111}h1{font-size:22px;margin-bottom:4px}
-        h2{font-size:14px;color:#555;font-weight:normal;margin:0 0 24px}table{width:100%;border-collapse:collapse}
-        td,th{padding:10px 12px;border:1px solid #ccc;font-size:13px;text-align:left}th{background:#0a1736;color:#fff}
-        .tot{margin-top:20px;font-size:15px}.tot b{display:inline-block;min-width:140px}</style></head><body>
+        <style>body{font-family:Georgia,serif;padding:32px;color:#111}h1{font-size:22px}table{width:100%;border-collapse:collapse}td,th{padding:10px;border:1px solid #ccc;font-size:13px}th{background:#1a2236;color:#fff}</style></head><body>
         <h1>Al Jazeera Hotel — Réservation</h1>
         <h2>Chambre ${esc(room.num)} — ${esc(room.title)}</h2>
         <table><tr><th>Champ</th><th>Valeur</th></tr>
-        <tr><td>Date</td><td>${esc(d.date)}</td></tr>
-        <tr><td>Nom Client</td><td>${esc(d.nom)}</td></tr>
-        <tr><td>N° CIN / Passport</td><td>${esc(d.cin)}</td></tr>
-        <tr><td>Nbrs Personnes</td><td>${d.personnes}</td></tr>
-        <tr><td>Nbrs Nuités</td><td>${d.nuits}</td></tr>
-        <tr><td>Tarif Nuités</td><td>${fmtAmt(d.tarif)} DH</td></tr>
-        </table>
-        <div class="tot"><p><b>Total HT</b> ${fmtAmt(d.ht)} DH</p>
-        <p><b>Total TVA</b> ${fmtAmt(d.tva)} DH</p>
-        <p><b>Total TTC</b> ${fmtAmt(d.ttc)} DH</p></div>
-        </body></html>`;
+        <tr><td>Date</td><td>${esc(d.date)}</td></tr><tr><td>Nom</td><td>${esc(d.nom)}</td></tr>
+        <tr><td>CIN</td><td>${esc(d.cin)}</td></tr><tr><td>Nuitées</td><td>${d.nuits}</td></tr>
+        <tr><td>TTC</td><td>${fmtAmt(d.ttc)} DH</td></tr></table></body></html>`;
         const w=window.open('','',isPdf?'width=800,height=700':'width=800,height=700');
-        w.document.write(html);
-        w.document.close();
-        w.focus();
-        setTimeout(()=>w.print(),300);
+        w.document.write(html);w.document.close();w.focus();setTimeout(()=>w.print(),300);
     }
 
     function onRoomClick(room){
@@ -4351,140 +5423,254 @@ const CHETAT=(function(){
         currentRoom=room;
         const box=document.getElementById('rmModalContent');
         if(!box)return;
-        box.innerHTML=`<div class="rm-form-head"><h3>Maintenance — Chambre ${esc(room.num)}</h3><p>Modifier la photo, le titre, la description, le prix et le statut</p></div>
-        <form class="rm-form-grid" id="reForm" onsubmit="return false">
-            <div class="field span2"><label>Aperçu photo</label><div class="rm-edit-preview"><img id="re_preview" src="${esc(room.img)}" alt=""></div></div>
-            <div class="field span2"><label>URL de la photo</label><input type="text" id="re_img" value="${esc(room.img)}" placeholder="https://..."></div>
-            <div class="field span2"><label>Importer une image</label><input type="file" id="re_img_file" accept="image/*"></div>
-            <div class="field span2"><label>Titre</label><input type="text" id="re_title" value="${esc(room.title)}"></div>
-            <div class="field span2"><label>Description</label><textarea id="re_desc" rows="3">${esc(room.desc)}</textarea></div>
-            <div class="field"><label>Prix / nuit (DH)</label><input type="number" id="re_price" min="0" step="1" value="${room.price}"></div>
-            <div class="field"><label>Statut</label><select id="re_status">${ALL_STATUS.map(st=>`<option value="${st}"${st===room.status?' selected':''}>${STATUS[st]}</option>`).join('')}</select></div>
+        const statusOpts=[
+            ['disponible','Disponible'],
+            ['occupee','Occupée'],
+            ['reservee','Réservée'],
+            ['maintenance','Maintenance'],
+            ['nettoyage','Nettoyage']
+        ];
+        box.innerHTML=`
+        <div class="rm-form-head">
+            <h3>Modifier — Chambre ${esc(room.num)}</h3>
+            <p>Titre, description, prix et état</p>
+        </div>
+        <form class="rm-form-grid rm-edit-simple" id="reForm" onsubmit="return false">
+            <div class="field span2">
+                <label>Titre</label>
+                <input type="text" id="re_title" value="${esc(room.title)}" placeholder="Titre de la chambre" required>
+            </div>
+            <div class="field span2">
+                <label>Description</label>
+                <textarea id="re_desc" rows="4" placeholder="Description de la chambre">${esc(room.desc)}</textarea>
+            </div>
+            <div class="field">
+                <label>Prix</label>
+                <input type="number" id="re_price" min="0" step="1" value="${room.price}" placeholder="Prix / nuit (DH)">
+            </div>
+            <div class="field">
+                <label>État</label>
+                <select id="re_status">
+                    ${statusOpts.map(([v,l])=>`<option value="${v}"${room.status===v?' selected':''}>${l}</option>`).join('')}
+                </select>
+            </div>
         </form>
         <div class="rm-form-actions">
             <button type="button" class="btn gold" id="reSave">Enregistrer</button>
             <button type="button" class="btn ghost" id="reCancel">Annuler</button>
         </div>`;
-        const preview=document.getElementById('re_preview');
-        const imgInput=document.getElementById('re_img');
-        imgInput?.addEventListener('input',()=>{
-            const v=imgInput.value.trim();
-            if(preview&&v)preview.src=v;
-        });
-        document.getElementById('re_img_file')?.addEventListener('change',e=>{
-            const file=e.target.files?.[0];
-            if(!file)return;
-            const reader=new FileReader();
-            reader.onload=()=>{
-                if(imgInput)imgInput.value=reader.result;
-                if(preview)preview.src=reader.result;
-            };
-            reader.readAsDataURL(file);
-        });
         document.getElementById('reSave')?.addEventListener('click',()=>saveRoomEdit(room));
         document.getElementById('reCancel')?.addEventListener('click',closeModal);
         openModal();
     }
 
     function saveRoomEdit(room){
-        const img=document.getElementById('re_img')?.value.trim();
         const title=document.getElementById('re_title')?.value.trim();
         const desc=document.getElementById('re_desc')?.value.trim();
         const price=num(document.getElementById('re_price')?.value);
         const status=document.getElementById('re_status')?.value;
         if(!title){alert('Veuillez saisir un titre.');return;}
-        if(!ALL_STATUS.includes(status))return;
-        room.img=img||room.img;
+        if(!ALL_STATUS.includes(status)){alert('État invalide.');return;}
         room.title=title;
         room.desc=desc;
         room.price=price;
-        saveRoomData(room.num,{img:room.img,title:room.title,desc:room.desc,price:room.price});
-        const oldStatus=room.status;
+        saveRoomData(room.num,{title:room.title,desc:room.desc,price:room.price});
+        const old=room.status;
         room.status=status;
         saveRoomStatus(room.num,status);
-        if(status!==oldStatus){
+        if(status!==old){
             const resas=getResas();
             if(status==='disponible'||status==='nettoyage'||status==='maintenance'){
                 delete resas[room.num];
                 setResas(resas);
             }
         }
-        updateKpi();
         closeModal();
-        render();
+        refreshCardDom(room);
+        renderStats();
+        applyFilters();
+        if(selectedNum===room.num)showDetail(room);
         alert('Chambre mise à jour.');
     }
 
-    function refreshCards(){
-        document.querySelectorAll('.rm-card').forEach(card=>{
-            const r=roomByNum(card.dataset.num);
-            if(!r)return;
-            card.className=`rm-card st-${r.status}${card.classList.contains('hidden-filter')?' hidden-filter':''}`;
-            card.dataset.status=r.status;
-            const badge=card.querySelector('.rm-badge');
-            if(badge)badge.textContent=STATUS[r.status];
+    function bindOnce(){
+        if(bound)return;
+        const area=document.getElementById('echSections');
+        document.getElementById('chSearch')?.addEventListener('input',e=>{currentFilter.q=e.target.value.trim();applyFilters();});
+        document.getElementById('chFilterFloor')?.addEventListener('change',e=>{currentFilter.floor=e.target.value;applyFilters();});
+        document.getElementById('chFilterCat')?.addEventListener('change',e=>{currentFilter.cat=e.target.value;applyFilters();});
+        document.getElementById('chFilterStatus')?.addEventListener('change',e=>{currentFilter.status=e.target.value;applyFilters();});
+        document.querySelectorAll('.ch-view-btn').forEach(btn=>{
+            btn.addEventListener('click',e=>{
+                e.preventDefault();
+                /* Mode liste désactivé : la grille reste verrouillée */
+                viewMode='grid';
+                document.querySelectorAll('.ch-view-btn').forEach(b=>b.classList.toggle('active',b.dataset.view==='grid'));
+                area?.classList.remove('ch-view-list');
+            });
         });
-        applyFilter(currentFilter);
-    }
-
-    function syncFromStorage(){
-        const statuses=getStatuses();
-        const resas=getResas();
-        const statusMap={};
-        ROOMS.forEach(r=>{statusMap[r.num]=r.status;});
-        ROOMS=loadCatalogRooms();
-        ROOMS.forEach(r=>{
-            if(resas[r.num]?.validated)r.status=resas[r.num].statusChambre||'reservee';
-            else if(statuses[r.num])r.status=statuses[r.num];
-            else if(statusMap[r.num])r.status=statusMap[r.num];
+        area?.addEventListener('click',e=>{
+            const card=e.target.closest('.ch-room-card');
+            if(!card)return;
+            const room=roomByNum(card.dataset.num);
+            if(room)showDetail(room);
         });
+        area?.addEventListener('keydown',e=>{
+            if(e.key!=='Enter'&&e.key!==' ')return;
+            const card=e.target.closest('.ch-room-card');
+            if(!card)return;
+            e.preventDefault();
+            const room=roomByNum(card.dataset.num);
+            if(room)showDetail(room);
+        });
+        document.getElementById('rmModalClose')?.addEventListener('click',closeModal);
+        document.getElementById('rmModalOverlay')?.addEventListener('click',e=>{if(e.target.id==='rmModalOverlay')closeModal();});
+        bound=true;
     }
 
     function render(){
         const box=document.getElementById('echSections');
         if(!box)return;
         syncFromStorage();
-        box.innerHTML=SECTIONS.map(s=>{
-            const rooms=ROOMS.filter(r=>r.type===s.key);
-            return`<div class="ech-section" data-type="${s.key}"><div class="ech-section-head"><h3>${s.title}</h3><span class="ech-count">${rooms.length} chambres</span></div><div class="ech-grid">${rooms.map(cardHtml).join('')}</div></div>`;
-        }).join('');
-        updateKpi();
-        applyFilter(currentFilter);
-        if(!bound){
-            document.getElementById('echFilters')?.addEventListener('click',e=>{
-                const btn=e.target.closest('.ech-filter');
-                if(btn)applyFilter(btn.dataset.filter);
+        ROOMS=ROOMS.slice().sort((a,b)=>String(a.num).localeCompare(String(b.num),undefined,{numeric:true}));
+        const grid=document.getElementById('chRoomGrid');
+        const existing=grid?grid.querySelectorAll('.ch-room-card').length:0;
+        if(grid&&existing===ROOMS.length){
+            ROOMS.forEach(r=>refreshCardDom(r));
+            renderStats();
+            applyFilters();
+        }else{
+            box.className='ch-rooms-area';
+            box.innerHTML=`<div class="ch-room-grid" id="chRoomGrid">${ROOMS.map((r,i)=>cardHtml(r,i)).join('')}</div>`;
+            renderStats();
+            populateFloorFilter();
+            applyFilters();
+            document.querySelectorAll('#chRoomGrid .ch-room-card').forEach(card=>{
+                card.style.transform='none';
+                card.style.translate='none';
+                card.style.order='0';
             });
-            box.addEventListener('click',e=>{
-                const editBtn=e.target.closest('.rm-edit-btn');
-                if(editBtn){
-                    e.stopPropagation();
-                    const card=editBtn.closest('.rm-card');
-                    const room=roomByNum(card?.dataset.num);
-                    if(room)showEditRoom(room);
-                    return;
-                }
-                const card=e.target.closest('.rm-card');
-                if(!card)return;
-                const room=roomByNum(card.dataset.num);
-                if(room)onRoomClick(room);
-            });
-            box.addEventListener('keydown',e=>{
-                if(e.key!=='Enter'&&e.key!==' ')return;
-                const card=e.target.closest('.rm-card');
-                if(!card)return;
-                e.preventDefault();
-                const room=roomByNum(card.dataset.num);
-                if(room)onRoomClick(room);
-            });
-            document.getElementById('rmModalClose')?.addEventListener('click',closeModal);
-            document.getElementById('rmModalOverlay')?.addEventListener('click',e=>{
-                if(e.target.id==='rmModalOverlay')closeModal();
-            });
-            bound=true;
+        }
+        bindOnce();
+        bindDetailFloorSelects();
+        populateDetailFloorSelects(selectedNum?roomByNum(selectedNum):null);
+        if(selectedNum){
+            const r=roomByNum(selectedNum);
+            if(r)showDetail(r);else closeDetail();
+        }else{
+            renderDetailEmpty();
         }
     }
-    return{render};
+
+    function renderCategories(){
+        const box=document.getElementById('chCategoriesGrid');
+        if(!box)return;
+        syncFromStorage();
+        box.innerHTML=['suite','familiale','single'].map(key=>{
+            const list=ROOMS.filter(r=>r.type===key);
+            const disp=list.filter(r=>r.status==='disponible').length;
+            return`<article class="ch-cat-card" data-cat="${key}">
+                <h3>${CAT_TITLE[key]}</h3>
+                <p>${list.length} chambre(s) · ${disp} disponible(s)</p>
+            </article>`;
+        }).join('');
+        box.querySelectorAll('.ch-cat-card').forEach(el=>{
+            el.addEventListener('click',()=>{
+                currentFilter.cat=el.dataset.cat;
+                const sel=document.getElementById('chFilterCat');
+                if(sel)sel.value=el.dataset.cat;
+                document.querySelector('.sb-item[data-target="ch-etat"]')?.click();
+            });
+        });
+    }
+
+    let etagesFloorFilter='',etagesFloorQ='',etagesBound=false;
+
+    function matchesEtageSearch(floor){
+        const q=etagesFloorQ.trim().toLowerCase();
+        if(etagesFloorFilter&&String(floor)!==String(etagesFloorFilter))return false;
+        if(!q)return true;
+        const lbl=floorLbl(floor).toLowerCase();
+        return lbl.includes(q)||String(floor).includes(q)||`${floor}e`.includes(q)||`${floor}er`.includes(q);
+    }
+
+    function renderEtagesTable(){
+        const tbody=document.getElementById('chEtagesTableBody');
+        if(!tbody)return;
+        const sorted=ROOMS.slice()
+            .filter(r=>matchesEtageSearch(r.floor))
+            .sort((a,b)=>{
+                if(a.floor!==b.floor)return a.floor-b.floor;
+                return String(a.num).localeCompare(String(b.num),undefined,{numeric:true});
+            });
+        if(!sorted.length){
+            tbody.innerHTML='<tr class="empty-row"><td colspan="6">Aucune chambre pour cet étage.</td></tr>';
+            return;
+        }
+        tbody.innerHTML=sorted.map(r=>`<tr>
+            <td class="et-floor-cell">${floorLbl(r.floor)}</td>
+            <td><strong>${esc(r.num)}</strong></td>
+            <td>${esc(r.title)}</td>
+            <td>${esc(CAT_LBL[r.type]||r.type)}</td>
+            <td><span class="et-status st-${r.status}">${STATUS[r.status]}</span></td>
+            <td>${fmtP(r.price)}</td>
+        </tr>`).join('');
+    }
+
+    function renderEtages(){
+        const box=document.getElementById('chEtagesGrid');
+        const tbody=document.getElementById('chEtagesTableBody');
+        if(!box&&!tbody)return;
+        syncFromStorage();
+        const floors=[...new Set(ROOMS.map(r=>r.floor))].sort((a,b)=>a-b);
+        const floorSel=document.getElementById('etFloorFilter');
+        if(floorSel){
+            const cur=etagesFloorFilter||floorSel.value;
+            floorSel.innerHTML='<option value="">Étage : Tous</option>'+floors.map(f=>`<option value="${f}">${floorLbl(f)}</option>`).join('');
+            if(cur&&floors.some(f=>String(f)===String(cur)))floorSel.value=cur;
+            else{floorSel.value='';etagesFloorFilter='';}
+        }
+        if(box){
+            box.innerHTML=floors.map(f=>{
+                const list=ROOMS.filter(r=>r.floor===f);
+                const dispo=list.filter(r=>r.status==='disponible').length;
+                const occu=list.filter(r=>r.status==='occupee').length;
+                const active=matchesEtageSearch(f);
+                return`<article class="ch-etage-card${active?'':' is-dimmed'}${String(etagesFloorFilter)===String(f)?' is-active':''}" data-floor="${f}" role="button" tabindex="0">
+                    <h3>${floorLbl(f)}</h3>
+                    <div class="et-count">${list.length}</div>
+                    <p class="et-meta">${dispo} dispo · ${occu} occupée(s)</p>
+                </article>`;
+            }).join('');
+            box.querySelectorAll('.ch-etage-card').forEach(el=>{
+                const pick=()=>{
+                    etagesFloorFilter=el.dataset.floor;
+                    etagesFloorQ='';
+                    const sel=document.getElementById('etFloorFilter');
+                    const search=document.getElementById('etFloorSearch');
+                    if(sel)sel.value=el.dataset.floor;
+                    if(search)search.value='';
+                    renderEtages();
+                };
+                el.addEventListener('click',pick);
+                el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();}});
+            });
+        }
+        renderEtagesTable();
+        if(!etagesBound){
+            document.getElementById('etFloorSearch')?.addEventListener('input',e=>{
+                etagesFloorQ=e.target.value;
+                renderEtages();
+            });
+            document.getElementById('etFloorFilter')?.addEventListener('change',e=>{
+                etagesFloorFilter=e.target.value;
+                renderEtages();
+            });
+            etagesBound=true;
+        }
+    }
+
+    return{render,renderCategories,renderEtages};
 })();
 window.CHETAT=CHETAT;
 </script>
