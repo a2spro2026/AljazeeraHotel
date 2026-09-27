@@ -72,6 +72,10 @@ class HotelUserController extends Controller
             'password.max' => 'Le mot de passe est trop long.',
         ]);
 
+        if ($data['profil'] === 'Direction') {
+            $data = array_merge($data, array_fill_keys(['contrat', 'debut', 'fin', 'formation', 'salaire'], null));
+        }
+
         if (blank($data['password'] ?? null)) {
             unset($data['password']);
         } else {

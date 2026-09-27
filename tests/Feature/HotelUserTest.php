@@ -54,6 +54,17 @@ class HotelUserTest extends TestCase
         $this->assertTrue(Hash::check('secret123', HotelUser::first()->password));
     }
 
+    public function test_direction_profile_has_no_employment_fields(): void
+    {
+        $this->asDirection()->postJson('/admin/api/users', $this->payload([
+            'profil' => 'Direction', 'contrat' => 'CDD', 'debut' => '2026-01-01', 'formation' => 'BTS', 'salaire' => 5000,
+        ]))->assertOk()
+            ->assertJsonPath('users.0.contrat', null)
+            ->assertJsonPath('users.0.debut', null)
+            ->assertJsonPath('users.0.formation', null)
+            ->assertJsonPath('users.0.salaire', null);
+    }
+
     public function test_login_must_be_unique(): void
     {
         $this->asDirection()->postJson('/admin/api/users', $this->payload())->assertOk();

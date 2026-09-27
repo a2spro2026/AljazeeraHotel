@@ -2613,6 +2613,10 @@
 
         .sidebar .sb-nav .sb-item.sb-pilot.active .lbl,
         .sidebar .sb-nav .sb-item.active:not(.sb-pilot):not(.sb-sub .sb-item) .lbl{color:#0b1530;font-weight:700}
+
+        /* Fiche utilisateur : champs emploi grisés pour le profil Direction */
+        #cfg-users .field.is-off{opacity:.45;transition:opacity .2s}
+        #cfg-users .field.is-off input,#cfg-users .field.is-off select{cursor:not-allowed;background:rgba(120,120,120,.12);filter:grayscale(1)}
     </style>
     @include('partials.data-center-styles')
 </head>
@@ -5247,7 +5251,21 @@ const CFG=(function(){
         alert('Fiche hôtel enregistrée.');
     }
 
+    const EMPLOI_FIELDS=['cu_contrat','cu_debut','cu_fin','cu_formation','cu_salaire'];
+    function isDirectionProfil(){return document.getElementById('cu_profil').value==='Direction';}
+    function syncProfilFields(){
+        const off=isDirectionProfil();
+        EMPLOI_FIELDS.forEach(id=>{
+            const el=document.getElementById(id);
+            if(!el)return;
+            el.disabled=off;
+            el.closest('.field')?.classList.toggle('is-off',off);
+        });
+    }
+
     function readUserForm(){
+        const off=isDirectionProfil();
+        const emploi=id=>off?'':document.getElementById(id).value.trim();
         return{
             id:document.getElementById('cu_id').value.trim(),
             nom:document.getElementById('cu_nom').value.trim(),
@@ -5255,11 +5273,11 @@ const CFG=(function(){
             tel:document.getElementById('cu_tel').value.trim(),
             adresse:document.getElementById('cu_adresse').value.trim(),
             profil:document.getElementById('cu_profil').value,
-            contrat:document.getElementById('cu_contrat').value,
-            debut:document.getElementById('cu_debut').value,
-            fin:document.getElementById('cu_fin').value,
-            formation:document.getElementById('cu_formation').value.trim(),
-            salaire:document.getElementById('cu_salaire').value,
+            contrat:emploi('cu_contrat'),
+            debut:emploi('cu_debut'),
+            fin:emploi('cu_fin'),
+            formation:emploi('cu_formation'),
+            salaire:emploi('cu_salaire'),
             login:document.getElementById('cu_login').value.trim(),
             password:document.getElementById('cu_password').value
         };
@@ -5303,6 +5321,7 @@ const CFG=(function(){
         document.getElementById('cu_fin').value=u?.fin||'';
         document.getElementById('cu_formation').value=u?.formation||'';
         document.getElementById('cu_salaire').value=u?.salaire||'';
+        syncProfilFields();
     }
 
     function drawUsers(){
@@ -5616,6 +5635,7 @@ const CFG=(function(){
 
     function init(){
         loadHotelForm();
+        document.getElementById('cu_profil')?.addEventListener('change',syncProfilFields);
         newUser();
         newCommercial();
         renderUsers();
