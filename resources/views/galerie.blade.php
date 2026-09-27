@@ -48,12 +48,12 @@
 (function(){
     const box=document.getElementById('galGrid');
     if(!box||!window.AJ_HOTEL)return;
-    const rooms=window.AJ_HOTEL.getCatalog().filter(r=>r.img);
+    const rooms=window.AJ_HOTEL.getCatalog().filter(r=>r.hasPhoto);
     box.innerHTML=rooms.map(r=>`
         <a class="gal-item" href="{{ route('chambres') }}#chambres-list">
             <img src="${r.img}" alt="${r.title}" loading="lazy" width="600" height="450">
             <span>${r.title} — Ch. ${r.num}</span>
-        </a>`).join('');
+        </a>`).join('')||'<p class="gal-empty" style="grid-column:1/-1;text-align:center;padding:40px 16px;opacity:.75">Les photos des chambres seront bientôt disponibles.</p>';
 })();
 </script>
 @endpush

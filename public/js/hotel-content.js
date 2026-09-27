@@ -1,6 +1,7 @@
 (function (global) {
     const K_CATALOG = 'aj_ch_catalog';
     const K_CAROUSEL = 'aj_cfg_carousel';
+    const PLACEHOLDER = '/images/rooms/default.svg';
 
     function load(key) {
         try {
@@ -29,12 +30,11 @@
                 });
             }
         } catch (e) {}
-        return base.rooms.map((room) => ({
-            ...room,
-            ...(stored[room.num] || {}),
-            num: room.num,
-            type: room.type,
-        }));
+        return base.rooms.map((room) => {
+            const merged = { ...room, ...(stored[room.num] || {}), num: room.num, type: room.type };
+            const hasPhoto = !!merged.img && merged.img !== PLACEHOLDER;
+            return { ...merged, img: hasPhoto ? merged.img : PLACEHOLDER, hasPhoto };
+        });
     }
 
     function getRoom(num) {
@@ -60,6 +60,7 @@
         const out = {};
         (base.categories || []).forEach((cat) => {
             const slides = roomsByType(cat.key)
+                .filter((room) => room.hasPhoto)
                 .slice(0, base.carousel_count || 4)
                 .map((room, i) => ({
                     id: cat.key + '-' + (i + 1),
@@ -115,6 +116,7 @@
     global.AJ_HOTEL = {
         K_CATALOG,
         K_CAROUSEL,
+        PLACEHOLDER,
         defaults,
         getCatalog,
         getRoom,

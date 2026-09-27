@@ -2619,15 +2619,11 @@
 <body>
 <script>
 (function(){
-    var V='aj_reset_v3';
+    var V='aj_reset_v4';
     if(localStorage.getItem('aj_data_version')!==V){
-        ['aj_frns','aj_bons','aj_regls','aj_cfg_hotel','aj_cfg_users','aj_cfg_commerciaux','aj_cfg_auth','aj_ch_resa','aj_ch_status','aj_public_resa'].forEach(function(k){localStorage.removeItem(k);});
         for(var i=localStorage.length-1;i>=0;i--){
             var k=localStorage.key(i);
-            var v=localStorage.getItem(k);
-            if(v&&/khadija@gds\.com/i.test(v)){
-                localStorage.setItem(k,v.replace(/khadija@gds\.com/gi,'Direction'));
-            }
+            if(k&&k.indexOf('aj_')===0)localStorage.removeItem(k);
         }
         localStorage.setItem('aj_data_version',V);
     }
@@ -2640,7 +2636,10 @@
         session(['space_admin_login' => 'Direction']);
     }
     $managerLogins = config('admin_spaces.admin.manager_logins', ['Direction']);
-    $canManageRooms = in_array($adminLogin, $managerLogins, true);
+    $adminProfil = session('space_admin_profil');
+    $canManageRooms = $adminProfil !== null
+        ? $adminProfil === 'Direction'
+        : in_array($adminLogin, $managerLogins, true);
     $adminLabel = 'Direction';
 @endphp
 <div class="admin-wrap sb-collapsed">
@@ -3688,6 +3687,8 @@
                                     <option>Commercial</option><option>Maintenance</option><option>Restauration</option>
                                 </select>
                             </div>
+                            <div class="field" style="flex:1 1 160px"><label>Login</label><input type="text" id="cu_login" value="" placeholder="Identifiant de connexion" autocomplete="off" autocapitalize="off" spellcheck="false" readonly onfocus="this.removeAttribute('readonly')" data-lpignore="true" data-1p-ignore></div>
+                            <div class="field" style="flex:1 1 160px"><label>Mot de passe</label><input type="password" id="cu_password" value="" placeholder="6 caractères minimum" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')" data-lpignore="true" data-1p-ignore></div>
                             <div class="field" style="flex:1 1 150px"><label>Type Contrat</label>
                                 <select id="cu_contrat">
                                     <option>CDI</option><option>CDD</option><option>Stage</option><option>Formation</option><option>Vacataire</option>
@@ -3708,7 +3709,7 @@
                         <div class="table-wrap">
                             <table>
                                 <thead><tr>
-                                    <th>ID</th><th>Nom et Prénom</th><th>CIN</th><th>Téléphone</th><th>Profil</th><th>Contrat</th><th>Salaire</th><th class="no-print">Actions</th>
+                                    <th>ID</th><th>Nom et Prénom</th><th>Login</th><th>CIN</th><th>Téléphone</th><th>Profil</th><th>Contrat</th><th>Salaire</th><th class="no-print">Actions</th>
                                 </tr></thead>
                                 <tbody id="cu_tbody"></tbody>
                             </table>
@@ -5152,7 +5153,6 @@ ETAT.init();
 /* ===== Module Configuration ===== */
 const CFG=(function(){
     const K_HOTEL='aj_cfg_hotel';
-    const K_USERS='aj_cfg_users';
     const K_COMM='aj_cfg_commerciaux';
     const K_AUTH='aj_cfg_auth';
     let carTab='suite';
@@ -5259,11 +5259,39 @@ const CFG=(function(){
             debut:document.getElementById('cu_debut').value,
             fin:document.getElementById('cu_fin').value,
             formation:document.getElementById('cu_formation').value.trim(),
-            salaire:document.getElementById('cu_salaire').value
+            salaire:document.getElementById('cu_salaire').value,
+            login:document.getElementById('cu_login').value.trim(),
+            password:document.getElementById('cu_password').value
         };
     }
 
+    const USERS_API=@json(url('admin/api/users'));
+    let usersCache=[];
+    async function usersApi(method,path,body){
+        const res=await fetch(USERS_API+(path||''),{
+            method,
+            credentials:'same-origin',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]')?.content||''
+            },
+            body:body?JSON.stringify(body):undefined
+        });
+        const data=await res.json().catch(()=>({}));
+        if(!res.ok){
+            const msg=data.errors?Object.values(data.errors).flat().join('\n'):(data.message||'Erreur serveur ('+res.status+').');
+            throw new Error(msg);
+        }
+        if(Array.isArray(data.users))usersCache=data.users;
+        return data;
+    }
+
     function fillUserForm(u){
+        const pwd=document.getElementById('cu_password');
+        pwd.value='';
+        pwd.placeholder=u?.login?'Laisser vide pour conserver':'6 caractères minimum';
+        document.getElementById('cu_login').value=u?.login||'';
         document.getElementById('cu_id').value=u?.id||'';
         document.getElementById('cu_nom').value=u?.nom||'';
         document.getElementById('cu_cin').value=u?.cin||'';
@@ -5277,57 +5305,63 @@ const CFG=(function(){
         document.getElementById('cu_salaire').value=u?.salaire||'';
     }
 
-    function renderUsers(){
-        const list=load(K_USERS)||[];
+    function drawUsers(){
         const tb=document.getElementById('cu_tbody');
-        if(!list.length){tb.innerHTML='<tr class="empty-row"><td colspan="8">Aucun utilisateur enregistré</td></tr>';return;}
-        tb.innerHTML=list.map(u=>`<tr>
-            <td>${esc(u.id)}</td><td>${esc(u.nom)}</td><td>${esc(u.cin)}</td><td>${esc(u.tel)}</td>
+        if(!usersCache.length){tb.innerHTML='<tr class="empty-row"><td colspan="9">Aucun utilisateur enregistré</td></tr>';return;}
+        tb.innerHTML=usersCache.map(u=>`<tr>
+            <td>${esc(u.id)}</td><td>${esc(u.nom)}</td><td>${esc(u.login)}</td><td>${esc(u.cin)}</td><td>${esc(u.tel)}</td>
             <td>${esc(u.profil)}</td><td>${esc(u.contrat)}</td><td>${fmtSal(u.salaire)}</td>
             <td class="no-print">
-                <button class="ibtn" title="Modifier" onclick="CFG.editUser('${u.id}')">&#9998;</button>
-                <button class="ibtn del" title="Supprimer" onclick="CFG.delUser('${u.id}')">&#128465;</button>
+                <button class="ibtn" title="Modifier" onclick="CFG.editUser('${esc(u.id)}')">&#9998;</button>
+                <button class="ibtn del" title="Supprimer" onclick="CFG.delUser('${esc(u.id)}')">&#128465;</button>
             </td>
         </tr>`).join('');
     }
 
-    function newUser(){
-        editUserId=null;
-        const list=load(K_USERS)||[];
-        fillUserForm({id:nextId(list,'Ut')});
+    async function renderUsers(){
+        const tb=document.getElementById('cu_tbody');
+        try{
+            await usersApi('GET');
+            drawUsers();
+            if(!editUserId)document.getElementById('cu_id').value=nextId(usersCache,'Ut');
+        }catch(e){
+            tb.innerHTML=`<tr class="empty-row"><td colspan="9">${esc(e.message)}</td></tr>`;
+        }
     }
 
-    function saveUser(){
+    function newUser(){
+        editUserId=null;
+        fillUserForm({id:nextId(usersCache,'Ut')});
+    }
+
+    async function saveUser(){
         const data=readUserForm();
         if(!data.nom){alert('Le nom est obligatoire.');return;}
-        let list=load(K_USERS)||[];
-        if(editUserId){
-            const i=list.findIndex(x=>x.id===editUserId);
-            if(i>=0)list[i]={...data,id:editUserId};
-        }else{
-            if(!data.id)data.id=nextId(list,'Ut');
-            if(list.some(x=>x.id===data.id)){alert('Cet ID existe déjà.');return;}
-            list.push(data);
-        }
-        save(K_USERS,list);
+        if(!data.login){alert('Le login est obligatoire.');return;}
+        if(!editUserId&&!data.password){alert('Le mot de passe est obligatoire.');return;}
+        try{
+            await usersApi('POST','',{...data,edit:editUserId});
+        }catch(e){alert(e.message);return;}
         editUserId=null;
         newUser();
-        renderUsers();
+        drawUsers();
         alert('Utilisateur enregistré.');
     }
 
     function editUser(id){
-        const u=(load(K_USERS)||[]).find(x=>x.id===id);
+        const u=usersCache.find(x=>x.id===id);
         if(!u)return;
         editUserId=id;
         fillUserForm(u);
     }
 
-    function delUser(id){
+    async function delUser(id){
         if(!confirm('Supprimer cet utilisateur ?'))return;
-        save(K_USERS,(load(K_USERS)||[]).filter(x=>x.id!==id));
+        try{
+            await usersApi('DELETE','/'+encodeURIComponent(id));
+        }catch(e){alert(e.message);return;}
         if(editUserId===id)newUser();
-        renderUsers();
+        drawUsers();
     }
 
     function readCommForm(){
@@ -5680,7 +5714,7 @@ const CHDISPO=(function(){
         </div>
         <form class="rm-form-grid cc-form" id="ccForm" onsubmit="return false" autocomplete="off">
             <div class="field span2"><label>Aperçu photo</label><div class="rm-edit-preview"><img id="cc_preview" src="${esc(room.img)}" alt=""></div></div>
-            <div class="field"><label>URL de la photo</label><input type="text" id="cc_img" value="${esc(room.img)}"></div>
+            <div class="field"><label>URL de la photo</label><input type="text" id="cc_img" value="${esc(room.hasPhoto?room.img:'')}" placeholder="Aucune photo"></div>
             <div class="field"><label>Importer une image</label><input type="file" id="cc_img_file" accept="image/*"></div>
             <div class="field span2"><label>Titre</label><input type="text" id="cc_title" value="${esc(room.title)}"></div>
             <div class="field span2"><label>Description courte</label><textarea id="cc_desc" rows="2">${esc(room.desc)}</textarea></div>
@@ -5709,7 +5743,7 @@ const CHDISPO=(function(){
         });
         const preview=document.getElementById('cc_preview');
         const imgInput=document.getElementById('cc_img');
-        imgInput?.addEventListener('input',()=>{if(preview&&imgInput.value.trim())preview.src=imgInput.value.trim();});
+        imgInput?.addEventListener('input',()=>{if(preview)preview.src=imgInput.value.trim()||window.AJ_HOTEL.PLACEHOLDER;});
         document.getElementById('cc_img_file')?.addEventListener('change',e=>{
             const file=e.target.files?.[0];
             if(!file)return;
@@ -5726,7 +5760,7 @@ const CHDISPO=(function(){
                 title,desc,
                 longDesc:val('cc_long')||desc,
                 price:Number(val('cc_price'))||0,
-                img:val('cc_img')||room.img,
+                img:val('cc_img'),
                 floor:val('cc_floor')===''?room.floor:Number(val('cc_floor')),
                 guests:Number(val('cc_guests'))||m.guests,
                 size:val('cc_size'),

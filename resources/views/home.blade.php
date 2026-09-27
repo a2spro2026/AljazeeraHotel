@@ -328,7 +328,7 @@
         @endphp
         <article class="home-room" data-num="{{ $num }}">
             <div class="home-room-img">
-                <img src="{{ $room['img'] }}" alt="{{ $meta['label'] ?? $room['title'] }}" loading="lazy">
+                <img src="{{ $room['img'] ?: asset('images/rooms/default.svg') }}" alt="{{ $meta['label'] ?? $room['title'] }}" loading="lazy">
                 @if(!empty($meta['popular']))
                     <span class="home-room-badge">Populaire</span>
                 @endif

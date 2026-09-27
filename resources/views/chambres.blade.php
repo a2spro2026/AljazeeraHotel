@@ -338,7 +338,7 @@
             const dots=slides.map((_,dotIdx)=>`<button type="button" class="ch-dot${dotIdx===0?' active':''}" data-i="${dotIdx}" aria-label="Slide ${dotIdx+1}"></button>`).join('');
             return`<article class="ch-frame" data-cat="${catIdx}">
                 <div class="ch-carousel">
-                    <div class="ch-slides">${slideHtml||'<div class="ch-slide active"></div>'}</div>
+                    <div class="ch-slides">${slideHtml||`<div class="ch-slide active" style="background-image:url('${esc(window.AJ_HOTEL.PLACEHOLDER)}')"><img src="${esc(window.AJ_HOTEL.PLACEHOLDER)}" alt="${esc(cat.title)}" width="900" height="600" decoding="async"></div>`}</div>
                     <div class="ch-car-nav">
                         <button type="button" class="ch-car-btn ch-prev" aria-label="Précédent">&#8249;</button>
                         <div class="ch-dots">${dots}</div>

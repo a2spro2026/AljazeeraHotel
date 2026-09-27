@@ -126,15 +126,11 @@
             regs.forEach(function(r){r.unregister();});
         });
     }
-    var V='aj_reset_v3';
+    var V='aj_reset_v4';
     if(localStorage.getItem('aj_data_version')!==V){
-        ['aj_frns','aj_bons','aj_regls','aj_cfg_hotel','aj_cfg_users','aj_cfg_commerciaux','aj_cfg_auth','aj_ch_resa','aj_ch_status','aj_public_resa'].forEach(function(k){localStorage.removeItem(k);});
         for(var i=localStorage.length-1;i>=0;i--){
             var k=localStorage.key(i);
-            var v=localStorage.getItem(k);
-            if(v&&/khadija@gds\.com/i.test(v)){
-                localStorage.setItem(k,v.replace(/khadija@gds\.com/gi,'Direction'));
-            }
+            if(k&&k.indexOf('aj_')===0)localStorage.removeItem(k);
         }
         localStorage.setItem('aj_data_version',V);
     }

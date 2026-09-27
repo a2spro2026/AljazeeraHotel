@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\HotelUserController;
+use App\Models\HotelUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
@@ -47,6 +50,24 @@ Route::post('/espace/{space}/login', function (Request $request, string $space) 
         $request->session()->regenerate();
         $request->session()->put("space_$space", true);
         $request->session()->put("space_{$space}_login", $config['login']);
+        $request->session()->forget(["space_{$space}_profil", "space_{$space}_nom"]);
+
+        return redirect()->route($config['route']);
+    }
+
+    $user = HotelUser::where('login', trim($credentials['login']))->first();
+    if ($user && Hash::check(trim($credentials['password']), $user->password)) {
+        if (! $user->canOpen($space)) {
+            return redirect()->route('home')
+                ->with('login_space', $space)
+                ->with('login_error', "Votre profil ne donne pas accès à l'espace {$config['label']}.");
+        }
+
+        $request->session()->regenerate();
+        $request->session()->put("space_$space", true);
+        $request->session()->put("space_{$space}_login", $user->login);
+        $request->session()->put("space_{$space}_profil", $user->profil);
+        $request->session()->put("space_{$space}_nom", $user->nom);
 
         return redirect()->route($config['route']);
     }
@@ -54,15 +75,21 @@ Route::post('/espace/{space}/login', function (Request $request, string $space) 
     return redirect()->route('home')
         ->with('login_space', $space)
         ->with('login_error', 'Identifiant ou mot de passe incorrect.');
-})->name('space.login');
+})->middleware('throttle:10,1')->name('space.login');
 
 // Déconnexion d'un espace
 Route::post('/espace/{space}/logout', function (Request $request, string $space) {
-    $request->session()->forget("space_$space");
-    $request->session()->forget("space_{$space}_login");
+    $request->session()->forget(["space_$space", "space_{$space}_login", "space_{$space}_profil", "space_{$space}_nom"]);
 
     return redirect()->route('home');
 })->name('space.logout');
+
+// Utilisateurs de l'hôtel (gestion réservée à la Direction)
+Route::prefix('admin/api/users')->controller(HotelUserController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'store');
+    Route::delete('/{code}', 'destroy');
+});
 
 // Pages protégées
 $protected = [
