@@ -7,6 +7,8 @@ Route::view('/', 'home')->name('home');
 Route::view('/chambres', 'chambres')->name('chambres');
 Route::view('/services', 'services')->name('services');
 Route::view('/restaurant', 'restaurant')->name('restaurant');
+Route::view('/galerie', 'galerie')->name('galerie');
+Route::view('/apropos', 'apropos')->name('apropos');
 Route::view('/calendrier', 'calendrier')->name('calendrier');
 
 Route::view('/contact', 'contact')->name('contact');
@@ -34,10 +36,14 @@ Route::post('/espace/{space}/login', function (Request $request, string $space) 
     if (in_array(strtolower($credentials['login']), array_map('strtolower', $legacyLogins), true)) {
         return redirect()->route('home')
             ->with('login_space', $space)
-            ->with('login_error', 'Identifiant obsolète. Utilisez : '.$config['login']);
+            ->with('login_error', 'Identifiant obsolète.');
     }
 
-    if ($credentials['login'] === $config['login'] && $credentials['password'] === $config['password']) {
+    $configured = filled($config['login']) && filled($config['password']);
+    $loginOk = $configured && strcasecmp(trim($credentials['login']), (string) $config['login']) === 0;
+    $passwordOk = $configured && hash_equals((string) $config['password'], trim($credentials['password']));
+
+    if ($loginOk && $passwordOk) {
         $request->session()->put("space_$space", true);
         $request->session()->put("space_{$space}_login", $config['login']);
 

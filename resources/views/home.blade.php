@@ -5,28 +5,14 @@
 @push('styles')
 <style>
     .home-hero{
-        position:relative;min-height:92vh;margin-top:0;
-        display:flex;align-items:center;
-        background:
-            linear-gradient(180deg,rgba(255,250,240,.18) 0%,rgba(255,255,255,.06) 42%,transparent 68%),
-            linear-gradient(90deg,rgba(6,15,36,.52) 0%,rgba(6,15,36,.18) 48%,rgba(6,15,36,.06) 100%),
-            url('{{ asset('images/hotel-facade.png') }}') center center/cover no-repeat;
-        background-color:#e8e4dc;
+        position:relative;min-height:100vh;margin-top:0;
+        display:block;
+        background:url('{{ asset('images/hotel-hero.png') }}') center center/cover no-repeat;
+        background-color:#1a1520;
     }
-    .home-hero::before{
-        content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
-        background:
-            radial-gradient(ellipse 80% 70% at 72% 45%,rgba(255,255,255,.22),transparent 58%),
-            radial-gradient(ellipse 55% 50% at 18% 55%,rgba(212,176,106,.12),transparent 62%);
-    }
-    .home-hero::after{
-        content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
-        background:linear-gradient(105deg,transparent 55%,rgba(255,255,255,.08) 100%);
-    }
-    .home-hero-inner{
-        position:relative;z-index:3;width:100%;max-width:var(--content-max);
-        margin:0 auto;padding:120px clamp(20px,4vw,48px) 160px;
-    }
+    .home-hero::before,
+    .home-hero::after{display:none}
+    .home-hero-inner{display:none}
     @keyframes txtFadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
     @keyframes goldGlow{
         0%,100%{text-shadow:0 0 12px rgba(212,176,106,.45),0 0 28px rgba(197,160,89,.25),0 2px 20px rgba(0,0,0,.35)}
@@ -93,35 +79,33 @@
     }
     .btn-play:hover{background:rgba(255,255,255,.22);border-color:#fff}
 
-    .home-booking-wrap{
-        position:relative;z-index:10;margin-top:-56px;
-        padding:0 clamp(16px,3vw,40px);max-width:var(--content-max);margin-left:auto;margin-right:auto;
+    .home-cta-wrap{
+        position:relative;z-index:10;margin-top:-72px;
+        padding:0 clamp(16px,3vw,40px);max-width:var(--content-max);
+        margin-left:auto;margin-right:auto;
+        display:flex;justify-content:center;
     }
-    .home-booking{
-        display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) auto;
-        gap:0;background:var(--white);border-radius:12px;
-        box-shadow:0 20px 60px rgba(0,0,0,.12);overflow:hidden;
-        border:1px solid rgba(0,0,0,.06);
+    .btn-offers{
+        display:inline-flex;align-items:center;justify-content:center;gap:12px;
+        padding:18px 42px;border:none;border-radius:50px;cursor:pointer;
+        font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;
+        letter-spacing:2px;text-transform:uppercase;color:#1a1304;
+        background:linear-gradient(135deg,#e8c878 0%,var(--gold-light) 40%,var(--gold) 100%);
+        box-shadow:0 12px 36px rgba(197,160,89,.4),0 0 40px rgba(212,176,106,.18),inset 0 1px 0 rgba(255,255,255,.45);
+        transition:transform .25s ease,box-shadow .3s ease;
+        position:relative;overflow:hidden;
     }
-    .home-booking .bk-field{
-        padding:18px 20px;border-right:1px solid rgba(0,0,0,.06);
-        display:flex;flex-direction:column;gap:6px;
+    .btn-offers::before{
+        content:'';position:absolute;inset:0;
+        background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);
+        transform:translateX(-120%);transition:transform .55s ease;
     }
-    .home-booking .bk-field label{
-        font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
-        color:var(--gold);text-shadow:0 0 12px rgba(197,160,89,.15);
+    .btn-offers:hover{
+        transform:translateY(-3px) scale(1.02);
+        box-shadow:0 18px 48px rgba(197,160,89,.5),0 0 56px rgba(212,176,106,.25),inset 0 1px 0 rgba(255,255,255,.5);
     }
-    .home-booking .bk-field input,.home-booking .bk-field select{
-        border:none;outline:none;background:transparent;font-size:15px;font-weight:600;
-        color:var(--text-dark);font-family:inherit;width:100%;
-    }
-    .home-booking .bk-search{
-        background:var(--navy-mid);color:#fff;border:none;cursor:pointer;
-        padding:0 28px;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
-        display:flex;align-items:center;justify-content:center;gap:8px;min-width:150px;
-        transition:background .2s;
-    }
-    .home-booking .bk-search:hover{background:var(--navy)}
+    .btn-offers:hover::before{transform:translateX(120%)}
+    .btn-offers span{position:relative;z-index:1}
 
     .home-section{padding:72px clamp(20px,4vw,48px);max-width:var(--content-max);margin:0 auto;width:100%}
     .home-section-head{
@@ -288,7 +272,7 @@
     .home-trust-item span{font-size:11px;color:var(--text-muted);line-height:1.4}
 
     .home-about{
-        padding:64px clamp(20px,4vw,48px);max-width:900px;margin:0 auto;text-align:center;
+        padding:64px clamp(20px,4vw,48px);max-width:100%;margin:0 auto;text-align:center;
     }
     .home-about h2{
         font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,36px);
@@ -305,15 +289,8 @@
     }
     .home-about em{color:var(--gold);font-style:normal;font-weight:600}
 
-    @media(max-width:900px){
-        .home-booking{grid-template-columns:1fr 1fr;grid-template-rows:auto}
-        .home-booking .bk-search{grid-column:1/-1;padding:18px}
-        .home-booking .bk-field:nth-child(5){border-right:none}
-    }
     @media(max-width:560px){
-        .home-booking{grid-template-columns:1fr}
-        .home-booking .bk-field{border-right:none;border-bottom:1px solid rgba(0,0,0,.06)}
-        .home-hero-inner{padding-bottom:120px}
+        .btn-offers{padding:16px 28px;font-size:12px;letter-spacing:1.4px;width:100%;max-width:360px}
     }
 </style>
 @endpush
@@ -331,51 +308,10 @@
     $allRooms = collect(config('hotel_rooms.rooms'))->keyBy('num');
 @endphp
 
-<section class="home-hero">
-    <div class="home-hero-inner">
-        <span class="home-hero-eyebrow"><span class="txt-line">Bienvenue à</span></span>
-        <h1 class="serif">
-            <span class="txt-hero-main txt-line">ALJAZEERA</span>
-            <span class="gold txt-hero-sub txt-line">Hotel &amp; Resort</span>
-        </h1>
-        <p class="home-hero-tagline txt-line">Là où le luxe rencontre l'hospitalité. Vivez une expérience inoubliable.</p>
-        <div class="home-hero-actions">
-            <a href="#chambres"><button type="button" class="btn-discover">Découvrir l'hôtel</button></a>
-            <button type="button" class="btn-play" id="heroPlay" aria-label="Voir la vidéo">&#9654;</button>
-        </div>
-    </div>
-</section>
+<section class="home-hero" aria-label="Hotel Al Jazzera"></section>
 
-<div class="home-booking-wrap">
-    <form class="home-booking" id="homeBooking" action="{{ route('chambres') }}" method="get">
-        <div class="bk-field">
-            <label>Arrivée</label>
-            <input type="date" name="arrivee" id="bkArrivee" required>
-        </div>
-        <div class="bk-field">
-            <label>Départ</label>
-            <input type="date" name="depart" id="bkDepart" required>
-        </div>
-        <div class="bk-field">
-            <label>Adultes</label>
-            <select name="adultes" id="bkAdultes">
-                @for($i=1;$i<=6;$i++)<option value="{{ $i }}"{{ $i===2?' selected':'' }}>{{ $i }}</option>@endfor
-            </select>
-        </div>
-        <div class="bk-field">
-            <label>Enfants</label>
-            <select name="enfants" id="bkEnfants">
-                @for($i=0;$i<=4;$i++)<option value="{{ $i }}">{{ $i }}</option>@endfor
-            </select>
-        </div>
-        <div class="bk-field">
-            <label>Chambres</label>
-            <select name="chambres" id="bkChambres">
-                @for($i=1;$i<=5;$i++)<option value="{{ $i }}">{{ $i }}</option>@endfor
-            </select>
-        </div>
-        <button type="submit" class="bk-search">&#128269; Rechercher</button>
-    </form>
+<div class="home-cta-wrap">
+    <a href="{{ route('chambres') }}" class="btn-offers"><span>Découvrez nos offres</span></a>
 </div>
 
 <section class="home-section" id="chambres">
@@ -487,19 +423,6 @@
 <script src="{{ asset('js/hotel-content.js') }}"></script>
 <script>
 (function(){
-    const today=new Date();
-    const tomorrow=new Date(today);tomorrow.setDate(tomorrow.getDate()+1);
-    const fmt=d=>d.toISOString().slice(0,10);
-    const arr=document.getElementById('bkArrivee');
-    const dep=document.getElementById('bkDepart');
-    if(arr){arr.value=fmt(today);arr.min=fmt(today);}
-    if(dep){dep.value=fmt(tomorrow);dep.min=fmt(tomorrow);}
-    arr?.addEventListener('change',()=>{if(dep&&arr.value>=dep.value){const d=new Date(arr.value);d.setDate(d.getDate()+1);dep.value=fmt(d);}dep.min=arr.value;});
-
-    document.getElementById('heroPlay')?.addEventListener('click',()=>{
-        document.getElementById('chambres')?.scrollIntoView({behavior:'smooth'});
-    });
-
     if(!window.AJ_HOTEL)return;
     const meta={
         '101':{label:'Chambre Deluxe',guests:2,size:'28 m²',view:'Vue ville'},

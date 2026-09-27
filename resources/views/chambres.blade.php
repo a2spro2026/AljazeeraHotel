@@ -3,42 +3,55 @@
 @push('styles')
 <style>
     body.page-chambres{background:var(--surface)}
-    .ch-page{padding-top:74px;background:var(--surface)}
+    .ch-page{padding-top:0;background:var(--surface)}
 
     .ch-hero{
-        position:relative;min-height:52vh;display:flex;align-items:center;
+        position:relative;min-height:auto;
         background:
-            linear-gradient(180deg,rgba(255,250,240,.16) 0%,rgba(255,255,255,.05) 45%,transparent 70%),
-            linear-gradient(90deg,rgba(6,15,36,.58) 0%,rgba(6,15,36,.22) 50%,rgba(6,15,36,.08) 100%),
-            url('{{ asset('images/hotel-facade.png') }}') center center/cover no-repeat;
-        background-color:#e8e4dc;
+            linear-gradient(135deg,#0a1736 0%,#0f2a5c 45%,#1a3a6e 100%);
+        border-bottom:1px solid rgba(197,160,89,.35);
+        overflow:hidden;
     }
     .ch-hero::before{
         content:'';position:absolute;inset:0;pointer-events:none;
-        background:radial-gradient(ellipse 70% 60% at 75% 40%,rgba(255,255,255,.18),transparent 60%);
+        background:
+            radial-gradient(ellipse 60% 80% at 90% 20%,rgba(212,176,106,.18),transparent 55%),
+            radial-gradient(ellipse 50% 60% at 10% 80%,rgba(197,160,89,.1),transparent 50%);
+    }
+    .ch-hero::after{
+        content:'';position:absolute;left:0;right:0;bottom:0;height:1px;pointer-events:none;
+        background:linear-gradient(90deg,transparent,var(--gold),transparent);
     }
     .ch-hero-inner{
         position:relative;z-index:2;width:100%;max-width:var(--content-max);
-        margin:0 auto;padding:100px clamp(20px,4vw,48px) 70px;text-align:left;
+        margin:0 auto;padding:56px clamp(20px,4vw,48px) 48px;text-align:center;
     }
     .ch-hero-eyebrow{
         display:inline-block;font-size:12px;letter-spacing:4px;text-transform:uppercase;
         color:var(--gold-light);margin-bottom:14px;font-weight:600;
-        text-shadow:0 0 18px rgba(212,176,106,.5);
     }
-    .ch-hero-eyebrow::before{
-        content:'';display:inline-block;width:28px;height:1px;background:var(--gold-light);
-        margin-right:12px;vertical-align:middle;box-shadow:0 0 10px rgba(212,176,106,.6);
-    }
+    .ch-hero-eyebrow::before{display:none}
     .ch-hero h1{
         font-family:'Cormorant Garamond',serif;
-        font-size:clamp(32px,4.5vw,56px);color:#fff;line-height:1.15;margin:0 0 14px;
-        letter-spacing:2px;text-shadow:0 4px 28px rgba(0,0,0,.45),0 0 40px rgba(255,255,255,.1);
+        font-size:clamp(30px,4vw,48px);color:#fff;line-height:1.2;margin:0 0 12px;
+        letter-spacing:2px;
     }
-    .ch-hero h1 em{font-style:normal;color:var(--gold-light);text-shadow:0 0 24px rgba(212,176,106,.45)}
-    .ch-hero-sub{font-size:clamp(14px,1.4vw,17px);color:rgba(255,255,255,.9);max-width:560px;line-height:1.65}
+    .ch-hero h1 em{font-style:italic;color:var(--gold-light)}
+    .ch-hero-sub{
+        font-size:clamp(14px,1.4vw,16px);color:rgba(255,255,255,.82);
+        max-width:560px;line-height:1.65;margin:0 auto;
+    }
+    .ch-hero-actions{margin-top:22px}
+    .ch-hero-back{
+        display:inline-flex;align-items:center;gap:8px;
+        color:rgba(255,255,255,.75);font-size:12px;font-weight:600;
+        letter-spacing:1px;text-transform:uppercase;
+        border:1px solid rgba(197,160,89,.35);padding:10px 18px;border-radius:40px;
+        transition:color .2s,border-color .2s,background .2s;
+    }
+    .ch-hero-back:hover{color:#fff;border-color:var(--gold);background:rgba(197,160,89,.12)}
 
-    .ch-body{max-width:min(1520px,98vw);margin:0 auto;padding:48px clamp(10px,2vw,28px) 80px;width:100%}
+    .ch-body{max-width:100%;margin:0 auto;padding:48px clamp(10px,2vw,28px) 80px;width:100%}
     @media(max-width:860px){.ch-body{padding:32px 12px 60px}}
 
     .ch-stats{
@@ -232,6 +245,9 @@
         <span class="ch-hero-eyebrow">Al Jazeera Hotel</span>
         <h1 class="serif">Découvrez le confort, <em>vivez l'exception</em></h1>
         <p class="ch-hero-sub">Explorez l'ensemble de nos chambres et suites — du confort essentiel aux suites présidentielles.</p>
+        <div class="ch-hero-actions">
+            <a href="{{ url('/') }}" class="ch-hero-back">&larr; Retour à l'accueil</a>
+        </div>
     </div>
 </header>
 

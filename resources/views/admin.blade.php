@@ -7,14 +7,14 @@
     <title>Direction — Al Jazeera Hotel</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root{
             --navy:#0a1736;--navy-deep:#060f24;--navy-mid:#0f2a5c;
             --gold:#c5a059;--gold-light:#d4b06a;--gold-pale:#f3e4a8;
             --cream:#f5f1e6;--muted:#6b7280;--text-dark:#1a2332;
             --surface:#f7f5f0;--white:#ffffff;--panel:var(--white);
-            --sb-w:280px;--topbar-h:74px;--content-max:1280px;
+            --sb-w:280px;--topbar-h:74px;--content-max:100%;
             --border-gold:rgba(197,160,89,.18);
             --shadow-soft:0 4px 20px rgba(0,0,0,.06);
             --shadow-card:0 8px 32px rgba(197,160,89,.1);
@@ -816,7 +816,7 @@
         .rm-status-pick .rm-status-sub{color:var(--muted);font-size:14px;margin:0 0 28px}
         .rm-status-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
         .rm-st-btn{
-            flex:1;min-width:150px;max-width:220px;padding:20px 22px;border-radius:12px;
+            flex:1;min-width:150px;padding:20px 22px;border-radius:12px;
             border:2px solid;cursor:pointer;font-family:'Montserrat',sans-serif;
             font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
             transition:all .25s ease;background:rgba(0,0,0,.25);
@@ -910,7 +910,7 @@
         .field input[readonly]{background:rgba(247,245,240,.8);opacity:.85}
 
         /* ===== FRNS — cadres & tableaux pleine largeur ===== */
-        .panel.frns-panel{max-width:min(100%,1480px);width:100%}
+        .panel.frns-panel{max-width:100%;width:100%}
         .panel.frns-panel .block{padding:28px 30px 30px;margin-bottom:24px}
         .panel.frns-panel .frns-form-top{
             display:grid;grid-template-columns:minmax(200px,280px) 1fr;gap:18px;align-items:end;
@@ -972,7 +972,7 @@
         }
 
         /* ===== Fournisseur — cadre élargi, barres de saisie réduites ===== */
-        .panel.frns-panel.frns-compact{max-width:min(100%,1480px)}
+        .panel.frns-panel.frns-compact{max-width:100%}
         .panel.frns-panel.frns-compact .block{padding:26px 32px 28px;margin-bottom:22px;border-radius:14px}
         .panel.frns-panel.frns-compact .block h3{font-size:15px;margin-bottom:14px;letter-spacing:1px;text-transform:uppercase}
         .panel.frns-panel.frns-compact .frns-form-grid,
@@ -1161,7 +1161,7 @@
         .bl-detail-head h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--text-dark);margin:0 0 4px}
         .bl-detail-head p{color:var(--muted);font-size:13px;margin:0}
         .bl-detail-summary .bl-sum-item{
-            flex:1 1 140px;max-width:220px;text-align:center;padding:12px 14px;border-radius:10px;
+            flex:1 1 140px;text-align:center;padding:12px 14px;border-radius:10px;
             background:var(--white);border:1px solid var(--border-gold);box-shadow:var(--shadow-soft);
         }
         .bl-detail-summary .bl-sum-item strong{font-size:15px;color:var(--navy-mid)}
@@ -1865,6 +1865,683 @@
                 width:100%!important;
             }
         }
+
+        /* ===== THÈME CRÉPUSCULE DORÉ — harmonisé avec le fond d'accueil ===== */
+        :root{
+            --tw-deep:#081433;
+            --tw-navy:#0d1f4a;
+            --tw-indigo:#1a2a5e;
+            --tw-dusk:#3a2b52;
+            --tw-sunset:#e8955a;
+            --tw-gold-glow:rgba(232,190,110,.55);
+            --tw-line:rgba(212,176,106,.22);
+            --tw-text:rgba(255,255,255,.82);
+            --tw-text-soft:rgba(226,221,208,.62);
+        }
+        body{
+            background:
+                linear-gradient(180deg,rgba(248,244,236,.95) 0%,rgba(246,241,231,.97) 100%),
+                url('{{ asset('images/hotel-hero.png') }}') center/cover fixed no-repeat;
+            background-color:var(--surface);
+        }
+        .main,.content{background:transparent}
+
+        /* ---- Panneau latéral ---- */
+        .sidebar{
+            background:
+                radial-gradient(ellipse 120% 40% at 50% 104%,rgba(232,149,90,.30),transparent 62%),
+                radial-gradient(ellipse 90% 30% at 100% 0%,rgba(212,176,106,.16),transparent 60%),
+                linear-gradient(180deg,var(--tw-deep) 0%,var(--tw-navy) 38%,var(--tw-indigo) 72%,var(--tw-dusk) 100%);
+            border-right:1px solid var(--tw-line);
+            box-shadow:6px 0 40px rgba(4,10,28,.35);
+            overflow:hidden;
+        }
+        .sidebar::before{
+            content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+            background:url('{{ asset('images/hotel-hero.png') }}') 22% center/cover no-repeat;
+            opacity:.10;mix-blend-mode:screen;
+        }
+        .sidebar::after{
+            opacity:.9;
+            background:linear-gradient(180deg,transparent,rgba(212,176,106,.35),var(--gold-light),rgba(212,176,106,.35),transparent);
+            background-size:100% 200%;
+        }
+        .sb-brand{border-bottom:1px solid var(--tw-line);padding:22px 18px 20px}
+        .sb-brand:hover{background:rgba(255,255,255,.04)}
+        .sb-logo-wrap{
+            background:linear-gradient(145deg,#fffdf8,#f3ead6);
+            border:1px solid rgba(232,190,110,.55);
+            box-shadow:0 0 0 3px rgba(212,176,106,.12),0 8px 22px rgba(0,0,0,.35);
+        }
+        .sb-est{color:var(--gold-light);letter-spacing:3px}
+        .sb-brand-text b{
+            color:#fff;font-size:21px;letter-spacing:1.5px;
+            text-shadow:0 0 18px rgba(232,190,110,.35);
+        }
+        .sb-stars{color:#f0c66e;text-shadow:0 0 8px rgba(240,198,110,.6)}
+
+        .sb-nav{scrollbar-color:rgba(212,176,106,.35) transparent}
+        .sb-nav::-webkit-scrollbar-thumb{background:rgba(212,176,106,.4)}
+        .sb-section-label{color:var(--gold-light);opacity:1;letter-spacing:2.6px}
+        .sb-section-label::before{width:18px;background:linear-gradient(90deg,var(--gold-light),transparent)}
+
+        .sb-group{
+            background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
+            border:1px solid rgba(212,176,106,.14);
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+            backdrop-filter:blur(6px);
+        }
+        .sb-group.sb-group-flat{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02))}
+        .sb-group:has(.sb-item.active),
+        .sb-group:has(.sb-sub.open){
+            border-color:rgba(232,190,110,.38);
+            box-shadow:0 8px 24px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.07);
+        }
+        .sb-group:has(.sb-item.active) .sb-parent{color:#fff}
+
+        .sb-item,.sb-parent{color:var(--tw-text)}
+        .ic-wrap{
+            background:rgba(212,176,106,.10);
+            border:1px solid rgba(212,176,106,.24);
+            color:var(--gold-light);
+        }
+        .sb-item:hover,.sb-parent:hover{
+            background:rgba(255,255,255,.07);color:#fff;
+            border-color:rgba(212,176,106,.22);
+        }
+        .sb-item:hover .ic-wrap,.sb-parent:hover .ic-wrap{
+            background:rgba(212,176,106,.2);border-color:rgba(232,190,110,.5);color:#f3d38a;
+            box-shadow:0 0 14px rgba(232,190,110,.25);
+        }
+        .sb-item.active:not(.sb-pilot){
+            background:linear-gradient(135deg,rgba(232,190,110,.22),rgba(232,149,90,.10));
+            border-color:rgba(232,190,110,.42);color:#fff;
+            box-shadow:0 6px 18px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08);
+        }
+        .sb-item.active:not(.sb-pilot) .lbl{color:#fff}
+
+        .sb-item.sb-pilot{
+            background:linear-gradient(135deg,rgba(212,176,106,.14),rgba(255,255,255,.03));
+            border:1px solid rgba(212,176,106,.26);
+        }
+        .sb-item.sb-pilot .lbl{color:#fff}
+        .sb-item.sb-pilot:hover{
+            background:linear-gradient(135deg,rgba(212,176,106,.22),rgba(255,255,255,.05));
+            border-color:rgba(232,190,110,.45);
+        }
+        .sb-item.sb-pilot.active,
+        .sb-item.active:not(.sb-pilot):not(.sb-sub .sb-item){
+            background:linear-gradient(135deg,#f0cf85 0%,var(--gold-light) 45%,var(--gold) 100%);
+            border-color:rgba(255,236,190,.6);color:#1a1304;
+            box-shadow:0 8px 26px rgba(212,176,106,.38),0 0 30px rgba(232,149,90,.18),inset 0 1px 0 rgba(255,255,255,.5);
+        }
+        .sb-item.sb-pilot.active .lbl,
+        .sb-item.active:not(.sb-pilot):not(.sb-sub .sb-item) .lbl{color:#1a1304;font-weight:700}
+        .sb-item.sb-pilot.active .ic-wrap,
+        .sb-item.active:not(.sb-pilot):not(.sb-sub .sb-item) .ic-wrap{
+            background:rgba(26,19,4,.10);border-color:rgba(26,19,4,.18);color:#1a1304;box-shadow:none;
+        }
+
+        .sb-parent.expanded{
+            background:linear-gradient(135deg,rgba(212,176,106,.16),rgba(255,255,255,.03));
+            color:#fff;border-color:rgba(212,176,106,.28);
+        }
+        .sb-parent.expanded .ic-wrap{background:rgba(212,176,106,.22);border-color:rgba(232,190,110,.5);color:#f3d38a}
+        .sb-parent .caret{background:rgba(255,255,255,.06);border-color:rgba(212,176,106,.25);color:var(--gold-light)}
+        .sb-parent.expanded .caret{background:rgba(212,176,106,.22);border-color:rgba(232,190,110,.5)}
+        .sb-parent .sb-badge{background:rgba(255,255,255,.06);color:var(--tw-text-soft);border-color:rgba(212,176,106,.2)}
+        .sb-group:has(.sb-item.active) .sb-parent .sb-badge,
+        .sb-parent.expanded .sb-badge{background:rgba(212,176,106,.22);color:#f3d38a;border-color:rgba(232,190,110,.4)}
+
+        .sb-sub::before{background:linear-gradient(180deg,var(--gold-light),rgba(212,176,106,.1));opacity:.7}
+        .sb-sub .sb-item{background:transparent;color:var(--tw-text-soft)}
+        .sb-sub .sb-item:hover{background:rgba(255,255,255,.06);color:#fff;border-color:rgba(212,176,106,.18)}
+        .sb-dot{border-color:rgba(212,176,106,.55)}
+        .sb-sub .sb-item.active{
+            background:linear-gradient(135deg,rgba(232,190,110,.24),rgba(232,149,90,.08));
+            color:#fff;border-color:rgba(232,190,110,.4);
+            box-shadow:0 4px 14px rgba(0,0,0,.22);
+        }
+        .sb-sub .sb-item.active .sb-dot{background:#f0cf85;border-color:#f0cf85;box-shadow:0 0 12px rgba(240,207,133,.7)}
+
+        .sb-foot{
+            border-top:1px solid var(--tw-line);
+            background:linear-gradient(180deg,rgba(8,20,51,.2),rgba(8,20,51,.55));
+        }
+        .sb-profile{border-bottom:1px solid var(--tw-line)}
+        .sb-profile-av{box-shadow:0 0 0 3px rgba(212,176,106,.18),0 6px 16px rgba(0,0,0,.35)}
+        .sb-profile-info b{color:#fff}
+        .sb-profile-info span{color:var(--tw-text-soft)}
+        .sb-profile-caret{color:var(--gold-light)}
+        .logout-btn{
+            background:rgba(255,255,255,.05);
+            border:1px solid rgba(240,128,128,.35);color:#f3a0a0;
+        }
+        .logout-btn:hover{background:rgba(240,110,110,.14);border-color:rgba(240,128,128,.6);color:#ffd0d0}
+
+        /* ---- Barre du haut ---- */
+        .topbar{
+            background:
+                radial-gradient(ellipse 50% 140% at 100% 50%,rgba(232,149,90,.22),transparent 60%),
+                linear-gradient(90deg,rgba(8,20,51,.96) 0%,rgba(13,31,74,.94) 55%,rgba(40,36,82,.93) 100%);
+            backdrop-filter:blur(18px) saturate(1.3);
+            box-shadow:0 8px 30px rgba(4,10,28,.28);
+        }
+        .topbar::after{
+            opacity:1;
+            background:linear-gradient(90deg,transparent,rgba(212,176,106,.25),#f0cf85,var(--gold),#f0cf85,rgba(212,176,106,.25),transparent);
+            background-size:200% 100%;
+        }
+        .topbar h1{color:#fff;text-shadow:0 0 18px rgba(232,190,110,.25)}
+        .topbar-brand:hover{background:rgba(255,255,255,.06);border-color:rgba(212,176,106,.3);box-shadow:0 0 22px rgba(232,190,110,.18)}
+        .topbar-brand-text .top-est{color:var(--gold-light)}
+        .top-logo-wrap{
+            background:linear-gradient(145deg,#fffdf8,#f3ead6);
+            border:1px solid rgba(232,190,110,.55);
+            box-shadow:0 0 0 3px rgba(212,176,106,.12),0 6px 18px rgba(0,0,0,.35);
+        }
+        .topbar .who{
+            padding:6px 8px 6px 16px;border-radius:40px;
+            background:rgba(255,255,255,.06);border:1px solid rgba(212,176,106,.25);
+        }
+        .topbar .who b{color:#fff}
+        .topbar .who span{color:var(--gold-light)}
+        .topbar .who img{border-color:#f0cf85;box-shadow:0 0 14px rgba(240,207,133,.35)}
+        .sb-toggle{
+            background:rgba(255,255,255,.06);border:1px solid rgba(212,176,106,.3);color:var(--gold-light);
+            box-shadow:none;
+        }
+        .sb-toggle:hover{
+            background:rgba(212,176,106,.18);border-color:rgba(232,190,110,.6);color:#fff;
+            box-shadow:0 0 18px rgba(232,190,110,.3);
+        }
+        .hamb{color:var(--gold-light)}
+
+        /* ---- Barres d'indicateurs & panneaux : verre clair sur fond crépuscule ---- */
+        .dash-kpi,.ch-kpi,.section-kpi{
+            background:linear-gradient(180deg,rgba(255,252,245,.94) 0%,rgba(247,241,229,.92) 100%);
+            border-bottom:1px solid rgba(212,176,106,.3);
+            box-shadow:0 10px 30px rgba(8,20,51,.10);
+        }
+        .overlay{background:rgba(8,20,51,.45)}
+
+        /* ---- Cartes analytiques — style crépuscule ---- */
+        .dash-kpi .card,
+        .section-kpi .card,
+        .ch-kpi .ch-stat-card,.ch-kpi .ch-stat-card:hover,.ch-kpi .ch-stat-card:focus,.ch-kpi .ch-stat-card:active,
+        .ech-kpi .ek-card{
+            --k:#e2bf72;
+            position:relative;overflow:hidden;
+            border-radius:16px;color:#fff;
+            background:
+                radial-gradient(120% 95% at 100% 0%,color-mix(in srgb,var(--k) 30%,transparent) 0%,transparent 58%),
+                radial-gradient(90% 70% at 0% 100%,rgba(232,149,90,.12) 0%,transparent 60%),
+                linear-gradient(150deg,#0a1839 0%,#12275a 58%,#1d2a5e 100%);
+            border:1px solid color-mix(in srgb,var(--k) 40%,transparent);
+            box-shadow:0 12px 30px rgba(8,20,51,.22),inset 0 1px 0 rgba(255,255,255,.08);
+            animation:none;
+        }
+        .dash-kpi .card:hover,
+        .section-kpi .card:hover,
+        .ech-kpi .ek-card:hover{
+            border-color:color-mix(in srgb,var(--k) 70%,transparent);
+            box-shadow:0 16px 38px rgba(8,20,51,.3),0 0 26px color-mix(in srgb,var(--k) 35%,transparent),inset 0 1px 0 rgba(255,255,255,.1);
+        }
+        .dash-kpi .card::before{display:none}
+
+        .dash-kpi .card.kpi-chambres{--k:#6ea4ff}
+        .dash-kpi .card.kpi-occupees{--k:#4fd08a}
+        .dash-kpi .card.kpi-charges{--k:#ff7b7b}
+        .dash-kpi .card.kpi-soldedu{--k:#b48cff}
+        .dash-kpi .card.kpi-caisse{--k:#f0c66e}
+        .section-kpi .card:nth-child(4n+1){--k:#f0c66e}
+        .section-kpi .card:nth-child(4n+2){--k:#4fd08a}
+        .section-kpi .card:nth-child(4n+3){--k:#6ea4ff}
+        .section-kpi .card:nth-child(4n+4){--k:#ff7b7b}
+        .ch-kpi .ch-stat-card.st-total{--k:#f0c66e}
+        .ch-kpi .ch-stat-card.st-dispo{--k:#f5d04a}
+        .ch-kpi .ch-stat-card.st-occu{--k:#4fd08a}
+        .ch-kpi .ch-stat-card.st-resa{--k:#6ea4ff}
+        .ch-kpi .ch-stat-card.st-nett{--k:#aab3c5}
+        .ch-kpi .ch-stat-card.st-maint{--k:#ff7b7b}
+        .ech-kpi .ek-card.ek-total{--k:#f0c66e}
+        .ech-kpi .ek-card.ek-dispo{--k:#f5d04a}
+        .ech-kpi .ek-card.ek-occu{--k:#4fd08a}
+        .ech-kpi .ek-card.ek-resa{--k:#6ea4ff}
+        .ech-kpi .ek-card.ek-nett{--k:#aab3c5}
+        .ech-kpi .ek-card.ek-maint{--k:#ff7b7b}
+
+        /* ligne d'accent lumineuse en bas */
+        .dash-kpi .card .kpi-accent,
+        .ech-kpi .ek-accent{
+            left:18px;right:18px;top:auto;bottom:0;width:auto;height:3px;border-radius:3px 3px 0 0;
+            background:linear-gradient(90deg,transparent,var(--k),transparent);
+            box-shadow:0 0 14px var(--k);
+        }
+        .section-kpi .card::after,
+        .ch-kpi .ch-stat-card::after{
+            content:'';position:absolute;left:18px;right:18px;bottom:0;height:3px;border-radius:3px 3px 0 0;
+            background:linear-gradient(90deg,transparent,var(--k),transparent);
+            box-shadow:0 0 14px var(--k);pointer-events:none;
+        }
+
+        /* icônes */
+        .dash-kpi .kpi-icon-wrap,
+        .ch-kpi .ch-stat-ico{
+            border-radius:12px;color:var(--k);
+            background:color-mix(in srgb,var(--k) 18%,transparent);
+            border:1px solid color-mix(in srgb,var(--k) 45%,transparent);
+            box-shadow:0 0 18px color-mix(in srgb,var(--k) 35%,transparent),inset 0 1px 0 rgba(255,255,255,.12);
+        }
+        .dash-kpi .card:hover .kpi-icon-wrap{
+            color:#fff;background:color-mix(in srgb,var(--k) 38%,transparent);
+            border-color:var(--k);
+        }
+
+        /* libellés & valeurs */
+        .dash-kpi .card .l,
+        .section-kpi .card .l,
+        .ech-kpi .ek-lbl{
+            color:rgba(236,230,214,.72);letter-spacing:1.8px;font-weight:600;
+        }
+        .dash-kpi .card .n,
+        .dash-kpi .card .n.money .amt,
+        .section-kpi .card .n,
+        .ech-kpi .ek-val,
+        .ech-kpi .ek-card.ek-dispo .ek-val,.ech-kpi .ek-card.ek-occu .ek-val,.ech-kpi .ek-card.ek-resa .ek-val{
+            color:#fff;
+            text-shadow:0 0 18px color-mix(in srgb,var(--k) 55%,transparent);
+        }
+        .dash-kpi .card .n{font-size:clamp(26px,2.1vw,32px)}
+        .dash-kpi .card .n.money .amt{font-size:clamp(24px,1.9vw,30px)}
+        .dash-kpi .card .n.money .unit{color:var(--k);opacity:.95}
+        .section-kpi .card{padding:18px 20px 20px}
+        .section-kpi .card .n{font-size:30px;font-weight:700}
+        .section-kpi .card .l{font-size:10px;margin-top:8px}
+
+        .ch-kpi .ch-stat-body b{color:#fff;text-shadow:0 0 16px color-mix(in srgb,var(--k) 55%,transparent)}
+        .ch-kpi .ch-stat-body span{color:rgba(236,230,214,.78);font-weight:600;letter-spacing:.4px}
+        .ch-kpi .ch-stat-body small{color:var(--k);font-weight:600;opacity:.9}
+
+        /* barres fixes : fond verre crème qui fait ressortir les cartes */
+        .dash-kpi,.ch-kpi,.section-kpi{
+            background:linear-gradient(180deg,rgba(250,246,237,.95) 0%,rgba(244,237,223,.92) 100%);
+        }
+
+        /* ---- Tableau de bord : chambres en photos (4 par ligne) ---- */
+        #dashboard{max-width:100%}
+        .dash-rooms{width:100%}
+        .dr-head{
+            display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;
+            margin:4px 0 22px;padding-bottom:16px;border-bottom:1px solid rgba(212,176,106,.28);
+        }
+        .dr-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600}
+        #dashboard .dr-title{
+            font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--text-dark);
+            letter-spacing:1px;line-height:1.1;margin:2px 0 0;text-align:left;
+        }
+        .dr-chips{display:flex;flex-wrap:wrap;gap:8px}
+        .dr-chip{
+            display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+            padding:8px 14px;border-radius:40px;font:600 11px 'Montserrat',sans-serif;letter-spacing:.6px;
+            color:var(--text-dark);background:rgba(255,255,255,.85);
+            border:1px solid rgba(212,176,106,.28);transition:all .2s ease;
+        }
+        .dr-chip b{
+            min-width:22px;padding:1px 7px;border-radius:20px;font-size:10px;text-align:center;
+            background:rgba(212,176,106,.16);color:#8a6a2c;
+        }
+        .dr-chip:hover{border-color:var(--gold);box-shadow:0 4px 14px rgba(212,176,106,.2)}
+        .dr-chip.is-on{
+            background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));color:#fff;border-color:transparent;
+            box-shadow:0 6px 18px rgba(8,20,51,.25);
+        }
+        .dr-chip.is-on b{background:rgba(240,207,133,.25);color:#f3d38a}
+
+        .dr-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+        @media(max-width:1200px){.dr-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+        @media(max-width:860px){.dr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:520px){.dr-grid{grid-template-columns:1fr}}
+        .dr-empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
+
+        .dr-card{
+            --st:#d4b06a;
+            background:#fff;border-radius:16px;overflow:hidden;cursor:pointer;
+            border:1px solid rgba(212,176,106,.2);
+            box-shadow:0 6px 22px rgba(8,20,51,.07);
+            transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;
+            display:flex;flex-direction:column;
+        }
+        .dr-card:hover{
+            transform:translateY(-5px);border-color:var(--st);
+            box-shadow:0 18px 40px rgba(8,20,51,.14),0 0 0 1px var(--st);
+        }
+        .dr-card.st-disponible{--st:#e0b43a}
+        .dr-card.st-occupee{--st:#2fa864}
+        .dr-card.st-reservee{--st:#3b7be0}
+        .dr-card.st-nettoyage{--st:#8a93a3}
+        .dr-card.st-maintenance{--st:#d9534f}
+        .dr-img{position:relative;aspect-ratio:4/3;overflow:hidden;background:#e9e5dc}
+        .dr-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+        .dr-card:hover .dr-img img{transform:scale(1.06)}
+        .dr-img::after{
+            content:'';position:absolute;inset:0;pointer-events:none;
+            background:linear-gradient(180deg,rgba(8,20,51,0) 55%,rgba(8,20,51,.55) 100%);
+        }
+        .dr-badge{
+            position:absolute;top:12px;left:12px;z-index:1;
+            padding:5px 11px;border-radius:30px;font:700 10px 'Montserrat',sans-serif;letter-spacing:.8px;
+            text-transform:uppercase;color:#fff;background:var(--st);
+            box-shadow:0 0 0 2px rgba(255,255,255,.35),0 4px 14px rgba(0,0,0,.25);
+        }
+        .dr-card.st-disponible .dr-badge{color:#2a1f05}
+        .dr-num{
+            position:absolute;left:12px;bottom:10px;z-index:1;
+            font:700 13px 'Montserrat',sans-serif;letter-spacing:1px;color:#fff;
+            text-shadow:0 2px 8px rgba(0,0,0,.5);
+        }
+        .dr-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1;border-top:3px solid var(--st)}
+        .dr-body h3{
+            font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--text-dark);
+            line-height:1.2;margin:0;
+        }
+        .dr-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto}
+        .dr-floor{font-size:11px;color:var(--muted);letter-spacing:.4px}
+        .dr-price{font-size:14px;font-weight:700;color:var(--tw-navy)}
+        .dr-price small{font-size:10px;font-weight:500;color:var(--muted)}
+
+        /* ---- Config Chambres ---- */
+        #ch-dispo{max-width:100%}
+        #ch-dispo .cc-title{
+            font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--text-dark);
+            letter-spacing:1px;line-height:1.1;margin:2px 0 4px;text-align:left;
+        }
+        .cc-sub{font-size:12px;color:var(--muted);margin:0}
+        .cc-tools{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+        .cc-search{
+            width:100%;min-width:260px;padding:10px 16px;border-radius:40px;outline:none;
+            border:1px solid rgba(212,176,106,.35);background:rgba(255,255,255,.9);
+            font:500 12px 'Montserrat',sans-serif;color:var(--text-dark);
+        }
+        .cc-search:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,176,106,.15)}
+        .cc-card{
+            --st:#d4b06a;
+            display:flex;flex-direction:column;background:#fff;border-radius:14px;overflow:hidden;cursor:pointer;
+            border:1px solid rgba(212,176,106,.22);box-shadow:0 6px 22px rgba(8,20,51,.07);
+            transition:box-shadow .2s ease,border-color .2s ease;
+        }
+        .cc-card:hover{border-color:var(--st);box-shadow:0 14px 32px rgba(8,20,51,.14),0 0 0 1px var(--st)}
+        .cc-card.st-disponible{--st:#e0b43a}
+        .cc-card.st-occupee{--st:#2fa864}
+        .cc-card.st-reservee{--st:#3b7be0}
+        .cc-card.st-nettoyage{--st:#8a93a3}
+        .cc-card.st-maintenance{--st:#d9534f}
+        .cc-img{aspect-ratio:4/3;background:#e9e5dc;overflow:hidden}
+        .cc-img img{width:100%;height:100%;object-fit:cover;display:block}
+        .cc-info{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(212,176,106,.2)}
+        .cc-info>div{padding:6px 4px;text-align:center;min-width:0}
+        .cc-info>div+div{border-left:1px solid rgba(212,176,106,.18)}
+        .cc-info small{display:block;font:600 8.5px 'Montserrat',sans-serif;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+        .cc-info b{display:block;font:700 11.5px 'Montserrat',sans-serif;color:var(--tw-navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .cc-status{
+            padding:6px 8px;text-align:center;font:700 10px 'Montserrat',sans-serif;letter-spacing:1.2px;
+            text-transform:uppercase;color:#fff;background:var(--st);
+        }
+        .cc-card.st-disponible .cc-status{color:#2a1f05}
+        @media(max-width:860px){.cc-tools{align-items:stretch;width:100%}}
+
+        .cc-form-head{margin-bottom:18px}
+        .cc-lbl{
+            display:block;color:var(--gold);font-weight:600;font-size:11px;letter-spacing:1px;
+            text-transform:uppercase;margin-bottom:10px;
+        }
+        .cc-st-block{margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid rgba(197,160,89,.18)}
+        .cc-st-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+        @media(max-width:600px){.cc-st-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        .cc-st-opt{
+            --st:#d4b06a;
+            display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;
+            padding:12px 8px;border-radius:10px;font:700 10.5px 'Montserrat',sans-serif;
+            letter-spacing:.6px;text-transform:uppercase;
+            color:var(--st);background:color-mix(in srgb,var(--st) 8%,#fff);
+            border:2px solid color-mix(in srgb,var(--st) 45%,transparent);
+            transition:background .2s ease,color .2s ease,box-shadow .2s ease;
+        }
+        .cc-st-opt .cc-dot{width:9px;height:9px;border-radius:50%;background:var(--st);flex-shrink:0}
+        .cc-st-opt:hover{background:color-mix(in srgb,var(--st) 16%,#fff)}
+        .cc-st-opt.is-on{
+            color:#fff;background:var(--st);border-color:var(--st);
+            box-shadow:0 6px 18px color-mix(in srgb,var(--st) 45%,transparent);
+        }
+        .cc-st-opt.is-on .cc-dot{background:#fff}
+        .cc-st-opt.st-disponible{--st:#e0b43a}
+        .cc-st-opt.st-disponible.is-on{color:#2a1f05}
+        .cc-st-opt.st-disponible.is-on .cc-dot{background:#2a1f05}
+        .cc-st-opt.st-occupee{--st:#2fa864}
+        .cc-st-opt.st-reservee{--st:#3b7be0}
+        .cc-st-opt.st-nettoyage{--st:#8a93a3}
+        .cc-st-opt.st-maintenance{--st:#d9534f}
+        .cc-form .field label{
+            color:var(--gold);font-weight:600;font-size:11px;letter-spacing:1px;
+            text-transform:uppercase;margin-bottom:6px;display:block;
+        }
+        .cc-actions{margin-top:20px}
+
+        /* ---- Signature AL JAZEERA HOTEL (sans logo) ---- */
+        .aj-mark{display:flex;flex-direction:column;align-items:center;gap:6px;line-height:1;user-select:none;position:relative;z-index:1}
+        .aj-name{
+            font-family:'Cinzel',serif;font-weight:800;font-size:24px;letter-spacing:3.5px;text-transform:uppercase;
+            white-space:nowrap;padding-left:3.5px;
+            background:linear-gradient(100deg,#b8862f 0%,#f7e2a6 20%,#d4a94f 38%,#fff6d8 50%,#d4a94f 62%,#f7e2a6 80%,#b8862f 100%);
+            background-size:220% 100%;
+            -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+            filter:drop-shadow(0 0 10px rgba(240,198,110,.35)) drop-shadow(0 2px 2px rgba(0,0,0,.45));
+            animation:ajShine 7s linear infinite;
+        }
+        @keyframes ajShine{from{background-position:120% 0}to{background-position:-100% 0}}
+        .aj-sub{
+            display:flex;align-items:center;gap:10px;
+            font:600 10px 'Montserrat',sans-serif;letter-spacing:7px;text-transform:uppercase;color:#f3e4b8;
+            text-shadow:0 0 10px rgba(240,198,110,.45);
+        }
+        .aj-sub i{display:block;width:28px;height:1px;background:linear-gradient(90deg,transparent,#e8be6e);box-shadow:0 0 6px rgba(232,190,110,.6)}
+        .aj-sub i:first-child{margin-right:7px}
+        .aj-sub i:last-child{background:linear-gradient(90deg,#e8be6e,transparent)}
+        .aj-stars{font-size:9px;letter-spacing:4px;padding-left:4px;color:#f0c66e;text-shadow:0 0 8px rgba(240,198,110,.75)}
+
+        .sb-brand{justify-content:center;padding:26px 14px 22px;position:relative}
+        .sb-brand::before{
+            content:'';position:absolute;inset:8px 20px;pointer-events:none;border-radius:50%;
+            background:radial-gradient(ellipse at center,rgba(240,198,110,.18),transparent 70%);
+        }
+
+        .topbar-brand{gap:16px}
+        .aj-mark-top{gap:4px;align-items:center}
+        .aj-mark-top .aj-name{font-size:20px;letter-spacing:3px;padding-left:3px}
+        .aj-mark-top .aj-sub{font-size:8.5px;letter-spacing:6px}
+        .aj-mark-top .aj-sub i{width:20px}
+        .aj-mark-top .aj-sub i:first-child{margin-right:6px}
+        .tb-sep{
+            width:1px;height:34px;flex-shrink:0;
+            background:linear-gradient(180deg,transparent,rgba(232,190,110,.7),transparent);
+            box-shadow:0 0 8px rgba(232,190,110,.4);
+        }
+        @media(max-width:600px){.aj-mark-top,.tb-sep{display:none}}
+        .topbar-left{flex:1}
+        .topbar-brand-text h1{max-width:none}
+        .topbar-brand-text h1.is-slogan{
+            font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;
+            font-size:clamp(17px,1.6vw,23px);letter-spacing:.4px;color:#f6efdd;
+            text-shadow:0 0 16px rgba(232,190,110,.25);
+        }
+        .topbar-brand-text h1.is-slogan em{
+            font-family:'Cinzel',serif;font-style:normal;font-weight:700;font-size:.9em;letter-spacing:2px;
+            background:linear-gradient(100deg,#d4a94f,#fff3cf 50%,#d4a94f);
+            -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+        }
+
+        /* ---- Panneau latéral : sections lumineuses ---- */
+        .sb-nav{--sec:#f0c66e}
+        .sb-nav .sec-pilot{--sec:#f0c66e}
+        .sb-nav .sec-heberg{--sec:#6ea4ff}
+        .sb-nav .sec-achats{--sec:#4fd08a}
+        .sb-nav .sec-fact{--sec:#b48cff}
+        .sb-nav .sec-pers{--sec:#4fd6d0}
+        .sb-nav .sec-fin{--sec:#ff9f6e}
+        .sb-nav .sec-sys{--sec:#c9d3e6}
+
+        .sb-nav .sb-section-label{
+            color:var(--sec);opacity:1;font-weight:700;letter-spacing:2.6px;
+            padding:16px 10px 8px;
+            text-shadow:0 0 12px color-mix(in srgb,var(--sec) 70%,transparent);
+        }
+        .sb-nav .sb-section-label::before{
+            width:8px;height:8px;border-radius:50%;background:var(--sec);
+            box-shadow:0 0 0 3px color-mix(in srgb,var(--sec) 22%,transparent),0 0 14px var(--sec);
+        }
+        .sb-nav .sb-section-label::after{
+            content:'';flex:1;height:1px;margin-left:4px;
+            background:linear-gradient(90deg,color-mix(in srgb,var(--sec) 65%,transparent),transparent);
+        }
+
+        .sb-nav .sb-group,
+        .sb-nav .sb-section-label{flex-shrink:0}
+        .sb-nav .sb-group{
+            position:relative;
+            background:
+                radial-gradient(130% 90% at 0% 0%,color-mix(in srgb,var(--sec) 20%,transparent),transparent 62%),
+                linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
+            border:1px solid color-mix(in srgb,var(--sec) 30%,transparent);
+            box-shadow:0 0 18px color-mix(in srgb,var(--sec) 12%,transparent),inset 0 1px 0 rgba(255,255,255,.07);
+        }
+        .sb-nav .sb-group::before{
+            content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:0 3px 3px 0;
+            background:linear-gradient(180deg,transparent,var(--sec),transparent);
+            box-shadow:0 0 12px var(--sec);opacity:.75;pointer-events:none;
+        }
+        .sb-nav .sb-group::after{
+            content:'';position:absolute;left:14px;right:14px;top:0;height:1px;pointer-events:none;
+            background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--sec) 80%,transparent),transparent);
+        }
+        .sb-nav .sb-group:has(.sb-item.active),
+        .sb-nav .sb-group:has(.sb-sub.open){
+            border-color:color-mix(in srgb,var(--sec) 60%,transparent);
+            box-shadow:0 0 28px color-mix(in srgb,var(--sec) 28%,transparent),0 8px 24px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.1);
+        }
+        .sb-nav .sb-group:has(.sb-item.active)::before,
+        .sb-nav .sb-group:has(.sb-sub.open)::before{opacity:1}
+
+        .sb-nav .ic-wrap{
+            color:var(--sec);
+            background:color-mix(in srgb,var(--sec) 14%,transparent);
+            border-color:color-mix(in srgb,var(--sec) 42%,transparent);
+            box-shadow:0 0 12px color-mix(in srgb,var(--sec) 25%,transparent);
+        }
+        .sb-nav .sb-item:hover,.sb-nav .sb-parent:hover{
+            background:color-mix(in srgb,var(--sec) 12%,transparent);color:#fff;
+            border-color:color-mix(in srgb,var(--sec) 32%,transparent);
+        }
+        .sb-nav .sb-item:hover .ic-wrap,.sb-nav .sb-parent:hover .ic-wrap{
+            color:#fff;background:color-mix(in srgb,var(--sec) 32%,transparent);border-color:var(--sec);
+            box-shadow:0 0 18px color-mix(in srgb,var(--sec) 55%,transparent);
+        }
+        .sb-nav .sb-item.sb-pilot{
+            background:linear-gradient(135deg,color-mix(in srgb,var(--sec) 16%,transparent),rgba(255,255,255,.03));
+            border-color:color-mix(in srgb,var(--sec) 30%,transparent);
+        }
+
+        .sb-nav .sb-item.sb-pilot.active,
+        .sb-nav .sb-item.active:not(.sb-pilot):not(.sb-sub .sb-item){
+            background:linear-gradient(135deg,color-mix(in srgb,var(--sec) 70%,#fff) 0%,var(--sec) 100%);
+            border-color:color-mix(in srgb,var(--sec) 50%,#fff);color:#0b1530;
+            box-shadow:0 6px 22px color-mix(in srgb,var(--sec) 45%,transparent),0 0 30px color-mix(in srgb,var(--sec) 30%,transparent),inset 0 1px 0 rgba(255,255,255,.5);
+        }
+        .sb-nav .sb-item.sb-pilot.active .lbl,
+        .sb-nav .sb-item.active:not(.sb-pilot):not(.sb-sub .sb-item) .lbl{color:#0b1530;font-weight:700}
+        .sb-nav .sb-item.sb-pilot.active .ic-wrap,
+        .sb-nav .sb-item.active:not(.sb-pilot):not(.sb-sub .sb-item) .ic-wrap{
+            color:#0b1530;background:rgba(11,21,48,.12);border-color:rgba(11,21,48,.2);box-shadow:none;
+        }
+
+        .sb-nav .sb-parent.expanded{
+            background:linear-gradient(135deg,color-mix(in srgb,var(--sec) 18%,transparent),rgba(255,255,255,.03));
+            border-color:color-mix(in srgb,var(--sec) 35%,transparent);color:#fff;
+        }
+        .sb-nav .sb-parent.expanded .ic-wrap{color:#fff;background:color-mix(in srgb,var(--sec) 34%,transparent);border-color:var(--sec)}
+        .sb-nav .sb-parent .caret{color:var(--sec);border-color:color-mix(in srgb,var(--sec) 35%,transparent)}
+        .sb-nav .sb-parent.expanded .caret{background:color-mix(in srgb,var(--sec) 25%,transparent);border-color:var(--sec)}
+        .sb-nav .sb-group:has(.sb-item.active) .sb-parent .sb-badge,
+        .sb-nav .sb-parent.expanded .sb-badge{
+            color:#fff;background:color-mix(in srgb,var(--sec) 35%,transparent);border-color:var(--sec);
+        }
+
+        .sb-nav .sb-sub::before{background:linear-gradient(180deg,var(--sec),transparent);box-shadow:0 0 8px var(--sec);opacity:.8}
+        .sb-nav .sb-dot{border-color:color-mix(in srgb,var(--sec) 70%,transparent)}
+        .sb-nav .sb-sub .sb-item:hover .sb-dot{border-color:var(--sec);background:color-mix(in srgb,var(--sec) 45%,transparent);box-shadow:0 0 8px var(--sec)}
+        .sb-nav .sb-sub .sb-item.active{
+            background:linear-gradient(135deg,color-mix(in srgb,var(--sec) 26%,transparent),color-mix(in srgb,var(--sec) 8%,transparent));
+            color:#fff;border-color:color-mix(in srgb,var(--sec) 50%,transparent);
+            box-shadow:0 0 16px color-mix(in srgb,var(--sec) 25%,transparent);
+        }
+        .sb-nav .sb-sub .sb-item.active .sb-dot{background:var(--sec);border-color:var(--sec);box-shadow:0 0 12px var(--sec)}
+
+        /* ---- Panneau latéral : lisibilité (fond sombre uni, textes contrastés) ---- */
+        .sidebar{
+            background:linear-gradient(180deg,#07122e 0%,#0a1a42 50%,#0d1f4a 100%);
+        }
+        .sidebar::before{display:none}
+        .sidebar .sb-nav{padding:12px 12px 16px;gap:4px}
+
+        .sidebar .sb-nav .sb-section-label{
+            font-size:11px;font-weight:700;letter-spacing:2.2px;
+            padding:18px 6px 8px;text-shadow:none;
+            color:color-mix(in srgb,var(--sec) 85%,#fff);
+        }
+        .sidebar .sb-nav .sb-section-label:first-child{padding-top:6px}
+
+        .sidebar .sb-nav .sb-group{
+            background:rgba(255,255,255,.045);
+            border:1px solid color-mix(in srgb,var(--sec) 28%,rgba(255,255,255,.08));
+            box-shadow:none;padding:6px;
+        }
+        .sidebar .sb-nav .sb-group::after{opacity:.6}
+
+        .sidebar .sb-nav .sb-item,
+        .sidebar .sb-nav .sb-parent{color:#f4f1ea}
+        .sidebar .sb-nav .sb-item .lbl,
+        .sidebar .sb-nav .sb-parent .lbl{color:#f4f1ea;font-size:13.5px;font-weight:500;letter-spacing:.2px}
+        .sidebar .sb-nav .sb-parent .lbl{font-weight:600}
+        .sidebar .sb-nav .sb-item.sb-pilot .lbl{font-weight:600}
+
+        .sidebar .sb-nav .ic-wrap{
+            color:var(--sec);background:color-mix(in srgb,var(--sec) 16%,transparent);
+            border-color:color-mix(in srgb,var(--sec) 45%,transparent);box-shadow:none;
+        }
+
+        .sidebar .sb-nav .sb-sub{padding:4px 6px 8px 44px}
+        .sidebar .sb-nav .sb-sub .sb-item{
+            color:#e6e1d4;background:transparent;min-height:36px;
+        }
+        .sidebar .sb-nav .sb-sub .sb-item .lbl{color:#e6e1d4;font-size:13px;font-weight:500}
+        .sidebar .sb-nav .sb-dot{border-color:var(--sec);border-width:2px}
+        .sidebar .sb-nav .sb-sub::before{opacity:.9;box-shadow:none}
+
+        .sidebar .sb-nav .sb-item:not(.active):hover,
+        .sidebar .sb-nav .sb-parent:hover{background:rgba(255,255,255,.09);border-color:color-mix(in srgb,var(--sec) 40%,transparent)}
+        .sidebar .sb-nav .sb-item:not(.active):hover .lbl,
+        .sidebar .sb-nav .sb-parent:hover .lbl{color:#fff}
+
+        .sidebar .sb-nav .sb-parent .sb-badge{color:#f4f1ea;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18)}
+        .sidebar .sb-nav .sb-parent .caret{color:#f4f1ea;background:rgba(255,255,255,.08)}
+
+        .sidebar .sb-nav .sb-sub .sb-item.active{
+            background:color-mix(in srgb,var(--sec) 24%,transparent);
+            border-color:color-mix(in srgb,var(--sec) 60%,transparent);box-shadow:none;
+        }
+        .sidebar .sb-nav .sb-sub .sb-item.active .lbl{color:#fff;font-weight:700}
+
+        .sidebar .sb-nav .sb-item.sb-pilot.active .lbl,
+        .sidebar .sb-nav .sb-item.active:not(.sb-pilot):not(.sb-sub .sb-item) .lbl{color:#0b1530;font-weight:700}
     </style>
     @include('partials.data-center-styles')
 </head>
@@ -1895,20 +2572,18 @@
     $canManageRooms = in_array($adminLogin, $managerLogins, true);
     $adminLabel = 'Direction';
 @endphp
-<div class="admin-wrap">
+<div class="admin-wrap sb-collapsed">
     <aside class="sidebar" id="sidebar">
         <div class="sb-brand">
-            <div class="sb-logo-wrap">
-                <img src="{{ asset('images/logo.png') }}" alt="logo">
-            </div>
-            <div class="sb-brand-text">
-                <span class="sb-est">Hotel &amp; Resort</span>
-                <b>ALJAZEERA</b>
-                <span class="sb-stars">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+            <div class="aj-mark">
+                <span class="aj-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                <span class="aj-name">Al Jazeera</span>
+                <span class="aj-sub"><i></i>Hotel<i></i></span>
             </div>
         </div>
         <nav class="sb-nav" id="sbNav">
-            <div class="sb-section-label">Pilotage</div>
+            <div class="sb-section-label sec-pilot">Pilotage</div>
+            <div class="sb-group sb-group-flat sec-pilot">
             <div class="sb-item sb-pilot active" data-target="dashboard">
                 <span class="ic-wrap">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -1923,29 +2598,26 @@
                 <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>
                 <span class="lbl">Calendrier</span>
             </div>
+            </div>
 
-            <div class="sb-section-label">Hébergement</div>
-            <div class="sb-group sb-group-flat">
+            <div class="sb-section-label sec-heberg">Hébergement</div>
+            <div class="sb-group sb-group-flat sec-heberg">
                 <div class="sb-item" data-target="ch-etat">
                     <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 012 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg></span>
                     <span class="lbl">Chambres</span>
-                </div>
-                <div class="sb-item" data-target="ch-categories">
-                    <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg></span>
-                    <span class="lbl">Catégories de chambres</span>
                 </div>
                 <div class="sb-item" data-target="ch-etages">
                     <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5v13H3V8l9-5z"/><path d="M9 21V12h6v9"/></svg></span>
                     <span class="lbl">Étages</span>
                 </div>
                 <div class="sb-item" data-target="ch-dispo">
-                    <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>
-                    <span class="lbl">Disponibilités</span>
+                    <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
+                    <span class="lbl">Config Chambres</span>
                 </div>
             </div>
 
-            <div class="sb-section-label">Achats &amp; Stock</div>
-            <div class="sb-group">
+            <div class="sb-section-label sec-achats">Achats &amp; Stock</div>
+            <div class="sb-group sec-achats">
                 <div class="sb-parent" id="frnsParent">
                     <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-6 9 6v11a1 1 0 01-1 1H4a1 1 0 01-1-1V9z"/><path d="M9 22V12h6v10"/></svg></span>
                     <span class="lbl">Fournisseurs</span>
@@ -1959,7 +2631,7 @@
                     <div class="sb-item" data-target="balance"><span class="sb-dot"></span><span class="lbl">Balance</span></div>
                 </div>
             </div>
-            <div class="sb-group">
+            <div class="sb-group sec-achats">
                 <div class="sb-parent" id="stockParent">
                     <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></span>
                     <span class="lbl">Stock</span>
@@ -1973,8 +2645,8 @@
                 </div>
             </div>
 
-            <div class="sb-section-label">Facturation</div>
-            <div class="sb-group">
+            <div class="sb-section-label sec-fact">Facturation</div>
+            <div class="sb-group sec-fact">
                 <div class="sb-parent" id="factParent">
                     <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></span>
                     <span class="lbl">Facturation</span>
@@ -1991,8 +2663,8 @@
                 </div>
             </div>
 
-            <div class="sb-section-label">Personnel</div>
-            <div class="sb-group">
+            <div class="sb-section-label sec-pers">Personnel</div>
+            <div class="sb-group sec-pers">
                 <div class="sb-parent" id="persParent">
                     <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span>
                     <span class="lbl">Personnel</span>
@@ -2007,8 +2679,8 @@
                 </div>
             </div>
 
-            <div class="sb-section-label">Finance</div>
-            <div class="sb-group">
+            <div class="sb-section-label sec-fin">Finance</div>
+            <div class="sb-group sec-fin">
                 <div class="sb-parent" id="monParent">
                     <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01M17 12h.01M7 12h.01"/></svg></span>
                     <span class="lbl">Trésorerie</span>
@@ -2023,8 +2695,8 @@
                 </div>
             </div>
 
-            <div class="sb-section-label">Système</div>
-            <div class="sb-group">
+            <div class="sb-section-label sec-sys">Système</div>
+            <div class="sb-group sec-sys">
                 <div class="sb-parent" id="cfgParent">
                     <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
                     <span class="lbl">Configuration</span>
@@ -2072,12 +2744,13 @@
                     </svg>
                 </button>
                 <div class="topbar-brand" id="goDashboard" title="Retour au tableau de bord">
-                    <div class="top-logo-wrap">
-                        <img src="{{ asset('images/logo.png') }}" alt="Al Jazeera Hotel">
+                    <div class="aj-mark aj-mark-top">
+                        <span class="aj-name">Al Jazeera</span>
+                        <span class="aj-sub"><i></i>Hotel<i></i></span>
                     </div>
+                    <span class="tb-sep" aria-hidden="true"></span>
                     <div class="topbar-brand-text">
-                        <span class="top-est">Al Jazeera Hotel</span>
-                        <h1 id="pageTitle">Tableau de bord</h1>
+                        <h1 id="pageTitle" class="is-slogan">Découvrez Laâyoune, vivez l’expérience <em>AL JAZZERA</em>.</h1>
                     </div>
                 </div>
             </div>
@@ -2730,12 +3403,6 @@
                 </aside>
             </section>
 
-            <section class="panel" id="ch-categories">
-                <h2 class="serif">Catégories de chambres</h2>
-                <p class="sub">Suites, Familiales et Singles — répartition du parc</p>
-                <div id="chCategoriesGrid" class="ch-cat-grid"></div>
-            </section>
-
             <section class="panel" id="ch-etages">
                 <div class="block">
                     <div class="ch-etages-toolbar">
@@ -2768,9 +3435,18 @@
             </section>
 
             <section class="panel" id="ch-dispo">
-                <h2 class="serif">Disponibilités</h2>
-                <p class="sub">Catalogue public — photos, titres et descriptions affichés sur le site</p>
-                <div id="cdSections"></div>
+                <div class="dr-head">
+                    <div>
+                        <div class="dr-eyebrow">Hébergement</div>
+                        <h2 class="dr-title cc-title">Config Chambres</h2>
+                        <p class="cc-sub">Cliquez sur une chambre pour modifier son statut, sa photo, ses descriptions, son prix et ses caractéristiques.</p>
+                    </div>
+                    <div class="cc-tools">
+                        <input type="search" id="ccSearch" class="cc-search" placeholder="Rechercher (n°, titre…)" autocomplete="off">
+                        <div class="dr-chips" id="ccChips"></div>
+                    </div>
+                </div>
+                <div class="dr-grid cc-grid" id="ccGrid"></div>
             </section>
 
             {{-- PERSONNELS --}}
@@ -3062,6 +3738,7 @@
     const items=document.querySelectorAll('.sb-item');
     const panels=document.querySelectorAll('.panel');
     const title=document.getElementById('pageTitle');
+    const DASH_SLOGAN=title?title.innerHTML:'';
     const sidebar=document.getElementById('sidebar');
     const overlay=document.getElementById('overlay');
     const adminWrap=document.querySelector('.admin-wrap');
@@ -3098,7 +3775,13 @@
             expandSubForItem(match);
         }
         panels.forEach(p=>p.classList.toggle('active',p.id===targetId));
-        title.textContent=label||(match?(match.querySelector('.lbl')||match).textContent.trim():'');
+        if(targetId==='dashboard'){
+            title.innerHTML=DASH_SLOGAN;
+            title.classList.add('is-slogan');
+        }else{
+            title.textContent=label||(match?(match.querySelector('.lbl')||match).textContent.trim():'');
+            title.classList.remove('is-slogan');
+        }
         if(dashKpiBar)dashKpiBar.classList.toggle('hidden',targetId!=='dashboard');
         if(chKpiBar){
             const showCh=targetId==='ch-etat';
@@ -3121,9 +3804,8 @@
         }
         const pageLabels={
             'ch-etat':'Chambres',
-            'ch-categories':'Catégories de chambres',
             'ch-etages':'Étages',
-            'ch-dispo':'Disponibilités',
+            'ch-dispo':'Config Chambres',
             'ch-reservations':'Réservations',
             'ch-calendrier':'Calendrier'
         };
@@ -3134,10 +3816,10 @@
             if(targetId==='regl')FRNS.renderReglBalances();
             if(targetId==='balance')FRNS.renderBalance();
         }
+        if(targetId==='dashboard'&&window.DASH)window.DASH.render();
         if(targetId==='stock-mouvement'&&typeof STOCK!=='undefined')STOCK.syncFromBons();
         if(targetId==='stock-etat'&&typeof ETAT!=='undefined')ETAT.render();
         if(targetId==='ch-etat'&&typeof CHETAT!=='undefined')CHETAT.render();
-        if(targetId==='ch-categories'&&typeof CHETAT!=='undefined')CHETAT.renderCategories();
         if(targetId==='ch-etages'&&typeof CHETAT!=='undefined')CHETAT.renderEtages();
         if(targetId==='ch-dispo'&&typeof CHDISPO!=='undefined')CHDISPO.render();
         if(targetId==='configuration'&&typeof CFG!=='undefined'){
@@ -3150,6 +3832,7 @@
     items.forEach(it=>it.addEventListener('click',()=>{
         const lbl=(it.querySelector('.lbl')||it).textContent.trim();
         activatePanel(it.dataset.target,lbl,it.dataset.cfg||null);
+        if(window.innerWidth>900&&typeof setSidebarCollapsed==='function')setSidebarCollapsed(true);
     }));
     document.getElementById('goDashboard')?.addEventListener('click',()=>activatePanel('dashboard','Tableau de bord'));
     document.querySelector('.sb-brand')?.addEventListener('click',()=>activatePanel('dashboard','Tableau de bord'));
@@ -3171,11 +3854,13 @@
         if(window.innerWidth<=900)return;
         setSidebarCollapsed(!adminWrap.classList.contains('sb-collapsed'));
     });
-    if(adminWrap&&window.innerWidth>900){
-        try{if(localStorage.getItem('aj_sb_collapsed')==='1')setSidebarCollapsed(true);}catch(e){}
+    if(adminWrap){
+        if(window.innerWidth>900)setSidebarCollapsed(true);
+        else adminWrap.classList.remove('sb-collapsed');
     }
     window.addEventListener('resize',()=>{
         if(window.innerWidth<=900)adminWrap?.classList.remove('sb-collapsed');
+        else if(!adminWrap?.classList.contains('sb-collapsed')&&!sidebar.classList.contains('open'))setSidebarCollapsed(true);
     });
     document.querySelectorAll('.sb-parent').forEach(parent=>{
         parent.addEventListener('click',()=>{
@@ -4416,9 +5101,8 @@ const CFG=(function(){
         {id:'regl-clt',label:'Règl Client',section:'Facturation'},
         {id:'releve-clt',label:'Relevé Compte Clt',section:'Facturation'},
         {id:'ch-etat',label:'Chambres',section:'Hébergement'},
-        {id:'ch-categories',label:'Catégories de chambres',section:'Hébergement'},
         {id:'ch-etages',label:'Étages',section:'Hébergement'},
-        {id:'ch-dispo',label:'Disponibilités',section:'Hébergement'},
+        {id:'ch-dispo',label:'Config Chambres',section:'Hébergement'},
         {id:'ch-calendrier',label:'Calendrier',section:'Pilotage'},
         {id:'pers-fiche',label:'Fiche Personnel',section:'Exploitation'},
         {id:'pers-taches',label:'Gestion des Taches',section:'Exploitation'},
@@ -4847,23 +5531,60 @@ CFG.init();
 </script>
 
 <script>
-/* ===== Module Chambres Disponibles ===== */
+/* ===== Module Config Chambres ===== */
 const CHDISPO=(function(){
+    const STATUS={disponible:'Disponible',occupee:'Occupée',reservee:'Réservée',nettoyage:'Nettoyage',maintenance:'Maintenance'};
+    const ALL_STATUS=['disponible','occupee','reservee','nettoyage','maintenance'];
+    const FILTERS=[['','Toutes'],['disponible','Disponibles'],['occupee','Occupées'],['reservee','Réservées'],['nettoyage','Nettoyage'],['maintenance','Maintenance']];
     const TYPE_LBL={suite:'Suite',familiale:'Familiale',single:'Single'};
-    const SECTIONS=window.AJ_HOTEL?window.AJ_HOTEL.getCategories():[];
-    let bound=false;
+    const META_DEF={
+        suite:{guests:3,size:'45 m²',view:'Vue panoramique',bed:'Lit King Size'},
+        familiale:{guests:4,size:'38 m²',view:'Vue jardin',bed:'2 lits doubles'},
+        single:{guests:2,size:'28 m²',view:'Vue ville',bed:'Lit Queen'}
+    };
+    const K_STATUS='aj_ch_status',K_RESA='aj_ch_resa';
+    let filter='',query='',bound=false;
     const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     const fmtP=n=>Number(n).toLocaleString('fr-FR')+' DH';
+    const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{};}catch(e){return{};}};
+    const store=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+    const floorLbl=f=>!f?'—':(Number(f)===1?'1er étage':f+'e étage');
+
+    function statusOf(r){
+        const resa=load(K_RESA)[r.num];
+        let st=r.status||'disponible';
+        if(resa?.validated)st=resa.statusChambre||'reservee';
+        else{const s=load(K_STATUS)[r.num];if(s)st=s;}
+        return STATUS[st]?st:'disponible';
+    }
+
+    function saveStatus(num,st){
+        const statuses=load(K_STATUS);
+        statuses[num]=st;
+        store(K_STATUS,statuses);
+        const resas=load(K_RESA);
+        if(resas[num]){
+            if(st==='occupee'||st==='reservee')resas[num].statusChambre=st;
+            else delete resas[num];
+            store(K_RESA,resas);
+        }
+    }
+
+    function rooms(){
+        const base=window.AJ_HOTEL?window.AJ_HOTEL.getCatalog():[];
+        return base.map(r=>({...r,status:statusOf(r)}));
+    }
 
     function cardHtml(r){
-        return`<article class="cd-card" data-num="${r.num}">
-            <div class="cd-card-img"><img src="${esc(r.img)}" alt="${esc(r.title)}" loading="lazy"><span class="cd-num">Ch. ${r.num}</span></div>
-            <div class="cd-card-body">
-                <span class="rm-type" style="font-size:9px">${TYPE_LBL[r.type]||r.type} · Étage ${r.floor||'—'}</span>
-                <h4>${esc(r.title)}</h4>
-                <p>${esc(r.desc)}</p>
-                <div class="cd-card-foot"><span class="cd-price">${fmtP(r.price)}</span><button type="button" class="cd-edit-btn" title="Modifier">&#9998;</button></div>
+        return`<article class="cc-card st-${r.status}" data-num="${esc(r.num)}" role="button" tabindex="0" title="Modifier la chambre ${esc(r.num)}">
+            <div class="cc-img"><img src="${esc(r.img)}" alt="${esc(r.title)}" loading="lazy"></div>
+            <div class="cc-info">
+                <div><small>N°</small><b>${esc(r.num)}</b></div>
+                <div><small>Type</small><b>${TYPE_LBL[r.type]||esc(r.type)}</b></div>
+                <div><small>Étage</small><b>${floorLbl(r.floor)}</b></div>
+                <div><small>Prix</small><b>${fmtP(r.price)}</b></div>
             </div>
+            <div class="cc-status">${STATUS[r.status]}</div>
         </article>`;
     }
 
@@ -4873,63 +5594,116 @@ const CHDISPO=(function(){
     function showEdit(room){
         const box=document.getElementById('rmModalContent');
         if(!box)return;
-        box.innerHTML=`<div class="rm-form-head"><h3>Chambre ${esc(room.num)} — Site public</h3><p>Photo, titre, descriptions et prix affichés sur la page Chambres</p></div>
-        <form class="rm-form-grid" id="cdForm" onsubmit="return false">
-            <div class="field span2"><label>Aperçu photo</label><div class="rm-edit-preview"><img id="cd_preview" src="${esc(room.img)}" alt=""></div></div>
-            <div class="field span2"><label>URL de la photo</label><input type="text" id="cd_img" value="${esc(room.img)}"></div>
-            <div class="field span2"><label>Importer une image</label><input type="file" id="cd_img_file" accept="image/*"></div>
-            <div class="field span2"><label>Titre</label><input type="text" id="cd_title" value="${esc(room.title)}"></div>
-            <div class="field span2"><label>Description courte</label><textarea id="cd_desc" rows="2">${esc(room.desc)}</textarea></div>
-            <div class="field span2"><label>Description longue</label><textarea id="cd_long" rows="4">${esc(room.longDesc||room.desc)}</textarea></div>
-            <div class="field"><label>Prix / nuit (DH)</label><input type="number" id="cd_price" min="0" step="1" value="${room.price}"></div>
+        const m={...(META_DEF[room.type]||META_DEF.single)};
+        ['guests','size','view','bed'].forEach(k=>{if(room[k]!=null&&room[k]!=='')m[k]=room[k];});
+        let pickedStatus=room.status;
+        box.innerHTML=`<div class="rm-form-head cc-form-head"><h3>Chambre ${esc(room.num)}</h3><p>${TYPE_LBL[room.type]||esc(room.type)} · les modifications s'appliquent à l'admin et au site public</p></div>
+        <div class="cc-st-block">
+            <label class="cc-lbl">Statut de la chambre</label>
+            <div class="cc-st-row" role="radiogroup">${ALL_STATUS.map(st=>`
+                <button type="button" class="cc-st-opt st-${st}${st===pickedStatus?' is-on':''}" data-st="${st}" role="radio" aria-checked="${st===pickedStatus}">
+                    <span class="cc-dot"></span>${STATUS[st]}
+                </button>`).join('')}
+            </div>
+        </div>
+        <form class="rm-form-grid cc-form" id="ccForm" onsubmit="return false" autocomplete="off">
+            <div class="field span2"><label>Aperçu photo</label><div class="rm-edit-preview"><img id="cc_preview" src="${esc(room.img)}" alt=""></div></div>
+            <div class="field"><label>URL de la photo</label><input type="text" id="cc_img" value="${esc(room.img)}"></div>
+            <div class="field"><label>Importer une image</label><input type="file" id="cc_img_file" accept="image/*"></div>
+            <div class="field span2"><label>Titre</label><input type="text" id="cc_title" value="${esc(room.title)}"></div>
+            <div class="field span2"><label>Description courte</label><textarea id="cc_desc" rows="2">${esc(room.desc)}</textarea></div>
+            <div class="field span2"><label>Description longue</label><textarea id="cc_long" rows="4">${esc(room.longDesc||room.desc)}</textarea></div>
+            <div class="field"><label>Prix / nuit (DH)</label><input type="number" id="cc_price" min="0" step="1" value="${Number(room.price)||0}"></div>
+            <div class="field"><label>Étage</label><input type="number" id="cc_floor" min="0" step="1" value="${esc(room.floor)}"></div>
+            <div class="field"><label>Capacité (personnes)</label><input type="number" id="cc_guests" min="1" step="1" value="${esc(m.guests)}"></div>
+            <div class="field"><label>Superficie</label><input type="text" id="cc_size" value="${esc(m.size)}"></div>
+            <div class="field"><label>Vue</label><input type="text" id="cc_view" value="${esc(m.view)}"></div>
+            <div class="field"><label>Literie</label><input type="text" id="cc_bed" value="${esc(m.bed)}"></div>
         </form>
-        <div class="rm-form-actions">
-            <button type="button" class="btn gold" id="cdSave">Enregistrer</button>
-            <button type="button" class="btn ghost" id="cdCancel">Annuler</button>
+        <div class="rm-form-actions cc-actions">
+            <button type="button" class="btn gold" id="ccSave">Enregistrer</button>
+            <button type="button" class="btn ghost" id="ccCancel">Annuler</button>
         </div>`;
-        const preview=document.getElementById('cd_preview');
-        const imgInput=document.getElementById('cd_img');
+
+        box.querySelectorAll('.cc-st-opt').forEach(btn=>{
+            btn.addEventListener('click',()=>{
+                pickedStatus=btn.dataset.st;
+                box.querySelectorAll('.cc-st-opt').forEach(b=>{
+                    const on=b===btn;
+                    b.classList.toggle('is-on',on);
+                    b.setAttribute('aria-checked',on?'true':'false');
+                });
+            });
+        });
+        const preview=document.getElementById('cc_preview');
+        const imgInput=document.getElementById('cc_img');
         imgInput?.addEventListener('input',()=>{if(preview&&imgInput.value.trim())preview.src=imgInput.value.trim();});
-        document.getElementById('cd_img_file')?.addEventListener('change',e=>{
+        document.getElementById('cc_img_file')?.addEventListener('change',e=>{
             const file=e.target.files?.[0];
             if(!file)return;
             const reader=new FileReader();
             reader.onload=()=>{if(imgInput)imgInput.value=reader.result;if(preview)preview.src=reader.result;};
             reader.readAsDataURL(file);
         });
-        document.getElementById('cdSave')?.addEventListener('click',()=>{
-            const title=document.getElementById('cd_title')?.value.trim();
-            const desc=document.getElementById('cd_desc')?.value.trim();
-            const longDesc=document.getElementById('cd_long')?.value.trim();
-            const price=Number(document.getElementById('cd_price')?.value)||0;
-            const img=document.getElementById('cd_img')?.value.trim();
+        document.getElementById('ccSave')?.addEventListener('click',()=>{
+            const val=id=>document.getElementById(id)?.value.trim()||'';
+            const title=val('cc_title');
             if(!title){alert('Le titre est obligatoire.');return;}
-            const data={title,desc,longDesc:longDesc||desc,price,img:img||room.img};
+            const desc=val('cc_desc');
+            const data={
+                title,desc,
+                longDesc:val('cc_long')||desc,
+                price:Number(val('cc_price'))||0,
+                img:val('cc_img')||room.img,
+                floor:val('cc_floor')===''?room.floor:Number(val('cc_floor')),
+                guests:Number(val('cc_guests'))||m.guests,
+                size:val('cc_size'),
+                view:val('cc_view'),
+                bed:val('cc_bed')
+            };
             if(window.AJ_HOTEL)window.AJ_HOTEL.saveRoom(room.num,data);
+            if(pickedStatus!==room.status)saveStatus(room.num,pickedStatus);
             closeModal();
             render();
-            alert('Chambre mise à jour — visible sur le site public.');
+            window.DASH?.render();
+            window.CHETAT?.render();
         });
-        document.getElementById('cdCancel')?.addEventListener('click',closeModal);
+        document.getElementById('ccCancel')?.addEventListener('click',closeModal);
         openModal();
     }
 
     function render(){
-        const box=document.getElementById('cdSections');
-        if(!box||!window.AJ_HOTEL)return;
-        const rooms=window.AJ_HOTEL.getCatalog();
-        box.innerHTML=SECTIONS.map(s=>{
-            const list=rooms.filter(r=>r.type===s.key);
-            return`<div class="cd-section"><div class="cd-section-head"><h3>${esc(s.title)}</h3><span class="ech-count">${list.length} chambres</span></div><div class="cd-grid">${list.map(cardHtml).join('')}</div></div>`;
-        }).join('');
+        const grid=document.getElementById('ccGrid');
+        const chipsBox=document.getElementById('ccChips');
+        if(!grid||!window.AJ_HOTEL)return;
+        const all=rooms().sort((a,b)=>String(a.num).localeCompare(String(b.num),undefined,{numeric:true}));
+        const count={};
+        all.forEach(r=>{count[r.status]=(count[r.status]||0)+1;});
+        if(chipsBox){
+            chipsBox.innerHTML=FILTERS.map(([k,l])=>{
+                const n=k?(count[k]||0):all.length;
+                return`<button type="button" class="dr-chip${filter===k?' is-on':''}${k?' st-'+k:''}" data-f="${k}">${l}<b>${n}</b></button>`;
+            }).join('');
+        }
+        const q=query.toLowerCase();
+        const list=all.filter(r=>(!filter||r.status===filter)&&(!q||`${r.num} ${r.title} ${r.desc||''}`.toLowerCase().includes(q)));
+        grid.innerHTML=list.length?list.map(cardHtml).join(''):'<p class="dr-empty">Aucune chambre ne correspond.</p>';
         if(!bound){
-            box.addEventListener('click',e=>{
-                const btn=e.target.closest('.cd-edit-btn');
-                if(!btn)return;
-                const card=btn.closest('.cd-card');
-                const room=window.AJ_HOTEL.getRoom(card?.dataset.num);
+            const open=el=>{
+                const card=el.closest('.cc-card');
+                if(!card)return;
+                const room=rooms().find(r=>r.num===card.dataset.num);
                 if(room)showEdit(room);
+            };
+            grid.addEventListener('click',e=>open(e.target));
+            grid.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open(e.target);}});
+            chipsBox?.addEventListener('click',e=>{
+                const chip=e.target.closest('.dr-chip');
+                if(!chip)return;
+                filter=chip.dataset.f||'';
+                render();
             });
+            document.getElementById('ccSearch')?.addEventListener('input',e=>{query=e.target.value.trim();render();});
             bound=true;
         }
     }
@@ -4986,7 +5760,11 @@ const CHETAT=(function(){
     const saveRoomStatus=(n,st)=>{const s=getStatuses();s[n]=st;setStatuses(s);};
     const saveRoomData=(n,d)=>{if(window.AJ_HOTEL)window.AJ_HOTEL.saveRoom(n,d);};
     const roomByNum=n=>ROOMS.find(r=>r.num===n);
-    const metaFor=r=>ROOM_META[r.type]||ROOM_META.single;
+    const metaFor=r=>{
+        const m={...(ROOM_META[r.type]||ROOM_META.single)};
+        ['guests','size','view','bed'].forEach(k=>{if(r[k]!=null&&r[k]!=='')m[k]=r[k];});
+        return m;
+    };
 
     function syncFromStorage(){
         const statuses=getStatuses(),resas=getResas(),statusMap={};
@@ -5562,28 +6340,6 @@ const CHETAT=(function(){
         }
     }
 
-    function renderCategories(){
-        const box=document.getElementById('chCategoriesGrid');
-        if(!box)return;
-        syncFromStorage();
-        box.innerHTML=['suite','familiale','single'].map(key=>{
-            const list=ROOMS.filter(r=>r.type===key);
-            const disp=list.filter(r=>r.status==='disponible').length;
-            return`<article class="ch-cat-card" data-cat="${key}">
-                <h3>${CAT_TITLE[key]}</h3>
-                <p>${list.length} chambre(s) · ${disp} disponible(s)</p>
-            </article>`;
-        }).join('');
-        box.querySelectorAll('.ch-cat-card').forEach(el=>{
-            el.addEventListener('click',()=>{
-                currentFilter.cat=el.dataset.cat;
-                const sel=document.getElementById('chFilterCat');
-                if(sel)sel.value=el.dataset.cat;
-                document.querySelector('.sb-item[data-target="ch-etat"]')?.click();
-            });
-        });
-    }
-
     let etagesFloorFilter='',etagesFloorQ='',etagesBound=false;
 
     function matchesEtageSearch(floor){
@@ -5670,9 +6426,92 @@ const CHETAT=(function(){
         }
     }
 
-    return{render,renderCategories,renderEtages};
+    function select(num){
+        const r=roomByNum(num);
+        if(r)showDetail(r);
+    }
+
+    return{render,renderEtages,select};
 })();
 window.CHETAT=CHETAT;
+
+/* ===== Tableau de bord — chambres en photos ===== */
+const DASH=(function(){
+    const STATUS={disponible:'Disponible',occupee:'Occupée',reservee:'Réservée',nettoyage:'Nettoyage',maintenance:'Maintenance'};
+    const FILTERS=[['','Toutes'],['disponible','Disponibles'],['occupee','Occupées'],['reservee','Réservées'],['nettoyage','Nettoyage'],['maintenance','Maintenance']];
+    let filter='';
+    const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{};}catch(e){return{};}};
+
+    function rooms(){
+        const base=window.AJ_HOTEL?window.AJ_HOTEL.getCatalog():[];
+        const statuses=load('aj_ch_status'),resas=load('aj_ch_resa');
+        return base.map(r=>{
+            let st=r.status||'disponible';
+            if(resas[r.num]?.validated)st=resas[r.num].statusChambre||'reservee';
+            else if(statuses[r.num])st=statuses[r.num];
+            return{...r,status:STATUS[st]?st:'disponible'};
+        });
+    }
+
+    function render(){
+        const box=document.getElementById('dashboard');
+        if(!box)return;
+        const all=rooms();
+        const count={};
+        all.forEach(r=>{count[r.status]=(count[r.status]||0)+1;});
+        const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+        set('kpiChambres',all.length);
+        set('kpiOccupees',count.occupee||0);
+
+        const list=filter?all.filter(r=>r.status===filter):all;
+        const chips=FILTERS.map(([k,l])=>{
+            const n=k?(count[k]||0):all.length;
+            return`<button type="button" class="dr-chip${filter===k?' is-on':''}${k?' st-'+k:''}" data-f="${k}">${l}<b>${n}</b></button>`;
+        }).join('');
+        const cards=list.map(r=>`
+            <article class="dr-card st-${r.status}" data-num="${esc(r.num)}" role="button" tabindex="0">
+                <div class="dr-img">
+                    <img src="${esc(r.img)}" alt="${esc(r.title)}" loading="lazy">
+                    <span class="dr-badge st-${r.status}">${STATUS[r.status]}</span>
+                    <span class="dr-num">N° ${esc(r.num)}</span>
+                </div>
+                <div class="dr-body">
+                    <h3>${esc(r.title)}</h3>
+                    <div class="dr-foot">
+                        <span class="dr-floor">${r.floor===1?'1er':r.floor+'e'} étage</span>
+                        <span class="dr-price">${Number(r.price||0).toLocaleString('fr-FR')} DH <small>/ nuit</small></span>
+                    </div>
+                </div>
+            </article>`).join('');
+
+        box.innerHTML=`
+            <div class="dash-rooms">
+                <div class="dr-head">
+                    <div>
+                        <span class="dr-eyebrow">Hébergement</span>
+                        <h2 class="dr-title">Nos chambres</h2>
+                    </div>
+                    <div class="dr-chips">${chips}</div>
+                </div>
+                <div class="dr-grid">${cards||'<p class="dr-empty">Aucune chambre pour ce filtre.</p>'}</div>
+            </div>`;
+
+        box.querySelectorAll('.dr-chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.f;render();}));
+        box.querySelectorAll('.dr-card').forEach(c=>{
+            const open=()=>{
+                activatePanel('ch-etat','Chambres');
+                if(window.CHETAT)window.CHETAT.select(c.dataset.num);
+            };
+            c.addEventListener('click',open);
+            c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
+        });
+    }
+
+    return{render};
+})();
+window.DASH=DASH;
+DASH.render();
 </script>
 </body>
 </html>
