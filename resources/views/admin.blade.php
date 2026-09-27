@@ -2250,6 +2250,72 @@
         .dr-price{font-size:14px;font-weight:700;color:var(--tw-navy)}
         .dr-price small{font-size:10px;font-weight:500;color:var(--muted)}
 
+        /* ---- Tableau de bord : afficher/masquer + analyses ---- */
+        .dr-tools{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+        .dr-toggle{
+            display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+            padding:8px 16px;border-radius:40px;font:600 11px 'Montserrat',sans-serif;letter-spacing:.6px;
+            color:#f3d38a;background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));
+            border:1px solid rgba(240,207,133,.45);box-shadow:0 6px 18px rgba(8,20,51,.2);
+            transition:box-shadow .2s ease,border-color .2s ease;
+        }
+        .dr-toggle:hover{border-color:#f0cf85;box-shadow:0 8px 22px rgba(8,20,51,.3),0 0 16px rgba(240,207,133,.3)}
+        .dr-toggle svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+        @media(max-width:860px){.dr-tools{align-items:flex-start;width:100%}}
+
+        .dash-analytics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+        @media(max-width:1100px){.dash-analytics{grid-template-columns:minmax(0,1fr)}}
+        .da-card{
+            background:#fff;border:1px solid rgba(212,176,106,.22);border-radius:16px;
+            box-shadow:0 6px 22px rgba(8,20,51,.07);padding:18px 20px 16px;min-width:0;
+        }
+        .da-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+        #dashboard .da-head h3{
+            font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--text-dark);
+            margin:0;text-align:left;
+        }
+        .da-tabs{display:inline-flex;gap:2px;padding:3px;border-radius:30px;background:rgba(13,31,74,.06)}
+        .da-tab{
+            border:0;background:transparent;cursor:pointer;padding:6px 14px;border-radius:30px;
+            font:600 11px 'Montserrat',sans-serif;color:var(--muted);transition:background .2s ease,color .2s ease;
+        }
+        .da-tab:hover{color:var(--text-dark)}
+        .da-tab.is-on{background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));color:#f3d38a}
+        .da-legend{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:6px;font:500 11px 'Montserrat',sans-serif;color:var(--muted)}
+        .da-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+        .da-legend i.line{width:16px;height:3px;border-radius:2px;vertical-align:3px}
+        .da-chart svg{display:block;width:100%;height:auto}
+        .da-chart .da-grid{stroke:rgba(13,31,74,.08);stroke-width:1}
+        .da-chart .da-ax{font:500 11px 'Montserrat',sans-serif;fill:#8a8f9c}
+        .da-chart .da-ax-r{fill:#3b7be0}
+        .da-note{font-size:11px;color:var(--muted);margin:8px 0 0}
+        .da-table-wrap{overflow-x:auto}
+        #dashboard .da-table{width:100%;border-collapse:collapse;margin:0}
+        #dashboard .da-table th{
+            padding:10px 8px;background:var(--tw-navy);color:#f3d38a;
+            font:600 10px 'Montserrat',sans-serif;letter-spacing:1px;text-transform:uppercase;text-align:center;
+        }
+        #dashboard .da-table th:first-child{border-radius:10px 0 0 10px}
+        #dashboard .da-table th:last-child{border-radius:0 10px 10px 0}
+        #dashboard .da-table td{
+            padding:11px 8px;border-bottom:1px solid rgba(212,176,106,.18);
+            font-size:13px;color:var(--text-dark);text-align:center;white-space:nowrap;
+        }
+        #dashboard .da-table tbody tr:hover td{background:rgba(212,176,106,.07)}
+        #dashboard .da-table td.amt{font-weight:600}
+        #dashboard .da-table td.solde.due{color:#c0392b}
+        #dashboard .da-table td.solde.ok{color:#2fa864}
+        #dashboard .da-table .da-empty td{color:var(--muted);padding:26px 8px;font-style:italic}
+
+        /* ---- Réservations : statut ---- */
+        .resa-st{
+            display:inline-block;padding:4px 10px;border-radius:20px;font:700 10px 'Montserrat',sans-serif;
+            letter-spacing:.6px;text-transform:uppercase;color:#fff;background:#8a93a3;
+        }
+        .resa-st.st-reservee{background:#3b7be0}
+        .resa-st.st-occupee{background:#2fa864}
+        .resa-st.st-terminee{background:#aab3c5}
+
         /* ---- Config Chambres ---- */
         #ch-dispo{max-width:100%}
         #ch-dispo .cc-title{
@@ -2889,10 +2955,10 @@
         {{-- KPI fixes — Réservations --}}
         <div class="section-kpi hidden" data-for="ch-reservations" aria-hidden="true">
             <div class="cards">
-                <div class="card"><div class="n">28</div><div class="l">Réservations actives</div></div>
-                <div class="card"><div class="n">6</div><div class="l">Arrivées aujourd'hui</div></div>
-                <div class="card"><div class="n">4</div><div class="l">Départs aujourd'hui</div></div>
-                <div class="card"><div class="n">3</div><div class="l">En attente</div></div>
+                <div class="card"><div class="n" id="resaKpiActive">0</div><div class="l">Réservations actives</div></div>
+                <div class="card"><div class="n" id="resaKpiArr">0</div><div class="l">Arrivées aujourd'hui</div></div>
+                <div class="card"><div class="n" id="resaKpiDep">0</div><div class="l">Départs aujourd'hui</div></div>
+                <div class="card"><div class="n" id="resaKpiTotal">0</div><div class="l">Total réservations</div></div>
             </div>
         </div>
 
@@ -3337,11 +3403,11 @@
                 <h2 class="serif">Gestion des Réservations</h2>
                 <p class="sub">Réservations clients — arrivées, séjours et départs</p>
                 <div class="block">
-                    <div class="row-head"><h3>Liste des réservations</h3><button class="btn-gold">+ Nouvelle réservation</button></div>
+                    <div class="row-head"><h3>Liste des réservations</h3><button type="button" class="btn-gold" id="resaNewBtn">+ Nouvelle réservation</button></div>
                     <table>
                         <thead><tr><th>N° Résa</th><th>Client</th><th>Chambre</th><th>Arrivée</th><th>Départ</th><th>Nuits</th><th>Montant</th><th>Statut</th></tr></thead>
-                        <tbody>
-                            <tr class="empty-row"><td colspan="6">Aucune donnée.</td></tr>
+                        <tbody id="resaTbody">
+                            <tr class="empty-row"><td colspan="8">Aucune réservation.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -3822,6 +3888,7 @@
         if(targetId==='ch-etat'&&typeof CHETAT!=='undefined')CHETAT.render();
         if(targetId==='ch-etages'&&typeof CHETAT!=='undefined')CHETAT.renderEtages();
         if(targetId==='ch-dispo'&&typeof CHDISPO!=='undefined')CHDISPO.render();
+        if(targetId==='ch-reservations'&&window.RESA)window.RESA.render();
         if(targetId==='configuration'&&typeof CFG!=='undefined'){
             CFG.render();
             CFG.switchTab(cfgTab||'hotel');
@@ -6094,14 +6161,24 @@ const CHETAT=(function(){
         });
     }
 
+    function logReservation(room,d){
+        let log=[];
+        try{log=JSON.parse(localStorage.getItem('aj_resa_log')||'[]')||[];}catch(e){}
+        const seq=log.reduce((m,x)=>Math.max(m,parseInt(String(x.id).replace(/\D/g,''),10)||0),0)+1;
+        log.push({id:'R'+String(seq).padStart(4,'0'),date:d.date||today(),num:room.num,nom:d.nom,nuits:num(d.nuits)||1,montant:num(d.ttc),paye:0,at:Date.now()});
+        localStorage.setItem('aj_resa_log',JSON.stringify(log));
+    }
+
     function confirmReservation(room,d,status){
         const resas=getResas();
         resas[room.num]={...d,validated:true,title:room.title,statusChambre:status};
         setResas(resas);
+        logReservation(room,d);
         room.status=status;
         saveRoomStatus(room.num,status);
         closeModal();
         render();
+        window.RESA?.render();
         alert('Réservation validée — Statut : '+STATUS[status]);
     }
 
@@ -6431,7 +6508,12 @@ const CHETAT=(function(){
         if(r)showDetail(r);
     }
 
-    return{render,renderEtages,select};
+    function reserve(num){
+        syncFromStorage();
+        const r=roomByNum(num);
+        if(r)showForm(r);
+    }
+    return{render,renderEtages,select,reserve};
 })();
 window.CHETAT=CHETAT;
 
@@ -6439,9 +6521,185 @@ window.CHETAT=CHETAT;
 const DASH=(function(){
     const STATUS={disponible:'Disponible',occupee:'Occupée',reservee:'Réservée',nettoyage:'Nettoyage',maintenance:'Maintenance'};
     const FILTERS=[['','Toutes'],['disponible','Disponibles'],['occupee','Occupées'],['reservee','Réservées'],['nettoyage','Nettoyage'],['maintenance','Maintenance']];
-    let filter='';
+    const K_HIDDEN='aj_dash_rooms_hidden',K_HIST='aj_ch_hist',K_LOG='aj_resa_log';
+    const MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+    const PERIODS=[['jour','Jour'],['mois','Mois'],['annee','Année']];
+    let filter='',roomsHidden=localStorage.getItem(K_HIDDEN)==='1',pRooms='jour',pFin='mois';
     const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{};}catch(e){return{};}};
+    const loadArr=k=>{try{const v=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(v)?v:[];}catch(e){return[];}};
+    const num=v=>Number(v)||0;
+    const fmtDH=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' DH';
+    const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const frDate=s=>s&&/^\d{4}-\d{2}-\d{2}/.test(s)?`${s.slice(8,10)}/${s.slice(5,7)}/${s.slice(0,4)}`:(s||'—');
+    const keyOf=(date,p)=>!date?'':p==='jour'?date.slice(0,10):p==='mois'?date.slice(0,7):date.slice(0,4);
+
+    function recordSnapshot(count){
+        const hist=load(K_HIST);
+        hist[iso(new Date())]={disponible:count.disponible||0,occupee:count.occupee||0,reservee:count.reservee||0,nettoyage:count.nettoyage||0,maintenance:count.maintenance||0};
+        const keys=Object.keys(hist).sort();
+        while(keys.length>800)delete hist[keys.shift()];
+        localStorage.setItem(K_HIST,JSON.stringify(hist));
+        return hist;
+    }
+
+    function reservations(){
+        const log=loadArr(K_LOG),resas=load('aj_ch_resa');
+        let changed=false;
+        Object.entries(resas).forEach(([n,r])=>{
+            if(!r||!r.validated)return;
+            if(log.some(x=>x.num===n&&x.date===r.date&&x.nom===r.nom))return;
+            const seq=log.reduce((m,x)=>Math.max(m,parseInt(String(x.id).replace(/\D/g,''),10)||0),0)+1;
+            log.push({id:'R'+String(seq).padStart(4,'0'),date:r.date||'',num:n,nom:r.nom||'',montant:num(r.ttc),paye:0,at:Date.now()});
+            changed=true;
+        });
+        if(changed)localStorage.setItem(K_LOG,JSON.stringify(log));
+        return log;
+    }
+
+    function bons(){
+        const frns=loadArr('aj_frns'),regls=loadArr('aj_regls');
+        const list=loadArr('aj_bons').map(b=>({
+            id:b.id,date:b.date||'',num:b.num||b.ref||'',frnsId:b.frnsId||'',
+            frnsNom:b.frnsNom||(frns.find(f=>f.id===b.frnsId)||{}).nom||'—',
+            total:num(b.total!=null?b.total:b.montant)
+        }));
+        const byF={};
+        list.forEach(b=>{(byF[b.frnsId]=byF[b.frnsId]||[]).push(b);});
+        Object.entries(byF).forEach(([fid,arr])=>{
+            const f=frns.find(x=>x.id===fid);
+            let pay=regls.filter(r=>r.frnsId===fid).reduce((s,r)=>s+num(r.montant),0)-num(f&&f.solde);
+            if(pay<0)pay=0;
+            arr.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(b=>{
+                const used=Math.min(b.total,pay);pay-=used;b.solde=b.total-used;
+            });
+        });
+        return list;
+    }
+
+    function buckets(p){
+        const now=new Date(),out=[];
+        if(p==='jour'){
+            for(let i=13;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);const k=iso(d);out.push({k,label:k.slice(8,10)+'/'+k.slice(5,7)});}
+        }else if(p==='mois'){
+            for(let i=11;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);out.push({k:iso(d).slice(0,7),label:MOIS[d.getMonth()]});}
+        }else{
+            for(let i=4;i>=0;i--){const y=String(now.getFullYear()-i);out.push({k:y,label:y});}
+        }
+        return out;
+    }
+
+    function niceMax(v){
+        if(!(v>0))return 4;
+        const p=Math.pow(10,Math.floor(Math.log10(v)));
+        for(const m of [1,2,2.5,5,10])if(m*p>=v)return m*p;
+        return 10*p;
+    }
+    function short(n){
+        n=num(n);const a=Math.abs(n);
+        if(a>=1e6)return (n/1e6).toFixed(1).replace('.0','')+'M';
+        if(a>=1e4)return Math.round(n/1e3)+'k';
+        return (Math.round(n*10)/10).toLocaleString('fr-FR');
+    }
+
+    function chartSvg(labels,series){
+        const bars=series.filter(s=>s.type!=='line'),lines=series.filter(s=>s.type==='line');
+        const W=820,H=290,L=58,R=lines.length?46:16,T=14,B=34,iw=W-L-R,ih=H-T-B;
+        const maxL=niceMax(Math.max(0,...bars.flatMap(s=>s.values)));
+        const maxR=lines.length?niceMax(Math.max(0,...lines.flatMap(s=>s.values))):1;
+        const y=(v,m)=>T+ih-(v/m)*ih;
+        const n=labels.length,gw=iw/n,bw=bars.length?Math.min(24,(gw*0.74)/bars.length):0;
+        let out='';
+        for(let i=0;i<=4;i++){
+            const yy=y(maxL*i/4,maxL);
+            out+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" class="da-grid"/>`;
+            out+=`<text x="${L-8}" y="${yy+4}" class="da-ax" text-anchor="end">${short(maxL*i/4)}</text>`;
+            if(lines.length)out+=`<text x="${W-R+8}" y="${yy+4}" class="da-ax da-ax-r">${short(maxR*i/4)}</text>`;
+        }
+        const step=Math.ceil(n/12);
+        labels.forEach((lab,i)=>{
+            const x0=L+i*gw+(gw-bw*bars.length)/2;
+            bars.forEach((s,j)=>{
+                const v=num(s.values[i]),h=(v/maxL)*ih;
+                out+=`<rect x="${x0+j*bw+1}" y="${T+ih-h}" width="${Math.max(1,bw-2)}" height="${h}" rx="3" fill="${s.color}"><title>${esc(lab)} — ${esc(s.label)} : ${s.fmt?s.fmt(v):v}</title></rect>`;
+            });
+            if(i%step===0)out+=`<text x="${L+i*gw+gw/2}" y="${H-10}" class="da-ax" text-anchor="middle">${esc(lab)}</text>`;
+        });
+        lines.forEach(s=>{
+            const pts=s.values.map((v,i)=>[L+i*gw+gw/2,y(num(v),maxR)]);
+            out+=`<polyline points="${pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round"/>`;
+            out+=pts.map((p,i)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" fill="#fff" stroke="${s.color}" stroke-width="2"><title>${esc(labels[i])} — ${esc(s.label)} : ${num(s.values[i])}</title></circle>`).join('');
+        });
+        return`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Diagramme">${out}</svg>`;
+    }
+
+    function legend(series){
+        return`<div class="da-legend">${series.map(s=>`<span><i class="${s.type==='line'?'line':''}" style="background:${s.color}"></i>${esc(s.label)}</span>`).join('')}</div>`;
+    }
+    function tabs(chart,cur){
+        return`<div class="da-tabs" role="tablist">${PERIODS.map(([k,l])=>`<button type="button" class="da-tab${cur===k?' is-on':''}" data-chart="${chart}" data-p="${k}">${l}</button>`).join('')}</div>`;
+    }
+
+    function roomsChart(hist){
+        const bk=buckets(pRooms);
+        const defs=[['disponible','Disponibles','#e0b43a'],['occupee','Occupées','#2fa864'],['reservee','Réservées','#3b7be0'],['maintenance','Maintenance','#d9534f']];
+        const series=defs.map(([k,l,c])=>({label:l,color:c,values:bk.map(b=>{
+            const days=Object.keys(hist).filter(d=>keyOf(d,pRooms)===b.k);
+            return days.length?Math.round(days.reduce((s,d)=>s+num(hist[d][k]),0)/days.length):0;
+        })}));
+        return{labels:bk.map(b=>b.label),series};
+    }
+
+    function financeChart(resaList,bonList){
+        const bk=buckets(pFin);
+        const inB=(date,b)=>keyOf(date,pFin)===b.k;
+        const series=[
+            {label:'Revenus (DH)',color:'#2fa864',fmt:fmtDH,values:bk.map(b=>resaList.filter(r=>inB(r.date,b)).reduce((s,r)=>s+num(r.montant),0))},
+            {label:'Charges (DH)',color:'#d9534f',fmt:fmtDH,values:bk.map(b=>bonList.filter(x=>inB(x.date,b)).reduce((s,x)=>s+x.total,0))},
+            {label:'Clients (axe de droite)',color:'#3b7be0',type:'line',values:bk.map(b=>resaList.filter(r=>inB(r.date,b)).length)}
+        ];
+        return{labels:bk.map(b=>b.label),series};
+    }
+
+    const byRecent=(a,b)=>(b.date||'').localeCompare(a.date||'')||num(b.at)-num(a.at)||String(b.id).localeCompare(String(a.id));
+    const soldeCell=v=>`<td class="amt solde ${v>0.004?'due':'ok'}">${fmtDH(v)}</td>`;
+
+    function analyticsHtml(hist){
+        const resaList=reservations(),bonList=bons();
+        const rc=roomsChart(hist),fc=financeChart(resaList,bonList);
+        const lastBons=bonList.slice().sort(byRecent).slice(0,5);
+        const lastResas=resaList.slice().sort(byRecent).slice(0,5);
+        const emptyRow=t=>`<tr class="da-empty"><td colspan="5">${t}</td></tr>`;
+        return`
+        <div class="dash-analytics">
+            <section class="da-card">
+                <div class="da-head"><h3>Occupation des chambres</h3>${tabs('rooms',pRooms)}</div>
+                ${legend(rc.series)}
+                <div class="da-chart">${chartSvg(rc.labels,rc.series)}</div>
+                <p class="da-note">Moyenne des statuts relevés chaque jour à l'ouverture du tableau de bord.</p>
+            </section>
+            <section class="da-card">
+                <div class="da-head"><h3>Clients, revenus &amp; charges</h3>${tabs('fin',pFin)}</div>
+                ${legend(fc.series)}
+                <div class="da-chart">${chartSvg(fc.labels,fc.series)}</div>
+                <p class="da-note">Revenus et clients : réservations validées · Charges : bons d'achat.</p>
+            </section>
+            <section class="da-card">
+                <div class="da-head"><h3>5 derniers bons de commande</h3></div>
+                <div class="da-table-wrap"><table class="da-table">
+                    <thead><tr><th>Date</th><th>Bon N°</th><th>Fournisseur</th><th>Montant</th><th>Solde</th></tr></thead>
+                    <tbody>${lastBons.length?lastBons.map(b=>`<tr><td>${frDate(b.date)}</td><td>${esc(b.num||'—')}</td><td>${esc(b.frnsNom)}</td><td class="amt">${fmtDH(b.total)}</td>${soldeCell(b.solde)}</tr>`).join(''):emptyRow('Aucun bon de commande.')}</tbody>
+                </table></div>
+            </section>
+            <section class="da-card">
+                <div class="da-head"><h3>5 dernières réservations</h3></div>
+                <div class="da-table-wrap"><table class="da-table">
+                    <thead><tr><th>Date</th><th>ID</th><th>Nom client</th><th>Montant</th><th>Solde</th></tr></thead>
+                    <tbody>${lastResas.length?lastResas.map(r=>`<tr><td>${frDate(r.date)}</td><td>${esc(r.id)}</td><td>${esc(r.nom||'—')}</td><td class="amt">${fmtDH(r.montant)}</td>${soldeCell(num(r.montant)-num(r.paye))}</tr>`).join(''):emptyRow('Aucune réservation.')}</tbody>
+                </table></div>
+            </section>
+        </div>`;
+    }
 
     function rooms(){
         const base=window.AJ_HOTEL?window.AJ_HOTEL.getCatalog():[];
@@ -6463,6 +6721,32 @@ const DASH=(function(){
         const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
         set('kpiChambres',all.length);
         set('kpiOccupees',count.occupee||0);
+        const hist=recordSnapshot(count);
+
+        const eye=roomsHidden
+            ?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+            :'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><path d="M1 1l22 22"/></svg>';
+        const toggle=`<button type="button" class="dr-toggle" id="drToggle" aria-pressed="${roomsHidden}">${eye}<span>${roomsHidden?'Afficher les chambres':'Masquer les chambres'}</span></button>`;
+
+        if(roomsHidden){
+            box.innerHTML=`
+            <div class="dash-rooms">
+                <div class="dr-head">
+                    <div>
+                        <span class="dr-eyebrow">Pilotage</span>
+                        <h2 class="dr-title">Activité de l'hôtel</h2>
+                    </div>
+                    <div class="dr-tools">${toggle}</div>
+                </div>
+                ${analyticsHtml(hist)}
+            </div>`;
+            box.querySelector('#drToggle').addEventListener('click',()=>{roomsHidden=false;localStorage.setItem(K_HIDDEN,'0');render();});
+            box.querySelectorAll('.da-tab').forEach(t=>t.addEventListener('click',()=>{
+                if(t.dataset.chart==='rooms')pRooms=t.dataset.p;else pFin=t.dataset.p;
+                render();
+            }));
+            return;
+        }
 
         const list=filter?all.filter(r=>r.status===filter):all;
         const chips=FILTERS.map(([k,l])=>{
@@ -6492,11 +6776,15 @@ const DASH=(function(){
                         <span class="dr-eyebrow">Hébergement</span>
                         <h2 class="dr-title">Nos chambres</h2>
                     </div>
-                    <div class="dr-chips">${chips}</div>
+                    <div class="dr-tools">
+                        ${toggle}
+                        <div class="dr-chips">${chips}</div>
+                    </div>
                 </div>
                 <div class="dr-grid">${cards||'<p class="dr-empty">Aucune chambre pour ce filtre.</p>'}</div>
             </div>`;
 
+        box.querySelector('#drToggle').addEventListener('click',()=>{roomsHidden=true;localStorage.setItem(K_HIDDEN,'1');render();});
         box.querySelectorAll('.dr-chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.f;render();}));
         box.querySelectorAll('.dr-card').forEach(c=>{
             const open=()=>{
@@ -6512,6 +6800,95 @@ const DASH=(function(){
 })();
 window.DASH=DASH;
 DASH.render();
+
+/* ===== Réservations — liste et nouvelle réservation ===== */
+const RESA=(function(){
+    const STATUS={disponible:'Disponible',occupee:'Occupée',reservee:'Réservée',nettoyage:'Nettoyage',maintenance:'Maintenance'};
+    const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const num=v=>Number(v)||0;
+    const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catch(e){return d;}};
+    const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const frDate=s=>s&&/^\d{4}-\d{2}-\d{2}/.test(s)?`${s.slice(8,10)}/${s.slice(5,7)}/${s.slice(0,4)}`:'—';
+    const fmtDH=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' DH';
+    const addDays=(s,n)=>{if(!s)return'';const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return iso(d);};
+    const floorLbl=f=>Number(f)===1?'1er étage':f+'e étage';
+
+    function rooms(){
+        const base=window.AJ_HOTEL?window.AJ_HOTEL.getCatalog():[];
+        const statuses=load('aj_ch_status',{}),resas=load('aj_ch_resa',{});
+        return base.map(r=>{
+            let st=r.status||'disponible';
+            if(resas[r.num]?.validated)st=resas[r.num].statusChambre||'reservee';
+            else if(statuses[r.num])st=statuses[r.num];
+            return{...r,status:STATUS[st]?st:'disponible'};
+        });
+    }
+
+    function list(){
+        const log=load('aj_resa_log',[]),resas=load('aj_ch_resa',{});
+        return log.map(x=>{
+            const cur=resas[x.num];
+            const nuits=num(x.nuits)||num(cur&&cur.date===x.date&&cur.nom===x.nom?cur.nuits:0)||1;
+            const active=!!(cur&&cur.validated&&cur.date===x.date&&cur.nom===x.nom);
+            return{...x,nuits,depart:addDays(x.date,nuits),active,statut:active?(cur.statusChambre||'reservee'):'terminee'};
+        }).sort((a,b)=>(b.date||'').localeCompare(a.date||'')||num(b.at)-num(a.at));
+    }
+
+    function render(){
+        const tb=document.getElementById('resaTbody');
+        const all=list();
+        if(tb){
+            tb.innerHTML=all.length?all.map(r=>`<tr>
+                <td>${esc(r.id)}</td><td>${esc(r.nom||'—')}</td><td>${esc(r.num)}</td>
+                <td>${frDate(r.date)}</td><td>${frDate(r.depart)}</td><td>${r.nuits}</td>
+                <td>${fmtDH(r.montant)}</td>
+                <td><span class="resa-st st-${esc(r.statut)}">${r.active?STATUS[r.statut]||'Réservée':'Terminée'}</span></td>
+            </tr>`).join(''):'<tr class="empty-row"><td colspan="8">Aucune réservation.</td></tr>';
+        }
+        const today=iso(new Date());
+        const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+        set('resaKpiActive',all.filter(r=>r.active).length);
+        set('resaKpiArr',all.filter(r=>r.date===today).length);
+        set('resaKpiDep',all.filter(r=>r.depart===today).length);
+        set('resaKpiTotal',all.length);
+    }
+
+    function openPicker(){
+        const box=document.getElementById('rmModalContent');
+        if(!box)return;
+        const free=rooms().filter(r=>r.status==='disponible')
+            .sort((a,b)=>String(a.num).localeCompare(String(b.num),undefined,{numeric:true}));
+        const floors=[...new Set(free.map(r=>r.floor))].sort((a,b)=>a-b);
+        box.innerHTML=`<div class="rm-form-head"><h3>Nouvelle réservation</h3><p>Choisissez une chambre disponible (${free.length} libre${free.length>1?'s':''})</p></div>
+        ${free.length?`<form class="rm-form-grid" onsubmit="return false" autocomplete="off">
+            <div class="field span2"><label>Chambre</label>
+                <select id="resaPickRoom">${floors.map(f=>`<optgroup label="${floorLbl(f)}">${free.filter(r=>r.floor===f).map(r=>`<option value="${esc(r.num)}">${esc(r.num)} — ${esc(r.title)} · ${num(r.price).toLocaleString('fr-FR')} DH / nuit</option>`).join('')}</optgroup>`).join('')}</select>
+            </div>
+        </form>
+        <div class="rm-form-actions" style="margin-top:18px">
+            <button type="button" class="btn gold" id="resaPickGo">Continuer</button>
+            <button type="button" class="btn ghost" id="resaPickCancel">Annuler</button>
+        </div>`:`<p class="hint" style="margin:18px 0">Aucune chambre disponible pour le moment.</p>
+        <div class="rm-form-actions"><button type="button" class="btn ghost" id="resaPickCancel">Fermer</button></div>`}`;
+        document.getElementById('resaPickGo')?.addEventListener('click',()=>{
+            const n=document.getElementById('resaPickRoom')?.value;
+            if(n&&window.CHETAT)window.CHETAT.reserve(n);
+        });
+        document.getElementById('resaPickCancel')?.addEventListener('click',()=>document.getElementById('rmModalOverlay')?.classList.remove('show'));
+        document.getElementById('rmModalOverlay')?.classList.add('show');
+    }
+
+    document.getElementById('resaNewBtn')?.addEventListener('click',openPicker);
+
+    const overlay=document.getElementById('rmModalOverlay');
+    const closeAnyModal=()=>overlay?.classList.remove('show');
+    document.getElementById('rmModalClose')?.addEventListener('click',closeAnyModal);
+    overlay?.addEventListener('click',e=>{if(e.target===overlay)closeAnyModal();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay?.classList.contains('show'))closeAnyModal();});
+    render();
+    return{render,openPicker};
+})();
+window.RESA=RESA;
 </script>
 </body>
 </html>
