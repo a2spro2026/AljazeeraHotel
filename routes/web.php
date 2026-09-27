@@ -44,6 +44,7 @@ Route::post('/espace/{space}/login', function (Request $request, string $space) 
     $passwordOk = $configured && hash_equals((string) $config['password'], trim($credentials['password']));
 
     if ($loginOk && $passwordOk) {
+        $request->session()->regenerate();
         $request->session()->put("space_$space", true);
         $request->session()->put("space_{$space}_login", $config['login']);
 
@@ -85,6 +86,8 @@ foreach ($protected as $name => $view) {
             session(['space_admin_login' => config('admin_spaces.admin.login', 'Direction')]);
         }
 
-        return view($view);
+        return response()->view($view)
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache');
     })->name($name);
 }

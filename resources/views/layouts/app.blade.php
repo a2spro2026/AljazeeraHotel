@@ -149,8 +149,10 @@
         </div>
         <div class="mega-grid">
             @foreach([['Direction','admin','&#128081;'],['Facturation','facturation','&#129534;'],['Commercial','commercial','&#128188;']] as $space)
-            <form class="mega-card" method="POST" action="{{ route('space.login', $space[1]) }}" autocomplete="off">
+            <form class="mega-card js-nomem-login" method="POST" action="{{ route('space.login', $space[1]) }}" autocomplete="off" data-lpignore="true" data-1p-ignore data-form-type="other">
                 @csrf
+                <input type="hidden" name="login" value="">
+                <input type="hidden" name="password" value="">
                 <div class="mega-icon">{!! $space[2] !!}</div>
                 <h5>{{ $space[0] }}</h5>
                 @if(session('login_error') && session('login_space') === $space[1])
@@ -158,17 +160,43 @@
                 @endif
                 <label class="field">
                     <span class="fi">&#128100;</span>
-                    <input type="text" name="login" value="" placeholder="Identifiant" autocomplete="off" required>
+                    <input type="text" class="js-nomem-user" value="" placeholder="Identifiant" autocomplete="off" autocapitalize="off" spellcheck="false" readonly data-lpignore="true" data-1p-ignore required>
                 </label>
                 <label class="field">
                     <span class="fi">&#128274;</span>
-                    <input type="password" name="password" value="" placeholder="Mot de passe" autocomplete="off" required>
+                    <input type="password" class="js-nomem-pass" value="" placeholder="Mot de passe" autocomplete="new-password" readonly data-lpignore="true" data-1p-ignore required>
                 </label>
                 <button type="submit" class="mega-btn">Se connecter</button>
             </form>
             @endforeach
         </div>
     </div>
+    <script>
+    (function(){
+        const forms=document.querySelectorAll('.js-nomem-login');
+        const wipe=all=>forms.forEach(f=>f.querySelectorAll('input:not([name="_token"])').forEach(i=>{
+            if(!all&&i.dataset.touched)return;
+            i.value='';
+            if(i.type!=='hidden'){i.setAttribute('readonly','');delete i.dataset.touched;}
+        }));
+        forms.forEach(f=>{
+            const u=f.querySelector('.js-nomem-user'),p=f.querySelector('.js-nomem-pass');
+            [u,p].forEach(i=>{
+                const unlock=()=>{i.removeAttribute('readonly');i.dataset.touched='1';};
+                ['pointerdown','touchstart','focus'].forEach(ev=>i.addEventListener(ev,unlock,{passive:true}));
+            });
+            f.addEventListener('submit',e=>{
+                if(!u.value.trim()||!p.value){e.preventDefault();const t=u.value.trim()?p:u;t.removeAttribute('readonly');t.focus();return;}
+                f.querySelector('input[name="login"]').value=u.value;
+                f.querySelector('input[name="password"]').value=p.value;
+                u.value='';p.value='';
+            });
+        });
+        wipe(true);
+        window.addEventListener('pageshow',()=>wipe(true));
+        window.addEventListener('load',()=>[0,300,1000,2500].forEach(ms=>setTimeout(()=>wipe(false),ms)));
+    })();
+    </script>
 
     @yield('content')
 
