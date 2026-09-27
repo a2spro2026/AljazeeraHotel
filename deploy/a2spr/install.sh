@@ -26,7 +26,7 @@ cd "$APP_DIR"
 [ ! -e .env ] || fail "$APP_DIR/.env existe déjà (installation déjà faite ?). Rien n'a été modifié."
 [ ! -e "$NGINX_AVAILABLE" ] && [ ! -e "$NGINX_ENABLED" ] \
     || fail "une configuration Nginx existe déjà pour $DOMAIN. Rien n'a été modifié."
-if grep -rlsF "$DOMAIN" /etc/nginx/sites-enabled /etc/nginx/conf.d >/dev/null 2>&1; then
+if grep -RlsF "$DOMAIN" /etc/nginx/sites-available /etc/nginx/sites-enabled /etc/nginx/conf.d >/dev/null 2>&1; then
     fail "$DOMAIN est déjà déclaré dans la configuration Nginx. Rien n'a été modifié."
 fi
 ok "aucune configuration existante pour $DOMAIN"
@@ -50,7 +50,8 @@ ok "PHP $PHP_V ($PHP_SOCK)"
 WEB_USER="$(grep -hE '^\s*user\s*=' "/etc/php/$PHP_V/fpm/pool.d/www.conf" 2>/dev/null | head -n1 | cut -d= -f2 | tr -d ' ' || true)"
 WEB_USER="${WEB_USER:-www-data}"
 id "$WEB_USER" >/dev/null 2>&1 || fail "utilisateur web '$WEB_USER' introuvable."
-ok "utilisateur web : $WEB_USER"
+DEPLOY_USER="${SUDO_USER:-root}"
+ok "utilisateur web : $WEB_USER — propriétaire des fichiers : $DEPLOY_USER"
 
 if ! mysql -uroot -e "SELECT 1" >/dev/null 2>&1; then
     read -rsp "Mot de passe root MySQL : " MYSQL_ROOT_PW; echo
@@ -129,18 +130,20 @@ set_env SPACE_FACTURATION_LOGIN Facturation
 set_env SPACE_FACTURATION_PASSWORD "$FACT_PASS"
 set_env SPACE_COMMERCIAL_LOGIN Commercial
 set_env SPACE_COMMERCIAL_PASSWORD "$COMM_PASS"
-chown root:"$WEB_USER" .env
+chown "$DEPLOY_USER":"$WEB_USER" .env
 chmod 640 .env
 "$PHP_BIN" artisan key:generate --force
-ok ".env créé (lisible uniquement par root et $WEB_USER)"
+ok ".env créé (lisible uniquement par $DEPLOY_USER et $WEB_USER)"
 
 # ---------------------------------------------------------------------------
 step "6/8 Laravel : tables, droits, caches"
 # ---------------------------------------------------------------------------
 "$PHP_BIN" artisan migrate --force
 "$PHP_BIN" artisan storage:link || true
-chown -R "$WEB_USER":"$WEB_USER" storage bootstrap/cache
+chown -R "$DEPLOY_USER":"$WEB_USER" "$APP_DIR"
+chmod 640 .env
 chmod -R ug+rwX storage bootstrap/cache
+find storage bootstrap/cache -type d -exec chmod g+s {} +
 artisan_web config:cache
 artisan_web route:cache
 artisan_web view:cache
