@@ -1613,15 +1613,16 @@
         .ch-view-toggle{display:none!important}
         .ch-room-grid{
             display:grid;
-            grid-template-columns:repeat(3,minmax(0,1fr));
+            grid-template-columns:repeat(5,minmax(0,1fr));
             gap:14px;
             align-items:start;
             grid-auto-flow:dense;
             grid-auto-rows:210px;
         }
-        @media(max-width:1400px){.ch-room-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-        @media(max-width:1000px){.ch-room-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-        @media(max-width:600px){.ch-room-grid{grid-template-columns:1fr}}
+        @media(max-width:1400px){.ch-room-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+        @media(max-width:1100px){.ch-room-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+        @media(max-width:760px){.ch-room-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:480px){.ch-room-grid{grid-template-columns:1fr}}
         .ch-room-card,
         .ch-room-card:hover,
         .ch-room-card:focus,
@@ -2203,10 +2204,11 @@
         }
         .dr-chip.is-on b{background:rgba(240,207,133,.25);color:#f3d38a}
 
-        .dr-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
-        @media(max-width:1200px){.dr-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-        @media(max-width:860px){.dr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-        @media(max-width:520px){.dr-grid{grid-template-columns:1fr}}
+        .dr-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
+        @media(max-width:1400px){.dr-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+        @media(max-width:1100px){.dr-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+        @media(max-width:760px){.dr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:480px){.dr-grid{grid-template-columns:1fr}}
         .dr-empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
 
         .dr-card{
