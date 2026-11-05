@@ -10,6 +10,7 @@
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <meta name="theme-color" content="#0a1736">
+    <script src="{{ asset('js/aj-dates.js') }}"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
@@ -764,6 +765,48 @@
             align-items:center;justify-content:center;padding:24px;
         }
         .rm-modal-overlay.show{display:flex}
+        #peModal,#peViewModal{width:min(980px,100%)}
+        .pe-copy-row,.pe-docs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+        .pe-copy{
+            border:1px solid rgba(197,160,89,.45);border-radius:14px;overflow:hidden;
+            background:linear-gradient(180deg,#fffdf8,#f6f1e6);
+            box-shadow:0 10px 28px rgba(10,23,54,.06);
+        }
+        .pe-copy-head{
+            padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+            color:#8a6a2f;background:rgba(197,160,89,.12);border-bottom:1px solid rgba(197,160,89,.28);
+        }
+        .pe-copy-zone{
+            display:flex;flex-direction:column;align-items:center;gap:8px;
+            width:100%;min-height:188px;padding:14px;border:0;background:transparent;cursor:pointer;
+        }
+        .pe-copy-zone:hover{background:rgba(197,160,89,.07)}
+        .pe-copy-preview{
+            width:100%;height:118px;border-radius:10px;overflow:hidden;
+            border:1.5px dashed rgba(197,160,89,.6);background:#fff;
+            display:flex;align-items:center;justify-content:center;color:#8a6a2f;
+        }
+        .pe-copy.has-file .pe-copy-preview{border-style:solid;border-color:rgba(197,160,89,.45)}
+        .pe-copy-preview img{width:100%;height:100%;object-fit:contain;background:#fff}
+        .pe-copy-ph{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;letter-spacing:.8px;text-transform:uppercase}
+        .pe-copy-ph em{font-style:normal;font-weight:700}
+        .pe-copy-pdf{font-size:18px;font-weight:700;letter-spacing:1.5px}
+        .pe-copy-name{max-width:100%;font-size:12px;color:#6d6558;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .pe-view-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px;margin:14px 0 4px}
+        .pe-view-grid b{display:block;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
+        .pe-copy-frame{padding:12px;background:#fff}
+        .pe-copy-frame img,.pe-copy-frame iframe{width:100%;height:280px;object-fit:contain;border:0;border-radius:10px;background:#f7f4ee}
+        .pe-copy-empty{margin:0;min-height:120px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px}
+        .pe-photo-wrap{display:grid;grid-template-columns:240px minmax(0,1fr);gap:18px;align-items:center;margin:2px 0 18px}
+        .pe-photo{width:100%}
+        .pe-photo-side{display:flex;flex-direction:column;gap:14px;justify-content:center}
+        .pe-photo-side .field{margin-bottom:0}
+        .pe-photo-side b{display:block;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+        .pe-photo .pe-copy-preview{height:168px;border-radius:12px}
+        .pe-photo.has-file .pe-copy-preview img,.pe-photo-frame img{object-fit:cover}
+        .pe-photo-frame{padding:10px}
+        .pe-photo-frame img{width:100%;height:200px;border-radius:12px}
+        @media(max-width:700px){.pe-view-grid,.pe-copy-row,.pe-docs,.pe-photo-wrap{grid-template-columns:1fr}}
         .rm-modal{
             position:relative;width:min(720px,100%);max-height:90vh;overflow-y:auto;
             background:linear-gradient(165deg,#fff,rgba(247,245,240,.98));
@@ -865,13 +908,43 @@
         .btn.del{border-color:rgba(230,120,120,.45);color:#e89}
         .btn.del:hover{border-color:#e89;color:#fff;background:rgba(230,120,120,.15)}
         .ba-lines-hint{font-size:12px;color:var(--muted);margin:0 0 10px}
-        .cfg-auth-wrap{overflow-x:auto;margin-top:8px}
-        .cfg-auth-table th,.cfg-auth-table td{text-align:center;vertical-align:middle}
-        .cfg-auth-table th:first-child,.cfg-auth-table td:first-child{text-align:center;min-width:200px}
+        .cfg-auth-wrap{
+            overflow:auto;margin-top:8px;max-height:calc(100vh - var(--topbar-h) - 230px);
+            border:1px solid var(--border-gold);border-radius:12px;background:#fff;
+        }
+        .cfg-auth-table{width:100%;border-collapse:separate;border-spacing:0}
+        .cfg-auth-table th,.cfg-auth-table td{text-align:center;vertical-align:middle;background:#fff}
+        .cfg-auth-table thead th{
+            position:sticky;top:0;z-index:3;
+            background:#f8f3e8;color:var(--gold);
+            box-shadow:inset 0 -1px 0 rgba(197,160,89,.45);
+        }
+        .cfg-auth-table th:first-child,.cfg-auth-table td:first-child{
+            position:sticky;left:0;z-index:2;text-align:left;min-width:220px;
+            background:#fff;box-shadow:inset -1px 0 0 rgba(197,160,89,.28);
+        }
+        .cfg-auth-table thead th:first-child{z-index:4;text-align:center;background:#f8f3e8}
+        .cfg-auth-table tr.auth-sec td{
+            background:#f3ead6;color:var(--gold);font-weight:600;font-size:11px;
+            letter-spacing:1px;text-transform:uppercase;text-align:left;
+        }
+        .auth-fold{
+            width:28px;height:28px;margin-right:10px;padding:0;vertical-align:middle;
+            display:inline-flex;align-items:center;justify-content:center;
+            border:1px solid rgba(197,160,89,.5);border-radius:8px;background:#fff;color:#8a6a2f;cursor:pointer;
+        }
+        .auth-fold:hover{border-color:var(--gold);background:rgba(197,160,89,.1)}
+        .auth-fold svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+        .auth-fold .eye-off{display:none}
+        .auth-sec.is-closed .auth-fold .eye-on{display:none}
+        .auth-sec.is-closed .auth-fold .eye-off{display:block}
+        .cfg-auth-table tr.auth-row.is-hidden{display:none}
+        .cfg-auth-table tr:hover td{background:#fbf7ef}
+        .cfg-auth-table tr:hover td:first-child{background:#f6f0e4}
+        .cfg-auth-table tr.auth-sec:hover td{background:#f3ead6}
         .cfg-auth-table th .perm-hdr{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;line-height:1.2}
         .cfg-auth-table th .perm-ic{font-size:16px;line-height:1}
         .cfg-auth-table input[type=checkbox]{width:18px;height:18px;accent-color:var(--gold);cursor:pointer}
-        .cfg-auth-table tr:hover td{background:rgba(201,162,39,.04)}
 
         /* ===== CHAMBRES DISPONIBLES & CARROUSEL ===== */
         .cd-section{margin-bottom:36px}
@@ -2644,10 +2717,13 @@
     $managerLogins = config('admin_spaces.admin.manager_logins', ['Direction']);
     $adminProfil = session('space_admin_profil');
     $canManageRooms = $adminProfil !== null
-        ? $adminProfil === 'Direction'
+        ? in_array($adminProfil, ['Direction', 'Administration'], true)
         : in_array($adminLogin, $managerLogins, true);
     $adminLabel = 'Direction';
+    $restrictMenus = $adminProfil !== null;
+    $menuAuth = $restrictMenus ? (session('space_admin_auth') ?? []) : null;
 @endphp
+<script>window.AJ_MENU_AUTH=@json($menuAuth);</script>
 <div class="admin-wrap sb-collapsed">
     <aside class="sidebar" id="sidebar">
         <div class="sb-brand">
@@ -3039,7 +3115,7 @@
                     <div class="block">
                         <h3>Fiche fournisseur</h3>
                         <div class="ff-form-one">
-                            <div class="field ff-f-date"><label>Date Création</label><input type="date" id="ff_date"></div>
+                            <div class="field ff-f-date"><label>Date Création</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="ff_date"></div>
                             <div class="field ff-f-id"><label>ID</label><input type="text" id="ff_id" placeholder="FR0001"></div>
                             <div class="field ff-f-nom"><label>Nom</label><input type="text" id="ff_nom" placeholder="Nom fournisseur"></div>
                             <div class="field ff-f-contact"><label>Contact</label><input type="text" id="ff_contact" placeholder="Téléphone / email"></div>
@@ -3075,7 +3151,7 @@
                     <div class="block">
                         <h3>Bon d'achat</h3>
                         <div class="ba-form-one">
-                            <div class="field ba-f-date"><label>Date</label><input type="date" id="ba_date"></div>
+                            <div class="field ba-f-date"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="ba_date"></div>
                             <div class="field ba-f-num"><label>N° Bon</label><input type="text" id="ba_num" placeholder="N° bon"></div>
                             <div class="field ba-f-frns-id"><label>ID Fournisseur</label><input type="text" id="ba_frns_id" list="ba_frns_list" placeholder="FR0001" oninput="FRNS.syncBonFrns()"></div>
                             <div class="field ba-f-frns-nom"><label>Nom Fournisseur</label><input type="text" id="ba_frns_nom" readonly placeholder="—"></div>
@@ -3152,7 +3228,7 @@
                     <div class="block">
                         <h3>Règlement achats</h3>
                         <div class="ra-form-row1">
-                            <div class="field ra-f-date"><label>Date</label><input type="date" id="ra_date"></div>
+                            <div class="field ra-f-date"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="ra_date"></div>
                             <div class="field ra-f-ref"><label>Réf</label><input type="text" id="ra_ref" placeholder="Auto" readonly></div>
                             <div class="field ra-f-type"><label>Type</label>
                                 <select id="ra_type" onchange="FRNS.syncReglTypeFields()"><option value="Esp">Espèces</option><option value="Chq">Chèque</option><option value="Eff">Effet</option><option value="Vir">Virement</option><option value="Vers">Versement</option></select>
@@ -3164,7 +3240,7 @@
                             <div class="field ra-f-tire"><label>Nom Tiré</label><input type="text" id="ra_tire" placeholder="Nom tiré"></div>
                         </div>
                         <div class="ra-form-row2">
-                            <div class="field ra-f-decaiss"><label>Échéance</label><input type="date" id="ra_decaiss"></div>
+                            <div class="field ra-f-decaiss"><label>Échéance</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="ra_decaiss"></div>
                             <div class="field ra-f-frns"><label>Fournisseur</label><select id="ra_frns" data-frns-select><option value="">— Tous —</option></select></div>
                         </div>
                         <p class="hint">Sélectionnez un fournisseur pour afficher les bons non soldés, puis saisissez le montant payé.</p>
@@ -3202,7 +3278,7 @@
                             </div>
                         </div>
                         <div class="bl-search-bar">
-                            <div class="field bl-f-date"><label>Date</label><input type="date" id="bl_search_date" oninput="FRNS.renderBalance()"></div>
+                            <div class="field bl-f-date"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="bl_search_date" oninput="FRNS.renderBalance()"></div>
                             <div class="field bl-f-nom"><label>Nom Fournisseur</label><input type="text" id="bl_search_nom" placeholder="Rechercher un fournisseur…" oninput="FRNS.renderBalance()"></div>
                         </div>
                         <div class="table-wrap">
@@ -3227,7 +3303,7 @@
                             </div>
                         </div>
                         <div class="sm-form-one">
-                            <div class="field sm-f-date"><label>Date achat</label><input type="date" id="sm_date" readonly></div>
+                            <div class="field sm-f-date"><label>Date achat</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="sm_date" readonly></div>
                             <div class="field sm-f-ref"><label>Réf pro</label><input type="text" id="sm_ref" placeholder="—" readonly></div>
                             <div class="field sm-f-desig"><label>Désignation</label><input type="text" id="sm_desig" placeholder="—" readonly></div>
                             <div class="field sm-f-init"><label>Stock initial</label><input type="number" id="sm_init" placeholder="0" readonly></div>
@@ -3265,7 +3341,7 @@
                     <div class="block">
                         <h3>État produit</h3>
                         <div class="ep-form-one">
-                            <div class="field ep-f-date"><label>Date</label><input type="date" id="ep_date"></div>
+                            <div class="field ep-f-date"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="ep_date"></div>
                             <div class="field ep-f-num"><label>N° État</label><input type="text" id="ep_num" placeholder="Auto" readonly></div>
                             <div class="field ep-f-ref"><label>Réf produit</label><input type="text" id="ep_ref" list="ep_ref_list" placeholder="Réf" oninput="ETAT.syncProduct()"></div>
                             <div class="field ep-f-desig"><label>Désignation</label><input type="text" id="ep_desig" placeholder="Désignation" oninput="ETAT.syncProduct()"></div>
@@ -3528,17 +3604,105 @@
             {{-- PERSONNELS --}}
             <section class="panel" id="pers-fiche">
                 <h2 class="serif">Fiche Personnel</h2>
-                <p class="sub">Gestion des employés de l'hôtel</p>
+                <p class="sub">Les employés saisis ici alimentent la fiche Utilisateur</p>
                 <div class="block">
-                    <div class="row-head"><h3>Liste du personnel</h3><button class="btn-gold">+ Ajouter</button></div>
-                    <table>
-                        <thead><tr><th>Nom</th><th>Poste</th><th>Service</th><th>Téléphone</th><th>Statut</th></tr></thead>
-                        <tbody>
-                            <tr class="empty-row"><td colspan="6">Aucune donnée.</td></tr>
-                        </tbody>
-                    </table>
+                    <div class="row-head"><h3>Liste du personnel</h3><button type="button" class="btn-gold" id="peAdd">Ajouter</button></div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr>
+                                <th>Date</th><th>ID</th><th>Nom complet</th><th>CIN N°</th><th>Ville</th><th>Adresse</th><th>N° mobile</th>
+                                <th>Formation</th><th>Section</th><th>Profil</th><th>Type contrat</th><th>Rémunération</th>
+                                <th>Date début</th><th>Date fin</th><th class="no-print">Actions</th>
+                            </tr></thead>
+                            <tbody id="pe_tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
+            <div class="rm-modal-overlay" id="peModalOverlay">
+                <div class="rm-modal" id="peModal" role="dialog" aria-modal="true" aria-labelledby="peTitle">
+                    <button type="button" class="rm-modal-close" id="peClose" aria-label="Fermer">&times;</button>
+                    <div class="rm-form-head"><h3 id="peTitle">Fiche personnel</h3><p>Saisie d'un employé</p></div>
+                    <div class="pe-photo-wrap">
+                        <div class="pe-copy pe-photo" id="pePhotoCard">
+                            <div class="pe-copy-head">Photo</div>
+                            <button type="button" class="pe-copy-zone" id="pePhotoBtn" title="Importer la photo">
+                                <span class="pe-copy-preview" id="pePhotoPreview"></span>
+                                <span class="pe-copy-name" id="pePhotoName">Importer une photo</span>
+                            </button>
+                            <input type="file" id="pePhotoFile" accept="image/*" hidden>
+                        </div>
+                        <div class="pe-photo-side">
+                            <div class="field"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="pe_date"></div>
+                            <div class="field"><label>ID</label><input type="text" id="pe_id" readonly></div>
+                        </div>
+                    </div>
+                    <div class="rm-form-grid rm-edit-simple">
+                        <div class="field"><label>Nom complet</label><input type="text" id="pe_nom" placeholder="Nom et prénom" autocomplete="off"></div>
+                        <div class="field"><label>CIN N°</label><input type="text" id="pe_cin" placeholder="AB123456" autocomplete="off"></div>
+                        <div class="field"><label>Ville</label><input type="text" id="pe_ville" autocomplete="off"></div>
+                        <div class="field"><label>Adresse</label><input type="text" id="pe_adresse" autocomplete="off"></div>
+                        <div class="field"><label>N° mobile / WhatsApp</label><input type="tel" id="pe_mobile" inputmode="tel" placeholder="06XXXXXXXX" autocomplete="off"></div>
+                        <div class="field"><label>Formation</label><input type="text" id="pe_formation" autocomplete="off"></div>
+                        <div class="field"><label>Section</label>
+                            <select id="pe_section">
+                                <option value="">— Sélectionner —</option>
+                                <option>Direction</option><option>Facturation</option><option>Commercial</option><option>Administration</option>
+                            </select>
+                        </div>
+                        <div class="field"><label>Profil</label>
+                            <select id="pe_profil">
+                                <option value="">— Sélectionner —</option>
+                                <option>Direction</option><option>Administration</option><option>Réception</option>
+                                <option>Comptabilité</option><option>Commercial</option><option>Maintenance</option><option>Restauration</option>
+                            </select>
+                        </div>
+                        <div class="field"><label>Type contrat</label>
+                            <select id="pe_contrat">
+                                <option value="">— Sélectionner —</option>
+                                <option>CDI</option><option>CDD</option><option>Vacataire</option>
+                            </select>
+                        </div>
+                        <div class="field"><label>Rémunération (DH)</label><input type="text" id="pe_remu" inputmode="decimal" placeholder="0.00" autocomplete="off"></div>
+                        <div class="field"><label>Date début</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="pe_debut"></div>
+                        <div class="field"><label>Date fin</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="pe_fin"></div>
+                    </div>
+                    <div class="pe-copy-row">
+                        <div class="pe-copy" id="peCinCard">
+                            <div class="pe-copy-head">Copie CIN</div>
+                            <button type="button" class="pe-copy-zone" id="peCinBtn" title="Importer la copie CIN">
+                                <span class="pe-copy-preview" id="peCinPreview"></span>
+                                <span class="pe-copy-name" id="peCinName">Importer une image ou un PDF</span>
+                            </button>
+                            <input type="file" id="peCinFile" accept="image/*,.pdf,application/pdf" hidden>
+                        </div>
+                        <div class="pe-copy" id="peDipCard">
+                            <div class="pe-copy-head">Copie diplôme</div>
+                            <button type="button" class="pe-copy-zone" id="peDipBtn" title="Importer le diplôme">
+                                <span class="pe-copy-preview" id="peDipPreview"></span>
+                                <span class="pe-copy-name" id="peDipName">Importer une image ou un PDF</span>
+                            </button>
+                            <input type="file" id="peDipFile" accept="image/*,.pdf,application/pdf" hidden>
+                        </div>
+                    </div>
+                    <div class="rm-form-actions" style="margin-top:16px">
+                        <button type="button" class="btn gold" id="peSave">Valider</button>
+                        <button type="button" class="btn ghost" id="peCancel">Fermer</button>
+                    </div>
+                </div>
+            </div>
+            <div class="rm-modal-overlay" id="peViewOverlay">
+                <div class="rm-modal" id="peViewModal" role="dialog" aria-modal="true" aria-labelledby="peViewTitle">
+                    <button type="button" class="rm-modal-close" id="peViewClose" aria-label="Fermer">&times;</button>
+                    <div class="rm-form-head"><h3 id="peViewTitle">Fiche personnel</h3><p id="peViewSub"></p></div>
+                    <div id="peViewPhoto"></div>
+                    <div class="pe-view-grid" id="peViewInfo"></div>
+                    <div class="pe-docs" id="peViewDocs"></div>
+                    <div class="rm-form-actions" style="margin-top:16px">
+                        <button type="button" class="btn ghost" id="peViewCancel">Fermer</button>
+                    </div>
+                </div>
+            </div>
 
             <section class="panel" id="pers-taches">
                 <h2 class="serif">Gestion des Taches</h2>
@@ -3681,29 +3845,17 @@
                 <div class="subpanel" id="cfg-users">
                     <div class="block">
                         <h3>Utilisateur</h3>
+                        <p class="hint" id="cu_hint">Le nom et le profil viennent de la liste du personnel.</p>
                         <div class="form-flex">
-                            <div class="field cfg-id-field" style="flex:0 0 100px"><label>ID</label><input type="text" id="cu_id" readonly></div>
-                            <div class="field" style="flex:2 1 200px"><label>Nom et Prénom</label><input type="text" id="cu_nom" placeholder="Nom complet"></div>
-                            <div class="field" style="flex:1 1 140px"><label>N° CIN</label><input type="text" id="cu_cin" placeholder="AB123456"></div>
-                            <div class="field" style="flex:1 1 140px"><label>N° Téléphone</label><input type="tel" id="cu_tel" placeholder="06 XX XX XX XX"></div>
-                            <div class="field" style="flex:2 1 220px"><label>Adresse</label><input type="text" id="cu_adresse" placeholder="Adresse"></div>
-                            <div class="field" style="flex:1 1 150px"><label>Profil</label>
-                                <select id="cu_profil">
-                                    <option>Direction</option><option>Réception</option><option>Comptabilité</option>
-                                    <option>Commercial</option><option>Maintenance</option><option>Restauration</option>
-                                </select>
+                            <div class="field" style="flex:0 0 160px"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cu_date"></div>
+                            <div class="field" style="flex:2 1 220px"><label>Nom complet</label>
+                                <select id="cu_nom"><option value="">— Sélectionner —</option></select>
                             </div>
-                            <div class="field" style="flex:1 1 160px"><label>Login</label><input type="text" id="cu_login" value="" placeholder="Identifiant de connexion" autocomplete="off" autocapitalize="off" spellcheck="false" readonly onfocus="this.removeAttribute('readonly')" data-lpignore="true" data-1p-ignore></div>
-                            <div class="field" style="flex:1 1 160px"><label>Mot de passe</label><input type="password" id="cu_password" value="" placeholder="6 caractères minimum" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')" data-lpignore="true" data-1p-ignore></div>
-                            <div class="field" style="flex:1 1 150px"><label>Type Contrat</label>
-                                <select id="cu_contrat">
-                                    <option>CDI</option><option>CDD</option><option>Stage</option><option>Formation</option><option>Vacataire</option>
-                                </select>
+                            <div class="field" style="flex:1 1 180px"><label>Profil</label>
+                                <select id="cu_profil"><option value="">— Sélectionner —</option></select>
                             </div>
-                            <div class="field" style="flex:0 0 140px"><label>Date Début</label><input type="date" id="cu_debut"></div>
-                            <div class="field" style="flex:0 0 140px"><label>Date Fin</label><input type="date" id="cu_fin"></div>
-                            <div class="field" style="flex:1 1 180px"><label>Formation</label><input type="text" id="cu_formation" placeholder="Formation / diplôme"></div>
-                            <div class="field" style="flex:0 0 120px"><label>Salaire (DH)</label><input type="number" id="cu_salaire" placeholder="0" step="0.01" min="0"></div>
+                            <div class="field" style="flex:1 1 180px"><label>Login</label><input type="text" id="cu_login" value="" placeholder="Profil" readonly tabindex="-1" autocomplete="off" data-lpignore="true" data-1p-ignore></div>
+                            <div class="field" style="flex:1 1 180px"><label>Mot de passe</label><input type="text" id="cu_password" value="" placeholder="Saisie manuelle" autocomplete="off" data-lpignore="true" data-1p-ignore spellcheck="false" style="-webkit-text-security:disc"></div>
                         </div>
                         <div class="actions">
                             <button type="button" class="btn gold" onclick="CFG.saveUser()">Valider</button>
@@ -3715,7 +3867,7 @@
                         <div class="table-wrap">
                             <table>
                                 <thead><tr>
-                                    <th>ID</th><th>Nom et Prénom</th><th>Login</th><th>CIN</th><th>Téléphone</th><th>Profil</th><th>Contrat</th><th>Salaire</th><th class="no-print">Actions</th>
+                                    <th>Date</th><th>Nom complet</th><th>Profil</th><th>Login</th><th class="no-print">Actions</th>
                                 </tr></thead>
                                 <tbody id="cu_tbody"></tbody>
                             </table>
@@ -3726,7 +3878,7 @@
                 <div class="subpanel" id="cfg-auth">
                     <div class="block">
                         <h3>Tableau des autorisations</h3>
-                        <p class="hint">Cochez les droits accordés pour chaque module du menu latéral.</p>
+                        <p class="hint" id="cfg_auth_who">Validez un utilisateur pour régler ses droits.</p>
                         <div class="cfg-auth-wrap">
                             <table class="cfg-auth-table" id="cfg_auth_table">
                                 <thead>
@@ -3767,8 +3919,8 @@
                                     <option>CDI</option><option>CDD</option><option>Stage</option><option>Formation</option><option>Vacataire</option>
                                 </select>
                             </div>
-                            <div class="field" style="flex:0 0 140px"><label>Date Début</label><input type="date" id="cc_debut"></div>
-                            <div class="field" style="flex:0 0 140px"><label>Date Fin</label><input type="date" id="cc_fin"></div>
+                            <div class="field" style="flex:0 0 140px"><label>Date Début</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cc_debut"></div>
+                            <div class="field" style="flex:0 0 140px"><label>Date Fin</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cc_fin"></div>
                             <div class="field" style="flex:1 1 180px"><label>Formation</label><input type="text" id="cc_formation" placeholder="Formation / diplôme"></div>
                             <div class="field" style="flex:0 0 120px"><label>Salaire (DH)</label><input type="number" id="cc_salaire" placeholder="0" step="0.01" min="0"></div>
                         </div>
@@ -3813,6 +3965,43 @@
 </div>
 
 <script>
+    window.ajMenuOn=function(id){
+        const auth=window.AJ_MENU_AUTH;
+        if(auth==null)return true;
+        const row=auth[id];
+        return !!(row&&['saisir','modifier','supprimer','imprimer','voir'].some(k=>row[k]));
+    };
+    window.ajDashOn=function(id){
+        const auth=window.AJ_MENU_AUTH;
+        if(auth==null)return true;
+        if(!Object.prototype.hasOwnProperty.call(auth,id))return window.ajMenuOn('dashboard');
+        return window.ajMenuOn(id);
+    };
+    if(!window.ajDashOn('dash-cartes'))document.getElementById('dashKpiBar')?.classList.add('hidden');
+    (function(){
+        const auth=window.AJ_MENU_AUTH;
+        if(auth==null)return;
+        const cfg={hotel:'cfg-hotel',carrousel:'cfg-carrousel',users:'cfg-users',commerciaux:'cfg-commerciaux'};
+        const dashParts=['dashboard','dash-cartes','dash-tableaux','dash-rooms'];
+        document.querySelectorAll('.sb-item[data-target]').forEach(el=>{
+            const id=el.dataset.target==='configuration'?(cfg[el.dataset.cfg]||''):el.dataset.target;
+            const allowed=id==='dashboard'?dashParts.some(window.ajMenuOn):window.ajMenuOn(id);
+            if(!allowed)el.remove();
+        });
+        document.querySelectorAll('.sb-group').forEach(g=>{if(!g.querySelector('.sb-item'))g.remove();});
+        document.querySelectorAll('.sb-section-label').forEach(label=>{
+            let n=label.nextElementSibling, any=false;
+            while(n&&!n.classList.contains('sb-section-label')){
+                if(n.classList.contains('sb-group')&&n.querySelector('.sb-item'))any=true;
+                n=n.nextElementSibling;
+            }
+            if(!any)label.remove();
+        });
+        document.querySelectorAll('.sb-badge').forEach(b=>{
+            const sub=b.parentElement?.nextElementSibling;
+            if(sub&&sub.classList.contains('sb-sub'))b.textContent=String(sub.querySelectorAll('.sb-item').length);
+        });
+    })();
     const items=document.querySelectorAll('.sb-item');
     const panels=document.querySelectorAll('.panel');
     const title=document.getElementById('pageTitle');
@@ -3836,6 +4025,13 @@
         }
     }
     function activatePanel(targetId,label,cfgTab){
+        if(window.AJ_MENU_AUTH!=null){
+            const cfg={hotel:'cfg-hotel',carrousel:'cfg-carrousel',users:'cfg-users',commerciaux:'cfg-commerciaux',auth:'cfg-users'};
+            const id=targetId==='configuration'?(cfg[cfgTab]||''):targetId;
+            const dashParts=['dashboard','dash-cartes','dash-tableaux','dash-rooms'];
+            const allowed=id==='dashboard'?dashParts.some(window.ajMenuOn):window.ajMenuOn(id);
+            if(!allowed)return;
+        }
         items.forEach(x=>x.classList.remove('active'));
         document.querySelectorAll('.sb-parent').forEach(p=>p.classList.remove('active'));
         let match;
@@ -3860,7 +4056,7 @@
             title.textContent=label||(match?(match.querySelector('.lbl')||match).textContent.trim():'');
             title.classList.remove('is-slogan');
         }
-        if(dashKpiBar)dashKpiBar.classList.toggle('hidden',targetId!=='dashboard');
+        if(dashKpiBar)dashKpiBar.classList.toggle('hidden',targetId!=='dashboard'||!window.ajDashOn('dash-cartes'));
         if(chKpiBar){
             const showCh=targetId==='ch-etat';
             chKpiBar.classList.toggle('hidden',!showCh);
@@ -3875,7 +4071,7 @@
         });
         if(echStickyBar)echStickyBar.classList.add('hidden');
         if(contentEl){
-            contentEl.classList.toggle('dash-view',targetId==='dashboard');
+            contentEl.classList.toggle('dash-view',targetId==='dashboard'&&window.ajDashOn('dash-cartes'));
             contentEl.classList.toggle('ech-view',false);
             contentEl.classList.toggle('ch-view',targetId==='ch-etat');
             contentEl.classList.toggle('kpi-view',sectionKpiShown);
@@ -3913,6 +4109,17 @@
         activatePanel(it.dataset.target,lbl,it.dataset.cfg||null);
         if(window.innerWidth>900&&typeof setSidebarCollapsed==='function')setSidebarCollapsed(true);
     }));
+    if(window.AJ_MENU_AUTH!=null){
+        setTimeout(function(){
+            const first=document.querySelector('#sbNav .sb-item');
+            if(first)first.click();
+            else{
+                panels.forEach(p=>p.classList.remove('active'));
+                if(title){title.textContent='Aucune section autorisée';title.classList.remove('is-slogan');}
+                if(dashKpiBar)dashKpiBar.classList.add('hidden');
+            }
+        },0);
+    }
     document.getElementById('goDashboard')?.addEventListener('click',()=>activatePanel('dashboard','Tableau de bord'));
     document.querySelector('.sb-brand')?.addEventListener('click',()=>activatePanel('dashboard','Tableau de bord'));
     const hamb=document.getElementById('hamb');
@@ -3967,7 +4174,7 @@ const FRNS = (function(){
         n[0]=n[0].replace(/\B(?=(\d{3})+(?!\d))/g,' ');
         return n.join('.');
     };
-    const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
     let editFiche=null;
 
     /* ---- calculs ---- */
@@ -4028,7 +4235,7 @@ const FRNS = (function(){
         let id=document.getElementById('ff_id').value.trim();
         const data={
             id: editFiche || (id || nextId()),
-            date:document.getElementById('ff_date').value,
+            date:ajIso(document.getElementById('ff_date').value),
             nom, contact:document.getElementById('ff_contact').value.trim(),
             ville:document.getElementById('ff_ville').value.trim(),
             adresse:document.getElementById('ff_adresse').value.trim(),
@@ -4048,7 +4255,7 @@ const FRNS = (function(){
     }
     function editFicheRow(id){
         const f=frnsById(id); if(!f)return; editFiche=id;
-        document.getElementById('ff_date').value=f.date||'';
+        document.getElementById('ff_date').value=ajDate(f.date||'');
         document.getElementById('ff_id').value=f.id;
         document.getElementById('ff_nom').value=f.nom||'';
         document.getElementById('ff_contact').value=f.contact||'';
@@ -4199,7 +4406,7 @@ const FRNS = (function(){
         let list=getBons();
         const data={
             id:editBonId||uid(),
-            date:document.getElementById('ba_date').value,
+            date:ajIso(document.getElementById('ba_date').value),
             num:document.getElementById('ba_num').value.trim(),
             frnsId,
             frnsNom:document.getElementById('ba_frns_nom').value.trim()||f.nom,
@@ -4245,7 +4452,7 @@ const FRNS = (function(){
         editBonId=null;
         baLineSeed=0;
         const today=new Date().toISOString().slice(0,10);
-        if(document.getElementById('ba_date'))document.getElementById('ba_date').value=today;
+        if(document.getElementById('ba_date'))document.getElementById('ba_date').value=ajDate(today);
         if(document.getElementById('ba_num'))document.getElementById('ba_num').value='';
         if(document.getElementById('ba_frns_id'))document.getElementById('ba_frns_id').value='';
         if(document.getElementById('ba_frns_nom'))document.getElementById('ba_frns_nom').value='';
@@ -4273,7 +4480,7 @@ const FRNS = (function(){
         const b=getBons().find(x=>x.id===id);
         if(!b)return;
         editBonId=id;
-        document.getElementById('ba_date').value=b.date||'';
+        document.getElementById('ba_date').value=ajDate(b.date||'');
         document.getElementById('ba_num').value=b.num||'';
         document.getElementById('ba_frns_id').value=b.frnsId||'';
         document.getElementById('ba_frns_nom').value=b.frnsNom||frnsName(b.frnsId);
@@ -4450,10 +4657,10 @@ const FRNS = (function(){
         const rows=[...document.querySelectorAll('#ra_balances .bal-row')].filter(r=>r.querySelector('.bal-chk').checked);
         if(!rows.length){alert('Cochez au moins un fournisseur à solder.');return;}
         let ref=document.getElementById('ra_ref').value.trim(); if(!ref)ref=nextReglRef();
-        const date=document.getElementById('ra_date').value,
+        const date=ajIso(document.getElementById('ra_date').value),
               type=document.getElementById('ra_type').value, num_=document.getElementById('ra_num').value.trim(),
               banq=document.getElementById('ra_banq').value.trim(), tire=document.getElementById('ra_tire').value.trim(),
-              decaiss=document.getElementById('ra_decaiss').value;
+              decaiss=ajIso(document.getElementById('ra_decaiss').value);
         const list=get(K.r);
         rows.forEach(r=>{
             const frnsId=r.dataset.frns, montant=num(r.querySelector('.pay').value);
@@ -4496,7 +4703,7 @@ const FRNS = (function(){
 
     /* ---- BALANCE ---- */
     function getBalanceRows(){
-        const dateQ=document.getElementById('bl_search_date')?.value||'';
+        const dateQ=ajIso(document.getElementById('bl_search_date')?.value||'');
         const nomQ=(document.getElementById('bl_search_nom')?.value||'').trim().toLowerCase();
         return get(K.f).map(f=>{
             const bons=getBons().filter(b=>b.frnsId===f.id);
@@ -4630,7 +4837,7 @@ const FRNS = (function(){
         const lines=readBonLines();
         if(!lines.length)return null;
         return{
-            date:document.getElementById('ba_date').value,
+            date:ajIso(document.getElementById('ba_date').value),
             num:document.getElementById('ba_num').value.trim(),
             frnsId:document.getElementById('ba_frns_id').value.trim(),
             frnsNom:document.getElementById('ba_frns_nom').value.trim(),
@@ -4711,7 +4918,7 @@ const STOCK=(function(){
     const getOverrides=()=>JSON.parse(localStorage.getItem(K)||'[]');
     const setOverrides=v=>localStorage.setItem(K,JSON.stringify(v));
     const num=v=>Math.max(0,Math.floor(Number(v)||0));
-    const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
     let editId=null;
     let etatPreview=null;
 
@@ -4872,7 +5079,7 @@ const STOCK=(function(){
         const row=buildFromBons().find(x=>x.id===id);
         if(!row)return;
         editId=id;
-        document.getElementById('sm_date').value=row.dateAchat||'';
+        document.getElementById('sm_date').value=ajDate(row.dateAchat||'');
         document.getElementById('sm_ref').value=row.ref||'';
         document.getElementById('sm_desig').value=row.desig||'';
         document.getElementById('sm_init').value=row.stockInitial;
@@ -4956,7 +5163,7 @@ const ETAT=(function(){
     const set=v=>localStorage.setItem(K,JSON.stringify(v));
     const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
     const num=v=>Math.max(0,Math.floor(Number(v)||0));
-    const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
     let editId=null;
 
     function nextNum(){
@@ -5028,7 +5235,7 @@ const ETAT=(function(){
     function newItem(){
         editId=null;
         const today=new Date().toISOString().slice(0,10);
-        if(document.getElementById('ep_date'))document.getElementById('ep_date').value=today;
+        if(document.getElementById('ep_date'))document.getElementById('ep_date').value=ajDate(today);
         if(document.getElementById('ep_num'))document.getElementById('ep_num').value=nextNum();
         ['ep_ref','ep_desig','ep_qte','ep_dest','ep_charge'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
         if(document.getElementById('ep_stock'))document.getElementById('ep_stock').value='0';
@@ -5045,7 +5252,7 @@ const ETAT=(function(){
         if(!numEtat)numEtat=nextNum();
         const data={
             id:editId||uid(),
-            date:document.getElementById('ep_date').value,
+            date:ajIso(document.getElementById('ep_date').value),
             numEtat,
             ref,
             desig,
@@ -5070,7 +5277,7 @@ const ETAT=(function(){
         const row=get().find(x=>x.id===id);
         if(!row)return;
         editId=id;
-        document.getElementById('ep_date').value=row.date||'';
+        document.getElementById('ep_date').value=ajDate(row.date||'');
         document.getElementById('ep_num').value=row.numEtat||'';
         document.getElementById('ep_ref').value=row.ref||'';
         document.getElementById('ep_desig').value=row.desig||'';
@@ -5156,15 +5363,250 @@ ETAT.init();
 <script>window.AJ_HOTEL_DEFAULTS=@json(config('hotel_rooms'));</script>
 <script src="{{ asset('js/hotel-content.js') }}"></script>
 <script>
+/* ===== Liste du personnel (source de la fiche Utilisateur) ===== */
+const PERS=(function(){
+    const K='aj_pers';
+    const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));};
+    const load=()=>{try{return JSON.parse(localStorage.getItem(K)||'[]')||[];}catch(e){return[];}};
+    const store=list=>localStorage.setItem(K,JSON.stringify(list));
+    const today=()=>new Date().toISOString().slice(0,10);
+    const val=id=>document.getElementById(id)?.value.trim()||'';
+    const money=v=>{const n=Number(v);return v===''||v==null||Number.isNaN(n)?'—':n.toFixed(2);};
+    let editId=null, cinCopy=null, dipCopy=null, photoCopy=null;
+    function nextId(list){
+        let max=0;
+        list.forEach(p=>{const m=String(p.id||'').match(/^Pe(\d+)$/i);if(m)max=Math.max(max,parseInt(m[1],10));});
+        return 'Pe'+String(max+1).padStart(4,'0');
+    }
+    function overlay(){return document.getElementById('peModalOverlay');}
+    function viewOverlay(){return document.getElementById('peViewOverlay');}
+    function close(){editId=null;overlay()?.classList.remove('show');}
+    function closeView(){viewOverlay()?.classList.remove('show');}
+    const copyPh='<span class="pe-copy-ph"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 16V6M8 9l4-4 4 4"/><path d="M4 16.5V18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5"/></svg><em>Importer</em></span>';
+    const photoPh='<span class="pe-copy-ph"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 19.2c1.4-2.8 3.6-4.2 7-4.2s5.6 1.4 7 4.2"/></svg><em>Photo</em></span>';
+    function paintCopy(cardId,previewId,nameId,file,emptyLabel,emptyHtml){
+        const card=document.getElementById(cardId);
+        const preview=document.getElementById(previewId);
+        const name=document.getElementById(nameId);
+        if(card)card.classList.toggle('has-file',!!file?.data);
+        if(name)name.textContent=file?.name||emptyLabel||'Importer une image ou un PDF';
+        if(!preview)return;
+        if(file?.data&&String(file.type||'').startsWith('image/')) preview.innerHTML=`<img src="${file.data}" alt="">`;
+        else if(file?.data) preview.innerHTML='<span class="pe-copy-pdf">PDF</span>';
+        else preview.innerHTML=emptyHtml||copyPh;
+    }
+    function setCopyLabels(){
+        paintCopy('pePhotoCard','pePhotoPreview','pePhotoName',photoCopy,'Importer une photo',photoPh);
+        paintCopy('peCinCard','peCinPreview','peCinName',cinCopy);
+        paintCopy('peDipCard','peDipPreview','peDipName',dipCopy);
+    }
+    function readCopy(file){
+        return new Promise((resolve,reject)=>{
+            if(!file){resolve(null);return;}
+            if(file.size>8*1024*1024){reject(new Error('Fichier trop lourd (8 Mo maximum).'));return;}
+            if(file.type.startsWith('image/')){
+                const img=new Image();
+                const url=URL.createObjectURL(file);
+                img.onload=()=>{
+                    const max=1400, scale=Math.min(1,max/Math.max(img.width,img.height));
+                    const canvas=document.createElement('canvas');
+                    canvas.width=Math.max(1,Math.round(img.width*scale));
+                    canvas.height=Math.max(1,Math.round(img.height*scale));
+                    canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+                    URL.revokeObjectURL(url);
+                    resolve({name:file.name,type:'image/jpeg',data:canvas.toDataURL('image/jpeg',0.72)});
+                };
+                img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Image illisible.'));};
+                img.src=url;
+                return;
+            }
+            const reader=new FileReader();
+            reader.onload=()=>resolve({name:file.name,type:file.type||'application/pdf',data:reader.result});
+            reader.onerror=()=>reject(new Error('Lecture impossible.'));
+            reader.readAsDataURL(file);
+        });
+    }
+    function bindImport(btnId,fileId,assign){
+        document.getElementById(btnId)?.addEventListener('click',()=>document.getElementById(fileId)?.click());
+        document.getElementById(fileId)?.addEventListener('change',async e=>{
+            const file=e.target.files?.[0];
+            e.target.value='';
+            if(!file)return;
+            try{ assign(await readCopy(file)); setCopyLabels(); }
+            catch(err){ alert(err.message||'Import impossible.'); }
+        });
+    }
+    function docHtml(file,title){
+        const body=!file?.data
+            ? '<p class="pe-copy-empty">Aucune copie importée.</p>'
+            : String(file.type||'').startsWith('image/')
+                ? `<img src="${file.data}" alt="${esc(title)}">`
+                : `<iframe src="${file.data}" title="${esc(title)}"></iframe>`;
+        const sub=file?.name?`<div class="pe-copy-name" style="padding:0 12px 12px">${esc(file.name)}</div>`:'';
+        return `<article class="pe-copy"><div class="pe-copy-head">${esc(title)}</div><div class="pe-copy-frame">${body}</div>${sub}</article>`;
+    }
+    function show(person){
+        if(!person)return;
+        document.getElementById('peViewTitle').textContent=person.nom||'Fiche personnel';
+        document.getElementById('peViewSub').textContent=(person.id||'')+(person.profil?' · '+person.profil:'');
+        const rows=[
+            ['Nom complet',person.nom],['CIN N°',person.cin],
+            ['Ville',person.ville],['Adresse',person.adresse],['N° mobile / WhatsApp',person.mobile],['Formation',person.formation],['Section',person.section],
+            ['Profil',person.profil],['Type contrat',person.contrat],['Rémunération',person.remu!==''&&person.remu!=null?money(person.remu):''],
+            ['Date début',person.debut],['Date fin',person.fin]
+        ];
+        document.getElementById('peViewInfo').innerHTML=rows.map(([k,v])=>`<div><b>${esc(k)}</b><span>${esc(v||'—')}</span></div>`).join('');
+        const photoBox=document.getElementById('peViewPhoto');
+        if(photoBox)photoBox.innerHTML=`<div class="pe-photo-wrap"><article class="pe-copy pe-photo"><div class="pe-copy-head">Photo</div><div class="pe-copy-frame pe-photo-frame">${person.photo?.data?`<img src="${person.photo.data}" alt="Photo">`:'<p class="pe-copy-empty">Aucune photo</p>'}</div></article><div class="pe-photo-side"><div><b>Date</b><span>${esc(person.date||'—')}</span></div><div><b>ID</b><span>${esc(person.id||'—')}</span></div></div></div>`;
+        document.getElementById('peViewDocs').innerHTML=docHtml(person.cinCopy,'Copie CIN')+docHtml(person.dipCopy,'Copie diplôme');
+        viewOverlay()?.classList.add('show');
+    }
+    function open(person){
+        editId=person?.id||null;
+        const list=load();
+        document.getElementById('pe_date').value=ajDate(person?.date||today());
+        document.getElementById('pe_id').value=person?.id||nextId(list);
+        document.getElementById('pe_nom').value=person?.nom||'';
+        document.getElementById('pe_cin').value=person?.cin||'';
+        document.getElementById('pe_ville').value=person?.ville||'';
+        document.getElementById('pe_adresse').value=person?.adresse||'';
+        document.getElementById('pe_mobile').value=person?.mobile||'';
+        document.getElementById('pe_formation').value=person?.formation||'';
+        document.getElementById('pe_section').value=person?.section||'';
+        document.getElementById('pe_profil').value=person?.profil||'';
+        document.getElementById('pe_contrat').value=person?.contrat||'';
+        document.getElementById('pe_remu').value=person?.remu!==''&&person?.remu!=null?Number(person.remu).toFixed(2):'';
+        document.getElementById('pe_debut').value=ajDate(person?.debut||'');
+        document.getElementById('pe_fin').value=ajDate(person?.fin||'');
+        photoCopy=person?.photo||null;
+        cinCopy=person?.cinCopy||null;
+        dipCopy=person?.dipCopy||null;
+        setCopyLabels();
+        overlay()?.classList.add('show');
+        document.getElementById('pe_nom')?.focus();
+    }
+    function render(){
+        const tb=document.getElementById('pe_tbody');
+        if(!tb)return;
+        const list=load();
+        const cell=v=>esc(v||'—');
+        tb.innerHTML=list.length?list.map(p=>`<tr>
+            <td>${cell(p.date)}</td><td>${cell(p.id)}</td><td>${cell(p.nom)}</td><td>${cell(p.cin)}</td>
+            <td>${cell(p.ville)}</td><td>${cell(p.adresse)}</td><td>${cell(p.mobile)}</td><td>${cell(p.formation)}</td><td>${cell(p.section)}</td>
+            <td>${cell(p.profil)}</td><td>${cell(p.contrat)}</td><td>${money(p.remu)}</td>
+            <td>${cell(p.debut)}</td><td>${cell(p.fin)}</td>
+            <td class="no-print">
+                <button type="button" class="ibtn" title="Voir" data-pe-view="${esc(p.id)}">&#128065;</button>
+                <button type="button" class="ibtn" title="Modifier" data-pe-edit="${esc(p.id)}">&#9998;</button>
+                <button type="button" class="ibtn del" title="Supprimer" data-pe-del="${esc(p.id)}">&#128465;</button>
+            </td>
+        </tr>`).join(''):'<tr class="empty-row"><td colspan="15">Aucun employé. Cliquez sur Ajouter.</td></tr>';
+    }
+    function save(){
+        const data={
+            date:ajIso(val('pe_date'))||today(),
+            id:val('pe_id'),
+            nom:val('pe_nom'),
+            cin:val('pe_cin'),
+            ville:val('pe_ville'),
+            adresse:val('pe_adresse'),
+            mobile:val('pe_mobile'),
+            formation:val('pe_formation'),
+            section:document.getElementById('pe_section')?.value||'',
+            profil:document.getElementById('pe_profil')?.value||'',
+            contrat:document.getElementById('pe_contrat')?.value||'',
+            remu:val('pe_remu')===''?'':Number(String(val('pe_remu')).replace(',','.')).toFixed(2),
+            debut:ajIso(val('pe_debut')),
+            fin:ajIso(val('pe_fin'))
+        };
+        if(val('pe_date')&&!ajIso(val('pe_date'))){alert('Date invalide. Saisissez jj/mm/aaaa.');return;}
+        if(val('pe_debut')&&!data.debut){alert('Date début invalide. Saisissez jj/mm/aaaa.');return;}
+        if(val('pe_fin')&&!data.fin){alert('Date fin invalide. Saisissez jj/mm/aaaa.');return;}
+        if(!data.nom){alert('Le nom complet est obligatoire.');return;}
+        if(!data.profil){alert('Le profil est obligatoire.');return;}
+        if(data.remu==='NaN'){alert('Rémunération invalide.');return;}
+        if(data.debut&&data.fin&&data.fin<data.debut){alert('La date de fin doit être après la date de début.');return;}
+        const list=load();
+        if(editId){
+            const i=list.findIndex(p=>p.id===editId);
+            if(i>=0)list[i]={...list[i],...data,id:editId,photo:photoCopy,cinCopy,dipCopy};
+        }else{
+            if(!data.id)data.id=nextId(list);
+            if(list.some(p=>p.id===data.id)){alert('Cet ID existe déjà.');return;}
+            list.push({...data,photo:photoCopy,cinCopy,dipCopy});
+        }
+        try{ store(list); }
+        catch(e){ alert('Les copies sont trop volumineuses pour ce navigateur. Importez des fichiers plus légers.'); return; }
+        render();
+        window.CFG?.refreshUserSources?.();
+        close();
+    }
+    function init(){
+        render();
+        document.getElementById('pe_remu')?.addEventListener('blur',()=>{
+            const el=document.getElementById('pe_remu');
+            if(!el||!el.value.trim())return;
+            const n=Number(el.value.replace(',','.'));
+            el.value=Number.isNaN(n)?'':n.toFixed(2);
+        });
+        bindImport('pePhotoBtn','pePhotoFile',file=>{
+            if(file&&!String(file.type||'').startsWith('image/')){alert('La photo doit être une image.');return;}
+            photoCopy=file;
+        });
+        bindImport('peCinBtn','peCinFile',file=>{cinCopy=file;});
+        bindImport('peDipBtn','peDipFile',file=>{dipCopy=file;});
+        document.getElementById('peAdd')?.addEventListener('click',()=>open(null));
+        document.getElementById('peSave')?.addEventListener('click',save);
+        document.getElementById('peCancel')?.addEventListener('click',close);
+        document.getElementById('peClose')?.addEventListener('click',close);
+        document.getElementById('peViewClose')?.addEventListener('click',closeView);
+        document.getElementById('peViewCancel')?.addEventListener('click',closeView);
+        overlay()?.addEventListener('click',e=>{if(e.target===overlay())close();});
+        viewOverlay()?.addEventListener('click',e=>{if(e.target===viewOverlay())closeView();});
+        document.addEventListener('keydown',e=>{
+            if(e.key!=='Escape')return;
+            if(viewOverlay()?.classList.contains('show')){closeView();return;}
+            if(overlay()?.classList.contains('show'))close();
+        });
+        document.getElementById('pe_tbody')?.addEventListener('click',e=>{
+            const view=e.target.closest('[data-pe-view]');
+            const edit=e.target.closest('[data-pe-edit]');
+            const del=e.target.closest('[data-pe-del]');
+            const list=load();
+            if(view){
+                const p=list.find(x=>x.id===view.dataset.peView);
+                if(p)show(p);
+            }
+            if(edit){
+                const p=list.find(x=>x.id===edit.dataset.peEdit);
+                if(p)open(p);
+            }
+            if(del){
+                if(!confirm('Retirer cet employé de la liste ?'))return;
+                store(list.filter(x=>x.id!==del.dataset.peDel));
+                if(editId===del.dataset.peDel)close();
+                render();
+                window.CFG?.refreshUserSources?.();
+            }
+        });
+    }
+    return{list:load,render,init};
+})();
+window.PERS=PERS;
+</script>
+<script>
 /* ===== Module Configuration ===== */
 const CFG=(function(){
     const K_HOTEL='aj_cfg_hotel';
     const K_COMM='aj_cfg_commerciaux';
-    const K_AUTH='aj_cfg_auth';
     let carTab='suite';
     const PERMS=['saisir','modifier','supprimer','imprimer','voir'];
     const MENUS=[
         {id:'dashboard',label:'Tableau de bord',section:'Pilotage'},
+        {id:'dash-cartes',label:'Cartes analytiques',section:'Tableau de bord'},
+        {id:'dash-tableaux',label:'Tableaux',section:'Tableau de bord'},
+        {id:'dash-rooms',label:'Cadres chambres',section:'Tableau de bord'},
+        {id:'ch-reservations',label:'Réservations',section:'Pilotage'},
         {id:'fiche',label:'Fiche fournisseur',section:'Achats & Stock'},
         {id:'bon',label:'Bon Achats',section:'Achats & Stock'},
         {id:'regl',label:'Règlement Achats',section:'Achats & Stock'},
@@ -5190,11 +5632,14 @@ const CFG=(function(){
         {id:'mon-tresorerie',label:'Trésorerie',section:'Finance'},
         {id:'mon-salaires',label:'Salaires',section:'Finance'},
         {id:'mon-charges',label:'Charges',section:'Finance'},
-        {id:'configuration',label:'Configuration',section:'Système'}
+        {id:'cfg-hotel',label:'Fiche hôtel',section:'Système'},
+        {id:'cfg-carrousel',label:'Carrousel',section:'Système'},
+        {id:'cfg-users',label:'Utilisateurs',section:'Système'},
+        {id:'cfg-commerciaux',label:'Commerciaux',section:'Système'}
     ];
     let editUserId=null,editCommId=null;
 
-    const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));};
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}};
     const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
     const fmtSal=v=>Number(v||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -5253,34 +5698,58 @@ const CFG=(function(){
         alert('Fiche hôtel enregistrée.');
     }
 
-    const EMPLOI_FIELDS=['cu_contrat','cu_debut','cu_fin','cu_formation','cu_salaire'];
-    function isDirectionProfil(){return document.getElementById('cu_profil').value==='Direction';}
-    function syncProfilFields(){
-        const off=isDirectionProfil();
-        EMPLOI_FIELDS.forEach(id=>{
-            const el=document.getElementById(id);
-            if(!el)return;
-            el.disabled=off;
-            el.closest('.field')?.classList.toggle('is-off',off);
-        });
+    let authUserId=null;
+    const todayISO=()=>new Date().toISOString().slice(0,10);
+    function personnelList(){return window.PERS?window.PERS.list():[];}
+
+    function fillUserSelects(selected){
+        const list=personnelList();
+        const nom=document.getElementById('cu_nom');
+        const profil=document.getElementById('cu_profil');
+        const hint=document.getElementById('cu_hint');
+        if(!nom||!profil)return;
+        const noms=[...new Set(list.map(p=>p.nom).filter(Boolean))];
+        if(selected?.nom&&!noms.includes(selected.nom))noms.unshift(selected.nom);
+        const profils=[...new Set(list.map(p=>p.profil).filter(Boolean))];
+        if(selected?.profil&&!profils.includes(selected.profil))profils.unshift(selected.profil);
+        nom.innerHTML='<option value="">— Sélectionner —</option>'+noms.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('');
+        profil.innerHTML='<option value="">— Sélectionner —</option>'+profils.map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join('');
+        nom.value=selected?.nom||'';
+        profil.value=selected?.profil||'';
+        document.getElementById('cu_login').value=profil.value||'';
+        const pwd=document.getElementById('cu_password');
+        if(pwd)pwd.value='';
+        if(hint)hint.textContent=list.length
+            ?'Le nom et le profil viennent de la liste du personnel. Le login reprend le profil.'
+            :'La liste du personnel est vide. Ajoutez d’abord un employé dans Fiche personnel.';
+    }
+
+    function syncUserLogin(){
+        const profil=document.getElementById('cu_profil')?.value||'';
+        const login=document.getElementById('cu_login');
+        if(login)login.value=profil;
+    }
+
+    function onUserName(){
+        const nom=document.getElementById('cu_nom')?.value||'';
+        const person=personnelList().find(p=>p.nom===nom);
+        const profil=document.getElementById('cu_profil');
+        if(person&&profil){
+            if(![...profil.options].some(o=>o.value===person.profil)){
+                profil.add(new Option(person.profil,person.profil));
+            }
+            profil.value=person.profil;
+        }
+        syncUserLogin();
     }
 
     function readUserForm(){
-        const off=isDirectionProfil();
-        const emploi=id=>off?'':document.getElementById(id).value.trim();
+        const profil=document.getElementById('cu_profil').value;
         return{
-            id:document.getElementById('cu_id').value.trim(),
+            fiche_date:ajIso(document.getElementById('cu_date').value),
             nom:document.getElementById('cu_nom').value.trim(),
-            cin:document.getElementById('cu_cin').value.trim(),
-            tel:document.getElementById('cu_tel').value.trim(),
-            adresse:document.getElementById('cu_adresse').value.trim(),
-            profil:document.getElementById('cu_profil').value,
-            contrat:emploi('cu_contrat'),
-            debut:emploi('cu_debut'),
-            fin:emploi('cu_fin'),
-            formation:emploi('cu_formation'),
-            salaire:emploi('cu_salaire'),
-            login:document.getElementById('cu_login').value.trim(),
+            profil,
+            login:profil,
             password:document.getElementById('cu_password').value
         };
     }
@@ -5310,30 +5779,20 @@ const CFG=(function(){
     function fillUserForm(u){
         const pwd=document.getElementById('cu_password');
         pwd.value='';
-        pwd.placeholder=u?.login?'Laisser vide pour conserver':'6 caractères minimum';
-        document.getElementById('cu_login').value=u?.login||'';
-        document.getElementById('cu_id').value=u?.id||'';
-        document.getElementById('cu_nom').value=u?.nom||'';
-        document.getElementById('cu_cin').value=u?.cin||'';
-        document.getElementById('cu_tel').value=u?.tel||'';
-        document.getElementById('cu_adresse').value=u?.adresse||'';
-        document.getElementById('cu_profil').value=u?.profil||'Direction';
-        document.getElementById('cu_contrat').value=u?.contrat||'CDI';
-        document.getElementById('cu_debut').value=u?.debut||'';
-        document.getElementById('cu_fin').value=u?.fin||'';
-        document.getElementById('cu_formation').value=u?.formation||'';
-        document.getElementById('cu_salaire').value=u?.salaire||'';
-        syncProfilFields();
+        pwd.placeholder='Saisie manuelle';
+        document.getElementById('cu_date').value=ajDate(u?.date||todayISO());
+        fillUserSelects(u||null);
+        pwd.value='';
     }
 
     function drawUsers(){
         const tb=document.getElementById('cu_tbody');
-        if(!usersCache.length){tb.innerHTML='<tr class="empty-row"><td colspan="9">Aucun utilisateur enregistré</td></tr>';return;}
+        if(!usersCache.length){tb.innerHTML='<tr class="empty-row"><td colspan="5">Aucun utilisateur enregistré</td></tr>';return;}
         tb.innerHTML=usersCache.map(u=>`<tr>
-            <td>${esc(u.id)}</td><td>${esc(u.nom)}</td><td>${esc(u.login)}</td><td>${esc(u.cin)}</td><td>${esc(u.tel)}</td>
-            <td>${esc(u.profil)}</td><td>${esc(u.contrat)}</td><td>${fmtSal(u.salaire)}</td>
+            <td>${esc(u.date||'')}</td><td>${esc(u.nom)}</td><td>${esc(u.profil)}</td><td>${esc(u.login)}</td>
             <td class="no-print">
                 <button class="ibtn" title="Modifier" onclick="CFG.editUser('${esc(u.id)}')">&#9998;</button>
+                <button class="ibtn" title="Autorisations" onclick="CFG.openAuth('${esc(u.id)}')">&#128065;</button>
                 <button class="ibtn del" title="Supprimer" onclick="CFG.delUser('${esc(u.id)}')">&#128465;</button>
             </td>
         </tr>`).join('');
@@ -5344,29 +5803,42 @@ const CFG=(function(){
         try{
             await usersApi('GET');
             drawUsers();
-            if(!editUserId)document.getElementById('cu_id').value=nextId(usersCache,'Ut');
         }catch(e){
-            tb.innerHTML=`<tr class="empty-row"><td colspan="9">${esc(e.message)}</td></tr>`;
+            tb.innerHTML=`<tr class="empty-row"><td colspan="5">${esc(e.message)}</td></tr>`;
         }
     }
 
     function newUser(){
         editUserId=null;
-        fillUserForm({id:nextId(usersCache,'Ut')});
+        fillUserForm(null);
+    }
+
+    function openAuth(id){
+        const u=usersCache.find(x=>x.id===id);
+        if(!u)return;
+        authUserId=u.id;
+        const who=document.getElementById('cfg_auth_who');
+        if(who)who.textContent='Autorisations de '+u.nom+' ('+u.profil+'). Cochez les droits, puis enregistrez.';
+        renderAuth(u.autorisations||{});
+        if(typeof activatePanel==='function')activatePanel('configuration','Autorisations','auth');
+        else switchTab('auth');
     }
 
     async function saveUser(){
         const data=readUserForm();
-        if(!data.nom){alert('Le nom est obligatoire.');return;}
-        if(!data.login){alert('Le login est obligatoire.');return;}
+        if(!data.fiche_date){alert('La date est obligatoire.');return;}
+        if(!data.nom){alert('Choisissez un nom dans la liste du personnel.');return;}
+        if(!data.profil){alert('Choisissez un profil.');return;}
         if(!editUserId&&!data.password){alert('Le mot de passe est obligatoire.');return;}
+        const editing=editUserId;
         try{
             await usersApi('POST','',{...data,edit:editUserId});
         }catch(e){alert(e.message);return;}
+        const saved=usersCache.find(u=>u.id===editing)||usersCache.find(u=>u.login===data.login);
         editUserId=null;
         newUser();
         drawUsers();
-        alert('Utilisateur enregistré.');
+        if(saved)openAuth(saved.id);
     }
 
     function editUser(id){
@@ -5382,6 +5854,11 @@ const CFG=(function(){
             await usersApi('DELETE','/'+encodeURIComponent(id));
         }catch(e){alert(e.message);return;}
         if(editUserId===id)newUser();
+        if(authUserId===id){
+            authUserId=null;
+            const who=document.getElementById('cfg_auth_who');
+            if(who)who.textContent='Validez un utilisateur pour régler ses droits.';
+        }
         drawUsers();
     }
 
@@ -5394,8 +5871,8 @@ const CFG=(function(){
             adresse:document.getElementById('cc_adresse').value.trim(),
             profil:document.getElementById('cc_profil').value,
             contrat:document.getElementById('cc_contrat').value,
-            debut:document.getElementById('cc_debut').value,
-            fin:document.getElementById('cc_fin').value,
+            debut:ajIso(document.getElementById('cc_debut').value),
+            fin:ajIso(document.getElementById('cc_fin').value),
             formation:document.getElementById('cc_formation').value.trim(),
             salaire:document.getElementById('cc_salaire').value
         };
@@ -5409,8 +5886,8 @@ const CFG=(function(){
         document.getElementById('cc_adresse').value=u?.adresse||'';
         document.getElementById('cc_profil').value=u?.profil||'Commercial junior';
         document.getElementById('cc_contrat').value=u?.contrat||'CDI';
-        document.getElementById('cc_debut').value=u?.debut||'';
-        document.getElementById('cc_fin').value=u?.fin||'';
+        document.getElementById('cc_debut').value=ajDate(u?.debut||'');
+        document.getElementById('cc_fin').value=ajDate(u?.fin||'');
         document.getElementById('cc_formation').value=u?.formation||'';
         document.getElementById('cc_salaire').value=u?.salaire||'';
     }
@@ -5468,42 +5945,46 @@ const CFG=(function(){
         renderCommerciaux();
     }
 
-    function getAuth(){
-        const stored=load(K_AUTH)||{};
-        const out={};
-        MENUS.forEach(m=>{
-            out[m.id]=stored[m.id]||{saisir:false,modifier:false,supprimer:false,imprimer:false,voir:true};
-        });
-        return out;
-    }
-
-    function renderAuth(){
-        const auth=getAuth();
+    const closedSecs=new Set(MENUS.map(m=>m.section));
+    const eyeOn='<svg class="eye-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    const eyeOff='<svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><path d="M1 1l22 22"/></svg>';
+    function renderAuth(stored){
+        const source=stored&&typeof stored==='object'&&!Array.isArray(stored)?stored:{};
         let lastSection='';
         const rows=MENUS.map(m=>{
             let sectionRow='';
             if(m.section!==lastSection){
                 lastSection=m.section;
-                sectionRow=`<tr><td colspan="6" style="background:rgba(201,162,39,.08);color:var(--gold);font-weight:600;font-size:11px;letter-spacing:1px;text-transform:uppercase;text-align:left">${esc(m.section)}</td></tr>`;
+                const closed=closedSecs.has(m.section);
+                sectionRow=`<tr class="auth-sec${closed?' is-closed':''}"><td colspan="6"><button type="button" class="auth-fold" data-sec="${esc(m.section)}" aria-expanded="${closed?'false':'true'}" title="${closed?'Afficher le module':'Masquer le module'}">${eyeOn}${eyeOff}</button>${esc(m.section)}</td></tr>`;
             }
-            const p=auth[m.id];
+            const p=source[m.id]||{};
             const cells=PERMS.map(k=>`<td><input type="checkbox" data-menu="${m.id}" data-perm="${k}" ${p[k]?'checked':''}></td>`).join('');
-            return sectionRow+`<tr><td style="text-align:left">${esc(m.label)}</td>${cells}</tr>`;
+            const hidden=closedSecs.has(m.section)?' is-hidden':'';
+            return sectionRow+`<tr class="auth-row${hidden}" data-sec="${esc(m.section)}"><td style="text-align:left">${esc(m.label)}</td>${cells}</tr>`;
         }).join('');
         document.getElementById('cfg_auth_tbody').innerHTML=rows;
     }
 
-    function saveAuth(){
+    async function saveAuth(){
+        if(!authUserId){alert('Validez d’abord un utilisateur.');return;}
         const auth={};
         MENUS.forEach(m=>{
             auth[m.id]={};
             PERMS.forEach(k=>{
                 const cb=document.querySelector(`#cfg_auth_tbody input[data-menu="${m.id}"][data-perm="${k}"]`);
-                auth[m.id][k]=cb?cb.checked:false;
+                auth[m.id][k]=!!(cb&&cb.checked);
             });
         });
-        save(K_AUTH,auth);
-        alert('Autorisations enregistrées.');
+        try{
+            await usersApi('POST','/'+encodeURIComponent(authUserId)+'/auth',{autorisations:auth});
+        }catch(e){alert(e.message);return;}
+        const btn=document.querySelector('#cfg-auth .btn.gold');
+        if(btn){
+            const label=btn.textContent;
+            btn.textContent='Enregistré';
+            setTimeout(()=>{btn.textContent=label;},1200);
+        }
     }
 
     function getCarouselData(){
@@ -5637,18 +6118,36 @@ const CFG=(function(){
 
     function init(){
         loadHotelForm();
-        document.getElementById('cu_profil')?.addEventListener('change',syncProfilFields);
+        document.getElementById('cu_nom')?.addEventListener('change',onUserName);
+        document.getElementById('cu_profil')?.addEventListener('change',syncUserLogin);
+        window.PERS?.init();
         newUser();
         newCommercial();
         renderUsers();
         renderCommerciaux();
         renderAuth();
+        document.getElementById('cfg_auth_tbody')?.addEventListener('click',e=>{
+            const btn=e.target.closest('.auth-fold');
+            if(!btn)return;
+            const sec=btn.dataset.sec;
+            const closed=closedSecs.has(sec)?(closedSecs.delete(sec),false):(closedSecs.add(sec),true);
+            const head=btn.closest('tr');
+            head.classList.toggle('is-closed',closed);
+            btn.setAttribute('aria-expanded',closed?'false':'true');
+            btn.title=closed?'Afficher le module':'Masquer le module';
+            document.querySelectorAll('#cfg_auth_tbody tr.auth-row').forEach(tr=>{
+                if(tr.dataset.sec===sec)tr.classList.toggle('is-hidden',closed);
+            });
+        });
     }
 
     return{
         init,render,switchTab,
         saveHotel,
-        saveUser,newUser,editUser,delUser,
+        saveUser,newUser,editUser,delUser,openAuth,refreshUserSources:()=>{
+            if(editUserId)fillUserSelects(usersCache.find(u=>u.id===editUserId)||null);
+            else fillUserSelects(null);
+        },
         saveCommercial,newCommercial,editCommercial,delCommercial,
         saveAuth,
         renderCarousel,saveCarousel,addCarouselSlide
@@ -5672,7 +6171,7 @@ const CHDISPO=(function(){
     };
     const K_STATUS='aj_ch_status',K_RESA='aj_ch_resa';
     let filter='',query='',bound=false;
-    const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
     const fmtP=n=>Number(n).toLocaleString('fr-FR')+' DH';
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{};}catch(e){return{};}};
     const store=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
@@ -5869,7 +6368,7 @@ const CHETAT=(function(){
     const K_STATUS='aj_ch_status';
     let ROOMS=[],currentFilter={q:'',floor:'',cat:'',status:''},viewMode='grid',selectedNum=null,bound=false,currentRoom=null;
 
-    const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
     const fmtP=n=>Number(n).toLocaleString('fr-FR')+' DH';
     const num=v=>Number(v)||0;
     const fmtAmt=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -6172,7 +6671,7 @@ const CHETAT=(function(){
         return`<div class="rm-form-head"><h3>Réservation — Chambre ${esc(room.num)}</h3><p>${esc(room.title)} · Tarif ${fmtP(room.price)} / nuit</p></div>
         <form id="rfForm" class="rm-form-grid" onsubmit="return false">
             <div class="field"><label>N° Chambre</label><input type="text" id="rf_num" value="${esc(room.num)}" readonly></div>
-            <div class="field"><label>Date</label><input type="date" id="rf_date" value="${esc(d.date||today())}"></div>
+            <div class="field"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="rf_date" value="${esc(d.date||today())}"></div>
             <div class="field span2"><label>Nom Client</label><input type="text" id="rf_nom" value="${esc(d.nom||'')}" placeholder="Nom complet du client"></div>
             <div class="field span2"><label>N° CIN / Passport</label><input type="text" id="rf_cin" value="${esc(d.cin||'')}" placeholder="AB123456"></div>
             <div class="field"><label>Nbrs Personnes</label><input type="number" id="rf_personnes" min="1" value="${esc(d.personnes||1)}"></div>
@@ -6206,7 +6705,7 @@ const CHETAT=(function(){
     function getFormData(){
         return{
             num:document.getElementById('rf_num')?.value,
-            date:document.getElementById('rf_date')?.value,
+            date:ajIso(document.getElementById('rf_date')?.value),
             nom:document.getElementById('rf_nom')?.value.trim(),
             cin:document.getElementById('rf_cin')?.value.trim(),
             personnes:num(document.getElementById('rf_personnes')?.value),
@@ -6586,7 +7085,7 @@ const DASH=(function(){
     const MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
     const PERIODS=[['jour','Jour'],['mois','Mois'],['annee','Année']];
     let filter='',roomsHidden=localStorage.getItem(K_HIDDEN)==='1',pRooms='jour',pFin='mois';
-    const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{};}catch(e){return{};}};
     const loadArr=k=>{try{const v=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(v)?v:[];}catch(e){return[];}};
     const num=v=>Number(v)||0;
@@ -6731,35 +7230,35 @@ const DASH=(function(){
         const lastBons=bonList.slice().sort(byRecent).slice(0,5);
         const lastResas=resaList.slice().sort(byRecent).slice(0,5);
         const emptyRow=t=>`<tr class="da-empty"><td colspan="5">${t}</td></tr>`;
-        return`
-        <div class="dash-analytics">
-            <section class="da-card">
+        const charts=window.ajDashOn('dash-cartes')?`
+            <section class="da-card" data-dash="cartes">
                 <div class="da-head"><h3>Occupation des chambres</h3>${tabs('rooms',pRooms)}</div>
                 ${legend(rc.series)}
                 <div class="da-chart">${chartSvg(rc.labels,rc.series)}</div>
                 <p class="da-note">Moyenne des statuts relevés chaque jour à l'ouverture du tableau de bord.</p>
             </section>
-            <section class="da-card">
+            <section class="da-card" data-dash="cartes">
                 <div class="da-head"><h3>Clients, revenus &amp; charges</h3>${tabs('fin',pFin)}</div>
                 ${legend(fc.series)}
                 <div class="da-chart">${chartSvg(fc.labels,fc.series)}</div>
                 <p class="da-note">Revenus et clients : réservations validées · Charges : bons d'achat.</p>
-            </section>
-            <section class="da-card">
+            </section>`:'';
+        const tables=window.ajDashOn('dash-tableaux')?`
+            <section class="da-card" data-dash="tableaux">
                 <div class="da-head"><h3>5 derniers bons de commande</h3></div>
                 <div class="da-table-wrap"><table class="da-table">
                     <thead><tr><th>Date</th><th>Bon N°</th><th>Fournisseur</th><th>Montant</th><th>Solde</th></tr></thead>
                     <tbody>${lastBons.length?lastBons.map(b=>`<tr><td>${frDate(b.date)}</td><td>${esc(b.num||'—')}</td><td>${esc(b.frnsNom)}</td><td class="amt">${fmtDH(b.total)}</td>${soldeCell(b.solde)}</tr>`).join(''):emptyRow('Aucun bon de commande.')}</tbody>
                 </table></div>
             </section>
-            <section class="da-card">
+            <section class="da-card" data-dash="tableaux">
                 <div class="da-head"><h3>5 dernières réservations</h3></div>
                 <div class="da-table-wrap"><table class="da-table">
                     <thead><tr><th>Date</th><th>ID</th><th>Nom client</th><th>Montant</th><th>Solde</th></tr></thead>
                     <tbody>${lastResas.length?lastResas.map(r=>`<tr><td>${frDate(r.date)}</td><td>${esc(r.id)}</td><td>${esc(r.nom||'—')}</td><td class="amt">${fmtDH(r.montant)}</td>${soldeCell(num(r.montant)-num(r.paye))}</tr>`).join(''):emptyRow('Aucune réservation.')}</tbody>
                 </table></div>
-            </section>
-        </div>`;
+            </section>`:'';
+        return charts||tables?`<div class="dash-analytics">${charts}${tables}</div>`:'';
     }
 
     function rooms(){
@@ -6783,13 +7282,20 @@ const DASH=(function(){
         set('kpiChambres',all.length);
         set('kpiOccupees',count.occupee||0);
         const hist=recordSnapshot(count);
-
+        const canRooms=window.ajDashOn('dash-rooms');
+        const canAnalytics=window.ajDashOn('dash-cartes')||window.ajDashOn('dash-tableaux');
+        const showRooms=canRooms&&(!canAnalytics||!roomsHidden);
         const eye=roomsHidden
             ?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
             :'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><path d="M1 1l22 22"/></svg>';
-        const toggle=`<button type="button" class="dr-toggle" id="drToggle" aria-pressed="${roomsHidden}">${eye}<span>${roomsHidden?'Afficher les chambres':'Masquer les chambres'}</span></button>`;
+        const toggle=canRooms&&canAnalytics?`<button type="button" class="dr-toggle" id="drToggle" aria-pressed="${roomsHidden}">${eye}<span>${roomsHidden?'Afficher les chambres':'Masquer les chambres'}</span></button>`:'';
 
-        if(roomsHidden){
+        if(!canRooms&&!canAnalytics){
+            box.innerHTML='<p class="dr-empty">Aucune partie du tableau de bord n\'est autorisée.</p>';
+            return;
+        }
+
+        if(!showRooms){
             box.innerHTML=`
             <div class="dash-rooms">
                 <div class="dr-head">
@@ -6801,7 +7307,7 @@ const DASH=(function(){
                 </div>
                 ${analyticsHtml(hist)}
             </div>`;
-            box.querySelector('#drToggle').addEventListener('click',()=>{roomsHidden=false;localStorage.setItem(K_HIDDEN,'0');render();});
+            box.querySelector('#drToggle')?.addEventListener('click',()=>{roomsHidden=false;localStorage.setItem(K_HIDDEN,'0');render();});
             box.querySelectorAll('.da-tab').forEach(t=>t.addEventListener('click',()=>{
                 if(t.dataset.chart==='rooms')pRooms=t.dataset.p;else pFin=t.dataset.p;
                 render();
@@ -6845,7 +7351,7 @@ const DASH=(function(){
                 <div class="dr-grid">${cards||'<p class="dr-empty">Aucune chambre pour ce filtre.</p>'}</div>
             </div>`;
 
-        box.querySelector('#drToggle').addEventListener('click',()=>{roomsHidden=true;localStorage.setItem(K_HIDDEN,'1');render();});
+        box.querySelector('#drToggle')?.addEventListener('click',()=>{roomsHidden=true;localStorage.setItem(K_HIDDEN,'1');render();});
         box.querySelectorAll('.dr-chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.f;render();}));
         box.querySelectorAll('.dr-card').forEach(c=>{
             const open=()=>{
@@ -6865,7 +7371,7 @@ DASH.render();
 /* ===== Réservations — liste et nouvelle réservation ===== */
 const RESA=(function(){
     const STATUS={disponible:'Disponible',occupee:'Occupée',reservee:'Réservée',nettoyage:'Nettoyage',maintenance:'Maintenance'};
-    const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
     const num=v=>Number(v)||0;
     const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catch(e){return d;}};
     const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;

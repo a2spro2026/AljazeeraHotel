@@ -80,6 +80,35 @@ class HotelUserTest extends TestCase
             ->getJson('/admin/api/users')->assertForbidden();
     }
 
+    public function test_autorisations_are_saved_for_one_user(): void
+    {
+        $this->asDirection()->postJson('/admin/api/users', $this->payload())->assertOk();
+
+        $this->asDirection()->postJson('/admin/api/users/Ut0001/auth', [
+            'autorisations' => [
+                'dashboard' => ['saisir' => true, 'modifier' => false, 'supprimer' => false, 'imprimer' => true, 'voir' => true],
+            ],
+        ])->assertOk()
+            ->assertJsonPath('users.0.autorisations.dashboard.saisir', true)
+            ->assertJsonPath('users.0.autorisations.dashboard.modifier', false);
+    }
+
+    public function test_administration_account_opens_the_admin_space(): void
+    {
+        config([
+            'admin_spaces.administration.login' => 'bureau',
+            'admin_spaces.administration.password' => 'secret123',
+            'admin_spaces.administration.route' => 'admin',
+            'admin_spaces.administration.gate' => 'admin',
+            'admin_spaces.administration.label' => 'Administration',
+        ]);
+
+        $this->post('/espace/administration/login', ['login' => 'bureau', 'password' => 'secret123'])
+            ->assertRedirect(route('admin'))
+            ->assertSessionHas('space_admin', true)
+            ->assertSessionHas('space_admin_login', 'bureau');
+    }
+
     public function test_user_logs_into_space_allowed_by_profile_only(): void
     {
         HotelUser::create($this->payload() + ['code' => 'Ut0001']);
@@ -96,5 +125,25 @@ class HotelUserTest extends TestCase
         $this->post('/espace/admin/login', ['login' => 'recep1', 'password' => 'mauvais'])
             ->assertRedirect(route('home'))
             ->assertSessionHas('login_error');
+    }
+
+    public function test_commercial_user_enters_the_sections_that_were_authorized(): void
+    {
+        HotelUser::create([
+            'code' => 'Ut0009',
+            'nom' => 'Sara',
+            'profil' => 'Commercial',
+            'login' => 'Commercial',
+            'password' => 'secret123',
+            'autorisations' => [
+                'ch-etat' => ['saisir' => false, 'modifier' => false, 'supprimer' => false, 'imprimer' => false, 'voir' => true],
+            ],
+        ]);
+
+        $this->post('/espace/commercial/login', ['login' => 'Commercial', 'password' => 'secret123'])
+            ->assertRedirect(route('admin'))
+            ->assertSessionHas('space_admin', true)
+            ->assertSessionHas('space_admin_profil', 'Commercial')
+            ->assertSessionHas('space_admin_auth', fn ($auth) => ($auth['ch-etat']['voir'] ?? false) === true);
     }
 }

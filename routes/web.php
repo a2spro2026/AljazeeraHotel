@@ -46,11 +46,13 @@ Route::post('/espace/{space}/login', function (Request $request, string $space) 
     $loginOk = $configured && strcasecmp(trim($credentials['login']), (string) $config['login']) === 0;
     $passwordOk = $configured && hash_equals((string) $config['password'], trim($credentials['password']));
 
+    $gate = $config['gate'] ?? $space;
+
     if ($loginOk && $passwordOk) {
         $request->session()->regenerate();
-        $request->session()->put("space_$space", true);
-        $request->session()->put("space_{$space}_login", $config['login']);
-        $request->session()->forget(["space_{$space}_profil", "space_{$space}_nom"]);
+        $request->session()->put("space_$gate", true);
+        $request->session()->put("space_{$gate}_login", $config['login']);
+        $request->session()->forget(["space_{$gate}_profil", "space_{$gate}_nom"]);
 
         return redirect()->route($config['route']);
     }
@@ -64,12 +66,13 @@ Route::post('/espace/{space}/login', function (Request $request, string $space) 
         }
 
         $request->session()->regenerate();
-        $request->session()->put("space_$space", true);
-        $request->session()->put("space_{$space}_login", $user->login);
-        $request->session()->put("space_{$space}_profil", $user->profil);
-        $request->session()->put("space_{$space}_nom", $user->nom);
+        $request->session()->put('space_admin', true);
+        $request->session()->put('space_admin_login', $user->login);
+        $request->session()->put('space_admin_profil', $user->profil);
+        $request->session()->put('space_admin_nom', $user->nom);
+        $request->session()->put('space_admin_auth', $user->autorisations ?? []);
 
-        return redirect()->route($config['route']);
+        return redirect()->route('admin');
     }
 
     return redirect()->route('home')
@@ -88,6 +91,7 @@ Route::post('/espace/{space}/logout', function (Request $request, string $space)
 Route::prefix('admin/api/users')->controller(HotelUserController::class)->group(function () {
     Route::get('/', 'index');
     Route::post('/', 'store');
+    Route::post('/{code}/auth', 'saveAuth');
     Route::delete('/{code}', 'destroy');
 });
 

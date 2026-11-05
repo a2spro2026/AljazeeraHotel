@@ -6,20 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class HotelUser extends Model
 {
-    public const PROFILS = ['Direction', 'Réception', 'Comptabilité', 'Commercial', 'Maintenance', 'Restauration'];
+    public const PROFILS = ['Direction', 'Administration', 'Réception', 'Comptabilité', 'Commercial', 'Maintenance', 'Restauration'];
 
     public const CONTRATS = ['CDI', 'CDD', 'Stage', 'Formation', 'Vacataire'];
 
     /** Profils autorisés à ouvrir chaque espace. */
     public const SPACE_PROFILS = [
-        'admin' => ['Direction', 'Réception', 'Maintenance', 'Restauration'],
-        'facturation' => ['Direction', 'Comptabilité'],
-        'commercial' => ['Direction', 'Commercial'],
+        'admin' => ['Direction', 'Administration', 'Réception', 'Maintenance', 'Restauration'],
+        'facturation' => ['Direction', 'Administration', 'Comptabilité'],
+        'commercial' => ['Direction', 'Administration', 'Commercial'],
+        'administration' => ['Direction', 'Administration'],
     ];
 
     protected $fillable = [
-        'code', 'nom', 'cin', 'tel', 'adresse', 'profil', 'contrat',
-        'debut', 'fin', 'formation', 'salaire', 'login', 'password',
+        'code', 'fiche_date', 'nom', 'cin', 'tel', 'adresse', 'profil', 'contrat',
+        'debut', 'fin', 'formation', 'salaire', 'login', 'password', 'autorisations',
     ];
 
     protected $hidden = ['password'];
@@ -27,10 +28,12 @@ class HotelUser extends Model
     protected function casts(): array
     {
         return [
+            'fiche_date' => 'date:Y-m-d',
             'debut' => 'date:Y-m-d',
             'fin' => 'date:Y-m-d',
             'salaire' => 'decimal:2',
             'password' => 'hashed',
+            'autorisations' => 'array',
         ];
     }
 
@@ -43,6 +46,7 @@ class HotelUser extends Model
     {
         return [
             'id' => $this->code,
+            'date' => $this->fiche_date?->format('Y-m-d'),
             'nom' => $this->nom,
             'cin' => $this->cin,
             'tel' => $this->tel,
@@ -54,6 +58,7 @@ class HotelUser extends Model
             'formation' => $this->formation,
             'salaire' => $this->salaire,
             'login' => $this->login,
+            'autorisations' => $this->autorisations ?? new \stdClass,
         ];
     }
 }

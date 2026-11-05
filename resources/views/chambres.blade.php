@@ -441,7 +441,7 @@
                 <p class="ch-desc" style="margin-top:-12px;font-weight:700;color:var(--navy-mid)">Tarif : ${fmtP(room.price)} / nuit</p>
                 <form class="ch-form" id="chResaForm" onsubmit="return false">
                     <div class="field"><label>N° Chambre</label><input type="text" id="rf_num" value="${esc(room.num)}" readonly></div>
-                    <div class="field"><label>Date</label><input type="date" id="rf_date" value="${today()}" required></div>
+                    <div class="field"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="rf_date" value="${ajDate(today())}" required></div>
                     <div class="field span2"><label>Nom Client</label><input type="text" id="rf_nom" placeholder="Nom complet" required></div>
                     <div class="field"><label>N° Téléphone</label><input type="tel" id="rf_tel" placeholder="06 XX XX XX XX" required></div>
                     <div class="field"><label>N° CIN / Passport</label><input type="text" id="rf_cin" placeholder="AB123456" required></div>
@@ -455,7 +455,7 @@
             const tel=document.getElementById('rf_tel').value.trim();
             const cin=document.getElementById('rf_cin').value.trim();
             if(!nom||!tel||!cin){alert('Veuillez remplir tous les champs obligatoires.');return;}
-            const data={num:room.num,title:room.title,date:document.getElementById('rf_date').value,nom,tel,cin,personnes:document.getElementById('rf_personnes').value,nuits:document.getElementById('rf_nuits').value,price:room.price,at:new Date().toISOString()};
+            const data={num:room.num,title:room.title,date:ajIso(document.getElementById('rf_date').value),nom,tel,cin,personnes:document.getElementById('rf_personnes').value,nuits:document.getElementById('rf_nuits').value,price:room.price,at:new Date().toISOString()};
             const list=JSON.parse(localStorage.getItem('aj_public_resa')||'[]');
             list.push(data);
             localStorage.setItem('aj_public_resa',JSON.stringify(list));

@@ -10,6 +10,7 @@
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <meta name="theme-color" content="#0a1736">
+    <script src="{{ asset('js/aj-dates.js') }}"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -57,7 +58,7 @@
         }
         .mega{
             position:fixed;top:70px;right:18px;left:auto;transform:translateY(-12px) scale(.98);
-            width:min(880px,92vw);z-index:90;
+            width:min(1180px,96vw);z-index:90;
             background:linear-gradient(165deg,rgba(255,255,255,.98),rgba(247,245,240,.95));
             border:1px solid rgba(197,160,89,.3);border-radius:20px;
             padding:28px;
@@ -71,7 +72,7 @@
             font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--text-dark);letter-spacing:1px;
         }
         .mega-head p{font-size:13px;color:var(--text-muted);margin-top:6px}
-        .mega-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+        .mega-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
         .mega-card{
             background:var(--white);border:1px solid rgba(197,160,89,.16);border-radius:14px;
             padding:20px 18px;display:flex;flex-direction:column;gap:10px;
@@ -92,6 +93,7 @@
             color:#1a1304;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;font-size:12px;
             padding:12px;border:none;border-radius:10px;cursor:pointer;
         }
+        @media(max-width:1100px){.mega-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
         @media(max-width:860px){
             .mega{right:12px;left:12px;width:auto;max-height:75vh;overflow-y:auto}
             .mega-grid{grid-template-columns:1fr}
@@ -144,7 +146,7 @@
             <p>Connectez-vous à votre espace dédié</p>
         </div>
         <div class="mega-grid">
-            @foreach([['Direction','admin','&#128081;'],['Facturation','facturation','&#129534;'],['Commercial','commercial','&#128188;']] as $space)
+            @foreach([['Direction','admin','&#128081;'],['Facturation','facturation','&#129534;'],['Commercial','commercial','&#128188;'],['Administration','administration','&#127970;']] as $space)
             <form class="mega-card js-nomem-login" method="POST" action="{{ route('space.login', $space[1]) }}" autocomplete="off" data-lpignore="true" data-1p-ignore data-form-type="other">
                 @csrf
                 <input type="hidden" name="login" value="">

@@ -7,7 +7,20 @@ return [
         'login'    => env('SPACE_DIRECTION_LOGIN'),
         'password' => env('SPACE_DIRECTION_PASSWORD'),
         'route'    => 'admin',
-        'manager_logins' => array_values(array_filter([env('SPACE_DIRECTION_LOGIN'), 'Direction'])),
+        'manager_logins' => array_values(array_filter([
+            env('SPACE_DIRECTION_LOGIN'),
+            env('SPACE_ADMINISTRATION_LOGIN'),
+            'Direction',
+            'Administration',
+        ])),
+    ],
+
+    'administration' => [
+        'label'    => 'Administration',
+        'login'    => env('SPACE_ADMINISTRATION_LOGIN'),
+        'password' => env('SPACE_ADMINISTRATION_PASSWORD'),
+        'route'    => 'admin',
+        'gate'     => 'admin',
     ],
 
     'facturation' => [
