@@ -31,7 +31,9 @@
             }
         } catch (e) {}
         return base.rooms.map((room) => {
-            const merged = { ...room, ...(stored[room.num] || {}), num: room.num, type: room.type };
+            const override = { ...(stored[room.num] || {}) };
+            if (!override.img || override.img === PLACEHOLDER) delete override.img;
+            const merged = { ...room, ...override, num: room.num, type: room.type };
             const hasPhoto = !!merged.img && merged.img !== PLACEHOLDER;
             return { ...merged, img: hasPhoto ? merged.img : PLACEHOLDER, hasPhoto };
         });
