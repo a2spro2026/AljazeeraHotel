@@ -2529,6 +2529,7 @@
         /* ---- Panneau latéral : sections lumineuses ---- */
         .sb-nav{--sec:#f0c66e}
         .sb-nav .sec-pilot{--sec:#f0c66e}
+        .sb-nav .sec-admin{--sec:#e7b15a}
         .sb-nav .sec-heberg{--sec:#6ea4ff}
         .sb-nav .sec-achats{--sec:#4fd08a}
         .sb-nav .sec-fact{--sec:#b48cff}
@@ -2692,6 +2693,126 @@
         /* Fiche utilisateur : champs emploi grisés pour le profil Direction */
         #cfg-users .field.is-off{opacity:.45;transition:opacity .2s}
         #cfg-users .field.is-off input,#cfg-users .field.is-off select{cursor:not-allowed;background:rgba(120,120,120,.12);filter:grayscale(1)}
+
+        /* Balance Clients — occupe toute la zone de travail */
+        .content:has(#adm-balance-clients.active),
+        .content:has(#adm-balance-paiement.active){
+            align-items:stretch;padding:18px 22px 22px;
+        }
+        #adm-balance-clients.panel.active,
+        #adm-balance-paiement.panel.active{
+            display:flex;flex-direction:column;
+            width:100%;max-width:none;
+            min-height:calc(100vh - var(--topbar-h) - 40px);
+        }
+        #adm-balance-clients .bc-head{text-align:center;margin-bottom:16px}
+        #adm-balance-clients .bc-kicker{
+            display:inline-flex;align-items:center;gap:8px;
+            font-size:11px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--gold);
+        }
+        #adm-balance-clients .bc-kicker::before,#adm-balance-clients .bc-kicker::after{
+            content:'';width:28px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));
+        }
+        #adm-balance-clients .bc-kicker::after{background:linear-gradient(90deg,var(--gold),transparent)}
+        #adm-balance-clients h2{margin:8px 0 4px}
+        .bc-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:16px;width:100%}
+        #adm-balance-paiement .bc-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+        .bc-card{
+            position:relative;overflow:hidden;padding:18px 18px 16px 20px;border-radius:16px;
+            background:linear-gradient(165deg,#fff 0%,#fbf8f1 100%);
+            border:1px solid var(--border-gold);box-shadow:var(--shadow-soft);
+        }
+        .bc-card::after{
+            content:'';position:absolute;right:-20px;top:-24px;width:90px;height:90px;border-radius:50%;
+            background:radial-gradient(circle,rgba(197,160,89,.18),transparent 70%);
+        }
+        .bc-card .bc-accent{position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0}
+        .bc-card.total .bc-accent{background:linear-gradient(180deg,#f3e4a8,#c5a059)}
+        .bc-card.paid .bc-accent{background:linear-gradient(180deg,#b7ebc9,#2a9d5c)}
+        .bc-card.due .bc-accent{background:linear-gradient(180deg,#f6c7c7,#c45454)}
+        .bc-card .bc-lbl{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted)}
+        .bc-card .bc-val{font-family:'Cormorant Garamond',serif;font-size:34px;line-height:1.05;color:var(--navy-mid);margin-top:6px}
+        .bc-card .bc-val small{font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:1px;color:var(--gold);margin-left:4px}
+        .bc-filters{
+            display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:14px;align-items:end;
+            width:100%;padding:16px 18px;margin-bottom:16px;border-radius:16px;
+            background:#fff;border:1px solid var(--border-gold);box-shadow:var(--shadow-soft);
+        }
+        .bc-filters label{display:flex;flex-direction:column;gap:6px;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold)}
+        .bc-filters input{
+            height:42px;border:1px solid rgba(197,160,89,.35);border-radius:10px;padding:0 12px;
+            font-family:inherit;font-size:14px;color:var(--text-dark);background:#fff;
+        }
+        .bc-filters input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.15)}
+        .bc-reset{
+            height:42px;padding:0 16px;border-radius:10px;cursor:pointer;
+            border:1px solid rgba(197,160,89,.4);background:#fff;color:var(--navy-mid);
+            font-weight:600;font-size:12px;letter-spacing:.4px;
+        }
+        .bc-reset:hover{background:rgba(197,160,89,.1)}
+        .bc-table-card{
+            flex:1;display:flex;flex-direction:column;
+            width:100%;min-height:280px;margin-bottom:0;padding:0;overflow:hidden;
+        }
+        #adm-balance-clients .table-wrap,
+        #adm-balance-paiement .table-wrap{
+            flex:1;width:100%;min-height:0;border-radius:16px;
+        }
+        #adm-balance-clients table,
+        #adm-balance-paiement table{width:100%;height:100%;table-layout:fixed}
+        #adm-balance-clients th:last-child,#adm-balance-clients td:last-child,
+        #adm-balance-paiement th:last-child,#adm-balance-paiement td:last-child{width:176px}
+        #adm-balance-clients td,#adm-balance-clients th,
+        #adm-balance-paiement td,#adm-balance-paiement th{padding:16px 10px}
+        #adm-balance-clients table:has(.empty-row),
+        #adm-balance-paiement table:has(.empty-row){height:100%}
+        #adm-balance-clients .empty-row td,
+        #adm-balance-paiement .empty-row td{height:100%;vertical-align:middle}
+        .bp-filters{grid-template-columns:repeat(5,minmax(0,1fr)) auto}
+        #adm-balance-clients th{white-space:nowrap}
+        .bc-money{font-variant-numeric:tabular-nums;font-weight:600}
+        .bc-solde.ok{color:#1f8a4c}
+        .bc-solde.due{color:#b45309}
+        .bc-type{
+            display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;
+            background:rgba(197,160,89,.12);color:#8a6a2f;
+        }
+        .bc-type.empty{background:rgba(107,114,128,.1);color:var(--muted);font-weight:500}
+        .bc-actions{display:flex;justify-content:center;gap:6px}
+        .bc-ico{
+            width:32px;height:32px;border-radius:9px;border:1px solid rgba(197,160,89,.35);
+            background:#fff;color:var(--navy-mid);cursor:pointer;
+            display:inline-flex;align-items:center;justify-content:center;
+        }
+        .bc-ico svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+        .bc-ico:hover{background:var(--navy-mid);color:#f6efdd;border-color:var(--navy-mid)}
+        .bc-ico.danger:hover{background:#9b2c2c;border-color:#9b2c2c;color:#fff}
+        .bc-modal{
+            position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;
+            background:rgba(6,15,36,.45);padding:20px;
+        }
+        .bc-modal.show{display:flex}
+        .bc-dialog{
+            width:min(560px,100%);background:#fff;border-radius:18px;padding:22px 22px 18px;
+            border:1px solid var(--border-gold);box-shadow:0 24px 60px rgba(6,15,36,.25);
+        }
+        .bc-dialog h3{font-family:'Cormorant Garamond',serif;font-size:28px;text-align:center;color:var(--navy-mid)}
+        .bc-dialog .bc-sub{text-align:center;color:var(--muted);font-size:13px;margin-bottom:16px}
+        .bc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+        .bc-grid div{padding:10px 12px;border-radius:10px;background:#f8f5ee}
+        .bc-grid span{display:block;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);font-weight:700}
+        .bc-grid b{font-weight:600;font-size:14px}
+        .bc-form{display:grid;gap:12px;margin-top:8px}
+        .bc-form label{display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold)}
+        .bc-form input,.bc-form select{
+            height:42px;border:1px solid rgba(197,160,89,.35);border-radius:10px;padding:0 12px;
+            font-family:inherit;font-size:14px;color:var(--text-dark);
+        }
+        .bc-dialog-actions{display:flex;justify-content:center;gap:10px;margin-top:16px}
+        @media(max-width:1100px){
+            .bc-cards,.bc-filters,.bp-filters{grid-template-columns:1fr}
+            .bc-grid{grid-template-columns:1fr}
+        }
     </style>
     @include('partials.data-center-styles')
 </head>
@@ -2750,6 +2871,22 @@
                 <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>
                 <span class="lbl">Calendrier</span>
             </div>
+            </div>
+
+            <div class="sb-section-label sec-admin">Administration</div>
+            <div class="sb-group sec-admin">
+                <div class="sb-parent" id="admParent">
+                    <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16"/><path d="M6 21V10M10 21V10M14 21V10M18 21V10"/><path d="M3 10h18"/><path d="M12 3l9 7H3l9-7z"/><path d="M12 10v4"/><circle cx="12" cy="16.5" r="1.2"/></svg></span>
+                    <span class="lbl">Administration</span>
+                    <span class="sb-badge">4</span>
+                    <span class="caret">&#9662;</span>
+                </div>
+                <div class="sb-sub" id="admSub">
+                    <div class="sb-item" data-target="adm-balance-clients"><span class="sb-dot"></span><span class="lbl">Balance Clients</span></div>
+                    <div class="sb-item" data-target="adm-balance-paiement"><span class="sb-dot"></span><span class="lbl">Balance Paiement</span></div>
+                    <div class="sb-item" data-target="adm-archive"><span class="sb-dot"></span><span class="lbl">Archive</span></div>
+                    <div class="sb-item" data-target="adm-chambres"><span class="sb-dot"></span><span class="lbl">Gestion Chambres</span></div>
+                </div>
             </div>
 
             <div class="sb-section-label sec-heberg">Hébergement</div>
@@ -3470,6 +3607,104 @@
                 </div>
             </section>
 
+            {{-- ADMINISTRATION --}}
+            <section class="panel" id="adm-balance-clients">
+                <div class="bc-head">
+                    <div class="bc-kicker">Administration</div>
+                    <h2 class="serif">Balance Clients</h2>
+                    <p class="sub">Réservations validées — soldes, paiements et recherches</p>
+                </div>
+                <div class="bc-cards">
+                    <article class="bc-card total"><span class="bc-accent"></span><div class="bc-lbl">Montant Total</div><div class="bc-val" id="bcTotal">0 <small>DH</small></div></article>
+                    <article class="bc-card paid"><span class="bc-accent"></span><div class="bc-lbl">Montant Payé</div><div class="bc-val" id="bcPaid">0 <small>DH</small></div></article>
+                    <article class="bc-card due"><span class="bc-accent"></span><div class="bc-lbl">Solde</div><div class="bc-val" id="bcDue">0 <small>DH</small></div></article>
+                </div>
+                <div class="bc-filters">
+                    <label>Mois<input type="month" id="bcMonth"></label>
+                    <label>Nom Client<input type="search" id="bcNom" placeholder="Rechercher un client" autocomplete="off"></label>
+                    <label>N° Chambre<input type="search" id="bcChambre" placeholder="Ex. 201" autocomplete="off"></label>
+                    <button type="button" class="bc-reset" id="bcReset">Effacer</button>
+                </div>
+                <div class="block bc-table-card">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th><th>ID Client</th><th>Nom Client</th><th>N° Chambre</th>
+                                    <th>Nbrs Jours</th><th>Paie/Jr</th><th>Total</th><th>Paiement</th>
+                                    <th>Type</th><th>Solde</th><th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bcBody">
+                                <tr class="empty-row"><td colspan="11">Aucune réservation validée.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bc-modal" id="bcModal" aria-hidden="true">
+                    <div class="bc-dialog" id="bcDialog" role="dialog" aria-modal="true"></div>
+                </div>
+            </section>
+            <section class="panel" id="adm-balance-paiement">
+                <div class="bc-head">
+                    <div class="bc-kicker">Administration</div>
+                    <h2 class="serif">Balance Paiement</h2>
+                    <p class="sub">Encaissements issus des réservations validées</p>
+                </div>
+                <div class="bc-cards">
+                    <article class="bc-card paid"><span class="bc-accent"></span><div class="bc-lbl">Total Payé</div><div class="bc-val" id="bpPaid">0 <small>DH</small></div></article>
+                    <article class="bc-card due"><span class="bc-accent"></span><div class="bc-lbl">Total Solde</div><div class="bc-val" id="bpDue">0 <small>DH</small></div></article>
+                </div>
+                <div class="bc-filters bp-filters">
+                    <label>Mois<input type="month" id="bpMonth"></label>
+                    <label>Mnt<input type="search" id="bpMnt" placeholder="Montant" autocomplete="off"></label>
+                    <label>N° Rég<input type="search" id="bpNreg" placeholder="N° de règlement" autocomplete="off"></label>
+                    <label>Bnq<input type="search" id="bpBnq" placeholder="Banque" autocomplete="off"></label>
+                    <label>Nom Tiré<input type="search" id="bpTire" placeholder="Nom du tiré" autocomplete="off"></label>
+                    <button type="button" class="bc-reset" id="bpReset">Effacer</button>
+                </div>
+                <div class="block bc-table-card">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th><th>Réf° Rég</th><th>Nom Client</th><th>Mnt</th><th>Type</th>
+                                    <th>N° Rég</th><th>Bnq</th><th>Nom Tiré</th><th>Date Encaissement</th><th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bpBody">
+                                <tr class="empty-row"><td colspan="10">Aucun paiement issu d'une réservation validée.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bc-modal" id="bpModal" aria-hidden="true">
+                    <div class="bc-dialog" id="bpDialog" role="dialog" aria-modal="true"></div>
+                </div>
+            </section>
+            <section class="panel" id="adm-archive">
+                <h2 class="serif">Archive</h2>
+                <p class="sub">Documents et dossiers archivés</p>
+                <div class="block">
+                    <div class="row-head"><h3>Archives</h3></div>
+                    <table>
+                        <thead><tr><th>Date</th><th>Dossier</th><th>Type</th><th>Statut</th></tr></thead>
+                        <tbody><tr class="empty-row"><td colspan="4">Aucune donnée.</td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="panel" id="adm-chambres">
+                <h2 class="serif">Gestion Chambres</h2>
+                <p class="sub">Pilotage administratif des chambres</p>
+                <div class="block">
+                    <div class="row-head"><h3>Chambres</h3></div>
+                    <table>
+                        <thead><tr><th>N°</th><th>Catégorie</th><th>Étage</th><th>Statut</th></tr></thead>
+                        <tbody><tr class="empty-row"><td colspan="4">Aucune donnée.</td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+
             {{-- GESTION CHAMBRES --}}
             <section class="panel" id="ch-suivi">
                 <h2 class="serif">Suivi Opérationnel</h2>
@@ -4097,6 +4332,8 @@
         if(targetId==='ch-etages'&&typeof CHETAT!=='undefined')CHETAT.renderEtages();
         if(targetId==='ch-dispo'&&typeof CHDISPO!=='undefined')CHDISPO.render();
         if(targetId==='ch-reservations'&&window.RESA)window.RESA.render();
+        if(targetId==='adm-balance-clients'&&window.BCL)window.BCL.render();
+        if(targetId==='adm-balance-paiement'&&window.BPY)window.BPY.render();
         if(targetId==='configuration'&&typeof CFG!=='undefined'){
             CFG.render();
             CFG.switchTab(cfgTab||'hotel');
@@ -5620,6 +5857,10 @@ const CFG=(function(){
         {id:'fact-clt',label:'Facture client',section:'Facturation'},
         {id:'regl-clt',label:'Règl Client',section:'Facturation'},
         {id:'releve-clt',label:'Relevé Compte Clt',section:'Facturation'},
+        {id:'adm-balance-clients',label:'Balance Clients',section:'Administration'},
+        {id:'adm-balance-paiement',label:'Balance Paiement',section:'Administration'},
+        {id:'adm-archive',label:'Archive',section:'Administration'},
+        {id:'adm-chambres',label:'Gestion Chambres',section:'Administration'},
         {id:'ch-etat',label:'Chambres',section:'Hébergement'},
         {id:'ch-etages',label:'Étages',section:'Hébergement'},
         {id:'ch-dispo',label:'Config Chambres',section:'Hébergement'},
@@ -6677,6 +6918,15 @@ const CHETAT=(function(){
             <div class="field"><label>Nbrs Personnes</label><input type="number" id="rf_personnes" min="1" value="${esc(d.personnes||1)}"></div>
             <div class="field"><label>Nbrs Nuités</label><input type="number" id="rf_nuits" min="1" value="${esc(d.nuits||1)}"></div>
             <div class="field span2"><label>Tarif Nuités (DH)</label><input type="number" id="rf_tarif" min="0" step="0.01" value="${esc(d.tarif!=null?d.tarif:room.price)}"></div>
+            <div class="field"><label>Réf° Rég</label><input type="text" id="rf_ref" value="${esc(d.ref||'')}" placeholder="RG0001"></div>
+            <div class="field"><label>Mnt payé (DH)</label><input type="number" id="rf_mnt" min="0" step="0.01" value="${esc(d.mnt!=null?d.mnt:(d.paye!=null?d.paye:0))}"></div>
+            <div class="field"><label>Type</label>
+                <select id="rf_type">${['','Espèces','Carte bancaire','Virement','Chèque'].map(t=>`<option value="${esc(t)}"${(d.type||'')===t?' selected':''}>${t||'— Type —'}</option>`).join('')}</select>
+            </div>
+            <div class="field"><label>N° Rég</label><input type="text" id="rf_nreg" value="${esc(d.nreg||'')}" placeholder="N° chèque / virement"></div>
+            <div class="field"><label>Banque</label><input type="text" id="rf_bnq" value="${esc(d.bnq||'')}" placeholder="Banque"></div>
+            <div class="field span2"><label>Nom Tiré</label><input type="text" id="rf_tire" value="${esc(d.tire||'')}" placeholder="Nom du tiré"></div>
+            <div class="field span2"><label>Date Encaissement</label><input type="text" class="js-date" id="rf_encaisse" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" value="${esc(d.encaisse&&typeof ajDate==='function'?ajDate(d.encaisse): (d.encaisse||''))}"></div>
         </form>
         <div class="rm-form-totals">
             <div class="ttl"><label>Total HT</label><input type="text" id="rf_ht" readonly></div>
@@ -6711,21 +6961,38 @@ const CHETAT=(function(){
             personnes:num(document.getElementById('rf_personnes')?.value),
             nuits:num(document.getElementById('rf_nuits')?.value),
             tarif:num(document.getElementById('rf_tarif')?.value),
+            mnt:num(document.getElementById('rf_mnt')?.value),
+            type:document.getElementById('rf_type')?.value||'',
+            ref:document.getElementById('rf_ref')?.value.trim(),
+            nreg:document.getElementById('rf_nreg')?.value.trim(),
+            bnq:document.getElementById('rf_bnq')?.value.trim(),
+            tire:document.getElementById('rf_tire')?.value.trim(),
+            encaisse:typeof ajIso==='function'?ajIso(document.getElementById('rf_encaisse')?.value):'',
             ...calcTotals()
         };
     }
 
     function setFormReadonly(ro){
-        ['rf_date','rf_nom','rf_cin','rf_personnes','rf_nuits','rf_tarif'].forEach(id=>{
+        ['rf_date','rf_nom','rf_cin','rf_personnes','rf_nuits','rf_tarif','rf_ref','rf_mnt','rf_nreg','rf_bnq','rf_tire','rf_encaisse'].forEach(id=>{
             const el=document.getElementById(id);if(el)el.readOnly=ro;
         });
+        const typeEl=document.getElementById('rf_type');
+        if(typeEl)typeEl.disabled=ro;
     }
 
     function logReservation(room,d){
         let log=[];
         try{log=JSON.parse(localStorage.getItem('aj_resa_log')||'[]')||[];}catch(e){}
         const seq=log.reduce((m,x)=>Math.max(m,parseInt(String(x.id).replace(/\D/g,''),10)||0),0)+1;
-        log.push({id:'R'+String(seq).padStart(4,'0'),date:d.date||today(),num:room.num,nom:d.nom,nuits:num(d.nuits)||1,montant:num(d.ttc),paye:0,at:Date.now()});
+        log.push({
+            id:'R'+String(seq).padStart(4,'0'),
+            date:d.date||today(),num:room.num,nom:d.nom,cin:d.cin||'',
+            nuits:num(d.nuits)||1,tarif:num(d.tarif),montant:num(d.ttc),
+            paye:num(d.mnt),type:d.type||'',
+            ref:d.ref||('RG'+String(seq).padStart(4,'0')),
+            nreg:d.nreg||'',bnq:d.bnq||'',tire:d.tire||'',encaisse:d.encaisse||'',
+            at:Date.now()
+        });
         localStorage.setItem('aj_resa_log',JSON.stringify(log));
     }
 
@@ -6739,6 +7006,8 @@ const CHETAT=(function(){
         closeModal();
         render();
         window.RESA?.render();
+        window.BCL?.render();
+        window.BPY?.render();
         alert('Réservation validée — Statut : '+STATUS[status]);
     }
 
@@ -6823,7 +7092,14 @@ const CHETAT=(function(){
         <table><tr><th>Champ</th><th>Valeur</th></tr>
         <tr><td>Date</td><td>${esc(d.date)}</td></tr><tr><td>Nom</td><td>${esc(d.nom)}</td></tr>
         <tr><td>CIN</td><td>${esc(d.cin)}</td></tr><tr><td>Nuitées</td><td>${d.nuits}</td></tr>
-        <tr><td>TTC</td><td>${fmtAmt(d.ttc)} DH</td></tr></table></body></html>`;
+        <tr><td>TTC</td><td>${fmtAmt(d.ttc)} DH</td></tr>
+        <tr><td>Réf° Rég</td><td>${esc(d.ref||'')}</td></tr>
+        <tr><td>Mnt payé</td><td>${fmtAmt(d.mnt)} DH</td></tr>
+        <tr><td>Type</td><td>${esc(d.type||'')}</td></tr>
+        <tr><td>N° Rég</td><td>${esc(d.nreg||'')}</td></tr>
+        <tr><td>Banque</td><td>${esc(d.bnq||'')}</td></tr>
+        <tr><td>Nom Tiré</td><td>${esc(d.tire||'')}</td></tr>
+        <tr><td>Date encaissement</td><td>${esc(d.encaisse||'')}</td></tr></table></body></html>`;
         const w=window.open('','',isPdf?'width=800,height=700':'width=800,height=700');
         w.document.write(html);w.document.close();w.focus();setTimeout(()=>w.print(),300);
     }
@@ -7456,6 +7732,377 @@ const RESA=(function(){
     return{render,openPicker};
 })();
 window.RESA=RESA;
+</script>
+<script>
+/* Balance Clients — import des réservations validées */
+const BCL=(function(){
+    const K_LOG='aj_resa_log';
+    const K_META='aj_bc_meta';
+    const TYPES=['','Espèces','Carte bancaire','Virement','Chèque'];
+    const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const num=v=>{const n=Number(v);return Number.isFinite(n)?n:0;};
+    const money=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}};
+    const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+    const showDate=iso=>{
+        if(typeof ajDate==='function'){const d=ajDate(iso);if(d)return d;}
+        const m=String(iso||'').match(/^(\d{4})-(\d{2})-(\d{2})/);
+        return m?m[3]+'/'+m[2]+'/'+m[1]:(iso||'—');
+    };
+    function meta(){return load(K_META)||{};}
+    function setMeta(m){save(K_META,m);}
+    function syncLog(){
+        let log=[];
+        try{log=JSON.parse(localStorage.getItem(K_LOG)||'[]')||[];}catch(e){log=[];}
+        let resas={};
+        try{resas=JSON.parse(localStorage.getItem('aj_ch_resa')||'{}')||{};}catch(e){}
+        let changed=false;
+        Object.keys(resas).forEach(numKey=>{
+            const r=resas[numKey];
+            if(!r||!r.validated)return;
+            const hit=log.find(x=>String(x.num)===String(r.num||numKey)&&x.date===r.date&&x.nom===r.nom);
+            if(hit){
+                if(!hit.cin&&r.cin){hit.cin=r.cin;changed=true;}
+                if((hit.tarif==null||hit.tarif==='')&&r.tarif!=null){hit.tarif=num(r.tarif);changed=true;}
+            }else{
+                const seq=log.reduce((m,x)=>Math.max(m,parseInt(String(x.id).replace(/\D/g,''),10)||0),0)+1;
+                log.push({id:'R'+String(seq).padStart(4,'0'),date:r.date||'',num:r.num||numKey,nom:r.nom||'',cin:r.cin||'',nuits:num(r.nuits)||1,tarif:num(r.tarif),montant:num(r.ttc!=null?r.ttc:r.montant),paye:0,type:'',at:Date.now()});
+                changed=true;
+            }
+        });
+        if(changed)localStorage.setItem(K_LOG,JSON.stringify(log));
+        return log;
+    }
+    function rows(){
+        const extra=meta();
+        return syncLog().filter(r=>!(extra[r.id]&&extra[r.id].deleted)).map(r=>{
+            const m=extra[r.id]||{};
+            const jours=num(r.nuits)||1;
+            const total=num(r.montant);
+            const tarif=r.tarif!=null&&r.tarif!==''?num(r.tarif):(jours?total/jours:0);
+            const paye=m.paye!=null?num(m.paye):num(r.paye);
+            const type=m.type!=null?m.type:(r.type||'');
+            return{id:r.id,date:r.date||'',cin:r.cin||'',nom:r.nom||'',num:r.num||'',jours,tarif,total,paye,type,solde:total-paye};
+        }).sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(b.id).localeCompare(String(a.id)));
+    }
+    function filtered(){
+        const month=document.getElementById('bcMonth')?.value||'';
+        const nom=(document.getElementById('bcNom')?.value||'').trim().toLowerCase();
+        const chambre=(document.getElementById('bcChambre')?.value||'').trim().toLowerCase();
+        return rows().filter(r=>{
+            if(month&&String(r.date).slice(0,7)!==month)return false;
+            if(nom&&!String(r.nom).toLowerCase().includes(nom))return false;
+            if(chambre&&!String(r.num).toLowerCase().includes(chambre))return false;
+            return true;
+        });
+    }
+    const ico={
+        voir:'<svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+        edit:'<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L8 18l-4 1 1-4 11.5-11.5z"/></svg>',
+        print:'<svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="7"/></svg>',
+        del:'<svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M8 7l1 13h6l1-13"/></svg>'
+    };
+    function paintMoney(id,value){
+        const el=document.getElementById(id);
+        if(el)el.innerHTML=money(value)+' <small>DH</small>';
+    }
+    function closeModal(){
+        const modal=document.getElementById('bcModal');
+        if(!modal)return;
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden','true');
+    }
+    function openModal(html){
+        const modal=document.getElementById('bcModal');
+        const box=document.getElementById('bcDialog');
+        if(!modal||!box)return;
+        box.innerHTML=html;
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden','false');
+    }
+    function find(id){return rows().find(r=>r.id===id);}
+    function view(id){
+        const r=find(id);if(!r)return;
+        openModal(`<h3>Réservation ${esc(r.id)}</h3><p class="bc-sub">${esc(r.nom||'Client')} · Chambre ${esc(r.num)}</p>
+            <div class="bc-grid">
+                <div><span>Date</span><b>${esc(showDate(r.date))}</b></div>
+                <div><span>ID Client</span><b>${esc(r.cin||'—')}</b></div>
+                <div><span>Nom Client</span><b>${esc(r.nom||'—')}</b></div>
+                <div><span>N° Chambre</span><b>${esc(r.num)}</b></div>
+                <div><span>Nbrs Jours</span><b>${r.jours}</b></div>
+                <div><span>Paie/Jr</span><b>${money(r.tarif)} DH</b></div>
+                <div><span>Total</span><b>${money(r.total)} DH</b></div>
+                <div><span>Paiement</span><b>${money(r.paye)} DH</b></div>
+                <div><span>Type</span><b>${esc(r.type||'—')}</b></div>
+                <div><span>Solde</span><b>${money(r.solde)} DH</b></div>
+            </div>
+            <div class="bc-dialog-actions"><button type="button" class="btn-gold" id="bcClose">Fermer</button></div>`);
+        document.getElementById('bcClose')?.addEventListener('click',closeModal);
+    }
+    function edit(id){
+        const r=find(id);if(!r)return;
+        openModal(`<h3>Modifier le paiement</h3><p class="bc-sub">${esc(r.nom||'Client')} · Chambre ${esc(r.num)} · Total ${money(r.total)} DH</p>
+            <form class="bc-form" id="bcEditForm">
+                <label>Paiement (DH)<input type="number" id="bcPaye" min="0" step="0.01" value="${esc(r.paye)}"></label>
+                <label>Type<select id="bcType">${TYPES.map(t=>`<option value="${esc(t)}"${t===r.type?' selected':''}>${t||'— Non précisé —'}</option>`).join('')}</select></label>
+            </form>
+            <div class="bc-dialog-actions">
+                <button type="button" class="btn-gold" id="bcSave">Enregistrer</button>
+                <button type="button" class="bc-reset" id="bcCancel">Annuler</button>
+            </div>`);
+        document.getElementById('bcCancel')?.addEventListener('click',closeModal);
+        document.getElementById('bcSave')?.addEventListener('click',()=>{
+            const paye=num(document.getElementById('bcPaye')?.value);
+            const type=document.getElementById('bcType')?.value||'';
+            const m=meta();
+            m[id]={...(m[id]||{}),paye,type,deleted:false};
+            setMeta(m);
+            closeModal();
+            render();
+        });
+    }
+    function printRow(id){
+        const r=find(id);if(!r)return;
+        const w=window.open('','_blank','width=720,height=640');
+        if(!w)return;
+        const lines=[
+            ['Date',showDate(r.date)],['ID Client',r.cin||'—'],['Nom Client',r.nom||'—'],
+            ['N° Chambre',r.num],['Nbrs Jours',String(r.jours)],['Paie/Jr',money(r.tarif)+' DH'],
+            ['Total',money(r.total)+' DH'],['Paiement',money(r.paye)+' DH'],['Type',r.type||'—'],['Solde',money(r.solde)+' DH']
+        ];
+        w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Balance '+esc(r.id)+'</title><style>body{font-family:Georgia,serif;padding:32px;color:#1a2332}h1{text-align:center;font-size:26px;margin:0}p{text-align:center;color:#6b7280}table{width:100%;border-collapse:collapse;margin-top:18px}td{border:1px solid #d9d0bc;padding:10px 12px}td:first-child{width:34%;background:#0a1736;color:#f6efdd;font-family:Arial,sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase}</style></head><body><h1>Al Jazeera Hotel</h1><p>Balance client · '+esc(r.id)+'</p><table>'+lines.map(l=>'<tr><td>'+esc(l[0])+'</td><td>'+esc(l[1])+'</td></tr>').join('')+'</table></body></html>');
+        w.document.close();
+        w.focus();
+        w.print();
+    }
+    function remove(id){
+        const r=find(id);if(!r)return;
+        if(!confirm('Retirer la réservation '+r.id+' de la balance clients ?'))return;
+        const m=meta();
+        m[id]={...(m[id]||{}),deleted:true};
+        setMeta(m);
+        closeModal();
+        render();
+    }
+    function render(){
+        const list=filtered();
+        const body=document.getElementById('bcBody');
+        if(!body)return;
+        const total=list.reduce((s,r)=>s+r.total,0);
+        const paid=list.reduce((s,r)=>s+r.paye,0);
+        paintMoney('bcTotal',total);
+        paintMoney('bcPaid',paid);
+        paintMoney('bcDue',total-paid);
+        body.innerHTML=list.length?list.map(r=>`<tr>
+            <td>${esc(showDate(r.date))}</td>
+            <td>${esc(r.cin||'—')}</td>
+            <td>${esc(r.nom||'—')}</td>
+            <td>${esc(r.num)}</td>
+            <td>${r.jours}</td>
+            <td class="bc-money">${money(r.tarif)}</td>
+            <td class="bc-money">${money(r.total)}</td>
+            <td class="bc-money">${money(r.paye)}</td>
+            <td>${r.type?`<span class="bc-type">${esc(r.type)}</span>`:'<span class="bc-type empty">—</span>'}</td>
+            <td class="bc-money bc-solde ${r.solde<=0.009?'ok':'due'}">${money(r.solde)}</td>
+            <td><div class="bc-actions">
+                <button type="button" class="bc-ico" data-bc="voir" data-id="${esc(r.id)}" title="Voir">${ico.voir}</button>
+                <button type="button" class="bc-ico" data-bc="edit" data-id="${esc(r.id)}" title="Modifier">${ico.edit}</button>
+                <button type="button" class="bc-ico" data-bc="print" data-id="${esc(r.id)}" title="Imprimer">${ico.print}</button>
+                <button type="button" class="bc-ico danger" data-bc="del" data-id="${esc(r.id)}" title="Supprimer">${ico.del}</button>
+            </div></td>
+        </tr>`).join(''):'<tr class="empty-row"><td colspan="11">Aucune réservation validée pour cette recherche.</td></tr>';
+    }
+    function init(){
+        ['bcMonth','bcNom','bcChambre'].forEach(id=>document.getElementById(id)?.addEventListener('input',render));
+        document.getElementById('bcReset')?.addEventListener('click',()=>{
+            ['bcMonth','bcNom','bcChambre'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+            render();
+        });
+        document.getElementById('bcBody')?.addEventListener('click',e=>{
+            const btn=e.target.closest('[data-bc]');
+            if(!btn)return;
+            const id=btn.dataset.id;
+            if(btn.dataset.bc==='voir')view(id);
+            if(btn.dataset.bc==='edit')edit(id);
+            if(btn.dataset.bc==='print')printRow(id);
+            if(btn.dataset.bc==='del')remove(id);
+        });
+        document.getElementById('bcModal')?.addEventListener('click',e=>{if(e.target.id==='bcModal')closeModal();});
+        document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+        render();
+    }
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+    else init();
+    return{render};
+})();
+window.BCL=BCL;
+</script>
+<script>
+/* Balance Paiement — encaissements des réservations validées */
+const BPY=(function(){
+    const K_LOG='aj_resa_log';
+    const K_HIDE='aj_bp_meta';
+    const K_PAY='aj_bc_meta';
+    const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const num=v=>{const n=Number(v);return Number.isFinite(n)?n:0;};
+    const money=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}};
+    const showDate=iso=>{
+        if(!iso)return '—';
+        if(typeof ajDate==='function'){const d=ajDate(iso);if(d)return d;}
+        const m=String(iso).match(/^(\d{4})-(\d{2})-(\d{2})/);
+        return m?m[3]+'/'+m[2]+'/'+m[1]:String(iso);
+    };
+    function rows(){
+        let log=[];
+        try{log=JSON.parse(localStorage.getItem(K_LOG)||'[]')||[];}catch(e){log=[];}
+        const hide=load(K_HIDE)||{};
+        const pay=load(K_PAY)||{};
+        return log.filter(r=>!(hide[r.id]&&hide[r.id].deleted)).map(r=>{
+            const p=pay[r.id]||{};
+            const total=num(r.montant);
+            const mnt=p.paye!=null?num(p.paye):num(r.paye);
+            const type=p.type!=null?p.type:(r.type||'');
+            return{
+                id:r.id,date:r.date||'',ref:r.ref||r.id,nom:r.nom||'',
+                mnt,type,nreg:r.nreg||'',bnq:r.bnq||'',tire:r.tire||'',
+                encaisse:r.encaisse||'',total,solde:total-mnt
+            };
+        }).sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(b.ref).localeCompare(String(a.ref)));
+    }
+    function filtered(){
+        const month=document.getElementById('bpMonth')?.value||'';
+        const mnt=(document.getElementById('bpMnt')?.value||'').trim().replace(',','.');
+        const nreg=(document.getElementById('bpNreg')?.value||'').trim().toLowerCase();
+        const bnq=(document.getElementById('bpBnq')?.value||'').trim().toLowerCase();
+        const tire=(document.getElementById('bpTire')?.value||'').trim().toLowerCase();
+        return rows().filter(r=>{
+            if(month&&String(r.date).slice(0,7)!==month&&String(r.encaisse).slice(0,7)!==month)return false;
+            if(mnt && String(r.mnt).indexOf(mnt)===-1 && money(r.mnt).replace(/\s/g,'').indexOf(mnt.replace(/\s/g,''))===-1)return false;
+            if(nreg&&!String(r.nreg).toLowerCase().includes(nreg))return false;
+            if(bnq&&!String(r.bnq).toLowerCase().includes(bnq))return false;
+            if(tire&&!String(r.tire).toLowerCase().includes(tire))return false;
+            return true;
+        });
+    }
+    const ico={
+        voir:'<svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+        print:'<svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="7"/></svg>',
+        pdf:'<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>',
+        del:'<svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M8 7l1 13h6l1-13"/></svg>'
+    };
+    function paint(id,value){
+        const el=document.getElementById(id);
+        if(el)el.innerHTML=money(value)+' <small>DH</small>';
+    }
+    function closeModal(){
+        const modal=document.getElementById('bpModal');
+        if(!modal)return;
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden','true');
+    }
+    function openModal(html){
+        const modal=document.getElementById('bpModal');
+        const box=document.getElementById('bpDialog');
+        if(!modal||!box)return;
+        box.innerHTML=html;
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden','false');
+    }
+    function find(id){return rows().find(r=>r.id===id);}
+    function sheet(r){
+        const lines=[
+            ['Date',showDate(r.date)],['Réf° Rég',r.ref||'—'],['Nom Client',r.nom||'—'],
+            ['Mnt',money(r.mnt)+' DH'],['Type',r.type||'—'],['N° Rég',r.nreg||'—'],
+            ['Bnq',r.bnq||'—'],['Nom Tiré',r.tire||'—'],['Date Encaissement',showDate(r.encaisse)],
+            ['Total séjour',money(r.total)+' DH'],['Solde',money(r.solde)+' DH']
+        ];
+        return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Règlement '+esc(r.ref)+'</title><style>body{font-family:Georgia,serif;padding:32px;color:#1a2332}h1{text-align:center;font-size:26px;margin:0}p{text-align:center;color:#6b7280}table{width:100%;border-collapse:collapse;margin-top:18px}td{border:1px solid #d9d0bc;padding:10px 12px}td:first-child{width:38%;background:#0a1736;color:#f6efdd;font-family:Arial,sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase}</style></head><body><h1>Al Jazeera Hotel</h1><p>Balance paiement · '+esc(r.ref)+'</p><table>'+lines.map(l=>'<tr><td>'+esc(l[0])+'</td><td>'+esc(l[1])+'</td></tr>').join('')+'</table></body></html>';
+    }
+    function openDoc(r){
+        const w=window.open('','_blank','width=760,height=680');
+        if(!w)return null;
+        w.document.write(sheet(r));
+        w.document.close();
+        w.focus();
+        return w;
+    }
+    function view(id){
+        const r=find(id);if(!r)return;
+        openModal(`<h3>${esc(r.ref)}</h3><p class="bc-sub">${esc(r.nom||'Client')}</p>
+            <div class="bc-grid">
+                <div><span>Date</span><b>${esc(showDate(r.date))}</b></div>
+                <div><span>Réf° Rég</span><b>${esc(r.ref||'—')}</b></div>
+                <div><span>Nom Client</span><b>${esc(r.nom||'—')}</b></div>
+                <div><span>Mnt</span><b>${money(r.mnt)} DH</b></div>
+                <div><span>Type</span><b>${esc(r.type||'—')}</b></div>
+                <div><span>N° Rég</span><b>${esc(r.nreg||'—')}</b></div>
+                <div><span>Bnq</span><b>${esc(r.bnq||'—')}</b></div>
+                <div><span>Nom Tiré</span><b>${esc(r.tire||'—')}</b></div>
+                <div><span>Date Encaissement</span><b>${esc(showDate(r.encaisse))}</b></div>
+                <div><span>Solde</span><b>${money(r.solde)} DH</b></div>
+            </div>
+            <div class="bc-dialog-actions"><button type="button" class="btn-gold" id="bpClose">Fermer</button></div>`);
+        document.getElementById('bpClose')?.addEventListener('click',closeModal);
+    }
+    function remove(id){
+        const r=find(id);if(!r)return;
+        if(!confirm('Retirer le règlement '+r.ref+' de la balance paiement ?'))return;
+        const hide=load(K_HIDE)||{};
+        hide[id]={deleted:true};
+        localStorage.setItem(K_HIDE,JSON.stringify(hide));
+        closeModal();
+        render();
+    }
+    function render(){
+        const list=filtered();
+        const body=document.getElementById('bpBody');
+        if(!body)return;
+        paint('bpPaid',list.reduce((s,r)=>s+r.mnt,0));
+        paint('bpDue',list.reduce((s,r)=>s+r.solde,0));
+        body.innerHTML=list.length?list.map(r=>`<tr>
+            <td>${esc(showDate(r.date))}</td>
+            <td>${esc(r.ref||'—')}</td>
+            <td>${esc(r.nom||'—')}</td>
+            <td class="bc-money">${money(r.mnt)}</td>
+            <td>${r.type?`<span class="bc-type">${esc(r.type)}</span>`:'<span class="bc-type empty">—</span>'}</td>
+            <td>${esc(r.nreg||'—')}</td>
+            <td>${esc(r.bnq||'—')}</td>
+            <td>${esc(r.tire||'—')}</td>
+            <td>${esc(showDate(r.encaisse))}</td>
+            <td><div class="bc-actions">
+                <button type="button" class="bc-ico" data-bp="voir" data-id="${esc(r.id)}" title="Voir">${ico.voir}</button>
+                <button type="button" class="bc-ico" data-bp="print" data-id="${esc(r.id)}" title="Imprimer">${ico.print}</button>
+                <button type="button" class="bc-ico" data-bp="pdf" data-id="${esc(r.id)}" title="PDF">${ico.pdf}</button>
+                <button type="button" class="bc-ico danger" data-bp="del" data-id="${esc(r.id)}" title="Supprimer">${ico.del}</button>
+            </div></td>
+        </tr>`).join(''):'<tr class="empty-row"><td colspan="10">Aucun paiement pour cette recherche.</td></tr>';
+    }
+    function init(){
+        ['bpMonth','bpMnt','bpNreg','bpBnq','bpTire'].forEach(id=>document.getElementById(id)?.addEventListener('input',render));
+        document.getElementById('bpReset')?.addEventListener('click',()=>{
+            ['bpMonth','bpMnt','bpNreg','bpBnq','bpTire'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+            render();
+        });
+        document.getElementById('bpBody')?.addEventListener('click',e=>{
+            const btn=e.target.closest('[data-bp]');
+            if(!btn)return;
+            const id=btn.dataset.id;
+            const r=find(id);
+            if(btn.dataset.bp==='voir')view(id);
+            if(btn.dataset.bp==='print'&&r){const w=openDoc(r);if(w)setTimeout(()=>w.print(),250);}
+            if(btn.dataset.bp==='pdf'&&r){const w=openDoc(r);if(w)setTimeout(()=>w.print(),250);}
+            if(btn.dataset.bp==='del')remove(id);
+        });
+        document.getElementById('bpModal')?.addEventListener('click',e=>{if(e.target.id==='bpModal')closeModal();});
+        document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+        render();
+    }
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+    else init();
+    return{render};
+})();
+window.BPY=BPY;
 </script>
 </body>
 </html>
