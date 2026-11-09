@@ -1455,16 +1455,16 @@
         }
         .ch-dp-empty p{margin:0;font-size:13px;line-height:1.55;color:rgba(245,241,230,.55);max-width:22ch}
         .ch-dp-hero{
-            position:relative;height:168px;overflow:hidden;flex-shrink:0;
+            position:relative;height:210px;overflow:hidden;flex-shrink:0;
             background:#0a1224;
         }
         .ch-dp-hero img{
             width:100%;height:100%;object-fit:cover;object-position:center;
-            display:block;filter:saturate(1.05) brightness(.92);
+            display:block;filter:saturate(1.05) brightness(1);
         }
         .ch-dp-hero::after{
-            content:'';position:absolute;inset:0;
-            background:linear-gradient(180deg,rgba(10,18,36,.15) 0%,rgba(10,18,36,.35) 40%,rgba(18,24,42,.96) 100%);
+            content:'';position:absolute;inset:0;pointer-events:none;
+            background:linear-gradient(180deg,rgba(10,18,36,.08) 0%,rgba(10,18,36,0) 46%,rgba(18,24,42,.78) 100%);
         }
         .ch-dp-hero-top{
             position:absolute;top:12px;left:12px;right:12px;z-index:2;
@@ -1690,7 +1690,6 @@
             gap:14px;
             align-items:start;
             grid-auto-flow:dense;
-            grid-auto-rows:210px;
         }
         @media(max-width:1400px){.ch-room-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
         @media(max-width:1100px){.ch-room-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -1707,8 +1706,8 @@
             display:flex!important;flex-direction:column;position:relative;
             transform:none!important;translate:none!important;
             transition:none!important;animation:none!important;
-            will-change:auto;backface-visibility:hidden;
-            height:210px;min-height:210px;max-height:210px;
+            will-change:auto;
+            height:auto;min-height:0;max-height:none;
             order:0!important;
             margin:0!important;
             top:auto!important;left:auto!important;
@@ -1720,11 +1719,10 @@
             opacity:0!important;
             pointer-events:none!important;
             display:flex!important;
-            height:210px!important;min-height:210px!important;max-height:210px!important;
         }
-        .ch-rc-img{position:relative;height:88px;aspect-ratio:auto;overflow:hidden;background:#e5e7eb;flex-shrink:0}
+        .ch-rc-img{position:relative;aspect-ratio:4/3;height:auto;overflow:hidden;background:#e5e7eb;flex-shrink:0}
         .ch-rc-img img{
-            width:100%;height:100%;object-fit:cover;object-position:center top;display:block;pointer-events:none;
+            position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;pointer-events:none;
             transform:none!important;scale:1!important;transition:none!important;animation:none!important;
         }
         .ch-rc-badge{
@@ -1736,6 +1734,77 @@
         .ch-rc-badge.st-reservee{background:#ffedd5;color:#d97706}
         .ch-rc-badge.st-nettoyage{background:#f3e8ff;color:#7c3aed}
         .ch-rc-badge.st-maintenance{background:#fee2e2;color:#dc2626}
+        .ch-rc-file{
+            position:absolute;top:8px;left:8px;z-index:3;
+            width:34px;height:34px;border-radius:10px;padding:0;
+            border:1px solid rgba(255,255,255,.5);
+            background:rgba(12,20,40,.66);color:#f3d38a;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;
+            backdrop-filter:blur(6px);
+            box-shadow:0 4px 14px rgba(0,0,0,.28);
+        }
+        .ch-rc-file svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
+        .ch-rc-file:hover{background:#e7b15a;color:#1a1304;border-color:transparent}
+        .ch-rc-file-n{
+            position:absolute;top:-6px;right:-6px;min-width:16px;height:16px;padding:0 4px;
+            border-radius:8px;background:#e7b15a;color:#1a1304;
+            font-size:9px;font-weight:700;line-height:16px;text-align:center;
+        }
+        .ch-inv-overlay{
+            display:none;position:fixed;inset:0;z-index:70;
+            background:rgba(10,23,54,.48);backdrop-filter:blur(8px);
+            align-items:center;justify-content:center;padding:24px;
+        }
+        .ch-inv-overlay.show{display:flex}
+        .ch-inv-panel{
+            position:relative;width:min(560px,100%);max-height:min(86vh,760px);overflow:auto;
+            background:#fff;border-radius:18px;border:1px solid rgba(197,160,89,.35);
+            box-shadow:0 24px 64px rgba(10,23,54,.22);
+        }
+        .ch-inv-head{
+            padding:22px 52px 16px 22px;
+            background:linear-gradient(165deg,#12182a 0%,#1a2236 100%);
+            color:#f5f1e6;border-radius:18px 18px 0 0;
+        }
+        .ch-inv-kicker{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#e7b15a}
+        .ch-inv-head h3{margin:6px 0 0;font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:#fff}
+        .ch-inv-head p{margin:4px 0 0;color:rgba(245,241,230,.7);font-size:13px}
+        .ch-inv-close{
+            position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:10px;
+            border:1px solid rgba(255,255,255,.2);background:rgba(10,18,36,.45);color:#f5f1e6;
+            font-size:20px;line-height:1;cursor:pointer;
+        }
+        .ch-inv-close:hover{border-color:#e7b15a;color:#e7b15a}
+        .ch-inv-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:12px}
+        .ch-inv-empty{margin:8px 0;text-align:center;color:#6b7280;font-size:13px;line-height:1.5}
+        .ch-inv-piece{border:1px solid #eef0f4;border-radius:12px;overflow:hidden}
+        .ch-inv-piece h4{
+            margin:0;padding:10px 14px;background:rgba(197,160,89,.12);color:#8a6a2f;
+            font-size:11px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;
+        }
+        .ch-inv-piece ul{list-style:none;margin:0;padding:0}
+        .ch-inv-piece li{
+            display:flex;align-items:center;justify-content:space-between;gap:10px;
+            padding:11px 14px;border-top:1px solid #f3f4f6;font-size:14px;color:#1a2332;
+        }
+        .ch-inv-del{border:0;background:transparent;color:#c05050;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.3px}
+        .ch-inv-del:hover{color:#9b2c2c}
+        .ch-inv-form{padding:18px 18px 20px;display:grid;gap:12px}
+        .ch-inv-form label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8a6a2f}
+        .ch-inv-form input,.ch-inv-form select{
+            width:100%;margin-top:6px;padding:11px 12px;border-radius:10px;
+            border:1px solid rgba(197,160,89,.35);background:#fff;color:#1a2332;font-size:14px;outline:none;
+        }
+        .ch-inv-form input:focus,.ch-inv-form select:focus{border-color:#c5a059;box-shadow:0 0 0 3px rgba(197,160,89,.15)}
+        .ch-inv-custom{display:none}
+        .ch-inv-custom.is-on{display:block}
+        .ch-inv-note{min-height:1.2em;margin:0;font-size:12px;color:#059669}
+        .ch-inv-save{
+            justify-self:start;border:0;border-radius:10px;cursor:pointer;
+            padding:11px 18px;font-size:12px;font-weight:700;letter-spacing:.4px;
+            background:linear-gradient(135deg,#c5a059,#e7b15a);color:#1a1304;
+        }
+        .ch-inv-save:hover{filter:brightness(1.05)}
         .ch-rc-body{padding:10px 12px 12px;flex:1;display:flex;flex-direction:column;min-height:0}
         .ch-rc-num{font-size:17px;font-weight:700;color:#1a2332;line-height:1;margin-bottom:2px}
         .ch-rc-title{font-family:'Cormorant Garamond',serif;font-size:13px;color:#4b5563;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1914,7 +1983,7 @@
         #ch-etat .ch-manage-main .ch-room-card.hidden-filter{
             visibility:hidden!important;opacity:0!important;
             pointer-events:none!important;display:flex!important;
-            height:210px!important;min-height:210px!important;
+            height:auto!important;max-height:none!important;
         }
         #ch-etat .ch-detail-panel,
         #ch-etat .ch-detail-panel.is-open{
@@ -3784,7 +3853,7 @@
                         <div class="ch-dp-empty">
                             <div class="ch-dp-empty-ico">&#128719;</div>
                             <h4>Fiche chambre</h4>
-                            <p>Sélectionnez un étage puis une chambre, ou cliquez une carte.</p>
+                            <p>Sélectionnez un étage puis une chambre, ou cliquez le texte d'une carte.</p>
                         </div>
                     </div>
                 </aside>
@@ -4189,6 +4258,53 @@
     <div class="rm-modal" id="rmModal">
         <button type="button" class="rm-modal-close" id="rmModalClose" aria-label="Fermer">&times;</button>
         <div id="rmModalContent"></div>
+    </div>
+</div>
+
+<div class="ch-inv-overlay" id="chInvOverlay">
+    <div class="ch-inv-panel" role="dialog" aria-modal="true" aria-labelledby="chInvTitle">
+        <button type="button" class="ch-inv-close" data-close="inv" aria-label="Fermer">&times;</button>
+        <div class="ch-inv-head">
+            <span class="ch-inv-kicker">Contenu de la chambre</span>
+            <h3 id="chInvTitle">Chambre</h3>
+            <p id="chInvSub"></p>
+        </div>
+        <div class="ch-inv-body" id="chInvBody"></div>
+    </div>
+</div>
+
+<div class="ch-inv-overlay" id="chInvAddOverlay">
+    <div class="ch-inv-panel" role="dialog" aria-modal="true" aria-labelledby="chInvAddTitle">
+        <button type="button" class="ch-inv-close" data-close="add" aria-label="Fermer">&times;</button>
+        <div class="ch-inv-head">
+            <span class="ch-inv-kicker">Ajouter un contenu</span>
+            <h3 id="chInvAddTitle">Chambre</h3>
+            <p id="chInvAddSub"></p>
+        </div>
+        <form class="ch-inv-form" id="chInvForm">
+            <div>
+                <label for="chInvPiece">Pièce</label>
+                <select id="chInvPiece" required></select>
+            </div>
+            <div class="ch-inv-custom" id="chInvPieceCustomWrap">
+                <label for="chInvPieceCustom">Nom de la pièce</label>
+                <input type="text" id="chInvPieceCustom" placeholder="Ex. Terrasse" autocomplete="off">
+            </div>
+            <div>
+                <label for="chInvItem">Équipement</label>
+                <input type="text" id="chInvItem" list="chInvItems" placeholder="TV, téléphone, routeur…" required autocomplete="off">
+                <datalist id="chInvItems">
+                    <option value="TV"></option>
+                    <option value="Téléphone"></option>
+                    <option value="Routeur"></option>
+                    <option value="Climatiseur"></option>
+                    <option value="Mini-bar"></option>
+                    <option value="Coffre-fort"></option>
+                </datalist>
+            </div>
+            <p class="ch-inv-note" id="chInvNote"></p>
+            <button type="submit" class="ch-inv-save">Ajouter</button>
+        </form>
     </div>
 </div>
 
@@ -6607,6 +6723,10 @@ const CHETAT=(function(){
     const TVA_RATE=.10;
     const K_RESA='aj_ch_resa';
     const K_STATUS='aj_ch_status';
+    const K_CONTENU='aj_ch_contenu';
+    const PIECES=['Salon','Chambre à coucher','Cuisine','Salle de bain','Dressing'];
+    const FILE_ICO='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>';
+    let invNum=null;
     let ROOMS=[],currentFilter={q:'',floor:'',cat:'',status:''},viewMode='grid',selectedNum=null,bound=false,currentRoom=null;
 
     const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
@@ -6645,11 +6765,137 @@ const CHETAT=(function(){
         });
     }
 
+    function loadContenu(){
+        try{const o=JSON.parse(localStorage.getItem(K_CONTENU)||'{}');return o&&typeof o==='object'?o:{};}
+        catch(e){return {};}
+    }
+    function saveContenu(all){localStorage.setItem(K_CONTENU,JSON.stringify(all));}
+    function itemsOf(num){
+        const list=loadContenu()[num];
+        return Array.isArray(list)?list.filter(it=>it&&it.item&&it.piece):[];
+    }
+    function fileBtnHtml(num){
+        const n=itemsOf(num).length;
+        return `<button type="button" class="ch-rc-file" title="Contenu de la chambre" aria-label="Contenu de la chambre ${esc(num)}">${FILE_ICO}${n?`<span class="ch-rc-file-n">${n}</span>`:''}</button>`;
+    }
+    function paintFileBadge(num){
+        const btn=document.querySelector(`.ch-room-card[data-num="${num}"] .ch-rc-file`);
+        if(!btn)return;
+        const n=itemsOf(num).length;
+        let badge=btn.querySelector('.ch-rc-file-n');
+        if(!n){badge?.remove();return;}
+        if(!badge){badge=document.createElement('span');badge.className='ch-rc-file-n';btn.appendChild(badge);}
+        badge.textContent=String(n);
+    }
+    function groupItems(list){
+        const map=new Map();
+        list.forEach(it=>{
+            const label=String(it.piece).trim();
+            const key=label.toLocaleLowerCase('fr');
+            if(!map.has(key))map.set(key,{label,items:[]});
+            map.get(key).items.push(it);
+        });
+        const rank=label=>{const i=PIECES.findIndex(p=>p.toLocaleLowerCase('fr')===label.toLocaleLowerCase('fr'));return i<0?1000:i;};
+        return [...map.values()].sort((a,b)=>rank(a.label)-rank(b.label)||a.label.localeCompare(b.label,'fr'));
+    }
+    function pieceOptions(num){
+        const known=new Set(PIECES.map(p=>p.toLocaleLowerCase('fr')));
+        const extra=[];
+        itemsOf(num).forEach(it=>{
+            const label=String(it.piece).trim();
+            if(!known.has(label.toLocaleLowerCase('fr'))&&!extra.some(p=>p.toLocaleLowerCase('fr')===label.toLocaleLowerCase('fr')))extra.push(label);
+        });
+        return PIECES.concat(extra);
+    }
+    function paintContenu(room){
+        const title=document.getElementById('chInvTitle');
+        const sub=document.getElementById('chInvSub');
+        const body=document.getElementById('chInvBody');
+        if(!body)return;
+        if(title)title.textContent='Chambre '+room.num;
+        if(sub)sub.textContent=room.title||'';
+        const groups=groupItems(itemsOf(room.num));
+        if(!groups.length){
+            body.innerHTML='<p class="ch-inv-empty">Aucun contenu pour cette chambre.<br>Cliquez la photo pour ajouter un équipement.</p>';
+            return;
+        }
+        body.innerHTML=groups.map(g=>`<section class="ch-inv-piece"><h4>${esc(g.label)}</h4><ul>${g.items.map(it=>`<li><span>${esc(it.item)}</span><button type="button" class="ch-inv-del" data-id="${esc(it.id)}">Retirer</button></li>`).join('')}</ul></section>`).join('');
+    }
+    function openContenu(room){
+        invNum=room.num;
+        paintContenu(room);
+        document.getElementById('chInvOverlay')?.classList.add('show');
+    }
+    function closeContenu(){
+        document.getElementById('chInvOverlay')?.classList.remove('show');
+        invNum=null;
+    }
+    function openAdd(room){
+        invNum=room.num;
+        const title=document.getElementById('chInvAddTitle');
+        const sub=document.getElementById('chInvAddSub');
+        const sel=document.getElementById('chInvPiece');
+        const note=document.getElementById('chInvNote');
+        const item=document.getElementById('chInvItem');
+        const custom=document.getElementById('chInvPieceCustom');
+        if(title)title.textContent='Chambre '+room.num;
+        if(sub)sub.textContent=room.title||'';
+        if(sel){
+            sel.innerHTML=pieceOptions(room.num).map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join('')+'<option value="__autre">Autre…</option>';
+        }
+        document.getElementById('chInvPieceCustomWrap')?.classList.remove('is-on');
+        if(custom)custom.value='';
+        if(item)item.value='';
+        if(note)note.textContent='';
+        document.getElementById('chInvAddOverlay')?.classList.add('show');
+        setTimeout(()=>item?.focus(),30);
+    }
+    function closeAdd(){document.getElementById('chInvAddOverlay')?.classList.remove('show');}
+    function addContenu(room){
+        const sel=document.getElementById('chInvPiece');
+        const custom=document.getElementById('chInvPieceCustom');
+        const itemEl=document.getElementById('chInvItem');
+        const note=document.getElementById('chInvNote');
+        let piece=sel?sel.value:'';
+        if(piece==='__autre')piece=(custom?.value||'').trim();
+        else piece=String(piece||'').trim();
+        const item=(itemEl?.value||'').trim();
+        if(!piece){if(note){note.style.color='#c05050';note.textContent='Indiquez la pièce.';}return;}
+        if(!item){if(note){note.style.color='#c05050';note.textContent='Indiquez l\'équipement.';}return;}
+        const all=loadContenu();
+        const list=Array.isArray(all[room.num])?all[room.num]:[];
+        list.push({id:'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),piece,item});
+        all[room.num]=list;
+        saveContenu(all);
+        paintFileBadge(room.num);
+        if(itemEl)itemEl.value='';
+        if(note){note.style.color='#059669';note.textContent=item+' ajouté — '+piece+'.';}
+        if(sel&&piece&&![...sel.options].some(o=>o.value.toLocaleLowerCase('fr')===piece.toLocaleLowerCase('fr'))){
+            const opt=document.createElement('option');
+            opt.value=piece;opt.textContent=piece;
+            sel.insertBefore(opt,sel.querySelector('option[value="__autre"]'));
+            sel.value=piece;
+            document.getElementById('chInvPieceCustomWrap')?.classList.remove('is-on');
+            if(custom)custom.value='';
+        }
+        itemEl?.focus();
+    }
+    function removeContenu(num,id){
+        const all=loadContenu();
+        all[num]=(Array.isArray(all[num])?all[num]:[]).filter(it=>it.id!==id);
+        if(!all[num].length)delete all[num];
+        saveContenu(all);
+        paintFileBadge(num);
+        const room=roomByNum(num);
+        if(room)paintContenu(room);
+    }
+
     function cardHtml(r,idx){
         const m=metaFor(r);
         return`<article class="ch-room-card st-${r.status}${selectedNum===r.num?' is-selected':''}" data-num="${r.num}" data-type="${r.type}" data-status="${r.status}" data-floor="${r.floor}" data-slot="${idx}" style="--ch-slot:${idx}" role="button" tabindex="0">
-            <div class="ch-rc-img">
-                <img src="${esc(r.img)}" alt="${esc(r.title)}" loading="lazy">
+            <div class="ch-rc-img" title="Ajouter un contenu">
+                <img src="${esc(r.img)}" alt="${esc(r.title)}" loading="eager" decoding="async">
+                ${fileBtnHtml(r.num)}
                 <span class="ch-rc-badge st-${r.status}">${STATUS[r.status]}</span>
             </div>
             <div class="ch-rc-body">
@@ -6809,7 +7055,7 @@ const CHETAT=(function(){
         box.innerHTML=`<div class="ch-dp-empty">
             <div class="ch-dp-empty-ico">&#128719;</div>
             <h4>Fiche chambre</h4>
-            <p>Sélectionnez un étage puis une chambre, ou cliquez une carte.</p>
+            <p>Sélectionnez un étage puis une chambre, ou cliquez le texte d'une carte.</p>
         </div>`;
     }
 
@@ -7204,7 +7450,32 @@ const CHETAT=(function(){
             const card=e.target.closest('.ch-room-card');
             if(!card)return;
             const room=roomByNum(card.dataset.num);
-            if(room)showDetail(room);
+            if(!room)return;
+            if(e.target.closest('.ch-rc-file')){e.preventDefault();e.stopPropagation();openContenu(room);return;}
+            if(e.target.closest('.ch-rc-img')){e.preventDefault();e.stopPropagation();openAdd(room);return;}
+            showDetail(room);
+        });
+        document.getElementById('chInvOverlay')?.addEventListener('click',e=>{
+            if(e.target.id==='chInvOverlay'||e.target.closest('[data-close="inv"]')){closeContenu();return;}
+            const del=e.target.closest('.ch-inv-del');
+            if(del&&invNum)removeContenu(invNum,del.dataset.id);
+        });
+        document.getElementById('chInvAddOverlay')?.addEventListener('click',e=>{
+            if(e.target.id==='chInvAddOverlay'||e.target.closest('[data-close="add"]'))closeAdd();
+        });
+        document.getElementById('chInvPiece')?.addEventListener('change',e=>{
+            document.getElementById('chInvPieceCustomWrap')?.classList.toggle('is-on',e.target.value==='__autre');
+            if(e.target.value==='__autre')document.getElementById('chInvPieceCustom')?.focus();
+        });
+        document.getElementById('chInvForm')?.addEventListener('submit',e=>{
+            e.preventDefault();
+            const room=invNum?roomByNum(invNum):null;
+            if(room)addContenu(room);
+        });
+        document.addEventListener('keydown',e=>{
+            if(e.key!=='Escape')return;
+            if(document.getElementById('chInvAddOverlay')?.classList.contains('show')){closeAdd();return;}
+            if(document.getElementById('chInvOverlay')?.classList.contains('show'))closeContenu();
         });
         area?.addEventListener('keydown',e=>{
             if(e.key!=='Enter'&&e.key!==' ')return;
