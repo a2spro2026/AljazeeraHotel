@@ -3164,7 +3164,14 @@
         : in_array($adminLogin, $managerLogins, true);
     $adminLabel = 'Direction';
     $restrictMenus = $adminProfil !== null;
-    $menuAuth = $restrictMenus ? (session('space_admin_auth') ?? []) : null;
+    $rawAuth = $restrictMenus ? (session('space_admin_auth') ?? []) : null;
+    $hasAnyAuth = is_array($rawAuth) && collect($rawAuth)->contains(
+        fn ($row) => is_array($row) && collect($row)->contains(fn ($v) => (bool) $v)
+    );
+    // Direction / Administration sans droits enregistrés = accès complet (évite page blanche).
+    $menuAuth = ($restrictMenus && in_array($adminProfil, ['Direction', 'Administration'], true) && ! $hasAnyAuth)
+        ? null
+        : $rawAuth;
 @endphp
 <script>window.AJ_MENU_AUTH=@json($menuAuth);</script>
 <div class="admin-wrap sb-collapsed">

@@ -53,7 +53,7 @@ Route::post('/espace/{space}/login', function (Request $request, string $space) 
         $request->session()->regenerate();
         $request->session()->put("space_$gate", true);
         $request->session()->put("space_{$gate}_login", $config['login']);
-        $request->session()->forget(["space_{$gate}_profil", "space_{$gate}_nom"]);
+        $request->session()->forget(["space_{$gate}_profil", "space_{$gate}_nom", "space_{$gate}_auth"]);
 
         return redirect()->route($config['route']);
     }
@@ -83,7 +83,13 @@ Route::post('/espace/{space}/login', function (Request $request, string $space) 
 
 // Déconnexion d'un espace
 Route::post('/espace/{space}/logout', function (Request $request, string $space) {
-    $request->session()->forget(["space_$space", "space_{$space}_login", "space_{$space}_profil", "space_{$space}_nom"]);
+    $request->session()->forget([
+        "space_$space",
+        "space_{$space}_login",
+        "space_{$space}_profil",
+        "space_{$space}_nom",
+        "space_{$space}_auth",
+    ]);
 
     return redirect()->route('home');
 })->name('space.logout');
