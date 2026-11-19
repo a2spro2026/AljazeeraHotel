@@ -4639,16 +4639,22 @@
                 <div class="subpanel" id="cfg-users">
                     <div class="block">
                         <h3>Utilisateur</h3>
-                        <p class="hint" id="cu_hint">Le nom et le profil viennent de la liste du personnel.</p>
+                        <p class="hint" id="cu_hint">Saisissez le nom, le profil, un login unique et le mot de passe, puis validez.</p>
                         <div class="form-flex">
                             <div class="field" style="flex:0 0 160px"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cu_date"></div>
                             <div class="field" style="flex:2 1 220px"><label>Nom complet</label>
-                                <select id="cu_nom"><option value="">— Sélectionner —</option></select>
+                                <input type="text" id="cu_nom" list="cu_nom_list" placeholder="Nom et prénom" autocomplete="off">
+                                <datalist id="cu_nom_list"></datalist>
                             </div>
                             <div class="field" style="flex:1 1 180px"><label>Profil</label>
-                                <select id="cu_profil"><option value="">— Sélectionner —</option></select>
+                                <select id="cu_profil">
+                                    <option value="">— Sélectionner —</option>
+                                    @foreach(\App\Models\HotelUser::PROFILS as $profilOpt)
+                                        <option value="{{ $profilOpt }}">{{ $profilOpt }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div class="field" style="flex:1 1 180px"><label>Login</label><input type="text" id="cu_login" value="" placeholder="Profil" readonly tabindex="-1" autocomplete="off" data-lpignore="true" data-1p-ignore></div>
+                            <div class="field" style="flex:1 1 180px"><label>Login</label><input type="text" id="cu_login" value="" placeholder="Identifiant de connexion" autocomplete="off" data-lpignore="true" data-1p-ignore></div>
                             <div class="field" style="flex:1 1 180px"><label>Mot de passe</label><input type="text" id="cu_password" value="" placeholder="Saisie manuelle" autocomplete="off" data-lpignore="true" data-1p-ignore spellcheck="false" style="-webkit-text-security:disc"></div>
                         </div>
                         <div class="actions">
@@ -7123,54 +7129,45 @@ const CFG=(function(){
     const todayISO=()=>new Date().toISOString().slice(0,10);
     function personnelList(){return window.PERS?window.PERS.list():[];}
 
-    function fillUserSelects(selected){
-        const list=personnelList();
-        const nom=document.getElementById('cu_nom');
-        const profil=document.getElementById('cu_profil');
-        const hint=document.getElementById('cu_hint');
-        if(!nom||!profil)return;
-        const noms=[...new Set(list.map(p=>p.nom).filter(Boolean))];
-        if(selected?.nom&&!noms.includes(selected.nom))noms.unshift(selected.nom);
-        const profils=[...new Set(list.map(p=>p.profil).filter(Boolean))];
-        if(selected?.profil&&!profils.includes(selected.profil))profils.unshift(selected.profil);
-        nom.innerHTML='<option value="">— Sélectionner —</option>'+noms.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('');
-        profil.innerHTML='<option value="">— Sélectionner —</option>'+profils.map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join('');
-        nom.value=selected?.nom||'';
-        profil.value=selected?.profil||'';
-        document.getElementById('cu_login').value=profil.value||'';
-        const pwd=document.getElementById('cu_password');
-        if(pwd)pwd.value='';
-        if(hint)hint.textContent=list.length
-            ?'Le nom et le profil viennent de la liste du personnel. Le login reprend le profil.'
-            :'La liste du personnel est vide. Ajoutez d’abord un employé dans Fiche personnel.';
+    function refreshUserNameList(){
+        const dl=document.getElementById('cu_nom_list');
+        if(!dl)return;
+        const noms=[...new Set(personnelList().map(p=>p.nom).filter(Boolean))];
+        dl.innerHTML=noms.map(n=>`<option value="${esc(n)}"></option>`).join('');
     }
 
-    function syncUserLogin(){
-        const profil=document.getElementById('cu_profil')?.value||'';
+    function fillUserSelects(selected){
+        const nom=document.getElementById('cu_nom');
+        const profil=document.getElementById('cu_profil');
         const login=document.getElementById('cu_login');
-        if(login)login.value=profil;
+        const pwd=document.getElementById('cu_password');
+        const hint=document.getElementById('cu_hint');
+        if(!nom||!profil)return;
+        refreshUserNameList();
+        nom.value=selected?.nom||'';
+        profil.value=selected?.profil||'';
+        if(login)login.value=selected?.login||'';
+        if(pwd){pwd.value='';pwd.placeholder=selected?'Laisser vide pour conserver':'Saisie manuelle';}
+        if(hint)hint.textContent=selected
+            ?'Modification de '+selected.nom+' — validez pour enregistrer, ou Ajouter pour un nouveau compte.'
+            :'Saisissez le nom, le profil, un login unique et le mot de passe, puis validez.';
     }
 
     function onUserName(){
-        const nom=document.getElementById('cu_nom')?.value||'';
+        const nom=document.getElementById('cu_nom')?.value.trim()||'';
         const person=personnelList().find(p=>p.nom===nom);
         const profil=document.getElementById('cu_profil');
-        if(person&&profil){
-            if(![...profil.options].some(o=>o.value===person.profil)){
-                profil.add(new Option(person.profil,person.profil));
-            }
-            profil.value=person.profil;
+        if(person&&profil&&person.profil){
+            if([...profil.options].some(o=>o.value===person.profil))profil.value=person.profil;
         }
-        syncUserLogin();
     }
 
     function readUserForm(){
-        const profil=document.getElementById('cu_profil').value;
         return{
             fiche_date:ajIso(document.getElementById('cu_date').value),
             nom:document.getElementById('cu_nom').value.trim(),
-            profil,
-            login:profil,
+            profil:document.getElementById('cu_profil').value,
+            login:document.getElementById('cu_login').value.trim(),
             password:document.getElementById('cu_password').value
         };
     }
@@ -7232,6 +7229,7 @@ const CFG=(function(){
     function newUser(){
         editUserId=null;
         fillUserForm(null);
+        document.getElementById('cu_nom')?.focus();
     }
 
     function openAuth(id){
@@ -7248,18 +7246,20 @@ const CFG=(function(){
     async function saveUser(){
         const data=readUserForm();
         if(!data.fiche_date){alert('La date est obligatoire.');return;}
-        if(!data.nom){alert('Choisissez un nom dans la liste du personnel.');return;}
+        if(!data.nom){alert('Le nom est obligatoire.');return;}
         if(!data.profil){alert('Choisissez un profil.');return;}
+        if(!data.login){alert('Le login est obligatoire.');return;}
         if(!editUserId&&!data.password){alert('Le mot de passe est obligatoire.');return;}
         const editing=editUserId;
         try{
-            await usersApi('POST','',{...data,edit:editUserId});
+            await usersApi('POST','',{...data,edit:editUserId||undefined});
         }catch(e){alert(e.message);return;}
         const saved=usersCache.find(u=>u.id===editing)||usersCache.find(u=>u.login===data.login);
         editUserId=null;
         newUser();
         drawUsers();
-        if(saved)openAuth(saved.id);
+        if(saved&&saved.profil!=='Direction')openAuth(saved.id);
+        else alert(editing?'Utilisateur modifié.':'Utilisateur ajouté.');
     }
 
     function editUser(id){
@@ -7541,7 +7541,6 @@ const CFG=(function(){
     function init(){
         loadHotelForm();
         document.getElementById('cu_nom')?.addEventListener('change',onUserName);
-        document.getElementById('cu_profil')?.addEventListener('change',syncUserLogin);
         window.PERS?.init();
         newUser();
         newCommercial();
