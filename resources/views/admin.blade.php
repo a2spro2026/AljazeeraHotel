@@ -3163,15 +3163,12 @@
         ? in_array($adminProfil, ['Direction', 'Administration'], true)
         : in_array($adminLogin, $managerLogins, true);
     $adminLabel = 'Direction';
-    $restrictMenus = $adminProfil !== null;
-    $rawAuth = $restrictMenus ? (session('space_admin_auth') ?? []) : null;
-    $hasAnyAuth = is_array($rawAuth) && collect($rawAuth)->contains(
-        fn ($row) => is_array($row) && collect($row)->contains(fn ($v) => (bool) $v)
-    );
-    // Direction / Administration sans droits enregistrés = accès complet (évite page blanche).
-    $menuAuth = ($restrictMenus && in_array($adminProfil, ['Direction', 'Administration'], true) && ! $hasAnyAuth)
-        ? null
-        : $rawAuth;
+    // Profil Direction : accès total à toutes les sections (aucune restriction menu).
+    if ($adminProfil === 'Direction' || $adminProfil === null) {
+        $menuAuth = null;
+    } else {
+        $menuAuth = session('space_admin_auth') ?? [];
+    }
 @endphp
 <script>window.AJ_MENU_AUTH=@json($menuAuth);</script>
 <div class="admin-wrap sb-collapsed">

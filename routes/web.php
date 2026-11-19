@@ -71,7 +71,11 @@ Route::post('/espace/{space}/login', function (Request $request, string $space) 
         $request->session()->put('space_admin_login', $user->login);
         $request->session()->put('space_admin_profil', $user->profil);
         $request->session()->put('space_admin_nom', $user->nom);
-        $request->session()->put('space_admin_auth', $user->autorisations ?? []);
+        // Direction voit tout ; les autres profils suivent le tableau d'autorisations.
+        $request->session()->put(
+            'space_admin_auth',
+            $user->profil === 'Direction' ? null : ($user->autorisations ?? [])
+        );
 
         return redirect()->route('admin');
     }
