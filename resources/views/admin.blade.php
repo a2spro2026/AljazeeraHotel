@@ -543,6 +543,259 @@
         .subtab.active{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304;font-weight:600;box-shadow:0 4px 16px rgba(197,160,89,.25)}
         .subpanel{display:none}
         .subpanel.active{display:block;animation:fade .3s ease}
+        html:has(body.hb-lock),body.hb-lock{overflow:hidden!important;height:100%}
+        body.hb-lock .content{overflow:hidden;height:calc(100vh - var(--topbar-h));padding-top:18px;padding-bottom:18px}
+        body.hb-lock #configuration.panel.active{height:100%;display:flex;flex-direction:column;min-height:0}
+        body.hb-lock #cfg-habillage.subpanel.active{
+            display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;animation:none;
+        }
+        body.hb-lock #cfg-habillage .block{
+            display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;margin:0;
+            padding-bottom:84px;
+        }
+        body.hb-lock #cfg-habillage .block > .hb-head-row,
+        body.hb-lock #cfg-habillage .block > .hb-parts{flex:0 0 auto}
+        body.hb-lock #cfg-habillage .hb-workspace{
+            flex:1 1 0;min-height:0;overflow:hidden;
+        }
+        body.hb-lock .hb-save-bar{
+            position:fixed;left:calc(var(--sb-w) + 24px);right:24px;bottom:14px;
+            z-index:120;margin:0;width:auto;
+        }
+        @media(max-width:900px){
+            body.hb-lock .hb-save-bar{left:16px;right:16px}
+        }
+        .hb-workspace{
+            display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.9fr);gap:16px;
+            align-items:stretch;min-height:0;
+        }
+        .hb-workspace > *{min-width:0;min-height:0;max-height:100%}
+        @media(max-width:1100px){
+            .hb-workspace{grid-template-columns:1fr;grid-template-rows:minmax(280px,.55fr) minmax(220px,.45fr)}
+        }
+        .hb-frame{
+            display:none;width:100%;height:100%;min-height:0;border:1px solid rgba(197,160,89,.35);
+            border-radius:16px;background:#111;
+        }
+        .hb-frame.is-on{display:block}
+        .hb-liveview{
+            position:relative;width:100%;min-height:0;height:100%;border:1px solid rgba(197,160,89,.35);
+            border-radius:16px;overflow:hidden;background:var(--hb-color,#1a1520);
+        }
+        .hb-liveview.is-off{display:none}
+        .hb-liveview img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;filter:brightness(var(--hb-light,1))}
+        .hb-liveview .hb-live-veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--hb-veil,transparent)}
+        .hb-liveview .hb-live-layer{position:absolute;inset:0;z-index:2}
+        .hb-liveview .hb-writing{
+            position:absolute;z-index:3;left:50%;top:50%;max-width:92%;
+            transform:translate(-50%,-50%) scale(var(--hb-wsize,1));transform-origin:center center;
+            color:var(--hb-wcolor,#fff);text-align:center;line-height:1.05;cursor:grab;touch-action:none;
+            white-space:normal;word-break:normal;user-select:none;
+        }
+        .hb-liveview .hb-writing.is-on{outline:none}
+        .hb-liveview .hb-w-1,.hb-liveview .hb-w-2{display:block}
+        .hb-liveview .hb-w-stars,.hb-liveview .hb-w-orn,.hb-liveview .hb-w-2{display:none}
+        .hb-liveview .hb-mode-lignes .hb-w-stars,.hb-liveview .hb-mode-lignes .hb-w-orn{display:flex}
+        .hb-liveview .hb-mode-lignes .hb-w-2{display:block}
+        .hb-liveview .hb-w-stars{align-items:center;justify-content:center;gap:12px;margin:10px 0;color:var(--hb-wcolor,#f6e7b8);width:100%}
+        .hb-liveview .hb-w-stars span{display:block;height:1px;flex:1;min-width:36px;max-width:160px;background:linear-gradient(90deg,transparent,var(--hb-wcolor,#f4e4b4) 18%,color-mix(in srgb,var(--hb-wcolor,#fff6d8) 70%,#fff) 50%,var(--hb-wcolor,#f4e4b4) 82%,transparent)}
+        .hb-liveview .hb-w-stars b{font-weight:400;letter-spacing:.28em;font-size:.34em;padding-left:.28em}
+        .hb-liveview .hb-w-orn{align-items:center;justify-content:center;gap:12px;margin-top:10px;color:var(--hb-wcolor,#f6e7b8);width:100%}
+        .hb-liveview .hb-w-orn span{display:block;height:1px;flex:1;min-width:36px;max-width:160px;background:linear-gradient(90deg,transparent,var(--hb-wcolor,#f4e4b4) 18%,color-mix(in srgb,var(--hb-wcolor,#fff6d8) 70%,#fff) 50%,var(--hb-wcolor,#f4e4b4) 82%,transparent)}
+        .hb-liveview .hb-w-orn i{font-style:normal;font-size:11px}
+        .hb-liveview .hb-style-enseigne{font-size:clamp(28px,4vw,72px)}
+        .hb-liveview .hb-style-enseigne .hb-w-1,.hb-liveview .hb-style-enseigne .hb-w-2{
+            font-family:'Cinzel',serif;font-weight:700;text-transform:uppercase;
+            letter-spacing:.08em;word-spacing:-.42em;white-space:nowrap;
+            background:linear-gradient(180deg,color-mix(in srgb,var(--hb-wcolor,#e2b65a) 35%,#fff) 0%,color-mix(in srgb,var(--hb-wcolor,#e2b65a) 75%,#fff) 28%,var(--hb-wcolor,#e2b65a) 62%,color-mix(in srgb,var(--hb-wcolor,#e2b65a) 70%,#000) 100%);
+            -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+        }
+        .hb-liveview .hb-style-enseigne .hb-w-2{font-size:.9em;letter-spacing:.1em;word-spacing:-.48em}
+        .hb-liveview .hb-style-classique{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(26px,3.6vw,58px);text-shadow:0 3px 18px rgba(0,0,0,.35)}
+        .hb-liveview .hb-style-signature{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(24px,3.2vw,52px);text-shadow:0 3px 18px rgba(0,0,0,.28)}
+        .hb-liveview .hb-style-moderne{font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:clamp(14px,1.8vw,28px);text-shadow:0 2px 12px rgba(0,0,0,.35)}
+        .hb-liveview .hb-style-lisere{font-family:'Cormorant Garamond',serif;font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:clamp(22px,2.8vw,44px)}
+        .hb-liveview .hb-style-lisere .hb-w-1{border-bottom:1px solid #e8c56a;padding-bottom:8px}
+        .hb-liveview .hb-style-contour{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:clamp(24px,3.4vw,56px);color:transparent;-webkit-text-stroke:1.5px var(--hb-wcolor,#fff)}
+        .hb-liveview .hb-style-neon{font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:clamp(16px,2vw,34px);text-shadow:0 0 8px var(--hb-wcolor,#fff),0 0 22px var(--hb-wcolor,#fff)}
+        .hb-liveview .hb-mode-bandeau{background:rgba(6,15,36,.62);padding:12px 18px;border-radius:10px}
+        .hb-liveview .hb-mode-encadre{border:1px solid currentColor;padding:12px 18px}
+        .hb-liveview .hb-writing.hb-mode-incline{transform:translate(-50%,-50%) rotate(-8deg) scale(var(--hb-wsize,1))}
+        .hb-liveview .hb-writing.hb-mode-vertical{writing-mode:vertical-rl;text-orientation:mixed}
+        .hb-liveview .hb-resize{position:absolute;right:-12px;bottom:-12px;width:16px;height:16px;border-radius:4px;background:#fff;border:2px solid #c5a059;cursor:nwse-resize}
+        .hb-tools{
+            display:flex;flex-direction:column;gap:0;min-width:0;min-height:0;height:100%;
+            overflow:hidden;padding:0;
+        }
+        .hb-tools-scroll{
+            flex:1 1 auto;min-height:0;height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
+            display:flex;flex-direction:column;gap:12px;padding:0 8px 12px 2px;scrollbar-gutter:stable;
+        }
+        .hb-tools-scroll::-webkit-scrollbar{width:8px}
+        .hb-tools-scroll::-webkit-scrollbar-thumb{background:rgba(197,160,89,.45);border-radius:999px}
+        .hb-tools-scroll::-webkit-scrollbar-track{background:rgba(197,160,89,.08);border-radius:999px}
+        .hb-tools-scroll .hb-card{flex:0 0 auto}
+        .hb-head-row{
+            display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
+            margin:0 0 12px;position:relative;z-index:30;
+        }
+        .hb-head-row h3{margin:0 0 4px}
+        .hb-save-bar{
+            display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;
+            padding:14px 16px;margin-top:12px;border-radius:14px;
+            background:#1a2332;border:2px solid #c5a059;
+            box-shadow:0 12px 32px rgba(0,0,0,.35);z-index:120;
+        }
+        .hb-save-bar .hb-actions{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+        .hb-save-bar .btn{
+            display:inline-flex;align-items:center;justify-content:center;
+            padding:14px 28px;font-size:14px;font-weight:800;min-width:160px;
+            text-transform:uppercase;letter-spacing:.6px;
+        }
+        .hb-save-bar .btn.gold{
+            background:linear-gradient(135deg,#f0cf85,#c5a059);color:#1a1304;
+            box-shadow:0 8px 22px rgba(197,160,89,.55);
+        }
+        .hb-save-bar .btn.ghost{
+            background:rgba(255,255,255,.06);color:#f6e7b8;border:1px solid rgba(246,231,184,.45);
+        }
+        .hb-save-bar .hb-note{color:#f6e7b8!important;margin:0;margin-right:auto;flex:1 1 140px;font-size:12px}
+        #hbWriteBox[hidden]{display:none!important}
+        .hb-card{
+            background:#fff;border:1px solid rgba(197,160,89,.28);border-radius:14px;
+            padding:14px 14px 12px;box-shadow:0 8px 22px rgba(10,23,54,.04);
+        }
+        .hb-card-head{
+            display:flex;align-items:center;justify-content:space-between;gap:10px;
+            margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid rgba(197,160,89,.18);
+        }
+        .hb-card-head h4{margin:0;font-size:13px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#1a2332}
+        .hb-card-head p{margin:0;font-size:11px;color:#6b7280}
+        .hb-parts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
+        @media(max-width:900px){.hb-parts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        .hb-part{
+            padding:12px 12px;border-radius:12px;border:1px solid rgba(197,160,89,.35);
+            background:#fff;color:#8a6a2f;cursor:pointer;text-align:left;
+        }
+        .hb-part b{display:block;font-size:12px;font-weight:700;letter-spacing:.3px}
+        .hb-part span{display:block;margin-top:3px;font-size:10px;color:#6b7280;line-height:1.3}
+        .hb-part.is-on{background:linear-gradient(135deg,#c5a059,#e7b15a);color:#1a1304;border-color:transparent}
+        .hb-part.is-on span{color:rgba(26,19,4,.72)}
+        .hb-part-panel{display:none}
+        .hb-part-panel.is-on{display:block}
+        .hb-presets{display:flex;flex-wrap:wrap;gap:6px}
+        .hb-presets button,.hb-actions button,.hb-styles button,.hb-modes button{border-radius:9px;cursor:pointer;font-size:11px;font-weight:700}
+        .hb-presets button{padding:7px 10px;border:1px solid rgba(197,160,89,.4);background:#fff;color:#8a6a2f}
+        .hb-presets button:hover,.hb-presets button.is-on{background:linear-gradient(135deg,#c5a059,#e7b15a);color:#1a1304;border-color:transparent}
+        .hb-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+        .hb-fields .span2{grid-column:1/-1}
+        .hb-fields label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#8a6a2f;margin-bottom:5px}
+        .hb-fields label b{font-size:11px;color:#1a2332;letter-spacing:0;text-transform:none}
+        .hb-fields input[type="text"],.hb-fields select,.hb-fields input[type="file"],.hb-fields textarea{width:100%;padding:9px 11px;border-radius:9px;border:1px solid rgba(197,160,89,.35);background:#fff;color:#1a2332;font-size:13px}
+        .hb-fields textarea{min-height:96px;resize:vertical;line-height:1.45;font-family:inherit}
+        .hb-fields input[type="color"]{width:54px;height:38px;padding:3px;border-radius:9px;border:1px solid rgba(197,160,89,.35);background:#fff;cursor:pointer;flex-shrink:0}
+        .hb-color-row{display:flex;align-items:center;gap:10px}
+        .hb-color-swatches{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+        .hb-color-swatches button{
+            width:24px;height:24px;border-radius:50%;border:1px solid rgba(0,0,0,.15);
+            cursor:pointer;padding:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);
+        }
+        .hb-color-swatches button.is-on{outline:2px solid #c5a059;outline-offset:2px}
+        .hb-check{
+            display:flex!important;align-items:center;justify-content:flex-start!important;gap:10px;
+            margin:0!important;cursor:pointer;user-select:none;text-transform:none!important;letter-spacing:0!important;
+            color:#1a2332!important;font-size:13px!important;font-weight:600!important;
+        }
+        .hb-check input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+        .hb-check-box{
+            width:20px;height:20px;border-radius:6px;border:1.5px solid rgba(197,160,89,.55);
+            background:#fff;display:inline-grid;place-items:center;flex-shrink:0;
+            box-shadow:inset 0 1px 2px rgba(0,0,0,.04);
+        }
+        .hb-check-box::after{
+            content:'';width:10px;height:6px;border-left:2px solid #fff;border-bottom:2px solid #fff;
+            transform:rotate(-45deg) translate(1px,-1px);opacity:0;
+        }
+        .hb-check input:checked + .hb-check-box{
+            background:linear-gradient(180deg,#d4a94f,#b8862f);border-color:#b8862f;
+        }
+        .hb-check input:checked + .hb-check-box::after{opacity:1}
+        .hb-check-txt{color:#1a2332;font-size:13px;font-weight:600;letter-spacing:.2px}
+        .hb-svc-list{display:flex;flex-direction:column;gap:8px}
+        .hb-svc-row{
+            display:flex;align-items:center;justify-content:space-between;gap:10px;
+            padding:10px 12px;border-radius:10px;border:1px solid rgba(197,160,89,.22);background:#fff;
+        }
+        .hb-svc-row.is-off{opacity:.55;background:#f7f5f0}
+        .hb-svc-row .hb-svc-meta{display:flex;align-items:center;gap:10px;min-width:0}
+        .hb-svc-row .hb-svc-ico{
+            width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
+            background:rgba(197,160,89,.12);border:1px solid rgba(197,160,89,.25);font-size:18px;flex-shrink:0;
+        }
+        .hb-svc-row b{font-size:12px;color:#1a2332;letter-spacing:.3px;text-transform:uppercase}
+        .hb-svc-toggle{
+            width:34px;height:34px;border-radius:50%;border:1px solid rgba(197,160,89,.45);
+            background:#fff;color:#8a6a2f;cursor:pointer;font-size:15px;line-height:1;
+            display:inline-flex;align-items:center;justify-content:center;
+        }
+        .hb-svc-row.is-off .hb-svc-toggle{background:#1a2332;color:#f6e7b8;border-color:#1a2332}
+        .hb-liveview .hb-writing.hb-light-none .hb-w-1,
+        .hb-liveview .hb-writing.hb-light-none .hb-w-2,
+        .hb-liveview .hb-writing.hb-light-none .hb-w-stars,
+        .hb-liveview .hb-writing.hb-light-none .hb-w-orn,
+        .hb-liveview .hb-writing.hb-nolight .hb-w-1,
+        .hb-liveview .hb-writing.hb-nolight .hb-w-2{
+            filter:none!important;text-shadow:none!important;
+        }
+        .hb-liveview .hb-writing.hb-light-soft .hb-w-1,
+        .hb-liveview .hb-writing.hb-light-soft .hb-w-2{filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))!important;text-shadow:0 2px 10px rgba(0,0,0,.28)!important}
+        .hb-liveview .hb-writing.hb-light-glow .hb-w-1,
+        .hb-liveview .hb-writing.hb-light-glow .hb-w-2{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--hb-wcolor,#fff) 65%,transparent)) drop-shadow(0 0 16px color-mix(in srgb,var(--hb-wcolor,#fff) 40%,transparent))!important;text-shadow:0 0 14px color-mix(in srgb,var(--hb-wcolor,#fff) 55%,transparent)!important}
+        .hb-liveview .hb-writing.hb-light-forte .hb-w-1,
+        .hb-liveview .hb-writing.hb-light-forte .hb-w-2{filter:drop-shadow(0 4px 8px rgba(0,0,0,.45)) drop-shadow(0 0 14px color-mix(in srgb,var(--hb-wcolor,#fff) 50%,transparent))!important;text-shadow:0 3px 16px rgba(0,0,0,.4),0 0 22px color-mix(in srgb,var(--hb-wcolor,#fff) 45%,transparent)!important}
+        .hb-liveview .hb-writing.hb-light-neon .hb-w-1,
+        .hb-liveview .hb-writing.hb-light-neon .hb-w-2{filter:drop-shadow(0 0 4px var(--hb-wcolor,#fff)) drop-shadow(0 0 14px var(--hb-wcolor,#fff)) drop-shadow(0 0 28px color-mix(in srgb,var(--hb-wcolor,#fff) 60%,transparent))!important;text-shadow:0 0 8px var(--hb-wcolor,#fff),0 0 20px var(--hb-wcolor,#fff)!important}
+        .hb-liveview .hb-writing.hb-light-or .hb-w-1,
+        .hb-liveview .hb-writing.hb-light-or .hb-w-2{filter:drop-shadow(0 0 8px rgba(232,190,110,.55)) drop-shadow(0 2px 4px rgba(0,0,0,.35))!important;text-shadow:0 0 12px rgba(246,231,184,.55),0 0 24px rgba(197,160,89,.4)!important}
+        .hb-liveview .hb-writing.hb-light-relief .hb-w-1,
+        .hb-liveview .hb-writing.hb-light-relief .hb-w-2{filter:drop-shadow(1px 1px 0 rgba(255,255,255,.35)) drop-shadow(-1px -1px 0 rgba(0,0,0,.35)) drop-shadow(0 3px 6px rgba(0,0,0,.4))!important;text-shadow:1px 1px 0 rgba(255,255,255,.25),-1px -1px 0 rgba(0,0,0,.35)!important}
+        .hb-liveview .hb-writing.hb-light-halo .hb-w-1,
+        .hb-liveview .hb-writing.hb-light-halo .hb-w-2{filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 0 28px color-mix(in srgb,var(--hb-wcolor,#fff) 35%,transparent))!important;text-shadow:0 0 18px rgba(255,255,255,.4),0 0 36px color-mix(in srgb,var(--hb-wcolor,#fff) 30%,transparent)!important}
+        .hb-liveview .hb-style-enseigne.hb-light-soft .hb-w-1,
+        .hb-liveview .hb-style-enseigne.hb-light-soft .hb-w-2,
+        .hb-liveview .hb-style-enseigne.hb-light-glow .hb-w-1,
+        .hb-liveview .hb-style-enseigne.hb-light-glow .hb-w-2,
+        .hb-liveview .hb-style-enseigne.hb-light-forte .hb-w-1,
+        .hb-liveview .hb-style-enseigne.hb-light-forte .hb-w-2,
+        .hb-liveview .hb-style-enseigne.hb-light-neon .hb-w-1,
+        .hb-liveview .hb-style-enseigne.hb-light-neon .hb-w-2,
+        .hb-liveview .hb-style-enseigne.hb-light-or .hb-w-1,
+        .hb-liveview .hb-style-enseigne.hb-light-or .hb-w-2,
+        .hb-liveview .hb-style-enseigne.hb-light-relief .hb-w-1,
+        .hb-liveview .hb-style-enseigne.hb-light-relief .hb-w-2,
+        .hb-liveview .hb-style-enseigne.hb-light-halo .hb-w-1,
+        .hb-liveview .hb-style-enseigne.hb-light-halo .hb-w-2{text-shadow:none!important}
+        .hb-liveview .hb-writing.hb-nostars .hb-w-stars,
+        .hb-liveview .hb-writing.hb-nostars .hb-w-orn{display:none!important}
+        .hb-lights{display:flex;flex-wrap:wrap;gap:6px}
+        .hb-lights button{
+            border:1px solid rgba(197,160,89,.3);background:#fff;color:#1a2332;border-radius:999px;
+            padding:7px 11px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.3px;
+        }
+        .hb-lights button.is-on{background:linear-gradient(135deg,#c5a059,#e7b15a);color:#1a1304;border-color:transparent}
+        .hb-range{display:flex;align-items:center;gap:8px;min-height:38px}
+        .hb-range input{flex:1;width:100%}
+        .hb-picks{display:flex;gap:8px;flex-wrap:wrap;max-height:168px;overflow:auto;padding:2px}
+        .hb-picks button{width:72px;height:48px;border-radius:8px;border:2px solid transparent;background-size:cover;background-position:center;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);flex:0 0 auto}
+        .hb-picks button.is-on{border-color:#c5a059}
+        .hb-styles,.hb-modes{display:flex;flex-wrap:wrap;gap:6px}
+        .hb-styles button,.hb-modes button{padding:7px 10px;border:1px solid rgba(197,160,89,.4);background:#fff;color:#8a6a2f}
+        .hb-styles button.is-on,.hb-styles button:hover{background:linear-gradient(135deg,#c5a059,#e7b15a);color:#1a1304;border-color:transparent}
+        .hb-modes button.is-on,.hb-modes button:hover{background:linear-gradient(135deg,#0a1736,#1a3a6b);color:#fff;border-color:transparent}
+        .hb-note{min-height:1.1em;margin:0;font-size:12px;color:#059669}
+        .hb-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+        .hb-actions .btn{padding:9px 14px}
+        .hb-write-empty{margin:0;font-size:12px;color:#6b7280;line-height:1.45}
         .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:16px}
         .form-flex{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:4px;justify-content:center}
         .form-flex .field{display:flex;flex-direction:column;margin-bottom:0}
@@ -3058,12 +3311,13 @@
                 <div class="sb-parent" id="cfgParent">
                     <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
                     <span class="lbl">Configuration</span>
-                    <span class="sb-badge">4</span>
+                    <span class="sb-badge">5</span>
                     <span class="caret">&#9662;</span>
                 </div>
                 <div class="sb-sub" id="cfgSub">
                     <div class="sb-item" data-target="configuration" data-cfg="hotel"><span class="sb-dot"></span><span class="lbl">Fiche hôtel</span></div>
                     <div class="sb-item" data-target="configuration" data-cfg="carrousel"><span class="sb-dot"></span><span class="lbl">Carrousel</span></div>
+                    <div class="sb-item" data-target="configuration" data-cfg="habillage"><span class="sb-dot"></span><span class="lbl">Habillage</span></div>
                     <div class="sb-item" data-target="configuration" data-cfg="users"><span class="sb-dot"></span><span class="lbl">Utilisateurs</span></div>
                     <div class="sb-item" data-target="configuration" data-cfg="commerciaux"><span class="sb-dot"></span><span class="lbl">Commerciaux</span></div>
                 </div>
@@ -4133,6 +4387,238 @@
                     </div>
                 </div>
 
+                <div class="subpanel" id="cfg-habillage">
+                    <div class="block">
+                        <div class="hb-head-row">
+                            <div>
+                                <h3>Habillage du site</h3>
+                                <p class="hint" style="margin:0">Bouton Enregistrer : barre dorée fixée en bas de l'écran.</p>
+                            </div>
+                        </div>
+                        <div class="hb-parts" id="hbParts">
+                            <button type="button" class="hb-part is-on" data-hb-part="photo"><b>1. Photo d'accueil</b><span>Image, lumière, voile</span></button>
+                            <button type="button" class="hb-part" data-hb-part="offres"><b>2. Offres</b><span>Bandeau et écritures</span></button>
+                            <button type="button" class="hb-part" data-hb-part="chambres"><b>3. Chambres</b><span>Bloc chambres</span></button>
+                            <button type="button" class="hb-part" data-hb-part="bas"><b>4. Bas de page</b><span>Services, à propos</span></button>
+                        </div>
+                        <div class="hb-workspace">
+                            <div class="hb-liveview" id="hbLive">
+                                <img id="hbLiveImg" alt="">
+                                <div class="hb-live-veil" id="hbLiveVeil"></div>
+                                <div class="hb-live-layer" id="hbLiveLayer"></div>
+                            </div>
+                            <iframe class="hb-frame" id="hbFrame" title="Aperçu de l'accueil" src="/?hb-edit=1"></iframe>
+                            <div class="hb-tools">
+                            <div class="hb-tools-scroll">
+                                <div class="hb-part-panel is-on" data-hb-panel="photo">
+                                    <div class="hb-card">
+                                        <div class="hb-card-head"><h4>Ambiance</h4><p>Presets, lumière, voile</p></div>
+                                        <div class="hb-presets" style="margin-bottom:12px">
+                                            <button type="button" data-hb-preset="crepuscule">Crépuscule</button>
+                                            <button type="button" data-hb-preset="nuit">Nuit dorée</button>
+                                            <button type="button" data-hb-preset="jour">Jour clair</button>
+                                        </div>
+                                        <div class="hb-fields">
+                                            <div>
+                                                <label for="hb_color">Couleur de fond</label>
+                                                <input type="color" id="hb_color" value="#1a1520">
+                                            </div>
+                                            <div>
+                                                <label for="hb_veil">Voile</label>
+                                                <select id="hb_veil">
+                                                    <option value="none">Aucun</option>
+                                                    <option value="navy">Marine</option>
+                                                    <option value="gold">Doré</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="hb_light">Lumière <b id="hb_light_val">100</b></label>
+                                                <div class="hb-range"><input type="range" id="hb_light" min="40" max="140" value="100"></div>
+                                            </div>
+                                            <div>
+                                                <label for="hb_veil_opacity">Force du voile <b id="hb_veil_val">40</b></label>
+                                                <div class="hb-range"><input type="range" id="hb_veil_opacity" min="0" max="80" value="40"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hb-card" style="margin-top:12px">
+                                        <div class="hb-card-head"><h4>Archive photos</h4><p>Toutes les images restent sauvegardées</p></div>
+                                        <div class="hb-fields">
+                                            <div class="span2">
+                                                <label>Photos disponibles <b id="hb_photo_count">0</b></label>
+                                                <div class="hb-picks" id="hbPicks"></div>
+                                                <input type="hidden" id="hb_image" value="/images/hotel-hero.png">
+                                            </div>
+                                            <div class="span2">
+                                                <label for="hb_file">Ajouter une photo</label>
+                                                <input type="file" id="hb_file" accept="image/jpeg,image/png,image/webp">
+                                                <p class="hb-write-empty" style="margin-top:8px">L'image s'ajoute à l'archive à l'enregistrement. Les anciennes restent.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hb-part-panel" data-hb-panel="offres">
+                                    <div class="hb-card"><p class="hb-write-empty">Outils propres aux offres. Pour l'instant : écritures sur ce bandeau.</p></div>
+                                </div>
+                                <div class="hb-part-panel" data-hb-panel="chambres">
+                                    <div class="hb-card"><p class="hb-write-empty">Outils propres aux chambres. Pour l'instant : écritures sur ce bloc.</p></div>
+                                </div>
+                                <div class="hb-part-panel" data-hb-panel="bas">
+                                    <div class="hb-card">
+                                        <div class="hb-card-head">
+                                            <div>
+                                                <h4>Services</h4>
+                                                <p>Masquer ou afficher chaque catégorie</p>
+                                            </div>
+                                        </div>
+                                        <div class="hb-svc-list" id="hbSvcList"></div>
+                                    </div>
+                                    <div class="hb-card" style="margin-top:12px">
+                                        <div class="hb-card-head">
+                                            <div>
+                                                <h4>Cadre À propos</h4>
+                                                <p>Texte, style et couleurs du fond</p>
+                                            </div>
+                                        </div>
+                                        <div class="hb-fields" id="hbAboutBox">
+                                            <div class="span2">
+                                                <label for="hb_about_title">Titre</label>
+                                                <input type="text" id="hb_about_title" maxlength="80" placeholder="À propos d'">
+                                            </div>
+                                            <div class="span2">
+                                                <label for="hb_about_brand">Mot en or</label>
+                                                <input type="text" id="hb_about_brand" maxlength="40" placeholder="ALJAZEERA">
+                                            </div>
+                                            <div class="span2">
+                                                <label for="hb_about_text">Texte</label>
+                                                <textarea id="hb_about_text" rows="4" maxlength="500" placeholder="Un hôtel <em>5 étoiles</em> ..."></textarea>
+                                                <p class="hb-write-empty" style="margin-top:6px">Pour un mot en couleur : &lt;em&gt;5 étoiles&lt;/em&gt;</p>
+                                            </div>
+                                            <div class="span2">
+                                                <label>Style du titre</label>
+                                                <div class="hb-modes" id="hbAboutStyles">
+                                                    <button type="button" data-hb-about-style="serif">Serif</button>
+                                                    <button type="button" data-hb-about-style="moderne">Moderne</button>
+                                                    <button type="button" data-hb-about-style="signature">Signature</button>
+                                                    <button type="button" data-hb-about-style="enseigne">Enseigne</button>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label for="hb_about_bg">Fond</label>
+                                                <input type="color" id="hb_about_bg" value="#0a1736">
+                                            </div>
+                                            <div>
+                                                <label for="hb_about_title_color">Titre</label>
+                                                <input type="color" id="hb_about_title_color" value="#8b93a3">
+                                            </div>
+                                            <div>
+                                                <label for="hb_about_accent">Accent / or</label>
+                                                <input type="color" id="hb_about_accent" value="#c5a059">
+                                            </div>
+                                            <div>
+                                                <label for="hb_about_text_color">Paragraphe</label>
+                                                <input type="color" id="hb_about_text_color" value="#c5cbd6">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hb-card">
+                                    <div class="hb-card-head">
+                                        <div>
+                                            <h4>Écriture</h4>
+                                            <p>Écrire, puis glisser sur la photo</p>
+                                        </div>
+                                        <div class="hb-actions">
+                                            <button type="button" class="btn gold" id="hbAdd">+ Écriture</button>
+                                            <button type="button" class="btn ghost" id="hbRemove">Retirer</button>
+                                        </div>
+                                    </div>
+                                    <p class="hb-write-empty" id="hbWriteEmpty">Aucune écriture sélectionnée. Cliquez + Écriture, ou un texte sur l'aperçu.</p>
+                                    <div class="hb-fields" id="hbWriteBox" hidden>
+                                        <div class="span2">
+                                            <label for="hb_w_text">Texte</label>
+                                            <input type="text" id="hb_w_text" maxlength="80" placeholder="HOTEL">
+                                        </div>
+                                        <div class="span2">
+                                            <label for="hb_w_text2">Deuxième ligne</label>
+                                            <input type="text" id="hb_w_text2" maxlength="140" placeholder="AL JAZZERA">
+                                        </div>
+                                        <div class="span2">
+                                            <label>Style</label>
+                                            <div class="hb-styles" id="hbStyles">
+                                                <button type="button" data-hb-style="enseigne">Enseigne</button>
+                                                <button type="button" data-hb-style="classique">Classique</button>
+                                                <button type="button" data-hb-style="signature">Signature</button>
+                                                <button type="button" data-hb-style="moderne">Moderne</button>
+                                                <button type="button" data-hb-style="lisere">Liseré</button>
+                                                <button type="button" data-hb-style="contour">Contour</button>
+                                                <button type="button" data-hb-style="neon">Néon</button>
+                                            </div>
+                                        </div>
+                                        <div class="span2">
+                                            <label>Mode</label>
+                                            <div class="hb-modes" id="hbModes">
+                                                <button type="button" data-hb-mode="libre">Libre</button>
+                                                <button type="button" data-hb-mode="lignes">Deux lignes</button>
+                                                <button type="button" data-hb-mode="bandeau">Bandeau</button>
+                                                <button type="button" data-hb-mode="encadre">Encadré</button>
+                                                <button type="button" data-hb-mode="incline">Incliné</button>
+                                                <button type="button" data-hb-mode="vertical">Vertical</button>
+                                            </div>
+                                        </div>
+                                        <div class="span2">
+                                            <label for="hb_w_color">Couleur de l'écriture</label>
+                                            <div class="hb-color-row">
+                                                <input type="color" id="hb_w_color" value="#e2b65a">
+                                                <div class="hb-color-swatches" id="hbColorSwatches">
+                                                    <button type="button" data-hb-swatch="#e2b65a" title="Or" style="background:#e2b65a"></button>
+                                                    <button type="button" data-hb-swatch="#ffffff" title="Blanc" style="background:#ffffff"></button>
+                                                    <button type="button" data-hb-swatch="#f6e7b8" title="Champagne" style="background:#f6e7b8"></button>
+                                                    <button type="button" data-hb-swatch="#1a2332" title="Nuit" style="background:#1a2332"></button>
+                                                    <button type="button" data-hb-swatch="#c5a059" title="Bronze" style="background:#c5a059"></button>
+                                                    <button type="button" data-hb-swatch="#d4af37" title="Doré" style="background:#d4af37"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label for="hb_w_size">Taille <b id="hb_w_size_val">100</b></label>
+                                            <div class="hb-range"><input type="range" id="hb_w_size" min="50" max="220" value="100"></div>
+                                        </div>
+                                        <div class="span2">
+                                            <label>Effet lumière</label>
+                                            <div class="hb-lights" id="hbLights">
+                                                <button type="button" data-hb-light="none">Aucun</button>
+                                                <button type="button" data-hb-light="soft" class="is-on">Doux</button>
+                                                <button type="button" data-hb-light="glow">Lueur</button>
+                                                <button type="button" data-hb-light="forte">Forte</button>
+                                                <button type="button" data-hb-light="neon">Néon</button>
+                                                <button type="button" data-hb-light="or">Or</button>
+                                                <button type="button" data-hb-light="relief">Relief</button>
+                                                <button type="button" data-hb-light="halo">Halo</button>
+                                            </div>
+                                        </div>
+                                        <div class="span2">
+                                            <label class="hb-check" for="hb_w_stars">
+                                                <input type="checkbox" id="hb_w_stars" checked>
+                                                <span class="hb-check-box" aria-hidden="true"></span>
+                                                <span class="hb-check-txt">Étoiles et tirets</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="hb-save-bar">
+                            <p class="hb-note" id="hb_note"></p>
+                            <div class="hb-actions">
+                                <button type="button" class="btn ghost" id="hbReset">Revenir à l'origine</button>
+                                <button type="button" class="btn gold" id="hbSave">Enregistrer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="subpanel" id="cfg-carrousel">
                     <div class="block">
                         <h3>Carrousel — page Chambres</h3>
@@ -4332,7 +4818,7 @@
     (function(){
         const auth=window.AJ_MENU_AUTH;
         if(auth==null)return;
-        const cfg={hotel:'cfg-hotel',carrousel:'cfg-carrousel',users:'cfg-users',commerciaux:'cfg-commerciaux'};
+        const cfg={hotel:'cfg-hotel',carrousel:'cfg-carrousel',habillage:'cfg-habillage',users:'cfg-users',commerciaux:'cfg-commerciaux'};
         const dashParts=['dashboard','dash-cartes','dash-tableaux','dash-rooms'];
         document.querySelectorAll('.sb-item[data-target]').forEach(el=>{
             const id=el.dataset.target==='configuration'?(cfg[el.dataset.cfg]||''):el.dataset.target;
@@ -4377,7 +4863,7 @@
     }
     function activatePanel(targetId,label,cfgTab){
         if(window.AJ_MENU_AUTH!=null){
-            const cfg={hotel:'cfg-hotel',carrousel:'cfg-carrousel',users:'cfg-users',commerciaux:'cfg-commerciaux',auth:'cfg-users'};
+            const cfg={hotel:'cfg-hotel',carrousel:'cfg-carrousel',habillage:'cfg-habillage',users:'cfg-users',commerciaux:'cfg-commerciaux',auth:'cfg-users'};
             const id=targetId==='configuration'?(cfg[cfgTab]||''):targetId;
             const dashParts=['dashboard','dash-cartes','dash-tableaux','dash-rooms'];
             const allowed=id==='dashboard'?dashParts.some(window.ajMenuOn):window.ajMenuOn(id);
@@ -4453,9 +4939,15 @@
         if(targetId==='configuration'&&typeof CFG!=='undefined'){
             CFG.render();
             CFG.switchTab(cfgTab||'hotel');
+        }else{
+            document.body.classList.remove('hb-lock');
         }
         sidebar.classList.remove('open');overlay.classList.remove('show');
-        window.scrollTo({top:0,behavior:'smooth'});
+        if(targetId!=='configuration' || cfgTab!=='habillage'){
+            window.scrollTo({top:0,behavior:'smooth'});
+        }else{
+            window.scrollTo(0,0);
+        }
     }
     items.forEach(it=>it.addEventListener('click',()=>{
         const lbl=(it.querySelector('.lbl')||it).textContent.trim();
@@ -5949,6 +6441,7 @@ window.PERS=PERS;
 </script>
 <script>
 /* ===== Module Configuration ===== */
+window.AJ_HABILLAGE=@json($habillage ?? null);
 const CFG=(function(){
     const K_HOTEL='aj_cfg_hotel';
     const K_COMM='aj_cfg_commerciaux';
@@ -5991,6 +6484,7 @@ const CFG=(function(){
         {id:'mon-charges',label:'Charges',section:'Finance'},
         {id:'cfg-hotel',label:'Fiche hôtel',section:'Système'},
         {id:'cfg-carrousel',label:'Carrousel',section:'Système'},
+        {id:'cfg-habillage',label:'Habillage',section:'Système'},
         {id:'cfg-users',label:'Utilisateurs',section:'Système'},
         {id:'cfg-commerciaux',label:'Commerciaux',section:'Système'}
     ];
@@ -6008,6 +6502,566 @@ const CFG=(function(){
             if(m)max=Math.max(max,parseInt(m[1],10));
         });
         return prefix+String(max+1).padStart(4,'0');
+    }
+
+    const HB_PRESETS={
+        crepuscule:{color:'#1a1520',light:92,veil:'navy',veil_opacity:28,title_color:'#ffffff'},
+        nuit:{color:'#081018',light:72,veil:'gold',veil_opacity:22,title_color:'#f3d38a'},
+        jour:{color:'#e8e4dc',light:118,veil:'none',veil_opacity:0,title_color:'#1a2332'}
+    };
+    let hbDraft='',hbBound=false,hbWritings=[],hbPhotos=[],hbServices=[],hbAbout={},hbSelected='',hbPart='photo';
+    const HB_SERVICES_DEFAULT=[
+        {id:'piscine',label:'Piscine',icon:'🏊',visible:true},
+        {id:'spa',label:'Spa & Bien-être',icon:'💖',visible:true},
+        {id:'restaurant',label:'Restaurant',icon:'🍽️',visible:true},
+        {id:'cafe',label:'Café & Lounge',icon:'☕',visible:true},
+        {id:'sport',label:'Salle de Sport',icon:'🏋️',visible:true},
+        {id:'wifi',label:'Wi-Fi Gratuit',icon:'📶',visible:true},
+        {id:'parking',label:'Parking',icon:'🚌',visible:true},
+        {id:'roomservice',label:'Room Service',icon:'🍽️',visible:true}
+    ];
+    const HB_ABOUT_DEFAULT={
+        bg:'#0a1736',
+        title:"À propos d'",
+        brand:'ALJAZEERA',
+        title_color:'#8b93a3',
+        accent:'#c5a059',
+        text:"Un hôtel <em>5 étoiles</em> qui allie élégance marocaine et confort international. Piscine, spa, gastronomie raffinée et un service attentionné pour un séjour d'exception au cœur de la ville.",
+        text_color:'#c5cbd6',
+        style:'serif'
+    };
+    function normalizeHbServices(list){
+        const byId={};
+        (Array.isArray(list)?list:[]).forEach(s=>{if(s&&s.id)byId[s.id]=s.visible!==false;});
+        return HB_SERVICES_DEFAULT.map(s=>({...s,visible:Object.prototype.hasOwnProperty.call(byId,s.id)?!!byId[s.id]:true}));
+    }
+    function normalizeHbAbout(data){
+        const d=Object.assign({}, HB_ABOUT_DEFAULT, data&&typeof data==='object'?data:{});
+        const styles=['serif','moderne','signature','enseigne'];
+        d.style=styles.includes(d.style)?d.style:'serif';
+        d.title=String(d.title||HB_ABOUT_DEFAULT.title).slice(0,80);
+        d.brand=String(d.brand||HB_ABOUT_DEFAULT.brand).slice(0,40);
+        d.text=String(d.text||HB_ABOUT_DEFAULT.text).slice(0,500);
+        d.bg=d.bg||HB_ABOUT_DEFAULT.bg;
+        d.title_color=d.title_color||HB_ABOUT_DEFAULT.title_color;
+        d.accent=d.accent||HB_ABOUT_DEFAULT.accent;
+        d.text_color=d.text_color||HB_ABOUT_DEFAULT.text_color;
+        return d;
+    }
+    function syncAboutForm(){
+        const set=(id,v)=>{const el=document.getElementById(id);if(el&&document.activeElement!==el)el.value=v;};
+        set('hb_about_title', hbAbout.title||'');
+        set('hb_about_brand', hbAbout.brand||'');
+        set('hb_about_text', hbAbout.text||'');
+        set('hb_about_bg', hbAbout.bg||'#0a1736');
+        set('hb_about_title_color', hbAbout.title_color||'#8b93a3');
+        set('hb_about_accent', hbAbout.accent||'#c5a059');
+        set('hb_about_text_color', hbAbout.text_color||'#c5cbd6');
+        document.querySelectorAll('#hbAboutStyles button').forEach(b=>b.classList.toggle('is-on', b.dataset.hbAboutStyle===hbAbout.style));
+    }
+    function readAboutForm(){
+        hbAbout=normalizeHbAbout({
+            title:document.getElementById('hb_about_title')?.value||'',
+            brand:document.getElementById('hb_about_brand')?.value||'',
+            text:document.getElementById('hb_about_text')?.value||'',
+            bg:document.getElementById('hb_about_bg')?.value||'#0a1736',
+            title_color:document.getElementById('hb_about_title_color')?.value||'#8b93a3',
+            accent:document.getElementById('hb_about_accent')?.value||'#c5a059',
+            text_color:document.getElementById('hb_about_text_color')?.value||'#c5cbd6',
+            style:document.querySelector('#hbAboutStyles button.is-on')?.dataset.hbAboutStyle||hbAbout.style||'serif'
+        });
+        return hbAbout;
+    }
+    function renderHbServices(){
+        const box=document.getElementById('hbSvcList');
+        if(!box)return;
+        box.innerHTML=hbServices.map(s=>`
+            <div class="hb-svc-row${s.visible?'':' is-off'}" data-svc-id="${s.id}">
+                <div class="hb-svc-meta"><span class="hb-svc-ico">${s.icon}</span><b>${esc(s.label)}</b></div>
+                <button type="button" class="hb-svc-toggle" data-svc-toggle="${s.id}" title="${s.visible?'Masquer':'Afficher'}" aria-label="${s.visible?'Masquer':'Afficher'}">${s.visible?'👁':'🙈'}</button>
+            </div>
+        `).join('');
+    }
+    function toggleHbService(id){
+        const s=hbServices.find(x=>x.id===id);
+        if(!s)return;
+        s.visible=!s.visible;
+        renderHbServices();
+        paintHabillagePreview();
+    }
+    const HB_LIBRARY=['/images/hotel-hero.png','/images/hotel-facade.png','/images/hotel.png'];
+    function renderHbPhotos(active){
+        const box=document.getElementById('hbPicks');
+        const count=document.getElementById('hb_photo_count');
+        if(!box)return;
+        const list=(hbPhotos.length?hbPhotos:HB_LIBRARY).slice();
+        HB_LIBRARY.forEach(p=>{if(!list.includes(p))list.unshift(p);});
+        hbPhotos=list;
+        box.innerHTML=list.map(src=>`<button type="button" data-hb-image="${src}" style="background-image:url('${src}')" title="${src.split('/').pop()}"></button>`).join('');
+        if(count)count.textContent=String(list.length);
+        box.querySelectorAll('button').forEach(b=>b.classList.toggle('is-on', !hbDraft && b.dataset.hbImage===active));
+    }
+    const HB_PARTS={
+        photo:{zones:['hero'],focus:'hero',label:'Photo d\'accueil'},
+        offres:{zones:['offres'],focus:'offres',label:'Offres'},
+        chambres:{zones:['chambres'],focus:'chambres',label:'Chambres'},
+        bas:{zones:['services','promos','confiance','apropos'],focus:'services',label:'Bas de page'}
+    };
+    const hbPartOfZone=zone=>{
+        for(const [key,part] of Object.entries(HB_PARTS)){
+            if(part.zones.includes(zone))return key;
+        }
+        return 'photo';
+    };
+    const hbVeil=(veil,opacity)=>{
+        const a=(Math.max(0,Math.min(80,Number(opacity)||0))/100).toFixed(2);
+        if(veil==='navy')return 'rgba(6,15,36,'+a+')';
+        if(veil==='gold')return 'rgba(120,78,18,'+a+')';
+        return 'transparent';
+    };
+    const softCleanHbText=(s)=>String(s||'').replace(/[\s\u00A0\u2000-\u200B\u202F\u205F\u3000]+/g,' ');
+    const cleanHbText=(s)=>softCleanHbText(s).trim();
+    function hbRead(){
+        return {
+            image:document.getElementById('hb_image')?.value||'/images/hotel-hero.png',
+            color:document.getElementById('hb_color')?.value||'#1a1520',
+            light:Number(document.getElementById('hb_light')?.value||100),
+            veil:document.getElementById('hb_veil')?.value||'none',
+            veil_opacity:Number(document.getElementById('hb_veil_opacity')?.value||0)
+        };
+    }
+    function hbSelectedWriting(){
+        return hbWritings.find(w=>w.id===hbSelected)||null;
+    }
+    function normalizeHbLight(v){
+        if(v===false||v===0||v==='0'||v==='false')return 'none';
+        if(v===true||v===1||v==='1'||v==='true')return 'soft';
+        const ok=['none','soft','glow','forte','neon','or','relief','halo'];
+        return ok.includes(String(v))?String(v):'soft';
+    }
+    function ensureWriting(){
+        let w=hbSelectedWriting();
+        if(w)return w;
+        const id='w'+Math.random().toString(36).slice(2,8);
+        const zone=(HB_PARTS[hbPart]?.focus)||'hero';
+        w={id,text:'',text2:'',style:'enseigne',mode:'lignes',color:'#e2b65a',size:120,light:'soft',stars:true,zone,x:50,y:45};
+        hbWritings.push(w);
+        hbSelected=id;
+        return w;
+    }
+    function syncWritingForm(){
+        const box=document.getElementById('hbWriteBox');
+        const empty=document.getElementById('hbWriteEmpty');
+        const w=hbSelectedWriting();
+        if(box)box.hidden=!w;
+        if(empty)empty.hidden=!!w;
+        if(!w)return;
+        const text=document.getElementById('hb_w_text');
+        const text2=document.getElementById('hb_w_text2');
+        const color=document.getElementById('hb_w_color');
+        const size=document.getElementById('hb_w_size');
+        const sizeVal=document.getElementById('hb_w_size_val');
+        const stars=document.getElementById('hb_w_stars');
+        if(text&&document.activeElement!==text)text.value=w.text||'';
+        if(text2&&document.activeElement!==text2)text2.value=w.text2||'';
+        if(color)color.value=w.color||'#e2b65a';
+        if(size)size.value=String(w.size||100);
+        if(sizeVal)sizeVal.textContent=String(w.size||100);
+        if(stars)stars.checked=w.stars!==false;
+        w.light=normalizeHbLight(w.light);
+        document.querySelectorAll('#hbStyles button').forEach(b=>b.classList.toggle('is-on', b.dataset.hbStyle===w.style));
+        document.querySelectorAll('#hbModes button').forEach(b=>b.classList.toggle('is-on', b.dataset.hbMode===w.mode));
+        document.querySelectorAll('#hbLights button').forEach(b=>b.classList.toggle('is-on', b.dataset.hbLight===w.light));
+        const cur=(w.color||'#e2b65a').toLowerCase();
+        document.querySelectorAll('#hbColorSwatches button').forEach(b=>b.classList.toggle('is-on', (b.dataset.hbSwatch||'').toLowerCase()===cur));
+    }
+    function pushHbFrame(){
+        const frame=document.getElementById('hbFrame');
+        if(!frame||!frame.classList.contains('is-on')||!frame.contentWindow)return;
+        const part=HB_PARTS[hbPart]||HB_PARTS.photo;
+        const d=hbRead();
+        frame.contentWindow.postMessage({
+            type:'hb-state',
+            image:hbDraft||d.image,
+            color:d.color,
+            light:d.light/100,
+            veil:hbVeil(d.veil, d.veil_opacity),
+            writings:hbWritings,
+            services:hbServices,
+            about:hbAbout,
+            selected:hbSelected,
+            zones:part.zones,
+            focus:part.focus,
+            solo:true
+        }, '*');
+    }
+    function focusHbPart(){
+        const live=document.getElementById('hbLive');
+        const frame=document.getElementById('hbFrame');
+        // Toujours la vraie page : même rendu que le PC
+        if(live)live.classList.add('is-off');
+        if(frame)frame.classList.add('is-on');
+        pushHbFrame();
+    }
+    function setHbPart(part){
+        if(!HB_PARTS[part])part='photo';
+        hbPart=part;
+        document.querySelectorAll('#hbParts .hb-part').forEach(b=>b.classList.toggle('is-on', b.dataset.hbPart===part));
+        document.querySelectorAll('.hb-part-panel').forEach(p=>p.classList.toggle('is-on', p.dataset.hbPanel===part));
+        const zones=HB_PARTS[part].zones;
+        if(!hbSelected || !zones.includes(hbSelectedWriting()?.zone)){
+            const first=hbWritings.find(w=>zones.includes(w.zone));
+            hbSelected=first?.id||'';
+        }
+        focusHbPart();
+        paintHabillagePreview();
+    }
+    function renderLiveWritings(){
+        const layer=document.getElementById('hbLiveLayer');
+        if(!layer)return;
+        const zones=HB_PARTS[hbPart]?.zones||['hero'];
+        const list=hbWritings.filter(w=>zones.includes(w.zone));
+        layer.innerHTML=list.map(w=>{
+            const style=['enseigne','classique','signature','moderne','lisere','contour','neon'].includes(w.style)?w.style:'classique';
+            const mode=['libre','lignes','bandeau','encadre','incline','vertical'].includes(w.mode)?w.mode:'libre';
+            const on=w.id===hbSelected?' is-on':'';
+            const light=' hb-light-'+normalizeHbLight(w.light);
+            const stars=w.stars===false?' hb-nostars':'';
+            return `<div class="hb-writing hb-style-${style} hb-mode-${mode}${on}${light}${stars}" data-id="${w.id}" style="left:${Number(w.x)||50}%;top:${Number(w.y)||50}%;--hb-wsize:${(Number(w.size)||100)/100};--hb-wcolor:${w.color||'#ffffff'}">
+                <span class="hb-w-1"></span>
+                <span class="hb-w-stars" aria-hidden="true"><span></span><b>★★★★★</b><span></span></span>
+                <span class="hb-w-2"></span>
+                <span class="hb-w-orn" aria-hidden="true"><span></span><i>◆</i><span></span></span>
+                <span class="hb-resize" title="Agrandir"></span>
+            </div>`;
+        }).join('');
+        list.forEach(w=>{
+            const el=layer.querySelector('[data-id="'+w.id+'"]');
+            if(!el)return;
+            const a=el.querySelector('.hb-w-1');
+            const b=el.querySelector('.hb-w-2');
+            if(a)a.textContent=cleanHbText(w.text||'');
+            if(b)b.textContent=cleanHbText(w.text2||'');
+        });
+    }
+    function sendHb(){
+        const d=hbRead();
+        const live=document.getElementById('hbLive');
+        const img=document.getElementById('hbLiveImg');
+        const lv=document.getElementById('hb_light_val');
+        const vv=document.getElementById('hb_veil_val');
+        if(lv)lv.textContent=String(d.light);
+        if(vv)vv.textContent=String(d.veil_opacity);
+        if(live){
+            live.style.setProperty('--hb-color', d.color);
+            live.style.setProperty('--hb-light', String(d.light/100));
+            live.style.setProperty('--hb-veil', hbVeil(d.veil, d.veil_opacity));
+        }
+        if(img){
+            const next=hbDraft||d.image;
+            if(img.getAttribute('src')!==next)img.src=next;
+        }
+        if(document.getElementById('hbPicks')&&!document.getElementById('hbPicks').children.length)renderHbPhotos(d.image);
+        else document.querySelectorAll('#hbPicks button').forEach(b=>b.classList.toggle('is-on', !hbDraft && b.dataset.hbImage===d.image));
+        readAboutForm();
+        pushHbFrame();
+    }
+    function paintHabillagePreview(){
+        syncWritingForm();
+        sendHb();
+    }
+    function fillHabillage(data){
+        const set=(id,v)=>{const el=document.getElementById(id);if(el&&v!=null)el.value=v;};
+        set('hb_image', data.image||'/images/hotel-hero.png');
+        set('hb_color', data.color||'#1a1520');
+        set('hb_light', data.light??100);
+        set('hb_veil', data.veil||'none');
+        set('hb_veil_opacity', data.veil_opacity??40);
+        hbWritings=Array.isArray(data.writings)?data.writings.map(w=>{
+            const copy=Object.assign({}, w);
+            copy.light=normalizeHbLight(copy.light);
+            return copy;
+        }):[];
+        hbServices=normalizeHbServices(data.services);
+        hbAbout=normalizeHbAbout(data.about);
+        hbPhotos=Array.isArray(data.photos)?data.photos.slice():HB_LIBRARY.slice();
+        if(data.image&&!hbPhotos.includes(data.image))hbPhotos.push(data.image);
+        renderHbServices();
+        syncAboutForm();
+        const zones=HB_PARTS[hbPart]?.zones||['hero'];
+        const inPart=hbWritings.find(w=>zones.includes(w.zone));
+        hbSelected=hbWritings.some(w=>w.id===hbSelected)?hbSelected:(inPart?.id||hbWritings[0]?.id||'');
+        hbDraft='';
+        const file=document.getElementById('hb_file');
+        if(file)file.value='';
+        renderHbPhotos(data.image||'/images/hotel-hero.png');
+        setHbPart(hbPart);
+    }
+    function syncFormIntoWriting(){
+        const w=hbSelectedWriting();
+        if(!w)return null;
+        w.text=cleanHbText(document.getElementById('hb_w_text')?.value||'');
+        w.text2=cleanHbText(document.getElementById('hb_w_text2')?.value||'');
+        w.color=document.getElementById('hb_w_color')?.value||'#e2b65a';
+        w.size=Number(document.getElementById('hb_w_size')?.value||100);
+        const lightBtn=document.querySelector('#hbLights button.is-on');
+        w.light=normalizeHbLight(lightBtn?.dataset.hbLight||w.light||'soft');
+        w.stars=!!document.getElementById('hb_w_stars')?.checked;
+        return w;
+    }
+    function pruneEmptyWritings(){
+        hbWritings=hbWritings.filter(w=>cleanHbText(w.text||'')!==''||cleanHbText(w.text2||'')!=='');
+        if(hbSelected&&!hbWritings.some(w=>w.id===hbSelected))hbSelected=hbWritings[0]?.id||'';
+    }
+    async function saveHabillage(){
+        const note=document.getElementById('hb_note');
+        syncFormIntoWriting();
+        readAboutForm();
+        pruneEmptyWritings();
+        const fd=new FormData();
+        const d=hbRead();
+        Object.entries(d).forEach(([k,v])=>fd.append(k,v));
+        fd.append('writings', JSON.stringify(hbWritings));
+        fd.append('services', JSON.stringify(hbServices));
+        fd.append('about', JSON.stringify(hbAbout));
+        fd.append('photos', JSON.stringify(hbPhotos));
+        const file=document.getElementById('hb_file')?.files?.[0];
+        if(file)fd.append('image_file', file);
+        try{
+            const res=await fetch('/admin/api/habillage',{method:'POST',headers:{'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]')?.content||'','Accept':'application/json'},body:fd});
+            const json=await res.json().catch(()=>({}));
+            if(!res.ok){
+                const first=json.errors?Object.values(json.errors)[0]:null;
+                throw new Error((first&&first[0])||json.message||'Enregistrement impossible.');
+            }
+            window.AJ_HABILLAGE=json;
+            fillHabillage(json);
+            if(note){note.style.color='#059669';note.textContent='Habillage enregistré.';}
+        }catch(err){
+            if(note){note.style.color='#c05050';note.textContent=err.message||'Enregistrement impossible.';}
+        }
+    }
+    async function resetHabillage(){
+        const note=document.getElementById('hb_note');
+        try{
+            const res=await fetch('/admin/api/habillage',{method:'DELETE',headers:{'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]')?.content||'','Accept':'application/json'}});
+            const json=await res.json().catch(()=>({}));
+            if(!res.ok)throw new Error(json.message||'Réinitialisation impossible.');
+            window.AJ_HABILLAGE=json;
+            document.querySelectorAll('[data-hb-preset]').forEach(b=>b.classList.remove('is-on'));
+            fillHabillage(json);
+            if(note){note.style.color='#059669';note.textContent='Habillage d\'origine rétabli. L\'archive photos est conservée.';}
+        }catch(err){
+            if(note){note.style.color='#c05050';note.textContent=err.message||'Réinitialisation impossible.';}
+        }
+    }
+    function bindHabillage(){
+        if(hbBound)return;
+        hbBound=true;
+        const patchWriting=(partial)=>{
+            const w=ensureWriting();
+            if(partial.text!=null)partial.text=softCleanHbText(partial.text);
+            if(partial.text2!=null)partial.text2=softCleanHbText(partial.text2);
+            Object.assign(w, partial);
+            if(partial.text2!=null&&partial.text2!==''&&w.mode==='libre')w.mode='lignes';
+            syncWritingForm();
+            sendHb();
+        };
+        document.getElementById('cfg-habillage')?.addEventListener('input', e=>{
+            const id=e.target.id;
+            if(id==='hb_w_text')patchWriting({text:e.target.value});
+            else if(id==='hb_w_text2')patchWriting({text2:e.target.value});
+            else if(id==='hb_w_color')patchWriting({color:e.target.value});
+            else if(id==='hb_w_stars')patchWriting({stars:!!e.target.checked});
+            else if(id==='hb_w_size'){
+                const size=Number(e.target.value);
+                ensureWriting().size=size;
+                const lab=document.getElementById('hb_w_size_val');
+                if(lab)lab.textContent=String(size);
+                sendHb();
+            }else if(e.target.closest('.hb-fields'))paintHabillagePreview();
+        });
+        let hbDrag=null;
+        document.getElementById('hbLiveLayer')?.addEventListener('pointerdown', e=>{
+            const node=e.target.closest('.hb-writing');
+            if(!node)return;
+            e.preventDefault();
+            hbSelected=node.dataset.id;
+            syncWritingForm();
+            renderLiveWritings();
+            const w=hbSelectedWriting();
+            if(!w)return;
+            if(e.target.closest('.hb-resize')){
+                hbDrag={mode:'size',id:w.id,x:e.clientX,size:Number(w.size)||100};
+            }else{
+                hbDrag={mode:'move',id:w.id};
+            }
+            node.setPointerCapture(e.pointerId);
+        });
+        document.addEventListener('pointermove', e=>{
+            if(!hbDrag)return;
+            const w=hbWritings.find(item=>item.id===hbDrag.id);
+            const live=document.getElementById('hbLive');
+            const node=document.querySelector('#hbLiveLayer [data-id="'+hbDrag.id+'"]');
+            if(!w||!live||!node)return;
+            if(hbDrag.mode==='size'){
+                w.size=Math.min(220, Math.max(50, Math.round(hbDrag.size+(e.clientX-hbDrag.x))));
+                node.style.setProperty('--hb-wsize', String(w.size/100));
+                const size=document.getElementById('hb_w_size');
+                const lab=document.getElementById('hb_w_size_val');
+                if(size)size.value=String(w.size);
+                if(lab)lab.textContent=String(w.size);
+            }else{
+                const r=live.getBoundingClientRect();
+                w.x=Math.min(96, Math.max(4, (e.clientX-r.left)/r.width*100));
+                w.y=Math.min(96, Math.max(4, (e.clientY-r.top)/r.height*100));
+                w.zone=(HB_PARTS[hbPart]?.focus)||'hero';
+                node.style.left=w.x+'%';
+                node.style.top=w.y+'%';
+            }
+        });
+        const stopDrag=()=>{hbDrag=null;};
+        document.addEventListener('pointerup', stopDrag);
+        document.addEventListener('pointercancel', stopDrag);
+        document.getElementById('hbParts')?.addEventListener('click', e=>{
+            const btn=e.target.closest('[data-hb-part]');
+            if(!btn)return;
+            e.preventDefault();
+            setHbPart(btn.dataset.hbPart);
+        });
+        document.getElementById('hbSvcList')?.addEventListener('click', e=>{
+            const btn=e.target.closest('[data-svc-toggle]');
+            if(!btn)return;
+            e.preventDefault();
+            toggleHbService(btn.dataset.svcToggle);
+        });
+        document.getElementById('hbAboutBox')?.addEventListener('input', e=>{
+            if(!e.target.closest('#hbAboutBox'))return;
+            readAboutForm();
+            paintHabillagePreview();
+        });
+        document.getElementById('hbAboutStyles')?.addEventListener('click', e=>{
+            const btn=e.target.closest('[data-hb-about-style]');
+            if(!btn)return;
+            hbAbout.style=btn.dataset.hbAboutStyle;
+            syncAboutForm();
+            paintHabillagePreview();
+        });
+        document.getElementById('hbAdd')?.addEventListener('click', ()=>{
+            const id='w'+Math.random().toString(36).slice(2,8);
+            const zone=(HB_PARTS[hbPart]?.focus)||'hero';
+            hbWritings.push({id,text:'HOTEL',text2:'AL JAZEERA',style:'enseigne',mode:'lignes',color:'#e2b65a',size:120,light:'soft',stars:true,zone,x:50,y:45});
+            hbSelected=id;
+            paintHabillagePreview();
+            const input=document.getElementById('hb_w_text');
+            if(input){input.focus();input.select();}
+        });
+        document.getElementById('hbRemove')?.addEventListener('click', ()=>{
+            if(!hbSelected)return;
+            const zones=HB_PARTS[hbPart]?.zones||['hero'];
+            hbWritings=hbWritings.filter(w=>w.id!==hbSelected);
+            const next=hbWritings.find(w=>zones.includes(w.zone));
+            hbSelected=next?.id||'';
+            paintHabillagePreview();
+        });
+        document.getElementById('hb_file')?.addEventListener('change', e=>{
+            const f=e.target.files&&e.target.files[0];
+            if(!f){hbDraft='';paintHabillagePreview();return;}
+            const reader=new FileReader();
+            reader.onload=()=>{hbDraft=String(reader.result||'');paintHabillagePreview();};
+            reader.readAsDataURL(f);
+        });
+        document.getElementById('hbPicks')?.addEventListener('click', e=>{
+            const btn=e.target.closest('[data-hb-image]');
+            if(!btn)return;
+            hbDraft='';
+            const file=document.getElementById('hb_file');
+            if(file)file.value='';
+            const hidden=document.getElementById('hb_image');
+            if(hidden)hidden.value=btn.dataset.hbImage;
+            document.querySelectorAll('[data-hb-preset]').forEach(b=>b.classList.remove('is-on'));
+            paintHabillagePreview();
+        });
+        document.querySelectorAll('[data-hb-preset]').forEach(btn=>{
+            btn.addEventListener('click', ()=>{
+                const preset=HB_PRESETS[btn.dataset.hbPreset];
+                if(!preset)return;
+                document.querySelectorAll('[data-hb-preset]').forEach(b=>b.classList.toggle('is-on', b===btn));
+                const set=(id,v)=>{const el=document.getElementById(id);if(el&&v!=null)el.value=v;};
+                set('hb_color', preset.color);
+                set('hb_light', preset.light);
+                set('hb_veil', preset.veil);
+                set('hb_veil_opacity', preset.veil_opacity);
+                paintHabillagePreview();
+            });
+        });
+        document.getElementById('hbStyles')?.addEventListener('click', e=>{
+            const btn=e.target.closest('[data-hb-style]');
+            if(!btn)return;
+            patchWriting({style:btn.dataset.hbStyle});
+        });
+        document.getElementById('hbModes')?.addEventListener('click', e=>{
+            const btn=e.target.closest('[data-hb-mode]');
+            if(!btn)return;
+            patchWriting({mode:btn.dataset.hbMode});
+        });
+        document.getElementById('hbLights')?.addEventListener('click', e=>{
+            const btn=e.target.closest('[data-hb-light]');
+            if(!btn)return;
+            patchWriting({light:normalizeHbLight(btn.dataset.hbLight)});
+        });
+        document.getElementById('hbColorSwatches')?.addEventListener('click', e=>{
+            const btn=e.target.closest('[data-hb-swatch]');
+            if(!btn)return;
+            const hex=btn.dataset.hbSwatch;
+            const input=document.getElementById('hb_w_color');
+            if(input)input.value=hex;
+            patchWriting({color:hex});
+        });
+        document.getElementById('hbSave')?.addEventListener('click', saveHabillage);
+        document.getElementById('hbReset')?.addEventListener('click', resetHabillage);
+        window.addEventListener('message', e=>{
+            if(e.origin!==location.origin||!e.data)return;
+            const data=e.data;
+            if(data.type==='hb-ready'){
+                if(hbPart!=='photo')pushHbFrame();
+                return;
+            }
+            if(data.type==='hb-svc-toggle'){
+                if(data.id)toggleHbService(data.id);
+                return;
+            }
+            if(data.type==='hb-select'){
+                if(!data.id)return;
+                hbSelected=data.id;
+                const w=hbSelectedWriting();
+                if(w)hbPart=hbPartOfZone(w.zone);
+                focusHbPart();
+                paintHabillagePreview();
+                return;
+            }
+            if(data.type==='hb-move'){
+                const w=hbWritings.find(x=>x.id===data.id);
+                if(!w)return;
+                w.x=Number(data.x)||w.x;
+                w.y=Number(data.y)||w.y;
+                if(data.zone)w.zone=data.zone;
+                paintHabillagePreview();
+                return;
+            }
+            if(data.type==='hb-size'){
+                const w=hbWritings.find(x=>x.id===data.id);
+                if(!w)return;
+                w.size=Math.min(220, Math.max(50, Number(data.size)||w.size||100));
+                const size=document.getElementById('hb_w_size');
+                const lab=document.getElementById('hb_w_size_val');
+                if(size)size.value=String(w.size);
+                if(lab)lab.textContent=String(w.size);
+                paintHabillagePreview();
+            }
+        });
+        fillHabillage(window.AJ_HABILLAGE||{});
+        setHbPart('photo');
     }
 
     function switchTab(key){
@@ -6029,6 +7083,12 @@ const CFG=(function(){
             if(pageTitle)pageTitle.textContent='Autorisations';
         }
         if(key==='carrousel')renderCarousel();
+        document.body.classList.toggle('hb-lock', key==='habillage');
+        if(key==='habillage'){
+            bindHabillage();
+            window.scrollTo(0,0);
+            requestAnimationFrame(()=>paintHabillagePreview());
+        }
     }
 
     function loadHotelForm(){
@@ -6471,6 +7531,7 @@ const CFG=(function(){
         renderCommerciaux();
         renderAuth();
         renderCarousel();
+        bindHabillage();
     }
 
     function init(){

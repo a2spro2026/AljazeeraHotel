@@ -13,7 +13,7 @@
     <script src="{{ asset('js/aj-dates.js') }}"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root{
             --navy:#0a1736;
@@ -120,7 +120,7 @@
     @include('partials.data-center-styles')
     @stack('styles')
 </head>
-<body class="@if(request()->routeIs('home')) page-home @elseif(request()->routeIs('chambres')) page-chambres @endif">
+<body class="@if(request()->routeIs('home')) page-home @elseif(request()->routeIs('chambres')) page-chambres @endif @if(!empty($habillage['saved'])) hb-on @endif @if(request()->boolean('hb-edit')) hb-edit @endif"@if(!empty($habillage)) style="--hb-image:url('{{ $habillage['image_url'] }}');--hb-color:{{ $habillage['color'] }};--hb-light:{{ $habillage['light_ratio'] }};--hb-veil:{{ $habillage['veil_css'] }};--hb-title:{{ $habillage['title_color'] }};"@endif>
 <script>
 (function(){
     if(navigator.serviceWorker){

@@ -39,7 +39,7 @@
 </style>
 @endpush
 @section('content')
-<header class="page-hero"><div class="ph-inner"><div class="crumb">Al Jazeera Hotel</div><h1 class="serif">Nos Services</h1></div></header>
+<header class="page-hero"><img class="hb-photo" src="{{ !empty($habillage['saved']) ? $habillage['image_url'] : asset('images/hotel-facade.png') }}" alt=""><div class="ph-inner"><div class="crumb">Al Jazeera Hotel</div><h1 class="serif">Nos Services</h1></div></header>
 <section class="page-body">
     <div class="srv-intro">
         <h2 class="serif">Votre confort, notre priorité</h2>

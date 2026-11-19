@@ -18,7 +18,7 @@
 </style>
 @endpush
 @section('content')
-<header class="page-hero"><div class="ph-inner">
+<header class="page-hero"><img class="hb-photo" src="{{ !empty($habillage['saved']) ? $habillage['image_url'] : asset('images/hotel-facade.png') }}" alt=""><div class="ph-inner">
     <div class="crumb">Espace Commercial</div>
     <h1 class="serif">Suivi commercial</h1>
     <form method="POST" action="{{ route('space.logout', 'commercial') }}" style="margin-top:14px">

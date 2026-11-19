@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HabillageController;
 use App\Http\Controllers\HotelUserController;
 use App\Models\HotelUser;
 use Illuminate\Http\Request;
@@ -88,6 +89,9 @@ Route::post('/espace/{space}/logout', function (Request $request, string $space)
 })->name('space.logout');
 
 // Utilisateurs de l'hôtel (gestion réservée à la Direction)
+Route::post('/admin/api/habillage', [HabillageController::class, 'update']);
+Route::delete('/admin/api/habillage', [HabillageController::class, 'destroy']);
+
 Route::prefix('admin/api/users')->controller(HotelUserController::class)->group(function () {
     Route::get('/', 'index');
     Route::post('/', 'store');

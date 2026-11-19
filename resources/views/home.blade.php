@@ -5,14 +5,161 @@
 @push('styles')
 <style>
     .home-hero{
-        position:relative;min-height:100vh;margin-top:0;
-        display:block;
-        background:url('{{ asset('images/hotel-hero.png') }}') center center/cover no-repeat;
-        background-color:#1a1520;
+        position:relative;width:100%;margin-top:0;display:block;overflow:hidden;
+        background:transparent;
     }
-    .home-hero::before,
-    .home-hero::after{display:none}
-    .home-hero-inner{display:none}
+    .home-hero .hb-photo{display:block;width:100%;height:auto;filter:brightness(var(--hb-light,1))}
+    .home-hero::after{
+        content:'';position:absolute;inset:0;z-index:1;display:block;pointer-events:none;
+        background:var(--hb-veil,transparent);
+    }
+    .home-hero-inner{
+        position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;
+        width:100%;height:auto;min-height:0;padding:8% 8vw 7%;
+    }
+    [data-hb-zone]{position:relative}
+    .hb-writing{
+        position:absolute;z-index:20;left:50%;top:50%;max-width:92%;
+        transform:translate(-50%,-50%) scale(var(--hb-wsize,1));transform-origin:center center;
+        color:var(--hb-wcolor,#fff);text-align:center;pointer-events:none;line-height:1.05;
+        white-space:normal;word-break:normal;
+    }
+    html:has(body.hb-edit),body.hb-edit{overflow:auto!important;height:100%!important;background:#0b1220}
+    body.hb-edit .hb-writing{pointer-events:auto;cursor:grab;touch-action:none}
+    body.hb-edit .hb-writing.is-on{outline:none}
+    body.hb-edit [data-hb-zone].is-focus{outline:none}
+    body.hb-edit.hb-solo nav,
+    body.hb-edit.hb-solo footer,
+    body.hb-edit.hb-solo [data-hb-zone]:not(.is-focus){display:none!important}
+    body.hb-edit.hb-solo .home-hero.is-focus{min-height:auto}
+    body.hb-edit.hb-solo [data-hb-zone].is-focus{min-height:280px}
+    .hb-w-1,.hb-w-2{display:block}
+    .hb-w-stars,.hb-w-orn,.hb-w-2{display:none}
+    .hb-mode-lignes .hb-w-stars,.hb-mode-lignes .hb-w-orn{display:flex}
+    .hb-mode-lignes .hb-w-2{display:block}
+    .hb-w-stars{align-items:center;justify-content:center;gap:12px;margin:10px 0;color:var(--hb-wcolor,#f6e7b8);width:100%}
+    .hb-w-stars span{display:block;height:1px;flex:1;min-width:36px;max-width:160px;background:linear-gradient(90deg,transparent,var(--hb-wcolor,#f4e4b4) 18%,color-mix(in srgb,var(--hb-wcolor,#fff6d8) 70%,#fff) 50%,var(--hb-wcolor,#f4e4b4) 82%,transparent)}
+    .hb-w-stars b{font-weight:400;letter-spacing:.28em;font-size:.34em;padding-left:.28em}
+    .hb-w-orn{align-items:center;justify-content:center;gap:12px;margin-top:10px;color:var(--hb-wcolor,#f6e7b8);width:100%}
+    .hb-w-orn span{display:block;height:1px;flex:1;min-width:36px;max-width:160px;background:linear-gradient(90deg,transparent,var(--hb-wcolor,#f4e4b4) 18%,color-mix(in srgb,var(--hb-wcolor,#fff6d8) 70%,#fff) 50%,var(--hb-wcolor,#f4e4b4) 82%,transparent)}
+    .hb-w-orn i{font-style:normal;font-size:11px}
+    .hb-style-enseigne{font-size:clamp(34px,5vw,84px)}
+    .hb-style-enseigne .hb-w-1,.hb-style-enseigne .hb-w-2{
+        font-family:'Cinzel',serif;font-weight:700;text-transform:uppercase;
+        letter-spacing:.08em;word-spacing:-.42em;white-space:nowrap;
+        background:linear-gradient(180deg,color-mix(in srgb,var(--hb-wcolor,#e2b65a) 35%,#fff) 0%,color-mix(in srgb,var(--hb-wcolor,#e2b65a) 75%,#fff) 28%,var(--hb-wcolor,#e2b65a) 62%,color-mix(in srgb,var(--hb-wcolor,#e2b65a) 70%,#000) 100%);
+        -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+    }
+    .hb-style-enseigne .hb-w-2{font-size:.9em;letter-spacing:.1em;word-spacing:-.48em}
+    .hb-style-classique{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(32px,4.4vw,72px);text-shadow:0 3px 18px rgba(0,0,0,.35)}
+    .hb-style-signature{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(30px,4vw,64px);text-shadow:0 3px 18px rgba(0,0,0,.28)}
+    .hb-style-moderne{font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:clamp(16px,2.1vw,34px);text-shadow:0 2px 12px rgba(0,0,0,.35)}
+    .hb-style-lisere{font-family:'Cormorant Garamond',serif;font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:clamp(26px,3.2vw,52px)}
+    .hb-style-lisere .hb-w-1{border-bottom:1px solid #e8c56a;padding-bottom:8px}
+    .hb-style-contour{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:clamp(28px,4vw,68px);color:transparent;-webkit-text-stroke:1.5px var(--hb-wcolor,#fff)}
+    .hb-style-neon{font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:clamp(18px,2.4vw,40px);text-shadow:0 0 8px var(--hb-wcolor,#fff),0 0 22px var(--hb-wcolor,#fff)}
+    .hb-writing.hb-light-none .hb-w-1,
+    .hb-writing.hb-light-none .hb-w-2,
+    .hb-writing.hb-light-none .hb-w-stars,
+    .hb-writing.hb-light-none .hb-w-orn,
+    .hb-writing.hb-nolight .hb-w-1,
+    .hb-writing.hb-nolight .hb-w-2,
+    .hb-writing.hb-nolight .hb-w-stars,
+    .hb-writing.hb-nolight .hb-w-orn{
+        filter:none!important;text-shadow:none!important;
+    }
+    .hb-writing.hb-light-soft .hb-w-1,
+    .hb-writing.hb-light-soft .hb-w-2{
+        filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))!important;
+        text-shadow:0 2px 10px rgba(0,0,0,.28)!important;
+    }
+    .hb-writing.hb-light-glow .hb-w-1,
+    .hb-writing.hb-light-glow .hb-w-2{
+        filter:drop-shadow(0 0 6px color-mix(in srgb,var(--hb-wcolor,#fff) 65%,transparent)) drop-shadow(0 0 16px color-mix(in srgb,var(--hb-wcolor,#fff) 40%,transparent))!important;
+        text-shadow:0 0 14px color-mix(in srgb,var(--hb-wcolor,#fff) 55%,transparent)!important;
+    }
+    .hb-writing.hb-light-forte .hb-w-1,
+    .hb-writing.hb-light-forte .hb-w-2{
+        filter:drop-shadow(0 4px 8px rgba(0,0,0,.45)) drop-shadow(0 0 14px color-mix(in srgb,var(--hb-wcolor,#fff) 50%,transparent))!important;
+        text-shadow:0 3px 16px rgba(0,0,0,.4),0 0 22px color-mix(in srgb,var(--hb-wcolor,#fff) 45%,transparent)!important;
+    }
+    .hb-writing.hb-light-neon .hb-w-1,
+    .hb-writing.hb-light-neon .hb-w-2{
+        filter:drop-shadow(0 0 4px var(--hb-wcolor,#fff)) drop-shadow(0 0 14px var(--hb-wcolor,#fff)) drop-shadow(0 0 28px color-mix(in srgb,var(--hb-wcolor,#fff) 60%,transparent))!important;
+        text-shadow:0 0 8px var(--hb-wcolor,#fff),0 0 20px var(--hb-wcolor,#fff)!important;
+    }
+    .hb-writing.hb-light-or .hb-w-1,
+    .hb-writing.hb-light-or .hb-w-2{
+        filter:drop-shadow(0 0 8px rgba(232,190,110,.55)) drop-shadow(0 2px 4px rgba(0,0,0,.35))!important;
+        text-shadow:0 0 12px rgba(246,231,184,.55),0 0 24px rgba(197,160,89,.4)!important;
+    }
+    .hb-writing.hb-light-relief .hb-w-1,
+    .hb-writing.hb-light-relief .hb-w-2{
+        filter:drop-shadow(1px 1px 0 rgba(255,255,255,.35)) drop-shadow(-1px -1px 0 rgba(0,0,0,.35)) drop-shadow(0 3px 6px rgba(0,0,0,.4))!important;
+        text-shadow:1px 1px 0 rgba(255,255,255,.25),-1px -1px 0 rgba(0,0,0,.35)!important;
+    }
+    .hb-writing.hb-light-halo .hb-w-1,
+    .hb-writing.hb-light-halo .hb-w-2{
+        filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 0 28px color-mix(in srgb,var(--hb-wcolor,#fff) 35%,transparent))!important;
+        text-shadow:0 0 18px rgba(255,255,255,.4),0 0 36px color-mix(in srgb,var(--hb-wcolor,#fff) 30%,transparent)!important;
+    }
+    .hb-style-enseigne.hb-light-soft .hb-w-1,
+    .hb-style-enseigne.hb-light-soft .hb-w-2,
+    .hb-style-enseigne.hb-light-glow .hb-w-1,
+    .hb-style-enseigne.hb-light-glow .hb-w-2,
+    .hb-style-enseigne.hb-light-forte .hb-w-1,
+    .hb-style-enseigne.hb-light-forte .hb-w-2,
+    .hb-style-enseigne.hb-light-neon .hb-w-1,
+    .hb-style-enseigne.hb-light-neon .hb-w-2,
+    .hb-style-enseigne.hb-light-or .hb-w-1,
+    .hb-style-enseigne.hb-light-or .hb-w-2,
+    .hb-style-enseigne.hb-light-relief .hb-w-1,
+    .hb-style-enseigne.hb-light-relief .hb-w-2,
+    .hb-style-enseigne.hb-light-halo .hb-w-1,
+    .hb-style-enseigne.hb-light-halo .hb-w-2{text-shadow:none!important}
+    .hb-writing.hb-nostars .hb-w-stars,
+    .hb-writing.hb-nostars .hb-w-orn{display:none!important}
+    .hb-mode-bandeau{background:rgba(6,15,36,.62);padding:12px 18px;border-radius:10px}
+    .hb-mode-encadre{border:1px solid currentColor;padding:12px 18px}
+    .hb-writing.hb-mode-incline{transform:translate(-50%,-50%) rotate(-8deg) scale(var(--hb-wsize,1))}
+    .hb-writing.hb-mode-vertical{writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:.2em}
+    .hb-resize{display:none}
+    body.hb-edit .hb-resize{display:block;position:absolute;right:-14px;bottom:-14px;width:16px;height:16px;border-radius:4px;background:#fff;border:2px solid #c5a059;cursor:nwse-resize}
+    .home-hero-inner h1,.home-hero-inner p{color:var(--hb-title,#fff)}
+    .home-hero-inner.hb-style-enseigne,
+    .home-hero-inner.hb-style-signature,
+    .home-hero-inner.hb-style-lisere{justify-content:center;align-items:center;text-align:center}
+    .hb-lockup{max-width:92%;transform:scale(var(--hb-size,1));transform-origin:left bottom}
+    .home-hero-inner.hb-style-enseigne .hb-lockup,
+    .home-hero-inner.hb-style-signature .hb-lockup,
+    .home-hero-inner.hb-style-lisere .hb-lockup{transform-origin:center center}
+    .home-hero-inner.is-placed{padding:0}
+    .home-hero-inner.is-placed .hb-lockup{position:absolute;left:var(--hb-x,50%);top:var(--hb-y,50%);transform:translate(-50%,-50%) scale(var(--hb-size,1));transform-origin:center center}
+    .hb-stars,.hb-ornament{display:none;align-items:center;justify-content:center;gap:14px;width:min(920px,92vw);margin:0 auto}
+    .hb-style-enseigne .hb-stars,.hb-style-enseigne .hb-ornament{display:flex}
+    .hb-stars span,.hb-ornament span{display:block;height:1px;flex:1;max-width:220px;background:linear-gradient(90deg,transparent,#f4e4b4 18%,#fff6d8 50%,#f4e4b4 82%,transparent)}
+    .hb-stars b{font-weight:400;letter-spacing:.38em;font-size:clamp(14px,1.7vw,22px);color:#f6e7b8;text-shadow:0 0 12px rgba(246,231,184,.6);padding-left:.38em}
+    .hb-ornament{margin-top:14px}
+    .hb-ornament i{color:#f6e7b8;font-style:normal;font-size:11px;text-shadow:0 0 8px rgba(246,231,184,.7)}
+    .hb-style-enseigne .hb-lockup h1,.hb-style-enseigne .hb-lockup p{
+        font-family:'Cinzel',serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;word-spacing:-.42em;line-height:1.05;white-space:nowrap;
+        background:linear-gradient(180deg,#fff8e4 0%,#f3dc9a 30%,#e2b65a 62%,#c9963a 100%);
+        -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+        filter:drop-shadow(0 2px 2px rgba(0,0,0,.35));text-shadow:none;
+    }
+    .home-hero-inner.hb-style-enseigne h1{font-size:clamp(48px,7.4vw,108px);margin:0}
+    .home-hero-inner.hb-style-enseigne p{max-width:none;margin:10px 0 0;padding:0;border:0;box-shadow:none;font-size:clamp(26px,4vw,62px);letter-spacing:.1em;word-spacing:-.48em}
+    .home-hero-inner.hb-style-signature h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;letter-spacing:1px;text-transform:none}
+    .home-hero-inner.hb-style-signature p{font-family:'Cormorant Garamond',serif;font-style:italic;letter-spacing:1px;max-width:none;border:0;padding:0;box-shadow:none}
+    .home-hero-inner.hb-style-moderne h1{font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:.22em;text-transform:uppercase;font-size:clamp(26px,4vw,54px)}
+    .home-hero-inner.hb-style-moderne p{font-family:'Montserrat',sans-serif;font-weight:500;letter-spacing:.2em;text-transform:uppercase;font-size:clamp(12px,1.3vw,15px);border:0;padding:0;box-shadow:none}
+    .home-hero-inner.hb-style-lisere h1{letter-spacing:.18em;text-transform:uppercase}
+    .home-hero-inner.hb-style-lisere h1::after{content:'';display:block;width:88px;height:1px;margin:14px auto 0;background:linear-gradient(90deg,transparent,#e8c56a,transparent)}
+    .home-hero-inner.hb-style-lisere p{font-family:'Montserrat',sans-serif;letter-spacing:.28em;text-transform:uppercase;font-size:clamp(12px,1.3vw,15px);max-width:none;border:0;padding:0;box-shadow:none}
+    .home-hero-inner p{
+        max-width:640px;margin-top:12px;font-size:clamp(16px,1.6vw,20px);line-height:1.5;
+        text-shadow:0 2px 16px rgba(0,0,0,.45);
+    }
     @keyframes txtFadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
     @keyframes goldGlow{
         0%,100%{text-shadow:0 0 12px rgba(212,176,106,.45),0 0 28px rgba(197,160,89,.25),0 2px 20px rgba(0,0,0,.35)}
@@ -41,7 +188,7 @@
     }
     .home-hero h1{
         font-family:'Cormorant Garamond',serif;font-weight:700;line-height:1.02;
-        font-size:clamp(44px,6.5vw,78px);color:#fff;margin:0 0 6px;
+        font-size:clamp(44px,6.5vw,78px);color:var(--hb-title,#fff);margin:0 0 6px;
         letter-spacing:3px;
     }
     .home-hero h1 .txt-hero-main{
@@ -206,22 +353,28 @@
         vertical-align:middle;margin:0 16px;box-shadow:0 0 10px rgba(197,160,89,.4);
     }
     .home-services-grid{
-        display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:20px;
+        display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:28px 20px;
     }
-    @media(max-width:1000px){.home-services-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
-    @media(max-width:560px){.home-services-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    .home-svc{text-align:center;padding:12px 8px}
+    .home-svc{position:relative;text-align:center;padding:12px 8px;flex:0 1 110px;width:110px;max-width:140px}
     .home-svc .ico{
         width:48px;height:48px;margin:0 auto 10px;border-radius:50%;
         display:flex;align-items:center;justify-content:center;
         background:rgba(197,160,89,.12);color:var(--gold);font-size:22px;
         border:1px solid rgba(197,160,89,.25);
     }
-    .home-svc span{
+    .home-svc > span{
         font-size:11px;font-weight:700;color:var(--text-dark);letter-spacing:.6px;
         text-transform:uppercase;transition:color .3s,text-shadow .3s;
     }
-    .home-svc:hover span{color:var(--gold);text-shadow:0 0 16px rgba(197,160,89,.25)}
+    .home-svc:hover > span{color:var(--gold);text-shadow:0 0 16px rgba(197,160,89,.25)}
+    .home-svc.is-off{display:none!important}
+    .home-svc-eye{
+        display:none;position:absolute;top:0;right:4px;z-index:5;
+        width:28px;height:28px;border-radius:50%;border:1px solid rgba(197,160,89,.45);
+        background:#fff;color:#8a6a2f;cursor:pointer;font-size:14px;line-height:1;
+        align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(10,23,54,.12);
+    }
+    body.hb-edit .home-svc-eye{display:inline-flex}
 
     .home-promos{padding:56px clamp(20px,4vw,48px);max-width:var(--content-max);margin:0 auto}
     .home-promos-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
@@ -273,21 +426,38 @@
 
     .home-about{
         padding:64px clamp(20px,4vw,48px);max-width:100%;margin:0 auto;text-align:center;
+        background:var(--hb-about-bg,#0a1736);
+        --hb-about-title:var(--hb-about-title-color,#8b93a3);
+        --hb-about-accent-color:var(--hb-about-accent,#c5a059);
+        --hb-about-body:var(--hb-about-text-color,#c5cbd6);
     }
     .home-about h2{
-        font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,36px);
-        color:var(--text-dark);margin-bottom:18px;letter-spacing:2px;
+        font-size:clamp(28px,3.5vw,36px);
+        color:var(--hb-about-title);margin-bottom:18px;letter-spacing:2px;
         position:relative;display:inline-block;
+    }
+    .home-about.hb-about-serif h2{font-family:'Cormorant Garamond',serif;font-weight:600}
+    .home-about.hb-about-moderne h2{font-family:'Montserrat',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.18em;font-size:clamp(18px,2.4vw,28px)}
+    .home-about.hb-about-signature h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500}
+    .home-about.hb-about-enseigne h2{
+        font-family:'Cinzel',serif;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+        background:linear-gradient(180deg,color-mix(in srgb,var(--hb-about-accent-color) 35%,#fff),var(--hb-about-accent-color) 55%,color-mix(in srgb,var(--hb-about-accent-color) 70%,#000));
+        -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+    }
+    .home-about.hb-about-enseigne h2 em{
+        background:linear-gradient(180deg,color-mix(in srgb,var(--hb-about-accent-color) 35%,#fff),var(--hb-about-accent-color) 55%,color-mix(in srgb,var(--hb-about-accent-color) 70%,#000));
+        -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
     }
     .home-about h2::after{
         content:'';position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);
-        width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
-        box-shadow:0 0 12px rgba(197,160,89,.4);
+        width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--hb-about-accent-color),transparent);
+        box-shadow:0 0 12px color-mix(in srgb,var(--hb-about-accent-color) 50%,transparent);
     }
     .home-about p{
-        font-size:16px;color:var(--text-muted);line-height:1.8;letter-spacing:.2px;
+        font-size:16px;color:var(--hb-about-body);line-height:1.8;letter-spacing:.2px;max-width:820px;margin:0 auto;
     }
-    .home-about em{color:var(--gold);font-style:normal;font-weight:600}
+    .home-about em{color:var(--hb-about-accent-color);font-style:normal;font-weight:600;-webkit-text-fill-color:var(--hb-about-accent-color)}
+    .home-about.hb-about-enseigne em{-webkit-text-fill-color:transparent}
 
     @media(max-width:560px){
         .btn-offers{padding:16px 28px;font-size:12px;letter-spacing:1.4px;width:100%;max-width:360px}
@@ -308,13 +478,17 @@
     $allRooms = collect(config('hotel_rooms.rooms'))->keyBy('num');
 @endphp
 
-<section class="home-hero" aria-label="Hotel Al Jazzera"></section>
+<section class="home-hero" data-hb-zone="hero" aria-label="Hotel Al Jazzera">
+    <img class="hb-photo" src="{{ $habillage['image_url'] ?? asset('images/hotel-hero.png') }}" alt="">
+    @include('partials.hb-writings', ['zone' => 'hero'])
+</section>
 
-<div class="home-cta-wrap">
+<div class="home-cta-wrap" data-hb-zone="offres">
     <a href="{{ route('chambres') }}" class="btn-offers"><span>Découvrez nos offres</span></a>
+    @include('partials.hb-writings', ['zone' => 'offres'])
 </div>
 
-<section class="home-section" id="chambres">
+<section class="home-section" id="chambres" data-hb-zone="chambres">
     <div class="home-section-head">
         <h2 class="serif">Nos Chambres &amp; Suites</h2>
         <a href="{{ route('chambres') }}#chambres-list" class="home-link">Voir toutes les chambres &rarr;</a>
@@ -348,25 +522,35 @@
         </article>
         @endforeach
     </div>
+    @include('partials.hb-writings', ['zone' => 'chambres'])
 </section>
 
-<section class="home-services" id="services">
+@php
+    $hbServices = $habillage['services'] ?? \App\Support\Habillage::defaultServices();
+    $hbEdit = request()->boolean('hb-edit');
+    $hbVisibleServices = $hbEdit ? $hbServices : array_values(array_filter($hbServices, fn ($s) => ($s['visible'] ?? true)));
+@endphp
+@if(count($hbVisibleServices))
+<section class="home-services" id="services" data-hb-zone="services">
     <div class="home-services-inner">
         <h2 class="serif">Nos Services Premium</h2>
-        <div class="home-services-grid">
-            <div class="home-svc"><div class="ico">&#127946;</div><span>Piscine</span></div>
-            <div class="home-svc"><div class="ico">&#128150;</div><span>Spa &amp; Bien-être</span></div>
-            <div class="home-svc"><div class="ico">&#127869;</div><span>Restaurant</span></div>
-            <div class="home-svc"><div class="ico">&#9749;</div><span>Café &amp; Lounge</span></div>
-            <div class="home-svc"><div class="ico">&#127947;</div><span>Salle de Sport</span></div>
-            <div class="home-svc"><div class="ico">&#128246;</div><span>Wi-Fi Gratuit</span></div>
-            <div class="home-svc"><div class="ico">&#128652;</div><span>Parking</span></div>
-            <div class="home-svc"><div class="ico">&#127869;</div><span>Room Service</span></div>
+        <div class="home-services-grid" id="homeServicesGrid">
+            @foreach($hbVisibleServices as $svc)
+                <div class="home-svc{{ ($svc['visible'] ?? true) ? '' : ' is-off' }}" data-svc-id="{{ $svc['id'] }}">
+                    @if($hbEdit)
+                        <button type="button" class="home-svc-eye" data-svc-toggle="{{ $svc['id'] }}" title="{{ ($svc['visible'] ?? true) ? 'Masquer' : 'Afficher' }}" aria-label="{{ ($svc['visible'] ?? true) ? 'Masquer' : 'Afficher' }}">{{ ($svc['visible'] ?? true) ? '👁' : '🙈' }}</button>
+                    @endif
+                    <div class="ico">{{ $svc['icon'] }}</div>
+                    <span>{{ $svc['label'] }}</span>
+                </div>
+            @endforeach
         </div>
     </div>
+    @include('partials.hb-writings', ['zone' => 'services'])
 </section>
+@endif
 
-<section class="home-promos">
+<section class="home-promos" data-hb-zone="promos">
     <div class="home-promos-grid">
         <article class="home-promo" style="background-image:url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&q=80')">
             <div class="p-ico">&#128737;</div>
@@ -389,9 +573,10 @@
             <p>Des avantages uniques</p>
         </article>
     </div>
+    @include('partials.hb-writings', ['zone' => 'promos'])
 </section>
 
-<section class="home-trust">
+<section class="home-trust" data-hb-zone="confiance">
     <div class="home-trust-inner">
         <div class="home-trust-item">
             <span class="t-ico">&#128176;</span>
@@ -410,11 +595,22 @@
             <div><b>Avis des clients</b><span>4.8/5 — 1 200 avis</span></div>
         </div>
     </div>
+    @include('partials.hb-writings', ['zone' => 'confiance'])
 </section>
 
-<section class="home-about" id="apropos">
-    <h2 class="serif">À propos d'<em>ALJAZEERA</em></h2>
-    <p>Un hôtel <em>5 étoiles</em> qui allie élégance marocaine et confort international. Piscine, spa, gastronomie raffinée et un service attentionné pour un séjour d'exception au cœur de la ville.</p>
+@php
+    $hbAbout = $habillage['about'] ?? \App\Support\Habillage::defaultAbout();
+    $hbAboutStyle = in_array($hbAbout['style'] ?? '', ['serif','moderne','signature','enseigne'], true) ? $hbAbout['style'] : 'serif';
+@endphp
+<section
+    class="home-about hb-about-{{ $hbAboutStyle }}"
+    id="apropos"
+    data-hb-zone="apropos"
+    style="--hb-about-bg:{{ $hbAbout['bg'] }};--hb-about-title-color:{{ $hbAbout['title_color'] }};--hb-about-accent:{{ $hbAbout['accent'] }};--hb-about-text-color:{{ $hbAbout['text_color'] }};"
+>
+    <h2><span data-hb-about="title">{{ $hbAbout['title'] }}</span><em data-hb-about="brand">{{ $hbAbout['brand'] }}</em></h2>
+    <p data-hb-about="text">{!! $hbAbout['text'] !!}</p>
+    @include('partials.hb-writings', ['zone' => 'apropos'])
 </section>
 @endsection
 
@@ -446,4 +642,168 @@
     });
 })();
 </script>
+@if(request()->boolean('hb-edit'))
+<script>
+(function(){
+    const zones=['hero','offres','chambres','services','promos','confiance','apropos'];
+    const styles=['enseigne','classique','signature','moderne','lisere','contour','neon'];
+    const modes=['libre','lignes','bandeau','encadre','incline','vertical'];
+    let drag=null;
+    function zoneOf(name){
+        return document.querySelector('[data-hb-zone="'+(zones.includes(name)?name:'hero')+'"]')||document.querySelector('[data-hb-zone="hero"]');
+    }
+    function draw(list, selected){
+        document.querySelectorAll('.hb-writing').forEach(n=>n.remove());
+        (list||[]).forEach(w=>{
+            const style=styles.includes(w.style)?w.style:'classique';
+            const mode=modes.includes(w.mode)?w.mode:'libre';
+            const zoneName=zones.includes(w.zone)?w.zone:'hero';
+            const zone=zoneOf(zoneName);
+            if(!zone)return;
+            zone.classList.add('is-focus');
+            const el=document.createElement('div');
+            const light=(w.light===false||w.light==='none')?'none':(w.light===true?'soft':(['soft','glow','forte','neon','or','relief','halo'].includes(w.light)?w.light:'soft'));
+            el.className='hb-writing hb-style-'+style+' hb-mode-'+mode+' hb-light-'+light+(w.id===selected?' is-on':'')+(w.stars===false?' hb-nostars':'');
+            el.dataset.id=w.id;
+            el.dataset.zone=zoneName;
+            el.style.left=(Number(w.x)||50)+'%';
+            el.style.top=(Number(w.y)||50)+'%';
+            el.style.setProperty('--hb-wsize', String((Number(w.size)||100)/100));
+            el.style.setProperty('--hb-wcolor', w.color||'#ffffff');
+            const a=document.createElement('span');a.className='hb-w-1';a.textContent=w.text||'';
+            const stars=document.createElement('span');stars.className='hb-w-stars';stars.setAttribute('aria-hidden','true');
+            stars.innerHTML='<span></span><b>★★★★★</b><span></span>';
+            const b=document.createElement('span');b.className='hb-w-2';b.textContent=w.text2||'';
+            const orn=document.createElement('span');orn.className='hb-w-orn';orn.setAttribute('aria-hidden','true');orn.innerHTML='<span></span><i>◆</i><span></span>';
+            const handle=document.createElement('span');handle.className='hb-resize';handle.title='Agrandir';
+            el.append(a,stars,b,orn,handle);
+            zone.appendChild(el);
+        });
+    }
+    function applyBg(d){
+        document.body.style.setProperty('--hb-color', d.color||'#1a1520');
+        document.body.style.setProperty('--hb-light', String(d.light??1));
+        document.body.style.setProperty('--hb-veil', d.veil||'transparent');
+        const img=document.querySelector('.home-hero .hb-photo');
+        if(img&&d.image&&img.getAttribute('src')!==d.image)img.src=d.image;
+    }
+    function applyServices(list){
+        if(!Array.isArray(list))return;
+        list.forEach(s=>{
+            const el=document.querySelector('.home-svc[data-svc-id="'+s.id+'"]');
+            if(!el)return;
+            const on=s.visible!==false;
+            el.classList.toggle('is-off', !on);
+            const btn=el.querySelector('[data-svc-toggle]');
+            if(btn){
+                btn.textContent=on?'👁':'🙈';
+                btn.title=on?'Masquer':'Afficher';
+                btn.setAttribute('aria-label', on?'Masquer':'Afficher');
+            }
+        });
+    }
+    function applyAbout(about){
+        const box=document.querySelector('.home-about');
+        if(!box||!about)return;
+        const styles=['serif','moderne','signature','enseigne'];
+        const style=styles.includes(about.style)?about.style:'serif';
+        box.classList.remove('hb-about-serif','hb-about-moderne','hb-about-signature','hb-about-enseigne');
+        box.classList.add('hb-about-'+style);
+        box.style.setProperty('--hb-about-bg', about.bg||'#0a1736');
+        box.style.setProperty('--hb-about-title-color', about.title_color||'#8b93a3');
+        box.style.setProperty('--hb-about-accent', about.accent||'#c5a059');
+        box.style.setProperty('--hb-about-text-color', about.text_color||'#c5cbd6');
+        const title=box.querySelector('[data-hb-about="title"]');
+        const brand=box.querySelector('[data-hb-about="brand"]');
+        const text=box.querySelector('[data-hb-about="text"]');
+        if(title)title.textContent=about.title||'';
+        if(brand)brand.textContent=about.brand||'';
+        if(text)text.innerHTML=String(about.text||'').replace(/<(?!\/?em\b)[^>]*>/gi,'');
+    }
+    function focusZone(name, solo, keep){
+        const active=Array.isArray(keep)&&keep.length?keep:[name||'hero'];
+        document.body.classList.add('hb-edit');
+        document.body.classList.toggle('hb-solo', !!solo);
+        document.querySelectorAll('[data-hb-zone]').forEach(z=>z.classList.toggle('is-focus', active.includes(z.dataset.hbZone)));
+        const first=document.querySelector('[data-hb-zone="'+active[0]+'"]');
+        window.scrollTo(0,0);
+        document.documentElement.scrollTop=0;
+        document.body.scrollTop=0;
+        if(first){
+            requestAnimationFrame(()=>{
+                first.scrollIntoView({block:'start',behavior:'instant' in document.documentElement.style ? 'instant' : 'auto'});
+                window.scrollTo(0, Math.max(0, (first.getBoundingClientRect().top+window.scrollY)-8));
+            });
+        }
+    }
+    function sameOrigin(origin){
+        try{return !origin||origin===location.origin||new URL(origin).host===location.host;}catch(err){return false;}
+    }
+    window.addEventListener('message', e=>{
+        if(!sameOrigin(e.origin)||!e.data)return;
+        if(e.data.type==='hb-focus'){focusZone(e.data.zone||'hero', e.data.solo!==false, e.data.zones);return;}
+        if(e.data.type!=='hb-state')return;
+        if(e.data.zones)focusZone(e.data.focus||e.data.zones[0]||'hero', e.data.solo!==false, e.data.zones);
+        applyBg(e.data);
+        applyServices(e.data.services);
+        applyAbout(e.data.about);
+        draw(e.data.writings, e.data.selected);
+    });
+    document.addEventListener('click', e=>{
+        const btn=e.target.closest('[data-svc-toggle]');
+        if(!btn)return;
+        e.preventDefault();
+        e.stopPropagation();
+        parent.postMessage({type:'hb-svc-toggle',id:btn.dataset.svcToggle}, '*');
+    });
+    document.addEventListener('pointerdown', e=>{
+        if(e.target.closest('[data-svc-toggle]'))return;
+        const node=e.target.closest('.hb-writing');
+        if(!node)return;
+        e.preventDefault();
+        node.setPointerCapture(e.pointerId);
+        if(e.target.closest('.hb-resize')){
+            drag={mode:'size',id:node.dataset.id,x:e.clientX,size:Math.round(parseFloat(node.style.getPropertyValue('--hb-wsize')||'1')*100),node};
+        }else{
+            drag={mode:'move',id:node.dataset.id,moved:false,node};
+        }
+    });
+    document.addEventListener('pointermove', e=>{
+        if(!drag)return;
+        if(drag.mode==='size'){
+            drag.sizeNow=Math.min(220, Math.max(50, Math.round(drag.size+(e.clientX-drag.x))));
+            drag.node.style.setProperty('--hb-wsize', String(drag.sizeNow/100));
+            return;
+        }
+        drag.moved=true;
+        drag.node.style.pointerEvents='none';
+        const under=document.elementFromPoint(e.clientX, e.clientY);
+        drag.node.style.pointerEvents='auto';
+        const zone=under&&under.closest('[data-hb-zone]');
+        if(!zone)return;
+        if(drag.node.parentElement!==zone)zone.appendChild(drag.node);
+        const r=zone.getBoundingClientRect();
+        const x=Math.min(96, Math.max(4, (e.clientX-r.left)/r.width*100));
+        const y=Math.min(96, Math.max(4, (e.clientY-r.top)/r.height*100));
+        drag.node.style.left=x+'%';
+        drag.node.style.top=y+'%';
+        drag.zone=zone.dataset.hbZone;
+        drag.px=x;
+        drag.py=y;
+    });
+    document.addEventListener('pointerup', ()=>{
+        if(!drag)return;
+        if(drag.mode==='size'){
+            parent.postMessage({type:'hb-size',id:drag.id,size:drag.sizeNow||drag.size}, '*');
+        }else if(drag.moved&&drag.zone){
+            parent.postMessage({type:'hb-move',id:drag.id,zone:drag.zone,x:+drag.px.toFixed(1),y:+drag.py.toFixed(1)}, '*');
+        }else{
+            parent.postMessage({type:'hb-select',id:drag.id}, '*');
+        }
+        drag=null;
+    });
+    parent.postMessage({type:'hb-ready'}, '*');
+})();
+</script>
+@endif
 @endpush
