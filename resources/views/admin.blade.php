@@ -1197,6 +1197,7 @@
         .cfg-auth-table tr.auth-sec:hover td{background:#f3ead6}
         .cfg-auth-table th .perm-hdr{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;line-height:1.2}
         .cfg-auth-table th .perm-ic{font-size:16px;line-height:1}
+        .cfg-auth-table th .auth-all-lbl{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
         .cfg-auth-table input[type=checkbox]{width:18px;height:18px;accent-color:var(--gold);cursor:pointer}
 
         /* ===== CHAMBRES DISPONIBLES & CARROUSEL ===== */
@@ -4683,12 +4684,17 @@
                             <table class="cfg-auth-table" id="cfg_auth_table">
                                 <thead>
                                     <tr>
-                                        <th>Module / Menu</th>
-                                        <th><span class="perm-hdr"><span class="perm-ic">&#9998;</span>Saisir</span></th>
-                                        <th><span class="perm-hdr"><span class="perm-ic">&#128394;</span>Modifier</span></th>
-                                        <th><span class="perm-hdr"><span class="perm-ic">&#128465;</span>Supprimer</span></th>
-                                        <th><span class="perm-hdr"><span class="perm-ic">&#128424;</span>Imprimer</span></th>
-                                        <th><span class="perm-hdr"><span class="perm-ic">&#128065;</span>Voir</span></th>
+                                        <th>
+                                            <label class="auth-all-lbl" title="Cocher ou décocher toutes les cases">
+                                                <span>Tout cocher</span>
+                                                <input type="checkbox" id="auth_check_all" aria-label="Tout cocher">
+                                            </label>
+                                        </th>
+                                        <th><span class="perm-hdr"><span class="perm-ic">&#9998;</span>Saisir<input type="checkbox" class="auth-col-all" data-perm="saisir" title="Tout saisir" aria-label="Tout saisir"></span></th>
+                                        <th><span class="perm-hdr"><span class="perm-ic">&#128394;</span>Modifier<input type="checkbox" class="auth-col-all" data-perm="modifier" title="Tout modifier" aria-label="Tout modifier"></span></th>
+                                        <th><span class="perm-hdr"><span class="perm-ic">&#128465;</span>Supprimer<input type="checkbox" class="auth-col-all" data-perm="supprimer" title="Tout supprimer" aria-label="Tout supprimer"></span></th>
+                                        <th><span class="perm-hdr"><span class="perm-ic">&#128424;</span>Imprimer<input type="checkbox" class="auth-col-all" data-perm="imprimer" title="Tout imprimer" aria-label="Tout imprimer"></span></th>
+                                        <th><span class="perm-hdr"><span class="perm-ic">&#128065;</span>Voir<input type="checkbox" class="auth-col-all" data-perm="voir" title="Tout voir" aria-label="Tout voir"></span></th>
                                     </tr>
                                 </thead>
                                 <tbody id="cfg_auth_tbody"></tbody>
@@ -7369,6 +7375,32 @@ const CFG=(function(){
     const closedSecs=new Set(MENUS.map(m=>m.section));
     const eyeOn='<svg class="eye-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
     const eyeOff='<svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><path d="M1 1l22 22"/></svg>';
+    function authBoxes(){
+        return [...document.querySelectorAll('#cfg_auth_tbody input[type=checkbox][data-menu]')];
+    }
+    function syncAuthMasters(){
+        const boxes=authBoxes();
+        const all=document.getElementById('auth_check_all');
+        if(all){
+            const n=boxes.length, on=boxes.filter(b=>b.checked).length;
+            all.checked=n>0&&on===n;
+            all.indeterminate=on>0&&on<n;
+        }
+        document.querySelectorAll('.auth-col-all').forEach(col=>{
+            const list=boxes.filter(b=>b.dataset.perm===col.dataset.perm);
+            const on=list.filter(b=>b.checked).length;
+            col.checked=list.length>0&&on===list.length;
+            col.indeterminate=on>0&&on<list.length;
+        });
+    }
+    function setAllAuth(on){
+        authBoxes().forEach(b=>{b.checked=!!on;});
+        syncAuthMasters();
+    }
+    function setAuthColumn(perm,on){
+        authBoxes().filter(b=>b.dataset.perm===perm).forEach(b=>{b.checked=!!on;});
+        syncAuthMasters();
+    }
     function renderAuth(stored){
         const source=stored&&typeof stored==='object'&&!Array.isArray(stored)?stored:{};
         let lastSection='';
@@ -7385,6 +7417,7 @@ const CFG=(function(){
             return sectionRow+`<tr class="auth-row${hidden}" data-sec="${esc(m.section)}"><td style="text-align:left">${esc(m.label)}</td>${cells}</tr>`;
         }).join('');
         document.getElementById('cfg_auth_tbody').innerHTML=rows;
+        syncAuthMasters();
     }
 
     async function saveAuth(){
@@ -7547,6 +7580,13 @@ const CFG=(function(){
         renderUsers();
         renderCommerciaux();
         renderAuth();
+        document.getElementById('auth_check_all')?.addEventListener('change',e=>setAllAuth(e.target.checked));
+        document.querySelectorAll('.auth-col-all').forEach(col=>{
+            col.addEventListener('change',e=>setAuthColumn(col.dataset.perm,e.target.checked));
+        });
+        document.getElementById('cfg_auth_tbody')?.addEventListener('change',e=>{
+            if(e.target.matches('input[type=checkbox][data-menu]'))syncAuthMasters();
+        });
         document.getElementById('cfg_auth_tbody')?.addEventListener('click',e=>{
             const btn=e.target.closest('.auth-fold');
             if(!btn)return;
