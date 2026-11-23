@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aperçu — Tableau de bord chambres</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#c5a059;--tw-navy:#0a1839;--tw-indigo:#1a2a5e;--text-dark:#1a2332;--muted:#7a8190;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;padding:72px 28px 40px;
+    font-family:'Montserrat',sans-serif;color:var(--text-dark);
+    background:
+      radial-gradient(90% 70% at 10% 0%,rgba(197,160,89,.16),transparent 55%),
+      linear-gradient(160deg,#f4efe4 0%,#ebe4d4 45%,#e7dfcf 100%);
+  }
+  .note{
+    position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:5;
+    font:600 11px/1.4 'Montserrat',sans-serif;letter-spacing:.18em;text-transform:uppercase;
+    color:#8a6a2f;background:rgba(255,255,255,.88);border:1px solid rgba(197,160,89,.35);
+    padding:10px 16px;border-radius:999px;backdrop-filter:blur(8px);
+  }
+  .dash-rooms{max-width:1180px;margin:0 auto}
+  .dr-head{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid rgba(212,176,106,.28);
+  }
+  .dr-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .dr-title{
+    font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;
+    letter-spacing:1px;line-height:1.1;margin:2px 0 0;
+  }
+  .dr-tools{display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+  .dr-chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .dr-chip{
+    display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+    padding:8px 14px;border-radius:40px;font:600 11px 'Montserrat',sans-serif;letter-spacing:.6px;
+    color:var(--text-dark);background:rgba(255,255,255,.85);
+    border:1px solid rgba(212,176,106,.28);
+  }
+  .dr-chip b{min-width:22px;padding:1px 7px;border-radius:20px;font-size:10px;text-align:center;background:rgba(212,176,106,.16);color:#8a6a2c}
+  .dr-chip.is-on{background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));color:#fff;border-color:transparent}
+  .dr-chip.is-on b{background:rgba(240,207,133,.25);color:#f3d38a}
+  .dr-toggle{
+    display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+    width:40px;height:40px;padding:0;border-radius:12px;
+    color:#f3d38a;background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));
+    border:1px solid rgba(240,207,133,.45);box-shadow:0 6px 18px rgba(8,20,51,.2);
+  }
+  .dr-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .dr-cats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 14px}
+  @media(max-width:760px){.dr-cats{grid-template-columns:1fr}}
+  .dr-cat{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    min-height:64px;padding:14px 16px;border-radius:14px;cursor:pointer;text-align:left;
+    background:#fff;border:1px solid rgba(212,176,106,.28);box-shadow:0 4px 16px rgba(8,20,51,.06);
+  }
+  .dr-cat.is-on{background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));border-color:transparent}
+  .dr-cat-lbl{display:flex;flex-direction:column;gap:2px;font:600 13px 'Montserrat',sans-serif}
+  .dr-cat-lbl small{font:500 10px 'Montserrat',sans-serif;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+  .dr-cat.is-on .dr-cat-lbl,.dr-cat.is-on .dr-cat-lbl small{color:#f3d38a}
+  .dr-cat-n{
+    min-width:34px;height:34px;padding:0 8px;border-radius:999px;
+    display:inline-flex;align-items:center;justify-content:center;
+    font:700 13px 'Montserrat',sans-serif;color:#8a6a2c;background:rgba(212,176,106,.16);
+  }
+  .dr-cat.is-on .dr-cat-n{background:rgba(240,207,133,.22);color:#f3d38a}
+  .dr-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;align-items:stretch}
+  @media(max-width:980px){.dr-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media(max-width:720px){.dr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:480px){.dr-grid{grid-template-columns:1fr}}
+  .dr-floor-label{
+    grid-column:1/-1;margin:4px 0 0;padding:4px 2px 0;
+    font:700 11px 'Montserrat',sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);
+  }
+  .dr-card{
+    --st:#e0b43a;background:#fff;border-radius:16px;overflow:hidden;cursor:pointer;
+    border:1px solid rgba(212,176,106,.2);box-shadow:0 6px 22px rgba(8,20,51,.07);
+    display:flex;flex-direction:column;height:100%;min-width:0;
+  }
+  .dr-card.st-occupee{--st:#2fa864}
+  .dr-card.st-reservee{--st:#3b7be0}
+  .dr-img{position:relative;aspect-ratio:4/3;overflow:hidden;background:#e9e5dc}
+  .dr-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .dr-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,20,51,0) 55%,rgba(8,20,51,.55) 100%)}
+  .dr-badge{
+    position:absolute;top:12px;left:12px;z-index:1;padding:5px 11px;border-radius:30px;
+    font:700 10px 'Montserrat',sans-serif;letter-spacing:.8px;text-transform:uppercase;color:#2a1f05;background:var(--st);
+  }
+  .dr-card.st-occupee .dr-badge,.dr-card.st-reservee .dr-badge{color:#fff}
+  .dr-num{position:absolute;left:12px;bottom:10px;z-index:1;font:700 13px 'Montserrat',sans-serif;letter-spacing:1px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+  .dr-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1;border-top:3px solid var(--st)}
+  .dr-cat-tag{font:600 10px 'Montserrat',sans-serif;letter-spacing:.7px;text-transform:uppercase;color:#8a6a2c}
+  .dr-body h3{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;margin:0;line-height:1.2;min-height:2.4em}
+  .dr-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto}
+  .dr-floor{font-size:11px;color:var(--muted)}
+  .dr-price{font-size:14px;font-weight:700;color:var(--tw-navy);white-space:nowrap}
+  .dr-price small{font-size:10px;font-weight:500;color:var(--muted)}
+</style>
+</head>
+<body>
+  <div class="note">Aperçu local — non déployé</div>
+  <div class="dash-rooms">
+    <div class="dr-head">
+      <div>
+        <span class="dr-eyebrow">Hébergement</span>
+        <h2 class="dr-title">Nos chambres</h2>
+      </div>
+      <div class="dr-tools">
+        <div class="dr-chips">
+          <button type="button" class="dr-chip is-on">Toutes<b>8</b></button>
+          <button type="button" class="dr-chip">Disponibles<b>5</b></button>
+          <button type="button" class="dr-chip">Occupées<b>2</b></button>
+          <button type="button" class="dr-chip">Réservées<b>1</b></button>
+        </div>
+        <button type="button" class="dr-toggle" title="Masquer les chambres" aria-label="Masquer les chambres">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><path d="M1 1l22 22"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="dr-cats">
+      <button type="button" class="dr-cat">
+        <span class="dr-cat-lbl">Suites<small>Grand Suite &amp; Junior</small></span>
+        <span class="dr-cat-n">2</span>
+      </button>
+      <button type="button" class="dr-cat is-on">
+        <span class="dr-cat-lbl">Single<small>Chambres singles</small></span>
+        <span class="dr-cat-n">3</span>
+      </button>
+      <button type="button" class="dr-cat">
+        <span class="dr-cat-lbl">Double<small>Chambres doubles</small></span>
+        <span class="dr-cat-n">3</span>
+      </button>
+    </div>
+
+    <div class="dr-grid">
+      <div class="dr-floor-label">1er étage</div>
+      <article class="dr-card st-disponible">
+        <div class="dr-img">
+          <img src="images/rooms/room-101.jpg" alt="Simple Standard" onerror="this.style.opacity=.35">
+          <span class="dr-badge">Disponible</span>
+          <span class="dr-num">N° 101</span>
+        </div>
+        <div class="dr-body">
+          <span class="dr-cat-tag">Single</span>
+          <h3>Simple Standard</h3>
+          <div class="dr-foot"><span class="dr-floor">1er étage</span><span class="dr-price">450.00 DH <small>/ nuit</small></span></div>
+        </div>
+      </article>
+      <article class="dr-card st-occupee">
+        <div class="dr-img">
+          <img src="images/rooms/room-115.jpg" alt="Familiale Confort" onerror="this.style.opacity=.35">
+          <span class="dr-badge">Occupée</span>
+          <span class="dr-num">N° 115</span>
+        </div>
+        <div class="dr-body">
+          <span class="dr-cat-tag">Double</span>
+          <h3>Familiale Confort</h3>
+          <div class="dr-foot"><span class="dr-floor">1er étage</span><span class="dr-price">950.00 DH <small>/ nuit</small></span></div>
+        </div>
+      </article>
+
+      <div class="dr-floor-label">2e étage</div>
+      <article class="dr-card st-disponible">
+        <div class="dr-img">
+          <img src="images/rooms/room-201.jpg" alt="Simple Supérieure" onerror="this.style.opacity=.35">
+          <span class="dr-badge">Disponible</span>
+          <span class="dr-num">N° 201</span>
+        </div>
+        <div class="dr-body">
+          <span class="dr-cat-tag">Single</span>
+          <h3>Simple Supérieure</h3>
+          <div class="dr-foot"><span class="dr-floor">2e étage</span><span class="dr-price">520.00 DH <small>/ nuit</small></span></div>
+        </div>
+      </article>
+      <article class="dr-card st-reservee">
+        <div class="dr-img">
+          <img src="images/rooms/room-205.jpg" alt="Simple Deluxe" onerror="this.style.opacity=.35">
+          <span class="dr-badge">Réservée</span>
+          <span class="dr-num">N° 205</span>
+        </div>
+        <div class="dr-body">
+          <span class="dr-cat-tag">Single</span>
+          <h3>Simple Deluxe</h3>
+          <div class="dr-foot"><span class="dr-floor">2e étage</span><span class="dr-price">550.00 DH <small>/ nuit</small></span></div>
+        </div>
+      </article>
+
+      <div class="dr-floor-label">3e étage</div>
+      <article class="dr-card st-disponible">
+        <div class="dr-img">
+          <img src="images/rooms/room-301.jpg" alt="Suite Junior" onerror="this.style.opacity=.35">
+          <span class="dr-badge">Disponible</span>
+          <span class="dr-num">N° 301</span>
+        </div>
+        <div class="dr-body">
+          <span class="dr-cat-tag">Suite</span>
+          <h3>Suite Junior</h3>
+          <div class="dr-foot"><span class="dr-floor">3e étage</span><span class="dr-price">1 100.00 DH <small>/ nuit</small></span></div>
+        </div>
+      </article>
+      <article class="dr-card st-disponible">
+        <div class="dr-img">
+          <img src="images/rooms/room-302.jpg" alt="Suite Executive" onerror="this.style.opacity=.35">
+          <span class="dr-badge">Disponible</span>
+          <span class="dr-num">N° 302</span>
+        </div>
+        <div class="dr-body">
+          <span class="dr-cat-tag">Suite</span>
+          <h3>Suite Executive</h3>
+          <div class="dr-foot"><span class="dr-floor">3e étage</span><span class="dr-price">1 350.00 DH <small>/ nuit</small></span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+  <script>
+    document.querySelectorAll('.dr-cat').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.dr-cat').forEach(b=>b.classList.remove('is-on'));
+        btn.classList.add('is-on');
+      });
+    });
+  </script>
+</body>
+</html>

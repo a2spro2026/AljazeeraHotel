@@ -375,14 +375,17 @@
         .content{padding:30px;flex:1;display:flex;flex-direction:column;align-items:center;background:var(--surface)}
         .panel{width:100%;max-width:var(--content-max);margin-left:auto;margin-right:auto}
         .panel#ch-etat{max-width:100%}
-        .content.dash-view,.content.kpi-view,.content.ch-view{padding-top:150px}
+        .content.dash-view{padding-top:128px}
+        .content.kpi-view,.content.ch-view{padding-top:150px}
         .content.ech-view{padding-top:12px}
         @media(max-width:1200px){
+            .content.dash-view{padding-top:136px}
             .content.ch-view{padding-top:260px}
             .content.kpi-view{padding-top:150px}
             .content.ech-view{padding-top:12px}
         }
         @media(max-width:640px){
+            .content.dash-view{padding-top:220px}
             .content.ch-view{padding-top:360px}
             .content.kpi-view{padding-top:260px}
         }
@@ -2576,15 +2579,15 @@
         #dashboard{max-width:100%}
         .dash-rooms{width:100%}
         .dr-head{
-            display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;
-            margin:4px 0 22px;padding-bottom:16px;border-bottom:1px solid rgba(212,176,106,.28);
+            display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;
+            margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid rgba(212,176,106,.28);
         }
         .dr-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600}
         #dashboard .dr-title{
-            font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--text-dark);
+            font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--text-dark);
             letter-spacing:1px;line-height:1.1;margin:2px 0 0;text-align:left;
         }
-        .dr-chips{display:flex;flex-wrap:wrap;gap:8px}
+        .dr-chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
         .dr-chip{
             display:inline-flex;align-items:center;gap:8px;cursor:pointer;
             padding:8px 14px;border-radius:40px;font:600 11px 'Montserrat',sans-serif;letter-spacing:.6px;
@@ -2602,12 +2605,50 @@
         }
         .dr-chip.is-on b{background:rgba(240,207,133,.25);color:#f3d38a}
 
-        .dr-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
+        .dr-cats{
+            display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;
+            margin:0 0 14px;
+        }
+        @media(max-width:760px){.dr-cats{grid-template-columns:1fr}}
+        .dr-cat{
+            display:flex;align-items:center;justify-content:space-between;gap:12px;
+            min-height:64px;padding:14px 16px;border-radius:14px;cursor:pointer;text-align:left;
+            background:#fff;border:1px solid rgba(212,176,106,.28);
+            box-shadow:0 4px 16px rgba(8,20,51,.06);
+            transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
+        }
+        .dr-cat:hover{border-color:rgba(212,176,106,.55);box-shadow:0 8px 22px rgba(8,20,51,.1)}
+        .dr-cat.is-on{
+            background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));
+            border-color:transparent;box-shadow:0 8px 22px rgba(8,20,51,.22);
+        }
+        .dr-cat .dr-cat-lbl{
+            display:flex;flex-direction:column;gap:2px;min-width:0;
+            font:600 13px 'Montserrat',sans-serif;color:var(--text-dark);
+        }
+        .dr-cat .dr-cat-lbl small{
+            font:500 10px 'Montserrat',sans-serif;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);
+        }
+        .dr-cat.is-on .dr-cat-lbl,.dr-cat.is-on .dr-cat-lbl small{color:#f3d38a}
+        .dr-cat .dr-cat-n{
+            flex:0 0 auto;min-width:34px;height:34px;padding:0 8px;border-radius:999px;
+            display:inline-flex;align-items:center;justify-content:center;
+            font:700 13px 'Montserrat',sans-serif;color:#8a6a2c;
+            background:rgba(212,176,106,.16);
+        }
+        .dr-cat.is-on .dr-cat-n{background:rgba(240,207,133,.22);color:#f3d38a}
+
+        .dr-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;align-items:stretch}
         @media(max-width:1400px){.dr-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
         @media(max-width:1100px){.dr-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
         @media(max-width:760px){.dr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
         @media(max-width:480px){.dr-grid{grid-template-columns:1fr}}
         .dr-empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
+        .dr-floor-label{
+            grid-column:1/-1;margin:4px 0 0;padding:4px 2px 0;
+            font:700 11px 'Montserrat',sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);
+        }
+        .dr-floor-label:first-child{margin-top:0}
 
         .dr-card{
             --st:#d4b06a;
@@ -2615,7 +2656,7 @@
             border:1px solid rgba(212,176,106,.2);
             box-shadow:0 6px 22px rgba(8,20,51,.07);
             transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;
-            display:flex;flex-direction:column;
+            display:flex;flex-direction:column;height:100%;min-width:0;
         }
         .dr-card:hover{
             transform:translateY(-5px);border-color:var(--st);
@@ -2645,28 +2686,34 @@
             font:700 13px 'Montserrat',sans-serif;letter-spacing:1px;color:#fff;
             text-shadow:0 2px 8px rgba(0,0,0,.5);
         }
-        .dr-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1;border-top:3px solid var(--st)}
+        .dr-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1;border-top:3px solid var(--st)}
         .dr-body h3{
-            font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--text-dark);
+            font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text-dark);
             line-height:1.2;margin:0;
+            display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+            min-height:2.4em;
+        }
+        .dr-cat-tag{
+            font:600 10px 'Montserrat',sans-serif;letter-spacing:.7px;text-transform:uppercase;color:#8a6a2c;
         }
         .dr-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto}
         .dr-floor{font-size:11px;color:var(--muted);letter-spacing:.4px}
-        .dr-price{font-size:14px;font-weight:700;color:var(--tw-navy)}
+        .dr-price{font-size:14px;font-weight:700;color:var(--tw-navy);white-space:nowrap}
         .dr-price small{font-size:10px;font-weight:500;color:var(--muted)}
 
         /* ---- Tableau de bord : afficher/masquer + analyses ---- */
-        .dr-tools{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+        .dr-tools{display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
         .dr-toggle{
-            display:inline-flex;align-items:center;gap:8px;cursor:pointer;
-            padding:8px 16px;border-radius:40px;font:600 11px 'Montserrat',sans-serif;letter-spacing:.6px;
+            display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+            width:40px;height:40px;padding:0;border-radius:12px;flex:0 0 auto;
             color:#f3d38a;background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));
             border:1px solid rgba(240,207,133,.45);box-shadow:0 6px 18px rgba(8,20,51,.2);
-            transition:box-shadow .2s ease,border-color .2s ease;
+            transition:box-shadow .2s ease,border-color .2s ease,transform .15s ease;
         }
         .dr-toggle:hover{border-color:#f0cf85;box-shadow:0 8px 22px rgba(8,20,51,.3),0 0 16px rgba(240,207,133,.3)}
-        .dr-toggle svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-        @media(max-width:860px){.dr-tools{align-items:flex-start;width:100%}}
+        .dr-toggle[aria-pressed="true"]{background:linear-gradient(135deg,#1a2a52,#2a3f78)}
+        .dr-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+        @media(max-width:860px){.dr-tools{justify-content:flex-start;width:100%}}
 
         .dash-analytics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
         @media(max-width:1100px){.dash-analytics{grid-template-columns:minmax(0,1fr)}}
@@ -8846,11 +8893,20 @@ window.CHETAT=CHETAT;
 const DASH=(function(){
     const STATUS={disponible:'Disponible',occupee:'Occupée',reservee:'Réservée',nettoyage:'Nettoyage',maintenance:'Maintenance'};
     const FILTERS=[['','Toutes'],['disponible','Disponibles'],['occupee','Occupées'],['reservee','Réservées'],['nettoyage','Nettoyage'],['maintenance','Maintenance']];
+    const CAT_CARDS=[['suite','Suites','Grand Suite & Junior'],['single','Single','Chambres singles'],['double','Double','Chambres doubles']];
+    const CAT_LBL={suite:'Suite',single:'Single',double:'Double'};
     const K_HIDDEN='aj_dash_rooms_hidden',K_HIST='aj_ch_hist',K_LOG='aj_resa_log';
     const MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
     const PERIODS=[['jour','Jour'],['mois','Mois'],['annee','Année']];
-    let filter='',roomsHidden=localStorage.getItem(K_HIDDEN)==='1',pRooms='jour',pFin='mois';
+    let filter='',catFilter='',roomsHidden=localStorage.getItem(K_HIDDEN)==='1',pRooms='jour',pFin='mois';
     const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
+    const catOf=t=>t==='grand-suite'||t==='suite-junior'||t==='suite'?'suite':(t==='familiale'||t==='double'?'double':'single');
+    const floorLbl=f=>Number(f)===1?'1er étage':`${f}e étage`;
+    const sortRooms=(a,b)=>{
+        const fa=Number(a.floor)||0,fb=Number(b.floor)||0;
+        if(fa!==fb)return fa-fb;
+        return String(a.num).localeCompare(String(b.num),undefined,{numeric:true});
+    };
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{};}catch(e){return{};}};
     const loadArr=k=>{try{const v=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(v)?v:[];}catch(e){return[];}};
     const num=v=>Number(v)||0;
@@ -9053,7 +9109,7 @@ const DASH=(function(){
         const eye=roomsHidden
             ?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
             :'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><path d="M1 1l22 22"/></svg>';
-        const toggle=canRooms&&canAnalytics?`<button type="button" class="dr-toggle" id="drToggle" aria-pressed="${roomsHidden}">${eye}<span>${roomsHidden?'Afficher les chambres':'Masquer les chambres'}</span></button>`:'';
+        const toggle=canRooms&&canAnalytics?`<button type="button" class="dr-toggle" id="drToggle" aria-pressed="${roomsHidden}" title="${roomsHidden?'Afficher les chambres':'Masquer les chambres'}" aria-label="${roomsHidden?'Afficher les chambres':'Masquer les chambres'}">${eye}</button>`:'';
 
         if(!canRooms&&!canAnalytics){
             box.innerHTML='<p class="dr-empty">Aucune partie du tableau de bord n\'est autorisée.</p>';
@@ -9080,12 +9136,28 @@ const DASH=(function(){
             return;
         }
 
-        const list=filter?all.filter(r=>r.status===filter):all;
+        const sorted=all.slice().sort(sortRooms);
+        const catCount={suite:0,single:0,double:0};
+        sorted.forEach(r=>{catCount[catOf(r.type)]=(catCount[catOf(r.type)]||0)+1;});
+        const list=sorted.filter(r=>(!filter||r.status===filter)&&(!catFilter||catOf(r.type)===catFilter));
         const chips=FILTERS.map(([k,l])=>{
             const n=k?(count[k]||0):all.length;
             return`<button type="button" class="dr-chip${filter===k?' is-on':''}${k?' st-'+k:''}" data-f="${k}">${l}<b>${n}</b></button>`;
         }).join('');
-        const cards=list.map(r=>`
+        const cats=CAT_CARDS.map(([k,l,sub])=>`
+            <button type="button" class="dr-cat${catFilter===k?' is-on':''}" data-cat="${k}" aria-pressed="${catFilter===k}">
+                <span class="dr-cat-lbl">${esc(l)}<small>${esc(sub)}</small></span>
+                <span class="dr-cat-n">${catCount[k]||0}</span>
+            </button>`).join('');
+        let cards='',lastFloor=null;
+        list.forEach(r=>{
+            const floor=Number(r.floor)||0;
+            if(floor!==lastFloor){
+                cards+=`<div class="dr-floor-label">${esc(floorLbl(floor))}</div>`;
+                lastFloor=floor;
+            }
+            const cat=catOf(r.type);
+            cards+=`
             <article class="dr-card st-${r.status}" data-num="${esc(r.num)}" role="button" tabindex="0">
                 <div class="dr-img">
                     <img src="${esc(r.img)}" alt="${esc(r.title)}" loading="lazy">
@@ -9093,13 +9165,15 @@ const DASH=(function(){
                     <span class="dr-num">N° ${esc(r.num)}</span>
                 </div>
                 <div class="dr-body">
+                    <span class="dr-cat-tag">${esc(CAT_LBL[cat]||cat)}</span>
                     <h3>${esc(r.title)}</h3>
                     <div class="dr-foot">
-                        <span class="dr-floor">${r.floor===1?'1er':r.floor+'e'} étage</span>
+                        <span class="dr-floor">${esc(floorLbl(r.floor))}</span>
                         <span class="dr-price">${ajMoneyDH(r.price||0)} <small>/ nuit</small></span>
                     </div>
                 </div>
-            </article>`).join('');
+            </article>`;
+        });
 
         box.innerHTML=`
             <div class="dash-rooms">
@@ -9109,15 +9183,20 @@ const DASH=(function(){
                         <h2 class="dr-title">Nos chambres</h2>
                     </div>
                     <div class="dr-tools">
-                        ${toggle}
                         <div class="dr-chips">${chips}</div>
+                        ${toggle}
                     </div>
                 </div>
+                <div class="dr-cats">${cats}</div>
                 <div class="dr-grid">${cards||'<p class="dr-empty">Aucune chambre pour ce filtre.</p>'}</div>
             </div>`;
 
         box.querySelector('#drToggle')?.addEventListener('click',()=>{roomsHidden=true;localStorage.setItem(K_HIDDEN,'1');render();});
         box.querySelectorAll('.dr-chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.f;render();}));
+        box.querySelectorAll('.dr-cat').forEach(b=>b.addEventListener('click',()=>{
+            catFilter=catFilter===b.dataset.cat?'':b.dataset.cat;
+            render();
+        }));
         box.querySelectorAll('.dr-card').forEach(c=>{
             const open=()=>{
                 activatePanel('ch-etat','Chambres');
