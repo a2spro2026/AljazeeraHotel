@@ -11,6 +11,7 @@
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <meta name="theme-color" content="#0a1736">
     <script src="{{ asset('js/aj-dates.js') }}"></script>
+    <script src="{{ asset('js/aj-money.js') }}"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
@@ -2777,29 +2778,81 @@
         .cc-card.st-disponible .cc-status{color:#2a1f05}
         @media(max-width:860px){.cc-tools{align-items:stretch;width:100%}}
 
-        .cc-form-head{margin-bottom:18px}
-        .cc-lbl{
-            display:block;color:var(--gold);font-weight:600;font-size:11px;letter-spacing:1px;
-            text-transform:uppercase;margin-bottom:10px;
+        .cc-form-head{margin-bottom:0}
+        .cc-edit-modal{
+            width:min(460px,100%);padding:0;overflow:hidden;
+            background:#fff;border:1px solid rgba(197,160,89,.28);
+            box-shadow:0 28px 70px rgba(8,20,51,.18),0 0 0 1px rgba(255,255,255,.4) inset;
         }
-        .cc-st-block{margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid rgba(197,160,89,.18)}
+        .cc-edit-hero{
+            position:relative;height:148px;overflow:hidden;
+            background:linear-gradient(145deg,#0a1839,#1a2a5e);
+        }
+        .cc-edit-hero img{width:100%;height:100%;object-fit:cover;display:block}
+        .cc-edit-hero::after{
+            content:'';position:absolute;inset:0;
+            background:linear-gradient(180deg,rgba(8,20,51,.25) 0%,rgba(8,20,51,.7) 100%);
+        }
+        .cc-edit-hero-cap{
+            position:absolute;left:22px;right:48px;bottom:16px;z-index:1;color:#fff6d8;
+            font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:.04em;
+            text-shadow:0 2px 12px rgba(0,0,0,.45);
+        }
+        .cc-edit-hero-cap small{
+            display:block;margin-bottom:4px;font:600 9px 'Montserrat',sans-serif;
+            letter-spacing:.28em;text-transform:uppercase;color:rgba(240,198,110,.95);
+        }
+        .cc-edit-body{padding:22px 24px 24px}
+        .cc-edit-kicker{
+            margin:0 0 16px;font:600 10px 'Montserrat',sans-serif;letter-spacing:.22em;
+            text-transform:uppercase;color:var(--gold);
+        }
+        .cc-edit-form{display:flex;flex-direction:column;gap:14px}
+        .cc-edit-form .field{display:flex;flex-direction:column;gap:7px;margin:0}
+        .cc-edit-form .field label{
+            margin:0;color:#8a6a2f;font:700 10px 'Montserrat',sans-serif;
+            letter-spacing:.16em;text-transform:uppercase;
+        }
+        .cc-edit-form .field input,
+        .cc-edit-form .field select{
+            width:100%;padding:12px 14px;border-radius:10px;outline:none;
+            border:1px solid rgba(197,160,89,.32);background:#fcfbf8;
+            font:500 14px 'Montserrat',sans-serif;color:#1a2332;
+            transition:border-color .2s,box-shadow .2s,background .2s;
+        }
+        .cc-edit-form .field select{cursor:pointer;appearance:none;
+            background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238a6a2f' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+            background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;
+        }
+        .cc-edit-form .field input:focus,
+        .cc-edit-form .field select:focus{
+            border-color:var(--gold);background:#fff;box-shadow:0 0 0 3px rgba(197,160,89,.14);
+        }
+        .cc-edit-actions{
+            display:flex;gap:10px;margin-top:18px;padding-top:16px;
+            border-top:1px solid rgba(197,160,89,.18);
+        }
+        .cc-edit-actions .btn{flex:1;padding:12px 16px;border-radius:10px;letter-spacing:.08em}
+        .cc-edit-actions .btn.gold{box-shadow:0 8px 20px rgba(197,160,89,.28)}
+        .cc-edit-actions .btn.ghost{background:#fff;border:1px solid rgba(197,160,89,.4)}
+        .cc-edit-status{margin:0 0 16px;padding-bottom:16px;border-bottom:1px solid rgba(197,160,89,.16)}
+        .cc-edit-status > label{
+            display:block;margin:0 0 10px;color:#8a6a2f;font:700 10px 'Montserrat',sans-serif;
+            letter-spacing:.16em;text-transform:uppercase;
+        }
         .cc-st-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
-        @media(max-width:600px){.cc-st-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:560px){.cc-st-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
         .cc-st-opt{
             --st:#d4b06a;
-            display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;
-            padding:12px 8px;border-radius:10px;font:700 10.5px 'Montserrat',sans-serif;
-            letter-spacing:.6px;text-transform:uppercase;
-            color:var(--st);background:color-mix(in srgb,var(--st) 8%,#fff);
-            border:2px solid color-mix(in srgb,var(--st) 45%,transparent);
-            transition:background .2s ease,color .2s ease,box-shadow .2s ease;
+            display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;
+            padding:11px 6px;border-radius:10px;font:700 10px 'Montserrat',sans-serif;
+            letter-spacing:.5px;text-transform:uppercase;color:var(--st);
+            background:rgba(212,176,106,.08);border:1.5px solid rgba(212,176,106,.35);
+            transition:background .2s,color .2s,box-shadow .2s,border-color .2s;
         }
-        .cc-st-opt .cc-dot{width:9px;height:9px;border-radius:50%;background:var(--st);flex-shrink:0}
-        .cc-st-opt:hover{background:color-mix(in srgb,var(--st) 16%,#fff)}
-        .cc-st-opt.is-on{
-            color:#fff;background:var(--st);border-color:var(--st);
-            box-shadow:0 6px 18px color-mix(in srgb,var(--st) 45%,transparent);
-        }
+        .cc-st-opt .cc-dot{width:8px;height:8px;border-radius:50%;background:var(--st);flex-shrink:0}
+        .cc-st-opt:hover{background:rgba(212,176,106,.16)}
+        .cc-st-opt.is-on{color:#fff;background:var(--st);border-color:var(--st);box-shadow:0 6px 16px rgba(8,20,51,.12)}
         .cc-st-opt.is-on .cc-dot{background:#fff}
         .cc-st-opt.st-disponible{--st:#e0b43a}
         .cc-st-opt.st-disponible.is-on{color:#2a1f05}
@@ -2808,11 +2861,10 @@
         .cc-st-opt.st-reservee{--st:#3b7be0}
         .cc-st-opt.st-nettoyage{--st:#8a93a3}
         .cc-st-opt.st-maintenance{--st:#d9534f}
-        .cc-form .field label{
-            color:var(--gold);font-weight:600;font-size:11px;letter-spacing:1px;
-            text-transform:uppercase;margin-bottom:6px;display:block;
+        #rmModal.cc-edit-modal{width:min(520px,100%)}
+        #rmModal.cc-edit-modal .rm-modal-close{
+            top:12px;right:12px;z-index:2;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);
         }
-        .cc-actions{margin-top:20px}
 
         /* ---- Signature AL JAZEERA HOTEL (sans logo) ---- */
         .aj-mark{display:flex;flex-direction:column;align-items:center;gap:6px;line-height:1;user-select:none;position:relative;z-index:1}
@@ -3675,7 +3727,7 @@
                                 <tfoot>
                                     <tr>
                                         <td colspan="4">Total bon</td>
-                                        <td><span class="ba-total-val" id="ba_total">0,00 DH</span></td>
+                                        <td><span class="ba-total-val" id="ba_total">0.00 DH</span></td>
                                         <td></td>
                                     </tr>
                                 </tfoot>
@@ -4099,9 +4151,10 @@
                             </select>
                             <select id="chFilterCat" class="ch-select" aria-label="Catégorie">
                                 <option value="">Catégorie : Toutes</option>
-                                <option value="suite">Suites</option>
-                                <option value="familiale">Familiales</option>
-                                <option value="single">Singles</option>
+                                <option value="grand-suite">Grand Suite</option>
+                                <option value="suite-junior">Suite Junior</option>
+                                <option value="single">Single</option>
+                                <option value="double">Double</option>
                             </select>
                             <select id="chFilterStatus" class="ch-select" aria-label="Statut">
                                 <option value="">Statut : Tous</option>
@@ -4181,9 +4234,10 @@
                             </select>
                             <select id="ccType" class="cc-select" aria-label="Filtrer par catégorie">
                                 <option value="">Catégorie : Toutes</option>
-                                <option value="suite">Suite</option>
-                                <option value="familiale">Familiale</option>
+                                <option value="grand-suite">Grand Suite</option>
+                                <option value="suite-junior">Suite Junior</option>
                                 <option value="single">Single</option>
+                                <option value="double">Double</option>
                             </select>
                         </div>
                         <div class="dr-chips" id="ccChips"></div>
@@ -5057,7 +5111,7 @@ const FRNS = (function(){
     const set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
     const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
     const num=v=>Number(v)||0;
-    const fmt=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' DH';
+    const fmt=v=>ajMoneyDH(v);
     const fmtKpi=v=>{
         const n=num(v).toFixed(2).split('.');
         n[0]=n[0].replace(/\B(?=(\d{3})+(?!\d))/g,' ');
@@ -6260,7 +6314,7 @@ const PERS=(function(){
     const store=list=>localStorage.setItem(K,JSON.stringify(list));
     const today=()=>new Date().toISOString().slice(0,10);
     const val=id=>document.getElementById(id)?.value.trim()||'';
-    const money=v=>{const n=Number(v);return v===''||v==null||Number.isNaN(n)?'—':n.toFixed(2);};
+    const money=v=>{const n=Number(v);return v===''||v==null||Number.isNaN(n)?'—':ajMoney(n);};
     let editId=null, cinCopy=null, dipCopy=null, photoCopy=null;
     function nextId(list){
         let max=0;
@@ -6537,7 +6591,7 @@ const CFG=(function(){
     const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));};
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}};
     const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-    const fmtSal=v=>Number(v||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const fmtSal=v=>ajMoney(v||0);
 
     function nextId(list,prefix){
         let max=0;
@@ -7652,16 +7706,26 @@ const CHDISPO=(function(){
     const STATUS={disponible:'Disponible',occupee:'Occupée',reservee:'Réservée',nettoyage:'Nettoyage',maintenance:'Maintenance'};
     const ALL_STATUS=['disponible','occupee','reservee','nettoyage','maintenance'];
     const FILTERS=[['','Toutes'],['disponible','Disponibles'],['occupee','Occupées'],['reservee','Réservées'],['nettoyage','Nettoyage'],['maintenance','Maintenance']];
-    const TYPE_LBL={suite:'Suite',familiale:'Familiale',single:'Single'};
+    const TYPE_LBL={'grand-suite':'Grand Suite','suite-junior':'Suite Junior',single:'Single',double:'Double',suite:'Grand Suite',familiale:'Double'};
+    const TYPE_OPTS=[['grand-suite','Grand Suite'],['suite-junior','Suite Junior'],['single','Single'],['double','Double']];
+    const FLOOR_OPTS=[1,2,3];
     const META_DEF={
-        suite:{guests:3,size:'45 m²',view:'Vue panoramique',bed:'Lit King Size'},
-        familiale:{guests:4,size:'38 m²',view:'Vue jardin',bed:'2 lits doubles'},
-        single:{guests:2,size:'28 m²',view:'Vue ville',bed:'Lit Queen'}
+        'grand-suite':{guests:4,size:'55 m²',view:'Vue panoramique',bed:'Lit King Size'},
+        'suite-junior':{guests:3,size:'45 m²',view:'Vue mer',bed:'Lit King Size'},
+        double:{guests:2,size:'32 m²',view:'Vue jardin',bed:'Lit double'},
+        single:{guests:1,size:'28 m²',view:'Vue ville',bed:'Lit Queen'},
+        suite:{guests:4,size:'55 m²',view:'Vue panoramique',bed:'Lit King Size'},
+        familiale:{guests:2,size:'32 m²',view:'Vue jardin',bed:'Lit double'}
     };
+    function normalizeType(t){
+        if(t==='suite')return 'grand-suite';
+        if(t==='familiale')return 'double';
+        return TYPE_LBL[t]?t:'single';
+    }
     const K_STATUS='aj_ch_status',K_RESA='aj_ch_resa';
     let filter='',floorFilter='',typeFilter='',bound=false;
     const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
-    const fmtP=n=>Number(n).toLocaleString('fr-FR')+' DH';
+    const fmtP=n=>ajMoneyDH(n);
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{};}catch(e){return{};}};
     const store=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
     const floorLbl=f=>!f?'—':(Number(f)===1?'1er étage':f+'e étage');
@@ -7707,41 +7771,51 @@ const CHDISPO=(function(){
         </article>`;
     }
 
-    function openModal(){document.getElementById('rmModalOverlay')?.classList.add('show');}
-    function closeModal(){document.getElementById('rmModalOverlay')?.classList.remove('show');}
+    function openModal(){
+        const modal=document.getElementById('rmModal');
+        modal?.classList.add('cc-edit-modal');
+        document.getElementById('rmModalOverlay')?.classList.add('show');
+    }
+    function closeModal(){
+        document.getElementById('rmModalOverlay')?.classList.remove('show');
+        document.getElementById('rmModal')?.classList.remove('cc-edit-modal');
+    }
 
     function showEdit(room){
         const box=document.getElementById('rmModalContent');
         if(!box)return;
-        const m={...(META_DEF[room.type]||META_DEF.single)};
-        ['guests','size','view','bed'].forEach(k=>{if(room[k]!=null&&room[k]!=='')m[k]=room[k];});
-        let pickedStatus=room.status;
-        box.innerHTML=`<div class="rm-form-head cc-form-head"><h3>Chambre ${esc(room.num)}</h3><p>${TYPE_LBL[room.type]||esc(room.type)} · les modifications s'appliquent à l'admin et au site public</p></div>
-        <div class="cc-st-block">
-            <label class="cc-lbl">Statut de la chambre</label>
-            <div class="cc-st-row" role="radiogroup">${ALL_STATUS.map(st=>`
-                <button type="button" class="cc-st-opt st-${st}${st===pickedStatus?' is-on':''}" data-st="${st}" role="radio" aria-checked="${st===pickedStatus}">
-                    <span class="cc-dot"></span>${STATUS[st]}
-                </button>`).join('')}
-            </div>
+        const type=normalizeType(room.type);
+        const floor=FLOOR_OPTS.includes(Number(room.floor))?Number(room.floor):1;
+        const meta=META_DEF[type]||META_DEF.single;
+        let pickedStatus=STATUS[room.status]?room.status:'disponible';
+        box.innerHTML=`<div class="cc-edit-hero">
+            <img src="${esc(room.img)}" alt="${esc(room.title)}">
+            <div class="cc-edit-hero-cap"><small>Chambre ${esc(room.num)}</small>${esc(room.title)}</div>
         </div>
-        <form class="rm-form-grid cc-form" id="ccForm" onsubmit="return false" autocomplete="off">
-            <div class="field span2"><label>Aperçu photo</label><div class="rm-edit-preview"><img id="cc_preview" src="${esc(room.img)}" alt=""></div></div>
-            <div class="field"><label>URL de la photo</label><input type="text" id="cc_img" value="${esc(room.hasPhoto?room.img:'')}" placeholder="Aucune photo"></div>
-            <div class="field"><label>Importer une image</label><input type="file" id="cc_img_file" accept="image/*"></div>
-            <div class="field span2"><label>Titre</label><input type="text" id="cc_title" value="${esc(room.title)}"></div>
-            <div class="field span2"><label>Description courte</label><textarea id="cc_desc" rows="2">${esc(room.desc)}</textarea></div>
-            <div class="field span2"><label>Description longue</label><textarea id="cc_long" rows="4">${esc(room.longDesc||room.desc)}</textarea></div>
-            <div class="field"><label>Prix / nuit (DH)</label><input type="number" id="cc_price" min="0" step="1" value="${Number(room.price)||0}"></div>
-            <div class="field"><label>Étage</label><input type="number" id="cc_floor" min="0" step="1" value="${esc(room.floor)}"></div>
-            <div class="field"><label>Capacité (personnes)</label><input type="number" id="cc_guests" min="1" step="1" value="${esc(m.guests)}"></div>
-            <div class="field"><label>Superficie</label><input type="text" id="cc_size" value="${esc(m.size)}"></div>
-            <div class="field"><label>Vue</label><input type="text" id="cc_view" value="${esc(m.view)}"></div>
-            <div class="field"><label>Literie</label><input type="text" id="cc_bed" value="${esc(m.bed)}"></div>
-        </form>
-        <div class="rm-form-actions cc-actions">
-            <button type="button" class="btn gold" id="ccSave">Enregistrer</button>
-            <button type="button" class="btn ghost" id="ccCancel">Annuler</button>
+        <div class="cc-edit-body">
+            <p class="cc-edit-kicker">Fiche chambre</p>
+            <div class="cc-edit-status">
+                <label>Statut</label>
+                <div class="cc-st-row" role="radiogroup">${ALL_STATUS.map(st=>`
+                    <button type="button" class="cc-st-opt st-${st}${st===pickedStatus?' is-on':''}" data-st="${st}" role="radio" aria-checked="${st===pickedStatus}">
+                        <span class="cc-dot"></span>${STATUS[st]}
+                    </button>`).join('')}
+                </div>
+            </div>
+            <form class="cc-edit-form" id="ccForm" onsubmit="return false" autocomplete="off">
+                <div class="field"><label for="cc_title">Titre</label><input type="text" id="cc_title" value="${esc(room.title)}" placeholder="Nom de la chambre"></div>
+                <div class="field"><label for="cc_type">Catégorie</label>
+                    <select id="cc_type">${TYPE_OPTS.map(([k,l])=>`<option value="${k}"${k===type?' selected':''}>${l}</option>`).join('')}</select>
+                </div>
+                <div class="field"><label for="cc_floor">Étage</label>
+                    <select id="cc_floor">${FLOOR_OPTS.map(f=>`<option value="${f}"${f===floor?' selected':''}>Étage ${f}</option>`).join('')}</select>
+                </div>
+                <div class="field"><label for="cc_price">Prix / nuit (DH)</label><input type="number" id="cc_price" min="0" step="0.01" value="${Number(room.price||0).toFixed(2)}"></div>
+            </form>
+            <div class="cc-edit-actions">
+                <button type="button" class="btn gold" id="ccSave">Enregistrer</button>
+                <button type="button" class="btn ghost" id="ccCancel">Annuler</button>
+            </div>
         </div>`;
 
         box.querySelectorAll('.cc-st-opt').forEach(btn=>{
@@ -7754,31 +7828,23 @@ const CHDISPO=(function(){
                 });
             });
         });
-        const preview=document.getElementById('cc_preview');
-        const imgInput=document.getElementById('cc_img');
-        imgInput?.addEventListener('input',()=>{if(preview)preview.src=imgInput.value.trim()||window.AJ_HOTEL.PLACEHOLDER;});
-        document.getElementById('cc_img_file')?.addEventListener('change',e=>{
-            const file=e.target.files?.[0];
-            if(!file)return;
-            const reader=new FileReader();
-            reader.onload=()=>{if(imgInput)imgInput.value=reader.result;if(preview)preview.src=reader.result;};
-            reader.readAsDataURL(file);
-        });
         document.getElementById('ccSave')?.addEventListener('click',()=>{
-            const val=id=>document.getElementById(id)?.value.trim()||'';
-            const title=val('cc_title');
+            const title=(document.getElementById('cc_title')?.value||'').trim();
             if(!title){alert('Le titre est obligatoire.');return;}
-            const desc=val('cc_desc');
+            const nextType=normalizeType(document.getElementById('cc_type')?.value||type);
+            const nextMeta=META_DEF[nextType]||meta;
             const data={
-                title,desc,
-                longDesc:val('cc_long')||desc,
-                price:Number(val('cc_price'))||0,
-                img:val('cc_img'),
-                floor:val('cc_floor')===''?room.floor:Number(val('cc_floor')),
-                guests:Number(val('cc_guests'))||m.guests,
-                size:val('cc_size'),
-                view:val('cc_view'),
-                bed:val('cc_bed')
+                title,
+                type:nextType,
+                floor:Number(document.getElementById('cc_floor')?.value)||floor,
+                price:Number(document.getElementById('cc_price')?.value)||0,
+                guests:room.guests||nextMeta.guests,
+                size:room.size||nextMeta.size,
+                view:room.view||nextMeta.view,
+                bed:room.bed||nextMeta.bed,
+                desc:room.desc||'',
+                longDesc:room.longDesc||room.desc||'',
+                img:room.hasPhoto?room.img:''
             };
             if(window.AJ_HOTEL)window.AJ_HOTEL.saveRoom(room.num,data);
             if(pickedStatus!==room.status)saveStatus(room.num,pickedStatus);
@@ -7860,13 +7926,16 @@ const CHETAT=(function(){
         maintenance:'DSL ! la chambre est en maintenance'
     };
     const MSG_ICON={occupee:'&#128719;',reservee:'&#128467;',nettoyage:'&#128736;',maintenance:'&#9888;'};
-    const TYPE_LBL={suite:'Suite',familiale:'Familiale',single:'Single'};
-    const CAT_LBL={suite:'Suite',familiale:'Chambre Familiale',single:'Chambre Single'};
-    const CAT_TITLE={suite:'Suites',familiale:'Chambres Familiales',single:'Chambres Singles'};
+    const TYPE_LBL={'grand-suite':'Grand Suite','suite-junior':'Suite Junior',single:'Single',double:'Double',suite:'Grand Suite',familiale:'Double'};
+    const CAT_LBL={'grand-suite':'Grand Suite','suite-junior':'Suite Junior',single:'Single',double:'Double',suite:'Grand Suite',familiale:'Double'};
+    const CAT_TITLE={'grand-suite':'Grand Suites','suite-junior':'Suites Junior',single:'Chambres Singles',double:'Chambres Doubles',suite:'Grand Suites',familiale:'Chambres Doubles'};
     const ROOM_META={
-        suite:{guests:3,size:'45 m²',view:'Vue panoramique',bed:'Lit King Size'},
-        familiale:{guests:4,size:'38 m²',view:'Vue jardin',bed:'2 lits doubles'},
-        single:{guests:2,size:'28 m²',view:'Vue ville',bed:'Lit Queen'}
+        'grand-suite':{guests:4,size:'55 m²',view:'Vue panoramique',bed:'Lit King Size'},
+        'suite-junior':{guests:3,size:'45 m²',view:'Vue mer',bed:'Lit King Size'},
+        double:{guests:2,size:'32 m²',view:'Vue jardin',bed:'Lit double'},
+        single:{guests:1,size:'28 m²',view:'Vue ville',bed:'Lit Queen'},
+        suite:{guests:4,size:'55 m²',view:'Vue panoramique',bed:'Lit King Size'},
+        familiale:{guests:2,size:'32 m²',view:'Vue jardin',bed:'Lit double'}
     };
     const STAT_ICO={total:'&#128719;',disponible:'&#10003;',occupee:'&#128100;',reservee:'&#128467;',nettoyage:'&#128736;',maintenance:'&#9881;'};
     const TVA_RATE=.10;
@@ -7879,9 +7948,9 @@ const CHETAT=(function(){
     let ROOMS=[],currentFilter={q:'',floor:'',cat:'',status:''},viewMode='grid',selectedNum=null,bound=false,currentRoom=null;
 
     const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
-    const fmtP=n=>Number(n).toLocaleString('fr-FR')+' DH';
+    const fmtP=n=>ajMoneyDH(n);
     const num=v=>Number(v)||0;
-    const fmtAmt=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const fmtAmt=v=>ajMoney(v);
     const today=()=>new Date().toISOString().slice(0,10);
     const pct=(n,t)=>t?((n/t)*100).toFixed(1)+'%':'0%';
     const floorLbl=f=>f===1?'1er étage':f+'e étage';
@@ -8532,7 +8601,7 @@ const CHETAT=(function(){
             </div>
             <div class="field">
                 <label>Prix</label>
-                <input type="number" id="re_price" min="0" step="1" value="${room.price}" placeholder="Prix / nuit (DH)">
+                <input type="number" id="re_price" min="0" step="0.01" value="${Number(room.price||0).toFixed(2)}" placeholder="Prix / nuit (DH)">
             </div>
             <div class="field">
                 <label>État</label>
@@ -8785,7 +8854,7 @@ const DASH=(function(){
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{};}catch(e){return{};}};
     const loadArr=k=>{try{const v=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(v)?v:[];}catch(e){return[];}};
     const num=v=>Number(v)||0;
-    const fmtDH=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' DH';
+    const fmtDH=v=>ajMoneyDH(v);
     const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const frDate=s=>s&&/^\d{4}-\d{2}-\d{2}/.test(s)?`${s.slice(8,10)}/${s.slice(5,7)}/${s.slice(0,4)}`:(s||'—');
     const keyOf=(date,p)=>!date?'':p==='jour'?date.slice(0,10):p==='mois'?date.slice(0,7):date.slice(0,4);
@@ -9027,7 +9096,7 @@ const DASH=(function(){
                     <h3>${esc(r.title)}</h3>
                     <div class="dr-foot">
                         <span class="dr-floor">${r.floor===1?'1er':r.floor+'e'} étage</span>
-                        <span class="dr-price">${Number(r.price||0).toLocaleString('fr-FR')} DH <small>/ nuit</small></span>
+                        <span class="dr-price">${ajMoneyDH(r.price||0)} <small>/ nuit</small></span>
                     </div>
                 </div>
             </article>`).join('');
@@ -9072,7 +9141,7 @@ const RESA=(function(){
     const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catch(e){return d;}};
     const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const frDate=s=>s&&/^\d{4}-\d{2}-\d{2}/.test(s)?`${s.slice(8,10)}/${s.slice(5,7)}/${s.slice(0,4)}`:'—';
-    const fmtDH=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' DH';
+    const fmtDH=v=>ajMoneyDH(v);
     const addDays=(s,n)=>{if(!s)return'';const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return iso(d);};
     const floorLbl=f=>Number(f)===1?'1er étage':f+'e étage';
 
@@ -9125,7 +9194,7 @@ const RESA=(function(){
         box.innerHTML=`<div class="rm-form-head"><h3>Nouvelle réservation</h3><p>Choisissez une chambre disponible (${free.length} libre${free.length>1?'s':''})</p></div>
         ${free.length?`<form class="rm-form-grid" onsubmit="return false" autocomplete="off">
             <div class="field span2"><label>Chambre</label>
-                <select id="resaPickRoom">${floors.map(f=>`<optgroup label="${floorLbl(f)}">${free.filter(r=>r.floor===f).map(r=>`<option value="${esc(r.num)}">${esc(r.num)} — ${esc(r.title)} · ${num(r.price).toLocaleString('fr-FR')} DH / nuit</option>`).join('')}</optgroup>`).join('')}</select>
+                <select id="resaPickRoom">${floors.map(f=>`<optgroup label="${floorLbl(f)}">${free.filter(r=>r.floor===f).map(r=>`<option value="${esc(r.num)}">${esc(r.num)} — ${esc(r.title)} · ${ajMoneyDH(r.price)} / nuit</option>`).join('')}</optgroup>`).join('')}</select>
             </div>
         </form>
         <div class="rm-form-actions" style="margin-top:18px">
@@ -9161,7 +9230,7 @@ const BCL=(function(){
     const TYPES=['','Espèces','Carte bancaire','Virement','Chèque'];
     const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const num=v=>{const n=Number(v);return Number.isFinite(n)?n:0;};
-    const money=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const money=v=>ajMoney(v);
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}};
     const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
     const showDate=iso=>{
@@ -9365,7 +9434,7 @@ const BPY=(function(){
     const K_PAY='aj_bc_meta';
     const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const num=v=>{const n=Number(v);return Number.isFinite(n)?n:0;};
-    const money=v=>num(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const money=v=>ajMoney(v);
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}};
     const showDate=iso=>{
         if(!iso)return '—';

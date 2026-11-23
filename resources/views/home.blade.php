@@ -515,7 +515,7 @@
                     <span>&#127749; {{ $meta['view'] ?? 'Vue' }}</span>
                 </div>
                 <div class="home-room-foot">
-                    <div class="home-room-price room-price">{{ number_format($room['price'], 0, ',', ' ') }} DH <small>/ nuit</small></div>
+                    <div class="home-room-price room-price">{{ number_format($room['price'], 2, '.', ' ') }} DH <small>/ nuit</small></div>
                     <a href="{{ route('chambres') }}#chambres-list"><button type="button" class="btn-room">Voir les détails</button></a>
                 </div>
             </div>
@@ -638,7 +638,7 @@
         const price=card.querySelector('.room-price');
         if(img&&room.img)img.src=room.img;
         if(title)title.textContent=m.label||room.title;
-        if(price)price.innerHTML=Number(room.price).toLocaleString('fr-FR')+' DH <small>/ nuit</small>';
+        if(price)price.innerHTML=ajMoneyDH(room.price)+' <small>/ nuit</small>';
     });
 })();
 </script>

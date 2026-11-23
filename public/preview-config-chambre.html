@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aperçu — Fiche chambre</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#c5a059;--gold-light:#e2bf72;--navy:#0a1839;--text:#1a2332;--muted:#7a8190}
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;display:grid;place-items:center;padding:32px 16px;
+    font-family:'Montserrat',sans-serif;color:var(--text);
+    background:
+      radial-gradient(90% 70% at 10% 0%,rgba(197,160,89,.18),transparent 55%),
+      linear-gradient(160deg,#f4efe4 0%,#ebe4d4 45%,#e7dfcf 100%);
+  }
+  .note{
+    position:fixed;top:18px;left:50%;transform:translateX(-50%);
+    font:600 11px/1.4 'Montserrat',sans-serif;letter-spacing:.18em;text-transform:uppercase;
+    color:#8a6a2f;background:rgba(255,255,255,.85);border:1px solid rgba(197,160,89,.35);
+    padding:10px 16px;border-radius:999px;backdrop-filter:blur(8px);
+  }
+  .status{margin:0 0 16px;padding-bottom:16px;border-bottom:1px solid rgba(197,160,89,.16)}
+  .status>label{display:block;margin:0 0 10px;color:#8a6a2f;font:700 10px 'Montserrat',sans-serif;letter-spacing:.16em;text-transform:uppercase}
+  .st-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+  .st{--st:#d4b06a;border:1.5px solid color-mix(in srgb,var(--st) 45%,#fff);background:color-mix(in srgb,var(--st) 10%,#fff);color:var(--st);border-radius:10px;padding:11px 4px;font:700 9px 'Montserrat',sans-serif;letter-spacing:.4px;text-transform:uppercase;cursor:pointer}
+  @media(max-width:560px){.st-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .modal{
+    width:min(520px,100%);overflow:hidden;border-radius:16px;background:#fff;
+    border:1px solid rgba(197,160,89,.28);
+    box-shadow:0 28px 70px rgba(8,20,51,.18),0 0 0 1px rgba(255,255,255,.4) inset;
+  }
+  .hero{position:relative;height:148px;overflow:hidden;background:linear-gradient(145deg,#0a1839,#1a2a5e)}
+  .hero img{width:100%;height:100%;object-fit:cover;display:block}
+  .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,20,51,.25),rgba(8,20,51,.7))}
+  .cap{position:absolute;left:22px;right:22px;bottom:16px;z-index:1;color:#fff6d8;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:.04em;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+  .cap small{display:block;margin-bottom:4px;font:600 9px 'Montserrat',sans-serif;letter-spacing:.28em;text-transform:uppercase;color:rgba(240,198,110,.95)}
+  .body{padding:22px 24px 24px}
+  .kicker{margin:0 0 16px;font:600 10px 'Montserrat',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+  .form{display:flex;flex-direction:column;gap:14px}
+  .field{display:flex;flex-direction:column;gap:7px}
+  .field label{margin:0;color:#8a6a2f;font:700 10px 'Montserrat',sans-serif;letter-spacing:.16em;text-transform:uppercase}
+  .field input,.field select{
+    width:100%;padding:12px 14px;border-radius:10px;outline:none;
+    border:1px solid rgba(197,160,89,.32);background:#fcfbf8;
+    font:500 14px 'Montserrat',sans-serif;color:#1a2332;
+  }
+  .field select{cursor:pointer}
+  .actions{display:flex;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(197,160,89,.18)}
+  .btn{flex:1;border:none;cursor:pointer;padding:12px 16px;border-radius:10px;font:700 12px 'Montserrat',sans-serif;letter-spacing:.08em;text-transform:uppercase}
+  .btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304;box-shadow:0 8px 20px rgba(197,160,89,.28)}
+  .btn.ghost{background:#fff;border:1px solid rgba(197,160,89,.4);color:var(--gold)}
+</style>
+</head>
+<body>
+  <div class="note">Aperçu local — non déployé</div>
+  <div class="modal">
+    <div class="hero">
+      <img src="images/rooms/room-301.jpg" alt="Suite Junior" onerror="this.style.opacity=.3">
+      <div class="cap"><small>Chambre 301</small>Suite Junior</div>
+    </div>
+    <div class="body">
+      <p class="kicker">Fiche chambre</p>
+      <div class="status">
+        <label>Statut</label>
+        <div class="st-row">
+          <button type="button" class="st on" style="--st:#e0b43a;color:#2a1f05;background:#e0b43a;border-color:#e0b43a">Disponible</button>
+          <button type="button" class="st" style="--st:#2fa864">Occupée</button>
+          <button type="button" class="st" style="--st:#3b7be0">Réservée</button>
+          <button type="button" class="st" style="--st:#8a93a3">Nettoyage</button>
+          <button type="button" class="st" style="--st:#d9534f">Maintenance</button>
+        </div>
+      </div>
+      <form class="form" onsubmit="return false">
+        <div class="field">
+          <label>Titre</label>
+          <input type="text" value="Suite Junior">
+        </div>
+        <div class="field">
+          <label>Catégorie</label>
+          <select>
+            <option>Grand Suite</option>
+            <option selected>Suite Junior</option>
+            <option>Single</option>
+            <option>Double</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Étage</label>
+          <select>
+            <option>Étage 1</option>
+            <option>Étage 2</option>
+            <option selected>Étage 3</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Prix / nuit (DH)</label>
+          <input type="number" value="1100">
+        </div>
+      </form>
+      <div class="actions">
+        <button type="button" class="btn gold">Enregistrer</button>
+        <button type="button" class="btn ghost">Annuler</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

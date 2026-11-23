@@ -286,7 +286,7 @@
     const statsBox=document.getElementById('chStats');
     let CATEGORIES=[];
     const today=()=>new Date().toISOString().slice(0,10);
-    const fmtP=n=>Number(n||0).toLocaleString('fr-FR')+' DH';
+    const fmtP=n=>ajMoneyDH(n||0);
 
     function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
