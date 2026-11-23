@@ -51,23 +51,43 @@
     border:1px solid rgba(240,207,133,.45);box-shadow:0 6px 18px rgba(8,20,51,.2);
   }
   .dr-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .dr-cats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 14px}
+  .dr-floor-bar{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    margin:0 0 12px;padding:10px 12px;border-radius:14px;
+    background:rgba(255,255,255,.88);border:1px solid rgba(212,176,106,.28);
+  }
+  .dr-floor-bar>label{font:700 10px 'Montserrat',sans-serif;letter-spacing:1px;text-transform:uppercase;color:#8a6a2c}
+  .dr-floor-search{position:relative;flex:1 1 180px;min-width:160px;max-width:280px}
+  .dr-floor-search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:#8a6a2c;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.7}
+  .dr-floor-search input{width:100%;height:38px;padding:0 12px 0 36px;border-radius:10px;border:1px solid rgba(212,176,106,.35);background:#fff;font:500 13px 'Montserrat',sans-serif;color:var(--text-dark);outline:none}
+  .dr-floor-opts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .dr-floor-opt{
+    display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+    padding:7px 12px;border-radius:999px;font:600 11px 'Montserrat',sans-serif;
+    color:var(--text-dark);background:#fff;border:1px solid rgba(212,176,106,.28);
+  }
+  .dr-floor-opt b{min-width:20px;padding:1px 6px;border-radius:20px;font-size:10px;text-align:center;background:rgba(212,176,106,.16);color:#8a6a2c}
+  .dr-floor-opt.is-on{background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));color:#fff;border-color:transparent}
+  .dr-floor-opt.is-on b{background:rgba(240,207,133,.25);color:#f3d38a}
+  .dr-cats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 12px}
   @media(max-width:760px){.dr-cats{grid-template-columns:1fr}}
   .dr-cat{
     display:flex;align-items:center;justify-content:space-between;gap:12px;
-    min-height:64px;padding:14px 16px;border-radius:14px;cursor:pointer;text-align:left;
+    min-height:68px;padding:14px 16px;border-radius:14px;cursor:pointer;text-align:left;
     background:#fff;border:1px solid rgba(212,176,106,.28);box-shadow:0 4px 16px rgba(8,20,51,.06);
   }
   .dr-cat.is-on{background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));border-color:transparent}
-  .dr-cat-lbl{display:flex;flex-direction:column;gap:2px;font:600 13px 'Montserrat',sans-serif}
-  .dr-cat-lbl small{font:500 10px 'Montserrat',sans-serif;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
-  .dr-cat.is-on .dr-cat-lbl,.dr-cat.is-on .dr-cat-lbl small{color:#f3d38a}
+  .dr-cat-lbl{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+  .dr-cat-title{display:block;font:700 14px 'Montserrat',sans-serif;color:var(--text-dark)}
+  .dr-cat-sub{display:block;font:500 10px 'Montserrat',sans-serif;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+  .dr-cat.is-on .dr-cat-title,.dr-cat.is-on .dr-cat-sub{color:#f3d38a}
   .dr-cat-n{
     min-width:34px;height:34px;padding:0 8px;border-radius:999px;
     display:inline-flex;align-items:center;justify-content:center;
     font:700 13px 'Montserrat',sans-serif;color:#8a6a2c;background:rgba(212,176,106,.16);
   }
   .dr-cat.is-on .dr-cat-n{background:rgba(240,207,133,.22);color:#f3d38a}
+  .dr-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
   .dr-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;align-items:stretch}
   @media(max-width:980px){.dr-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
   @media(max-width:720px){.dr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -110,31 +130,46 @@
         <h2 class="dr-title">Nos chambres</h2>
       </div>
       <div class="dr-tools">
-        <div class="dr-chips">
-          <button type="button" class="dr-chip is-on">Toutes<b>8</b></button>
-          <button type="button" class="dr-chip">Disponibles<b>5</b></button>
-          <button type="button" class="dr-chip">Occupées<b>2</b></button>
-          <button type="button" class="dr-chip">Réservées<b>1</b></button>
-        </div>
         <button type="button" class="dr-toggle" title="Masquer les chambres" aria-label="Masquer les chambres">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><path d="M1 1l22 22"/></svg>
         </button>
       </div>
     </div>
 
+    <div class="dr-floor-bar" role="search" aria-label="Rechercher par étage">
+      <label for="drFloorSearch">Étage</label>
+      <div class="dr-floor-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+        <input type="search" id="drFloorSearch" value="1" placeholder="Rechercher 1, 2 ou 3…">
+      </div>
+      <div class="dr-floor-opts">
+        <button type="button" class="dr-floor-opt">Tous<b>8</b></button>
+        <button type="button" class="dr-floor-opt is-on">1er étage<b>2</b></button>
+        <button type="button" class="dr-floor-opt">2e étage<b>2</b></button>
+        <button type="button" class="dr-floor-opt">3e étage<b>2</b></button>
+      </div>
+    </div>
+
     <div class="dr-cats">
       <button type="button" class="dr-cat">
-        <span class="dr-cat-lbl">Suites<small>Grand Suite &amp; Junior</small></span>
+        <span class="dr-cat-lbl"><span class="dr-cat-title">Suites</span><span class="dr-cat-sub">Grand Suite &amp; Junior</span></span>
         <span class="dr-cat-n">2</span>
       </button>
       <button type="button" class="dr-cat is-on">
-        <span class="dr-cat-lbl">Single<small>Chambres singles</small></span>
+        <span class="dr-cat-lbl"><span class="dr-cat-title">Single</span><span class="dr-cat-sub">Chambres singles</span></span>
         <span class="dr-cat-n">3</span>
       </button>
       <button type="button" class="dr-cat">
-        <span class="dr-cat-lbl">Double<small>Chambres doubles</small></span>
+        <span class="dr-cat-lbl"><span class="dr-cat-title">Double</span><span class="dr-cat-sub">Chambres doubles</span></span>
         <span class="dr-cat-n">3</span>
       </button>
+    </div>
+
+    <div class="dr-chips">
+      <button type="button" class="dr-chip is-on">Toutes<b>8</b></button>
+      <button type="button" class="dr-chip">Disponibles<b>5</b></button>
+      <button type="button" class="dr-chip">Occupées<b>2</b></button>
+      <button type="button" class="dr-chip">Réservées<b>1</b></button>
     </div>
 
     <div class="dr-grid">
@@ -221,6 +256,12 @@
     document.querySelectorAll('.dr-cat').forEach(btn=>{
       btn.addEventListener('click',()=>{
         document.querySelectorAll('.dr-cat').forEach(b=>b.classList.remove('is-on'));
+        btn.classList.add('is-on');
+      });
+    });
+    document.querySelectorAll('.dr-floor-opt').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.dr-floor-opt').forEach(b=>b.classList.remove('is-on'));
         btn.classList.add('is-on');
       });
     });

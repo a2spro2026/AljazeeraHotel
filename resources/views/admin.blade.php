@@ -2580,7 +2580,7 @@
         .dash-rooms{width:100%}
         .dr-head{
             display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;
-            margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid rgba(212,176,106,.28);
+            margin:0 0 12px;padding-bottom:12px;border-bottom:1px solid rgba(212,176,106,.28);
         }
         .dr-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600}
         #dashboard .dr-title{
@@ -2588,55 +2588,44 @@
             letter-spacing:1px;line-height:1.1;margin:2px 0 0;text-align:left;
         }
         .dr-chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-        .dr-chip{
-            display:inline-flex;align-items:center;gap:8px;cursor:pointer;
-            padding:8px 14px;border-radius:40px;font:600 11px 'Montserrat',sans-serif;letter-spacing:.6px;
-            color:var(--text-dark);background:rgba(255,255,255,.85);
-            border:1px solid rgba(212,176,106,.28);transition:all .2s ease;
+        .dr-filters{
+            display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:nowrap;
+            margin:0 0 14px;padding:10px 12px;border-radius:14px;
+            background:rgba(255,255,255,.88);border:1px solid rgba(212,176,106,.28);
+            overflow-x:auto;-webkit-overflow-scrolling:touch;
         }
-        .dr-chip b{
-            min-width:22px;padding:1px 7px;border-radius:20px;font-size:10px;text-align:center;
+        .dr-filters::-webkit-scrollbar{height:4px}
+        .dr-filters::-webkit-scrollbar-thumb{background:rgba(212,176,106,.35);border-radius:4px}
+        .dr-sep{
+            flex:0 0 auto;width:1px;height:22px;align-self:center;
+            background:rgba(212,176,106,.35);
+        }
+        .dr-chip,.dr-floor-opt,.dr-cat{
+            display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;
+            flex:1 1 0;min-width:max-content;white-space:nowrap;
+            padding:7px 12px;border-radius:999px;font:600 11px 'Montserrat',sans-serif;letter-spacing:.4px;
+            color:var(--text-dark);background:#fff;border:1px solid rgba(212,176,106,.28);
+            transition:border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease;
+        }
+        .dr-chip b,.dr-floor-opt b,.dr-cat b{
+            min-width:20px;padding:1px 6px;border-radius:20px;font-size:10px;text-align:center;
             background:rgba(212,176,106,.16);color:#8a6a2c;
         }
-        .dr-chip:hover{border-color:var(--gold);box-shadow:0 4px 14px rgba(212,176,106,.2)}
-        .dr-chip.is-on{
+        .dr-chip:hover,.dr-floor-opt:hover,.dr-cat:hover{border-color:var(--gold);box-shadow:0 4px 12px rgba(212,176,106,.18)}
+        .dr-chip.is-on,.dr-floor-opt.is-on,.dr-cat.is-on{
             background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));color:#fff;border-color:transparent;
-            box-shadow:0 6px 18px rgba(8,20,51,.25);
+            box-shadow:0 6px 16px rgba(8,20,51,.22);
         }
-        .dr-chip.is-on b{background:rgba(240,207,133,.25);color:#f3d38a}
-
-        .dr-cats{
-            display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;
-            margin:0 0 14px;
+        .dr-chip.is-on b,.dr-floor-opt.is-on b,.dr-cat.is-on b{background:rgba(240,207,133,.25);color:#f3d38a}
+        .dr-reset{
+            display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+            flex:0 0 auto;width:36px;height:36px;padding:0;border-radius:12px;
+            color:#8a6a2c;background:#fff;border:1px solid rgba(212,176,106,.35);
+            transition:border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease;
         }
-        @media(max-width:760px){.dr-cats{grid-template-columns:1fr}}
-        .dr-cat{
-            display:flex;align-items:center;justify-content:space-between;gap:12px;
-            min-height:64px;padding:14px 16px;border-radius:14px;cursor:pointer;text-align:left;
-            background:#fff;border:1px solid rgba(212,176,106,.28);
-            box-shadow:0 4px 16px rgba(8,20,51,.06);
-            transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
-        }
-        .dr-cat:hover{border-color:rgba(212,176,106,.55);box-shadow:0 8px 22px rgba(8,20,51,.1)}
-        .dr-cat.is-on{
-            background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));
-            border-color:transparent;box-shadow:0 8px 22px rgba(8,20,51,.22);
-        }
-        .dr-cat .dr-cat-lbl{
-            display:flex;flex-direction:column;gap:2px;min-width:0;
-            font:600 13px 'Montserrat',sans-serif;color:var(--text-dark);
-        }
-        .dr-cat .dr-cat-lbl small{
-            font:500 10px 'Montserrat',sans-serif;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);
-        }
-        .dr-cat.is-on .dr-cat-lbl,.dr-cat.is-on .dr-cat-lbl small{color:#f3d38a}
-        .dr-cat .dr-cat-n{
-            flex:0 0 auto;min-width:34px;height:34px;padding:0 8px;border-radius:999px;
-            display:inline-flex;align-items:center;justify-content:center;
-            font:700 13px 'Montserrat',sans-serif;color:#8a6a2c;
-            background:rgba(212,176,106,.16);
-        }
-        .dr-cat.is-on .dr-cat-n{background:rgba(240,207,133,.22);color:#f3d38a}
+        .dr-reset svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+        .dr-reset:hover{border-color:var(--gold);color:var(--tw-navy);box-shadow:0 4px 12px rgba(212,176,106,.18)}
+        .dr-reset:disabled{opacity:.35;cursor:default;box-shadow:none}
 
         .dr-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;align-items:stretch}
         @media(max-width:1400px){.dr-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
@@ -2702,7 +2691,7 @@
         .dr-price small{font-size:10px;font-weight:500;color:var(--muted)}
 
         /* ---- Tableau de bord : afficher/masquer + analyses ---- */
-        .dr-tools{display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+        .dr-tools{display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:10px;flex:0 0 auto}
         .dr-toggle{
             display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
             width:40px;height:40px;padding:0;border-radius:12px;flex:0 0 auto;
@@ -2713,7 +2702,6 @@
         .dr-toggle:hover{border-color:#f0cf85;box-shadow:0 8px 22px rgba(8,20,51,.3),0 0 16px rgba(240,207,133,.3)}
         .dr-toggle[aria-pressed="true"]{background:linear-gradient(135deg,#1a2a52,#2a3f78)}
         .dr-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-        @media(max-width:860px){.dr-tools{justify-content:flex-start;width:100%}}
 
         .dash-analytics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
         @media(max-width:1100px){.dash-analytics{grid-template-columns:minmax(0,1fr)}}
@@ -8898,7 +8886,7 @@ const DASH=(function(){
     const K_HIDDEN='aj_dash_rooms_hidden',K_HIST='aj_ch_hist',K_LOG='aj_resa_log';
     const MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
     const PERIODS=[['jour','Jour'],['mois','Mois'],['annee','Année']];
-    let filter='',catFilter='',roomsHidden=localStorage.getItem(K_HIDDEN)==='1',pRooms='jour',pFin='mois';
+    let filter='',catFilter='',floorFilter='',roomsHidden=localStorage.getItem(K_HIDDEN)==='1',pRooms='jour',pFin='mois';
     const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
     const catOf=t=>t==='grand-suite'||t==='suite-junior'||t==='suite'?'suite':(t==='familiale'||t==='double'?'double':'single');
     const floorLbl=f=>Number(f)===1?'1er étage':`${f}e étage`;
@@ -9137,18 +9125,31 @@ const DASH=(function(){
         }
 
         const sorted=all.slice().sort(sortRooms);
+        const floors=[...new Set(sorted.map(r=>Number(r.floor)).filter(f=>f>0))].sort((a,b)=>a-b);
+        if(floorFilter&&!floors.some(f=>String(f)===String(floorFilter)))floorFilter='';
+        const floorCount={};
+        floors.forEach(f=>{floorCount[f]=sorted.filter(r=>Number(r.floor)===f).length;});
         const catCount={suite:0,single:0,double:0};
         sorted.forEach(r=>{catCount[catOf(r.type)]=(catCount[catOf(r.type)]||0)+1;});
-        const list=sorted.filter(r=>(!filter||r.status===filter)&&(!catFilter||catOf(r.type)===catFilter));
-        const chips=FILTERS.map(([k,l])=>{
+        const list=sorted.filter(r=>
+            (!filter||r.status===filter)&&
+            (!catFilter||catOf(r.type)===catFilter)&&
+            (!floorFilter||String(r.floor)===String(floorFilter))
+        );
+        const floorPills=`
+            <button type="button" class="dr-floor-opt${!floorFilter?' is-on':''}" data-floor="" aria-pressed="${!floorFilter}">Tous<b>${all.length}</b></button>
+            ${floors.map(f=>`<button type="button" class="dr-floor-opt${String(floorFilter)===String(f)?' is-on':''}" data-floor="${f}" aria-pressed="${String(floorFilter)===String(f)}">${esc(floorLbl(f))}<b>${floorCount[f]||0}</b></button>`).join('')}
+        `;
+        const catPills=`
+            <button type="button" class="dr-cat${!catFilter?' is-on':''}" data-cat="" aria-pressed="${!catFilter}">Toutes<b>${all.length}</b></button>
+            ${CAT_CARDS.map(([k,l])=>`
+            <button type="button" class="dr-cat${catFilter===k?' is-on':''}" data-cat="${k}" aria-pressed="${catFilter===k}">${esc(l)}<b>${catCount[k]||0}</b></button>
+            `).join('')}
+        `;
+        const statusPills=FILTERS.map(([k,l])=>{
             const n=k?(count[k]||0):all.length;
             return`<button type="button" class="dr-chip${filter===k?' is-on':''}${k?' st-'+k:''}" data-f="${k}">${l}<b>${n}</b></button>`;
         }).join('');
-        const cats=CAT_CARDS.map(([k,l,sub])=>`
-            <button type="button" class="dr-cat${catFilter===k?' is-on':''}" data-cat="${k}" aria-pressed="${catFilter===k}">
-                <span class="dr-cat-lbl">${esc(l)}<small>${esc(sub)}</small></span>
-                <span class="dr-cat-n">${catCount[k]||0}</span>
-            </button>`).join('');
         let cards='',lastFloor=null;
         list.forEach(r=>{
             const floor=Number(r.floor)||0;
@@ -9182,19 +9183,30 @@ const DASH=(function(){
                         <span class="dr-eyebrow">Hébergement</span>
                         <h2 class="dr-title">Nos chambres</h2>
                     </div>
-                    <div class="dr-tools">
-                        <div class="dr-chips">${chips}</div>
-                        ${toggle}
-                    </div>
+                    <div class="dr-tools">${toggle}</div>
                 </div>
-                <div class="dr-cats">${cats}</div>
+                <div class="dr-filters" role="toolbar" aria-label="Filtres chambres">
+                    ${floorPills}
+                    <span class="dr-sep" aria-hidden="true"></span>
+                    ${catPills}
+                    <span class="dr-sep" aria-hidden="true"></span>
+                    ${statusPills}
+                    <button type="button" class="dr-reset" id="drReset" title="Réinitialiser les filtres" aria-label="Réinitialiser les filtres"${(!filter&&!catFilter&&!floorFilter)?' disabled':''}>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                    </button>
+                </div>
                 <div class="dr-grid">${cards||'<p class="dr-empty">Aucune chambre pour ce filtre.</p>'}</div>
             </div>`;
 
         box.querySelector('#drToggle')?.addEventListener('click',()=>{roomsHidden=true;localStorage.setItem(K_HIDDEN,'1');render();});
+        box.querySelector('#drReset')?.addEventListener('click',()=>{
+            filter='';catFilter='';floorFilter='';
+            render();
+        });
         box.querySelectorAll('.dr-chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.f;render();}));
+        box.querySelectorAll('.dr-floor-opt').forEach(b=>b.addEventListener('click',()=>{floorFilter=b.dataset.floor||'';render();}));
         box.querySelectorAll('.dr-cat').forEach(b=>b.addEventListener('click',()=>{
-            catFilter=catFilter===b.dataset.cat?'':b.dataset.cat;
+            catFilter=b.dataset.cat||'';
             render();
         }));
         box.querySelectorAll('.dr-card').forEach(c=>{
