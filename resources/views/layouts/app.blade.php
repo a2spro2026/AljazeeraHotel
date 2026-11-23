@@ -147,7 +147,7 @@
             <p>Connectez-vous à votre espace dédié</p>
         </div>
         <div class="mega-grid">
-            @foreach([['Direction','admin','&#128081;'],['Facturation','facturation','&#129534;'],['Commercial','commercial','&#128188;'],['Administration','administration','&#127970;']] as $space)
+            @foreach([['Direction','admin','&#128081;'],['Facturation','facturation','&#129534;'],['Accueil','commercial','&#128279;'],['Administration','administration','&#127970;']] as $space)
             <form class="mega-card js-nomem-login" method="POST" action="{{ route('space.login', $space[1]) }}" autocomplete="off" data-lpignore="true" data-1p-ignore data-form-type="other">
                 @csrf
                 <input type="hidden" name="login" value="">

@@ -6,21 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class HotelUser extends Model
 {
-    public const PROFILS = ['Direction', 'Administration', 'Réception', 'Comptabilité', 'Commercial', 'Maintenance', 'Restauration'];
+    public const USER_PROFILS = ['Direction', 'Administration', 'Réception', 'Comptabilité', 'Commercial', 'Maintenance', 'Restauration'];
+
+    public const COMM_PROFILS = ['Accueil', 'Administration', 'Facturation', 'Service Achats', 'Service Technique'];
+
+    public const PROFILS = [
+        'Direction', 'Administration', 'Réception', 'Comptabilité', 'Commercial', 'Maintenance', 'Restauration',
+        'Accueil', 'Facturation', 'Service Achats', 'Service Technique',
+    ];
 
     public const CONTRATS = ['CDI', 'CDD', 'Stage', 'Formation', 'Vacataire'];
 
     /** Profils autorisés à ouvrir chaque espace. */
     public const SPACE_PROFILS = [
         'admin' => ['Direction', 'Administration', 'Réception', 'Maintenance', 'Restauration'],
-        'facturation' => ['Direction', 'Administration', 'Comptabilité'],
-        'commercial' => ['Direction', 'Administration', 'Commercial'],
+        'facturation' => ['Direction', 'Administration', 'Comptabilité', 'Facturation'],
+        'commercial' => ['Direction', 'Administration', 'Commercial', 'Accueil', 'Facturation', 'Service Achats', 'Service Technique'],
         'administration' => ['Direction', 'Administration'],
     ];
 
     protected $fillable = [
-        'code', 'fiche_date', 'nom', 'cin', 'tel', 'adresse', 'profil', 'contrat',
-        'debut', 'fin', 'formation', 'salaire', 'login', 'password', 'autorisations',
+        'code', 'kind', 'fiche_date', 'nom', 'cin', 'tel', 'adresse', 'profil', 'contrat',
+        'debut', 'fin', 'formation', 'salaire', 'login', 'password', 'autorisations', 'photo',
     ];
 
     protected $hidden = ['password'];
@@ -39,6 +46,10 @@ class HotelUser extends Model
 
     public function canOpen(string $space): bool
     {
+        if ($this->kind === 'commercial' && $space === 'commercial') {
+            return true;
+        }
+
         return in_array($this->profil, self::SPACE_PROFILS[$space] ?? [], true);
     }
 
@@ -46,6 +57,7 @@ class HotelUser extends Model
     {
         return [
             'id' => $this->code,
+            'kind' => $this->kind ?: 'user',
             'date' => $this->fiche_date?->format('Y-m-d'),
             'nom' => $this->nom,
             'cin' => $this->cin,
@@ -59,6 +71,7 @@ class HotelUser extends Model
             'salaire' => $this->salaire,
             'login' => $this->login,
             'autorisations' => $this->autorisations ?? new \stdClass,
+            'photo' => $this->photo,
         ];
     }
 }

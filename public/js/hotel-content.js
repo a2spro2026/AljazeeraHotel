@@ -1,6 +1,7 @@
 (function (global) {
     const K_CATALOG = 'aj_ch_catalog';
     const K_CAROUSEL = 'aj_cfg_carousel';
+    const K_FLOORS = 'aj_ch_floors';
     const PLACEHOLDER = '/images/rooms/default.svg';
 
     function load(key) {
@@ -19,6 +20,27 @@
         return global.AJ_HOTEL_DEFAULTS || { categories: [], rooms: [], carousel_count: 4 };
     }
 
+    function normalizeRoom(num, room, fallback) {
+        const base = fallback || {};
+        const merged = {
+            num: String(num),
+            title: room.title || base.title || ('Chambre ' + num),
+            type: room.type || base.type || 'single',
+            floor: Number(room.floor != null ? room.floor : base.floor) || 1,
+            price: Number(room.price != null ? room.price : base.price) || 0,
+            desc: room.desc != null ? room.desc : (base.desc || ''),
+            longDesc: room.longDesc != null ? room.longDesc : (base.longDesc || base.desc || ''),
+            img: room.img || base.img || '',
+            guests: room.guests != null ? room.guests : base.guests,
+            size: room.size != null ? room.size : base.size,
+            view: room.view != null ? room.view : base.view,
+            bed: room.bed != null ? room.bed : base.bed,
+            custom: !!(room.custom || base.custom),
+        };
+        const hasPhoto = !!merged.img && merged.img !== PLACEHOLDER;
+        return { ...merged, img: hasPhoto ? merged.img : PLACEHOLDER, hasPhoto };
+    }
+
     function getCatalog() {
         const base = defaults();
         let stored = load(K_CATALOG) || {};
@@ -30,24 +52,78 @@
                 });
             }
         } catch (e) {}
-        return base.rooms.map((room) => {
+
+        const baseNums = new Set((base.rooms || []).map((r) => String(r.num)));
+        const fromBase = (base.rooms || []).map((room) => {
             const override = { ...(stored[room.num] || {}) };
             if (!override.img || override.img === PLACEHOLDER) delete override.img;
-            const nextType = override.type || room.type;
-            const merged = { ...room, ...override, num: room.num, type: nextType };
-            const hasPhoto = !!merged.img && merged.img !== PLACEHOLDER;
-            return { ...merged, img: hasPhoto ? merged.img : PLACEHOLDER, hasPhoto };
+            return normalizeRoom(room.num, { ...room, ...override, type: override.type || room.type }, room);
+        });
+
+        const extras = Object.keys(stored)
+            .filter((num) => !baseNums.has(String(num)))
+            .filter((num) => stored[num] && typeof stored[num] === 'object' && !stored[num]._deleted)
+            .map((num) => normalizeRoom(num, { ...stored[num], custom: true }));
+
+        return fromBase.concat(extras).sort((a, b) => {
+            const fa = Number(a.floor) || 0;
+            const fb = Number(b.floor) || 0;
+            if (fa !== fb) return fa - fb;
+            return String(a.num).localeCompare(String(b.num), undefined, { numeric: true });
         });
     }
 
     function getRoom(num) {
-        return getCatalog().find((r) => r.num === num) || null;
+        return getCatalog().find((r) => String(r.num) === String(num)) || null;
     }
 
     function saveRoom(num, data) {
         const stored = load(K_CATALOG) || {};
-        stored[num] = { ...(stored[num] || {}), ...data };
+        stored[String(num)] = { ...(stored[String(num)] || {}), ...data };
         save(K_CATALOG, stored);
+    }
+
+    function addRoom(data) {
+        const num = String(data?.num || '').trim();
+        if (!num) throw new Error('Le numéro de chambre est obligatoire.');
+        if (!/^[A-Za-z0-9_-]+$/.test(num)) throw new Error('Numéro de chambre invalide.');
+        if (getRoom(num)) throw new Error('La chambre ' + num + ' existe déjà.');
+        const floor = Number(data.floor) || 1;
+        if (!(floor > 0)) throw new Error('Étage invalide.');
+        const payload = {
+            title: String(data.title || ('Chambre ' + num)).trim(),
+            type: data.type || 'single',
+            floor,
+            price: Number(data.price) || 0,
+            desc: String(data.desc || '').trim(),
+            longDesc: String(data.longDesc || data.desc || '').trim(),
+            img: data.img || '',
+            custom: true,
+        };
+        saveRoom(num, payload);
+        addFloor(floor);
+        return getRoom(num);
+    }
+
+    function getExtraFloors() {
+        const list = load(K_FLOORS);
+        return Array.isArray(list) ? list.map(Number).filter((f) => f > 0) : [];
+    }
+
+    function getFloors() {
+        const fromRooms = getCatalog().map((r) => Number(r.floor)).filter((f) => f > 0);
+        return [...new Set(fromRooms.concat(getExtraFloors()))].sort((a, b) => a - b);
+    }
+
+    function addFloor(floor) {
+        const f = Number(floor);
+        if (!(f > 0) || !Number.isFinite(f)) throw new Error('Étage invalide.');
+        const list = getExtraFloors();
+        if (!list.includes(f)) {
+            list.push(f);
+            save(K_FLOORS, list.sort((a, b) => a - b));
+        }
+        return f;
     }
 
     function getCategories() {
@@ -119,11 +195,15 @@
     global.AJ_HOTEL = {
         K_CATALOG,
         K_CAROUSEL,
+        K_FLOORS,
         PLACEHOLDER,
         defaults,
         getCatalog,
         getRoom,
         saveRoom,
+        addRoom,
+        getFloors,
+        addFloor,
         getCategories,
         roomsByType,
         defaultCarousel,

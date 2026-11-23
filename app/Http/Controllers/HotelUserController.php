@@ -24,11 +24,18 @@ class HotelUserController extends Controller
             ? HotelUser::where('code', $request->input('edit'))->firstOrFail()
             : null;
 
+        $kind = $request->input('kind', $existing?->kind ?: 'user');
+        if (! in_array($kind, ['user', 'commercial'], true)) {
+            $kind = 'user';
+        }
+
         $reserved = collect(config('admin_spaces'))
             ->pluck('login')
             ->filter()
             ->map(fn ($login) => mb_strtolower((string) $login))
             ->all();
+
+        $allowedProfils = $kind === 'commercial' ? HotelUser::COMM_PROFILS : HotelUser::USER_PROFILS;
 
         $data = $request->validate([
             'fiche_date' => ['nullable', 'date'],
@@ -36,7 +43,7 @@ class HotelUserController extends Controller
             'cin' => ['nullable', 'string', 'max:30'],
             'tel' => ['nullable', 'string', 'max:30'],
             'adresse' => ['nullable', 'string', 'max:255'],
-            'profil' => ['required', Rule::in(HotelUser::PROFILS)],
+            'profil' => ['required', Rule::in($allowedProfils)],
             'contrat' => ['nullable', Rule::in(HotelUser::CONTRATS)],
             'debut' => ['nullable', 'date'],
             'fin' => ['nullable', 'date', 'after_or_equal:debut'],
@@ -52,6 +59,7 @@ class HotelUserController extends Controller
                 },
             ],
             'password' => [$existing ? 'nullable' : 'required', 'string', 'min:6', 'max:100'],
+            'photo' => ['nullable', 'string'],
         ], [
             'nom.required' => 'Le nom est obligatoire.',
             'profil.required' => 'Le profil est obligatoire.',
@@ -73,8 +81,21 @@ class HotelUserController extends Controller
             'password.max' => 'Le mot de passe est trop long.',
         ]);
 
+        $data['kind'] = $kind;
         $data['fiche_date'] = $data['fiche_date'] ?? now()->toDateString();
-        $data = array_merge($data, array_fill_keys(['cin', 'tel', 'adresse', 'contrat', 'debut', 'fin', 'formation', 'salaire'], null));
+        $data = array_merge(
+            array_fill_keys(['cin', 'tel', 'adresse', 'contrat', 'debut', 'fin', 'formation', 'salaire'], null),
+            $data
+        );
+
+        // Compte Direction : pas de fiche RH (contrat / dates / formation / salaire).
+        if (($data['profil'] ?? null) === 'Direction') {
+            $data['contrat'] = null;
+            $data['debut'] = null;
+            $data['fin'] = null;
+            $data['formation'] = null;
+            $data['salaire'] = null;
+        }
 
         if (blank($data['password'] ?? null)) {
             unset($data['password']);
@@ -82,10 +103,14 @@ class HotelUserController extends Controller
             $data['password'] = trim($data['password']);
         }
 
+        if (! array_key_exists('photo', $data) || $data['photo'] === null || $data['photo'] === '') {
+            unset($data['photo']);
+        }
+
         if ($existing) {
             $existing->update($data);
         } else {
-            HotelUser::create($data + ['code' => $this->nextCode()]);
+            HotelUser::create($data + ['code' => $this->nextCode($kind)]);
         }
 
         return response()->json(['users' => $this->list()]);
@@ -141,12 +166,13 @@ class HotelUserController extends Controller
         return HotelUser::orderBy('code')->get()->map->toAdminArray()->all();
     }
 
-    private function nextCode(): string
+    private function nextCode(string $kind = 'user'): string
     {
+        $prefix = $kind === 'commercial' ? 'Co' : 'Ut';
         $max = HotelUser::pluck('code')
-            ->map(fn ($code) => preg_match('/^Ut(\d+)$/i', $code, $m) ? (int) $m[1] : 0)
+            ->map(fn ($code) => preg_match('/^'.$prefix.'(\d+)$/i', $code, $m) ? (int) $m[1] : 0)
             ->max() ?? 0;
 
-        return 'Ut'.str_pad((string) ($max + 1), 4, '0', STR_PAD_LEFT);
+        return $prefix.str_pad((string) ($max + 1), 4, '0', STR_PAD_LEFT);
     }
 }

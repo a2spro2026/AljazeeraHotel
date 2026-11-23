@@ -22,16 +22,17 @@
             --cream:#f5f1e6;--muted:#6b7280;--text-dark:#1a2332;
             --surface:#f7f5f0;--white:#ffffff;--panel:var(--white);
             --sb-w:280px;--topbar-h:74px;--content-max:100%;
+            --kpi-bar-h:0px;--lock-top:0px;
             --border-gold:rgba(197,160,89,.18);
             --shadow-soft:0 4px 20px rgba(0,0,0,.06);
             --shadow-card:0 8px 32px rgba(197,160,89,.1);
         }
         *{margin:0;padding:0;box-sizing:border-box}
-        html{scroll-behavior:smooth}
-        body{font-family:'Montserrat',sans-serif;background:var(--surface);color:var(--text-dark)}
+        html{height:100%;overflow:hidden;scroll-behavior:smooth}
+        body{height:100%;overflow:hidden;font-family:'Montserrat',sans-serif;background:var(--surface);color:var(--text-dark)}
         a{text-decoration:none;color:inherit}
         .serif{font-family:'Cormorant Garamond',serif}
-        .admin-wrap{display:flex;min-height:100vh}
+        .admin-wrap{display:flex;height:100%;min-height:0;overflow:hidden}
 
         @keyframes navShimmer{
             0%{background-position:200% center}
@@ -281,12 +282,13 @@
             border-bottom:1px solid var(--border-gold);
         }
         .sb-profile-av{
-            width:36px;height:36px;border-radius:50%;flex-shrink:0;
+            width:36px;height:36px;border-radius:50%;flex-shrink:0;overflow:hidden;
             background:linear-gradient(135deg,var(--gold),var(--gold-light));
             color:#1a1304;font-weight:700;font-size:14px;
             display:flex;align-items:center;justify-content:center;
             box-shadow:0 4px 12px rgba(197,160,89,.3);
         }
+        .sb-profile-av img{width:100%;height:100%;object-fit:cover;display:block}
         .sb-profile-info{flex:1;min-width:0}
         .sb-profile-info b{display:block;font-size:13px;color:var(--text-dark);line-height:1.2}
         .sb-profile-info span{font-size:10px;color:var(--muted)}
@@ -308,17 +310,21 @@
             background:rgba(200,70,70,.08);border-color:rgba(200,80,80,.4);color:#a03030;
         }
 
-        /* MAIN */
-        .main{flex:1;margin-left:var(--sb-w);display:flex;flex-direction:column;min-width:0;transition:margin-left .35s cubic-bezier(.4,0,.2,1);background:var(--surface)}
+        /* MAIN — shell figé : seul .content défile */
+        .main{
+            flex:1;margin-left:var(--sb-w);display:flex;flex-direction:column;
+            min-width:0;min-height:0;height:100%;overflow:hidden;
+            transition:margin-left .35s cubic-bezier(.4,0,.2,1);background:var(--surface);
+        }
         .admin-wrap.sb-collapsed .main{margin-left:0}
         .topbar{
             display:flex;align-items:center;justify-content:space-between;gap:16px;
-            padding:12px 28px;
+            flex:0 0 auto;position:relative;z-index:30;
+            padding:12px 28px;min-height:var(--topbar-h);
             background:linear-gradient(180deg,rgba(255,255,255,.99) 0%,rgba(247,245,240,.96) 100%);
             backdrop-filter:blur(18px) saturate(1.4);
             border-bottom:1px solid transparent;
             box-shadow:0 4px 24px rgba(10,23,54,.05);
-            position:sticky;top:0;z-index:30;
         }
         .topbar::after{
             content:'';position:absolute;left:0;right:0;bottom:0;height:1px;
@@ -372,22 +378,27 @@
         .sb-toggle .ico-expand{display:none}
         .sb-toggle.is-collapsed .ico-collapse{display:none}
         .sb-toggle.is-collapsed .ico-expand{display:block}
-        .content{padding:30px;flex:1;display:flex;flex-direction:column;align-items:center;background:var(--surface)}
+        .content{
+            padding:30px;flex:1 1 auto;min-height:0;
+            display:flex;flex-direction:column;align-items:center;
+            background:var(--surface);overflow-x:hidden;overflow-y:auto;
+            overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+        }
         .panel{width:100%;max-width:var(--content-max);margin-left:auto;margin-right:auto}
         .panel#ch-etat{max-width:100%}
-        .content.dash-view{padding-top:128px}
-        .content.kpi-view,.content.ch-view{padding-top:150px}
-        .content.ech-view{padding-top:12px}
+        .content.dash-view{padding-top:132px;--kpi-bar-h:118px;--lock-top:var(--kpi-bar-h)}
+        .content.kpi-view,.content.ch-view{padding-top:150px;--kpi-bar-h:118px;--lock-top:var(--kpi-bar-h)}
+        .content.ech-view{padding-top:12px;--kpi-bar-h:0px;--lock-top:0px}
         @media(max-width:1200px){
-            .content.dash-view{padding-top:136px}
-            .content.ch-view{padding-top:260px}
-            .content.kpi-view{padding-top:150px}
+            .content.dash-view{padding-top:210px;--kpi-bar-h:190px}
+            .content.ch-view{padding-top:260px;--kpi-bar-h:210px}
+            .content.kpi-view{padding-top:150px;--kpi-bar-h:118px}
             .content.ech-view{padding-top:12px}
         }
         @media(max-width:640px){
-            .content.dash-view{padding-top:220px}
-            .content.ch-view{padding-top:360px}
-            .content.kpi-view{padding-top:260px}
+            .content.dash-view{padding-top:280px;--kpi-bar-h:250px}
+            .content.ch-view{padding-top:360px;--kpi-bar-h:300px}
+            .content.kpi-view{padding-top:260px;--kpi-bar-h:210px}
         }
         @media(max-width:600px){.content.ech-view{padding-top:12px}}
 
@@ -402,7 +413,7 @@
         /* Barres KPI fixes — toutes sections */
         .dash-kpi,.ch-kpi,.section-kpi{
             position:fixed;top:var(--topbar-h);left:var(--sb-w);right:0;z-index:25;
-            padding:18px 32px 20px;
+            padding:14px 28px 16px;
             background:linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(247,245,240,.96) 100%);
             border-bottom:1px solid var(--border-gold);
             box-shadow:0 8px 32px rgba(10,23,54,.06);
@@ -431,31 +442,79 @@
         }
         @media(max-width:768px){.dash-kpi .cards{grid-template-columns:repeat(2, minmax(0, 1fr));gap:14px}}
         @media(max-width:640px){.section-kpi .cards{grid-template-columns:1fr}}
-        /* Aucune carte ne bascule au survol */
+        /* Verrouillage cartes : aucun mouvement au survol */
         .card,.card:hover,
         .section-kpi .card,.dash-kpi .card,
         .cd-card,.cd-card:hover,
         .ch-cat-card,.ch-cat-card:hover,
         .ch-etage-card,.ch-etage-card:hover,
         .rm-card,.rm-card:hover,
-        .ech-kpi .ek-card,.ech-kpi .ek-card:hover{
+        .ech-kpi .ek-card,.ech-kpi .ek-card:hover,
+        .dr-card,.dr-card:hover,
+        .cc-card,.cc-card:hover,
+        .da-card,.da-card:hover,
+        .ch-stat-card,.ch-stat-card:hover,
+        .ch-room-card,.ch-room-card:hover,
+        .bal-row,.bal-row:hover{
             transform:none!important;translate:none!important;
         }
 
-        /* KPI — cartes lumineuses */
-        @keyframes kpiGlow{
-            0%,100%{box-shadow:var(--shadow-soft),0 0 16px rgba(197,160,89,.06)}
-            50%{box-shadow:0 8px 28px rgba(197,160,89,.12),0 0 24px rgba(197,160,89,.08)}
+        /* Verrouillage barres d'outils / filtres (sticky dans .content) — hors chambres (évite de masquer les photos) */
+        .ech-filters,
+        .bc-filters,
+        .panel .row-head{
+            position:sticky;top:var(--lock-top);z-index:18;
+            background:rgba(247,245,240,.97);
+            backdrop-filter:blur(12px);
         }
+        .ech-filters,.bc-filters{
+            box-shadow:0 6px 18px rgba(8,20,51,.08);
+        }
+        /* Tableau de bord : pas de sticky — la barre ne doit jamais recouvrir les photos */
+        #dashboard .dr-head{
+            position:static!important;top:auto!important;z-index:auto!important;
+            background:transparent!important;backdrop-filter:none!important;box-shadow:none!important;
+        }
+        .panel .row-head,.cc-tools{
+            padding-top:6px;padding-bottom:8px;margin-top:0;
+        }
+
+        /* Verrouillage en-têtes de tableaux — collés sous KPI (+ barre outils ~52px) */
+        .table-wrap,
+        .da-table-wrap,
+        .ba-lines-wrap,
+        .ra-bons-wrap{
+            overflow:visible;
+        }
+        .table-wrap table,
+        .da-table-wrap table,
+        .ra-bons-wrap .ra-bons-table,
+        .ba-lines-wrap .ba-lines-table,
+        .panel table{
+            border-collapse:separate;border-spacing:0;
+        }
+        .table-wrap thead th,
+        .da-table-wrap table thead th,
+        #dashboard .da-table thead th,
+        .ra-bons-wrap .ra-bons-table thead th,
+        .ba-lines-wrap .ba-lines-table thead th,
+        .panel table thead th{
+            position:sticky;top:calc(var(--lock-top) + 52px);z-index:16;
+            background:#f8f3e8 !important;
+            box-shadow:0 1px 0 rgba(197,160,89,.28);
+        }
+        /* Si une barre sticky précède le tableau, l'offset 52px évite le chevauchement */
+
+        /* KPI — cartes lumineuses */
         .dash-kpi .card{
             position:relative;overflow:hidden;
             padding:18px 16px 16px 18px;border-radius:14px;
             background:var(--white);
             border:1px solid var(--border-gold);
             box-shadow:var(--shadow-soft);
-            transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s ease,border-color .35s ease;
+            transition:none;
             min-height:100px;
-            animation:kpiGlow 4s ease-in-out infinite;
+            animation:none;
         }
         .dash-kpi .card::before{
             content:'';position:absolute;inset:0;pointer-events:none;border-radius:14px;
@@ -513,12 +572,7 @@
             font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;
             letter-spacing:2px;color:var(--muted);text-transform:uppercase;
         }
-        .dash-kpi .card .kpi-shine{
-            position:absolute;inset:0;pointer-events:none;
-            background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.4) 50%,transparent 65%);
-            transform:translateX(-100%);transition:transform .7s ease;
-        }
-        .dash-kpi .card:hover .kpi-shine{transform:translateX(100%)}
+        .dash-kpi .card .kpi-shine{display:none}
         #dashboard.panel.active{min-height:calc(100vh - var(--topbar-h) - 130px)}
         .card{background:var(--white);border:1px solid var(--border-gold);border-radius:14px;padding:22px;box-shadow:var(--shadow-soft)}
         .card .n{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--navy-mid);line-height:1}
@@ -815,7 +869,7 @@
         .tbtn{background:var(--white);border:1px solid var(--border-gold);color:var(--text-dark);padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;margin-right:4px;transition:all .2s}
         .tbtn:hover{border-color:var(--gold);color:var(--gold)}
         .tbtn.del:hover{border-color:#e89;color:#c05050}
-        .table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border-gold);background:var(--white)}
+        .table-wrap{border-radius:12px;border:1px solid var(--border-gold);background:var(--white)}
         .empty-row td{text-align:center;color:var(--muted);padding:22px}
         .bal-list{display:flex;flex-direction:column;gap:8px;margin:6px 0 16px}
         .bal-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--white);border:1px solid var(--border-gold);border-radius:10px;padding:12px 14px;justify-content:center;box-shadow:var(--shadow-soft)}
@@ -1054,6 +1108,38 @@
         .pe-copy-frame{padding:12px;background:#fff}
         .pe-copy-frame img,.pe-copy-frame iframe{width:100%;height:280px;object-fit:contain;border:0;border-radius:10px;background:#f7f4ee}
         .pe-copy-empty{margin:0;min-height:120px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px}
+        .cc-comm-layout{
+            display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:16px;align-items:start;
+        }
+        @media(max-width:900px){.cc-comm-layout{grid-template-columns:1fr}}
+        .cc-comm-docs{display:flex;flex-direction:column;gap:12px;width:220px;max-width:100%}
+        .cc-doc{width:100%}
+        .cc-doc .pe-copy-zone{min-height:132px;padding:10px}
+        .cc-doc .pe-copy-preview{height:88px}
+        .cc-doc.has-file .pe-copy-preview{border-style:solid}
+        #cfg-commerciaux .form-flex{align-items:flex-end}
+        .cc-comm-actions{
+            display:flex;flex-wrap:nowrap;align-items:stretch;gap:10px;
+            flex:2 1 340px;margin:0;min-width:280px;padding-bottom:0;
+        }
+        .cc-comm-actions .btn{
+            flex:1 1 0;min-width:0;white-space:nowrap;justify-content:center;
+            height:42px;padding-top:0;padding-bottom:0;
+        }
+        #cfg-commerciaux .field.cc-sal-field label{color:#7c3aed}
+        #cfg-commerciaux .field.cc-sal-field input{
+            border-color:rgba(124,58,237,.45);color:#5b21b6;font-weight:700;
+            background:linear-gradient(180deg,#faf5ff,#f3e8ff);
+            box-shadow:inset 0 0 0 1px rgba(124,58,237,.08);
+        }
+        #cfg-commerciaux .field.cc-sal-field input:focus{
+            border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.18);
+        }
+        #cfg-commerciaux .field.cfg-id-field{flex:0 0 118px}
+        #cfg-commerciaux .field.cfg-id-field input{
+            font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:.04em;
+            color:var(--navy-mid);text-align:center;
+        }
         .pe-photo-wrap{display:grid;grid-template-columns:240px minmax(0,1fr);gap:18px;align-items:center;margin:2px 0 18px}
         .pe-photo{width:100%}
         .pe-photo-side{display:flex;flex-direction:column;gap:14px;justify-content:center}
@@ -1071,6 +1157,98 @@
             box-shadow:0 24px 64px rgba(0,0,0,.12),0 0 60px rgba(197,160,89,.08);
             padding:28px 28px 24px;animation:fade .3s ease;
         }
+        .rm-modal.rm-resa-wide{width:min(920px,100%)}
+        .rm-form-sec{margin:0 0 18px}
+        .rm-form-sec-title{
+            font:700 11px 'Montserrat',sans-serif;letter-spacing:1.4px;text-transform:uppercase;
+            color:var(--gold);margin:0 0 10px;padding-bottom:6px;
+            border-bottom:1px solid rgba(212,176,106,.28);
+        }
+        .rm-form-grid.cols-4{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+        @media(max-width:820px){.rm-form-grid.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:520px){.rm-form-grid.cols-4{grid-template-columns:1fr}}
+        .rm-form-grid .field.span2{grid-column:span 2}
+        .rm-form-grid .field.span3{grid-column:span 3}
+        .rm-form-grid .field.span4,.rm-form-grid .field.span2.full{grid-column:1/-1}
+        .rm-form-grid .field.is-off{opacity:.45}
+        .rm-form-grid .field.is-off input,
+        .rm-form-grid .field.is-off select{
+            cursor:not-allowed;background:rgba(120,120,120,.12);filter:grayscale(1);
+        }
+        .rm-form-grid .field label{
+            display:block;font:600 10px 'Montserrat',sans-serif;letter-spacing:.8px;
+            text-transform:uppercase;color:#8a6a2c;margin:0 0 6px;
+        }
+        .rm-pay-doc,.rm-pers-doc{
+            display:grid;grid-template-columns:minmax(0,1fr) 240px;
+            gap:14px;align-items:start;margin:0 0 18px;
+        }
+        @media(max-width:720px){.rm-pay-doc,.rm-pers-doc{grid-template-columns:1fr}}
+        .rm-pay-doc .rm-form-sec,.rm-pers-doc .rm-form-sec{margin:0;min-width:0}
+        .rm-form-grid.pay-compact{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+        .rm-form-grid.pers-line{
+            grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;
+        }
+        .rm-form-grid.pers-line .field{min-width:0}
+        .rm-form-grid.pers-line .field input,
+        .rm-form-grid.pers-line .field select{
+            width:100%;min-width:0;max-width:100%;
+            overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+        }
+        .rm-form-grid.pers-line .field input:focus{
+            overflow:visible;text-overflow:clip;white-space:normal;
+        }
+        .rm-form-grid.pay-compact .field.span2{grid-column:1/-1}
+        .rm-form-grid.pay-line{
+            grid-template-columns:minmax(100px,.7fr) minmax(90px,.85fr) minmax(90px,.85fr) minmax(140px,1.6fr) minmax(110px,.9fr);
+            gap:10px;align-items:end;
+        }
+        .rm-form-grid.pay-line .field{min-width:0}
+        .rm-form-grid.pay-line .field.pay-type{max-width:140px}
+        .rm-form-grid.pay-line .field.pay-tire{min-width:0}
+        @media(max-width:820px){
+            .rm-form-grid.pay-line{grid-template-columns:repeat(2,minmax(0,1fr))}
+            .rm-form-grid.pay-line .field.pay-type{max-width:none}
+        }
+        .rm-form-head.simple h3{margin:0 0 14px}
+        .rm-form-head.simple p{display:none}
+        .rf-doc{
+            border:1px solid rgba(197,160,89,.4);border-radius:14px;overflow:hidden;
+            background:linear-gradient(180deg,#fffdf8,#f6f1e6);
+            box-shadow:0 8px 22px rgba(10,23,54,.05);
+            width:240px;max-width:100%;height:auto;
+            display:flex;flex-direction:column;
+        }
+        .rf-doc-head{
+            padding:9px 12px;font:700 10px 'Montserrat',sans-serif;letter-spacing:1.2px;text-transform:uppercase;
+            color:#8a6a2f;background:rgba(197,160,89,.12);border-bottom:1px solid rgba(197,160,89,.28);
+        }
+        .rf-doc-body{padding:12px;display:flex;flex-direction:column;gap:10px}
+        .rf-doc-preview{
+            width:100%;height:148px;min-height:148px;max-height:148px;flex:none;
+            border-radius:10px;overflow:hidden;
+            border:1.5px dashed rgba(197,160,89,.55);background:#fff;
+            display:flex;align-items:center;justify-content:center;color:#8a6a2f;text-align:center;
+        }
+        .rf-doc.has-file .rf-doc-preview{border-style:solid;border-color:rgba(197,160,89,.4)}
+        .rf-doc-preview img{
+            width:100%;height:100%;max-width:100%;max-height:148px;
+            object-fit:contain;object-position:center;background:#fff;display:block;
+        }
+        .rf-doc-preview .rf-doc-ph{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px;font:600 10px 'Montserrat',sans-serif;letter-spacing:.7px;text-transform:uppercase}
+        .rf-doc-preview .rf-doc-ph span{font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);font-size:11px}
+        .rf-doc-preview .rf-doc-pdf{font:700 16px 'Montserrat',sans-serif;letter-spacing:1px}
+        .rf-doc-actions{display:flex;flex-wrap:wrap;gap:8px}
+        .rf-doc-actions button{
+            flex:1;min-width:0;padding:8px 10px;border-radius:9px;cursor:pointer;
+            font:700 10px 'Montserrat',sans-serif;letter-spacing:.5px;text-transform:uppercase;
+            border:1px solid rgba(197,160,89,.4);background:#fff;color:var(--text-dark);
+        }
+        .rf-doc-actions button:hover{border-color:var(--gold);color:var(--tw-navy)}
+        .rf-doc-actions button.is-gold{
+            background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304;border-color:transparent;
+        }
+        .rf-doc-actions button:disabled{opacity:.4;cursor:default}
         .rm-modal-close{
             position:absolute;top:14px;right:16px;width:34px;height:34px;border-radius:8px;
             background:var(--white);border:1px solid var(--border-gold);
@@ -1084,8 +1262,7 @@
         .rm-form-head p{color:var(--muted);font-size:13px;margin:0}
         .rm-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
         @media(max-width:600px){.rm-form-grid{grid-template-columns:1fr}}
-        .rm-form-grid .field.span2{grid-column:1/-1}
-        .rm-form-grid .field input[readonly]{opacity:.75;cursor:default}
+        .rm-form-grid .field input[readonly]{opacity:.75;cursor:default;background:rgba(247,245,240,.9)}
         .rm-form-grid .field textarea,.rm-form-grid .field select{
             width:100%;background:var(--white);border:1px solid var(--border-gold);
             border-radius:8px;padding:10px 12px;color:var(--text-dark);font-size:13px;font-family:inherit;
@@ -1244,6 +1421,11 @@
             border-radius:8px;padding:11px 13px;color:var(--text-dark);font-family:inherit;font-size:14px;outline:none;text-align:center;transition:border-color .2s,box-shadow .2s}
         .field input:focus,.field select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.1)}
         .field input[readonly]{background:rgba(247,245,240,.8);opacity:.85}
+        .field input.is-locked-comm,
+        .field select.is-locked-comm{
+            background:rgba(120,120,120,.12)!important;color:#6b7280!important;
+            cursor:not-allowed;opacity:.9;filter:grayscale(.15);
+        }
 
         /* ===== FRNS — cadres & tableaux pleine largeur ===== */
         .panel.frns-panel{max-width:100%;width:100%}
@@ -1326,7 +1508,7 @@
         .panel.frns-panel.frns-compact .field input[readonly]{background:rgba(0,0,0,.12)}
         .panel.frns-panel.frns-compact .ba-lines-wrap{
             margin:14px 0 18px;border:1px solid rgba(201,162,39,.16);border-radius:12px;
-            overflow:hidden;background:rgba(0,0,0,.14);
+            overflow-x:auto;overflow-y:visible;background:rgba(0,0,0,.14);
         }
         .panel.frns-panel.frns-compact .ba-lines-table thead th{
             background:rgba(201,162,39,.09);padding:12px 14px;font-size:11px;letter-spacing:1px;
@@ -1343,7 +1525,7 @@
         .panel.frns-panel.frns-compact td{padding:14px 16px;font-size:14px}
         .panel.frns-panel.frns-compact .table-wrap{
             margin:12px 0 0;border:1px solid rgba(201,162,39,.16);border-radius:12px;
-            overflow:hidden;background:rgba(0,0,0,.14);
+            overflow:auto;background:rgba(0,0,0,.14);
         }
         .panel.frns-panel.frns-compact .table-wrap thead th{
             background:rgba(201,162,39,.09);padding:12px 14px;font-size:11px;letter-spacing:1px;
@@ -1924,12 +2106,16 @@
             font-size:10px;color:#9ca3af;margin-top:4px;display:block;min-height:1.2em;
         }
         .ch-toolbar{
-            display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;
+            display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin-bottom:14px;
             background:#fff;padding:12px 14px;border-radius:12px;
             box-shadow:0 1px 4px rgba(0,0,0,.05);
         }
+        #ch-etat .ch-toolbar{
+            position:static!important;top:auto!important;z-index:auto!important;
+            backdrop-filter:none!important;width:100%;
+        }
         .ch-search-wrap{
-            flex:1;min-width:200px;position:relative;display:flex;align-items:center;
+            flex:0 1 280px;min-width:200px;max-width:360px;position:relative;display:flex;align-items:center;
         }
         .ch-search-ico{position:absolute;left:12px;font-size:14px;opacity:.45;pointer-events:none}
         .ch-search-wrap input{
@@ -2121,11 +2307,34 @@
         #ch-etages.panel.active{animation:none!important;transform:none!important}
         #ch-etages .block{margin-top:0}
         .ch-etages-toolbar{
-            display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+            display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;
             margin-bottom:16px;
+            position:static!important;top:auto!important;z-index:auto!important;backdrop-filter:none!important;
         }
-        .ch-etages-toolbar .ch-search-wrap{flex:1;min-width:220px}
+        .ch-etages-toolbar .ch-search-wrap{flex:0 1 280px;min-width:220px;max-width:360px}
         .ch-etages-toolbar .ch-select{min-width:160px}
+        .ch-etages-toolbar .btn-add-et{
+            display:inline-flex;align-items:center;gap:8px;margin-left:0;
+            padding:10px 16px;border:none;border-radius:10px;cursor:pointer;
+            font:700 11px 'Montserrat',sans-serif;letter-spacing:.6px;text-transform:uppercase;
+            color:#1a1304;background:linear-gradient(135deg,var(--gold),var(--gold-light));
+            box-shadow:0 6px 16px rgba(197,160,89,.28);
+        }
+        .ch-etages-toolbar .btn-add-et:hover{box-shadow:0 8px 20px rgba(197,160,89,.38)}
+        .et-add-mode{display:flex;gap:8px;margin-bottom:14px}
+        .et-add-mode button{
+            flex:1;padding:10px 12px;border-radius:10px;cursor:pointer;
+            border:1px solid rgba(197,160,89,.35);background:#fff;
+            font:700 11px 'Montserrat',sans-serif;letter-spacing:.5px;text-transform:uppercase;color:var(--text-dark);
+        }
+        .et-add-mode button.is-on{
+            background:linear-gradient(135deg,var(--tw-navy,#0a1839),var(--tw-indigo,#1a2a5e));
+            color:#f3d38a;border-color:transparent;
+        }
+        .et-add-pane{display:none;flex-direction:column;gap:12px}
+        .et-add-pane.is-on{display:flex}
+        .et-add-actions{display:flex;gap:10px;margin-top:8px}
+        .et-add-actions .btn{flex:1}
         #chEtagesTableBody .et-floor-cell{font-weight:600;color:var(--gold);white-space:nowrap}
         #chEtagesTableBody .et-status{
             display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;
@@ -2579,63 +2788,79 @@
         #dashboard{max-width:100%}
         .dash-rooms{width:100%}
         .dr-head{
-            display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;
-            margin:0 0 12px;padding-bottom:12px;border-bottom:1px solid rgba(212,176,106,.28);
+            display:flex;align-items:center;gap:10px;flex-wrap:nowrap;
+            margin:0 0 14px;padding:0 0 10px;
+            border-bottom:1px solid rgba(212,176,106,.22);
         }
         .dr-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600}
         #dashboard .dr-title{
-            font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--text-dark);
-            letter-spacing:1px;line-height:1.1;margin:2px 0 0;text-align:left;
+            font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--text-dark);
+            letter-spacing:.5px;line-height:1;margin:0;text-align:left;
+            flex:0 0 auto;white-space:nowrap;
         }
+        #dashboard.panel.active{padding-top:0;margin-top:0}
+        #dashboard .dr-head{
+            display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+            align-items:center;gap:12px;
+        }
+        #dashboard .dr-head > .dr-title{justify-self:start;grid-column:1}
+        #dashboard .dr-head > .dr-filter-bar{justify-self:center;grid-column:2;max-width:100%}
+        #dashboard .dr-head > .dr-tools{justify-self:end;grid-column:3}
         .dr-chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+        .dr-filter-bar{
+            display:flex;align-items:center;justify-content:center;gap:6px;
+            flex:0 1 auto;min-width:0;width:max-content;max-width:100%;
+            margin:0;padding:0;border:0;background:transparent;box-shadow:none;
+        }
+        .dr-filter-bar.is-collapsed{flex:0 0 auto;width:auto}
         .dr-filters{
-            display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:nowrap;
-            margin:0 0 14px;padding:10px 12px;border-radius:14px;
-            background:rgba(255,255,255,.88);border:1px solid rgba(212,176,106,.28);
+            display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:nowrap;
+            flex:0 1 auto;min-width:0;margin:0;padding:0;border:0;background:transparent;box-shadow:none;
             overflow-x:auto;-webkit-overflow-scrolling:touch;
         }
-        .dr-filters::-webkit-scrollbar{height:4px}
+        .dr-filters.is-hidden{display:none}
+        .dr-filters::-webkit-scrollbar{height:3px}
         .dr-filters::-webkit-scrollbar-thumb{background:rgba(212,176,106,.35);border-radius:4px}
         .dr-sep{
-            flex:0 0 auto;width:1px;height:22px;align-self:center;
+            flex:0 0 auto;width:1px;height:18px;align-self:center;
             background:rgba(212,176,106,.35);
         }
         .dr-chip,.dr-floor-opt,.dr-cat{
-            display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;
-            flex:1 1 0;min-width:max-content;white-space:nowrap;
-            padding:7px 12px;border-radius:999px;font:600 11px 'Montserrat',sans-serif;letter-spacing:.4px;
+            display:inline-flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;
+            flex:0 0 auto;min-width:max-content;white-space:nowrap;
+            padding:5px 10px;border-radius:999px;font:600 10px 'Montserrat',sans-serif;letter-spacing:.3px;
             color:var(--text-dark);background:#fff;border:1px solid rgba(212,176,106,.28);
             transition:border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease;
         }
         .dr-chip b,.dr-floor-opt b,.dr-cat b{
-            min-width:20px;padding:1px 6px;border-radius:20px;font-size:10px;text-align:center;
+            min-width:18px;padding:1px 5px;border-radius:20px;font-size:9px;text-align:center;
             background:rgba(212,176,106,.16);color:#8a6a2c;
         }
         .dr-chip:hover,.dr-floor-opt:hover,.dr-cat:hover{border-color:var(--gold);box-shadow:0 4px 12px rgba(212,176,106,.18)}
         .dr-chip.is-on,.dr-floor-opt.is-on,.dr-cat.is-on{
             background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));color:#fff;border-color:transparent;
-            box-shadow:0 6px 16px rgba(8,20,51,.22);
+            box-shadow:0 4px 12px rgba(8,20,51,.18);
         }
         .dr-chip.is-on b,.dr-floor-opt.is-on b,.dr-cat.is-on b{background:rgba(240,207,133,.25);color:#f3d38a}
         .dr-reset{
             display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
-            flex:0 0 auto;width:36px;height:36px;padding:0;border-radius:12px;
+            flex:0 0 auto;width:30px;height:30px;padding:0;border-radius:10px;
             color:#8a6a2c;background:#fff;border:1px solid rgba(212,176,106,.35);
             transition:border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease;
         }
-        .dr-reset svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+        .dr-reset svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
         .dr-reset:hover{border-color:var(--gold);color:var(--tw-navy);box-shadow:0 4px 12px rgba(212,176,106,.18)}
         .dr-reset:disabled{opacity:.35;cursor:default;box-shadow:none}
 
-        .dr-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;align-items:stretch}
+        .dr-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;align-items:stretch}
         @media(max-width:1400px){.dr-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
         @media(max-width:1100px){.dr-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
         @media(max-width:760px){.dr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
         @media(max-width:480px){.dr-grid{grid-template-columns:1fr}}
         .dr-empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
         .dr-floor-label{
-            grid-column:1/-1;margin:4px 0 0;padding:4px 2px 0;
-            font:700 11px 'Montserrat',sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);
+            grid-column:1/-1;margin:2px 0 0;padding:2px 2px 0;
+            font:700 10px 'Montserrat',sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);
         }
         .dr-floor-label:first-child{margin-top:0}
 
@@ -2648,7 +2873,7 @@
             display:flex;flex-direction:column;height:100%;min-width:0;
         }
         .dr-card:hover{
-            transform:translateY(-5px);border-color:var(--st);
+            border-color:var(--st);
             box-shadow:0 18px 40px rgba(8,20,51,.14),0 0 0 1px var(--st);
         }
         .dr-card.st-disponible{--st:#e0b43a}
@@ -2690,18 +2915,149 @@
         .dr-price{font-size:14px;font-weight:700;color:var(--tw-navy);white-space:nowrap}
         .dr-price small{font-size:10px;font-weight:500;color:var(--muted)}
 
+        /* ---- Calendrier : affichage seul (pas de clic) ---- */
+        .cal-block{padding-top:18px}
+        .cal-head{display:flex;align-items:center;justify-content:center;margin:0 0 16px}
+        .cal-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+        .cal-chip{
+            display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+            padding:6px 12px;border-radius:999px;font:600 11px 'Montserrat',sans-serif;letter-spacing:.3px;
+            color:var(--text-dark);background:#fff;border:1px solid rgba(212,176,106,.28);
+        }
+        .cal-chip b{min-width:18px;padding:1px 6px;border-radius:20px;font-size:10px;text-align:center;background:rgba(212,176,106,.16);color:#8a6a2c}
+        .cal-chip.is-on{background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));color:#fff;border-color:transparent}
+        .cal-chip.is-on b{background:rgba(240,207,133,.25);color:#f3d38a}
+        .cal-chip.st-occupee.is-on{background:#2fa864}
+        .cal-chip.st-reservee.is-on{background:#3b7be0}
+        .cal-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:stretch}
+        @media(max-width:1400px){.cal-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+        @media(max-width:1100px){.cal-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+        @media(max-width:760px){.cal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:480px){.cal-grid{grid-template-columns:1fr}}
+        .cal-empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:48px 12px;font-size:14px}
+        .cal-card{
+            --st:#3b7be0;
+            position:relative;border-radius:14px;overflow:hidden;cursor:default;
+            border:1px solid rgba(212,176,106,.22);
+            box-shadow:0 8px 22px rgba(8,20,51,.09);
+            min-width:0;aspect-ratio:3/4;background:#1a1520;
+        }
+        .cal-card.st-occupee{--st:#2fa864}
+        .cal-card.st-reservee{--st:#3b7be0}
+        .cal-card::before{
+            content:'';position:absolute;left:0;top:0;bottom:0;width:3px;z-index:3;background:var(--st);
+        }
+        .cal-img{position:absolute;inset:0;pointer-events:none}
+        .cal-img img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.05)}
+        .cal-img::after{
+            content:'';position:absolute;inset:0;
+            background:
+                linear-gradient(180deg,rgba(8,20,51,.18) 0%,rgba(8,20,51,.1) 30%,rgba(8,20,51,.62) 62%,rgba(8,20,51,.94) 100%);
+        }
+        .cal-badge{
+            position:absolute;top:10px;left:10px;z-index:2;pointer-events:none;
+            padding:4px 9px;border-radius:999px;font:700 9px 'Montserrat',sans-serif;letter-spacing:.8px;
+            text-transform:uppercase;color:#fff;background:var(--st);
+            box-shadow:0 3px 10px rgba(0,0,0,.25);
+        }
+        .cal-num{
+            position:absolute;top:10px;right:10px;z-index:2;pointer-events:none;
+            padding:4px 8px;border-radius:8px;
+            font:700 10px 'Montserrat',sans-serif;letter-spacing:.6px;color:#fff;
+            background:rgba(8,20,51,.45);backdrop-filter:blur(6px);
+            border:1px solid rgba(255,255,255,.18);
+        }
+        .cal-fiche,.dr-fiche{
+            position:absolute;z-index:4;pointer-events:auto;cursor:pointer;
+            width:32px;height:32px;border-radius:10px;border:1px solid rgba(255,255,255,.28);
+            background:rgba(8,20,51,.55);color:#f3d38a;backdrop-filter:blur(8px);
+            display:inline-flex;align-items:center;justify-content:center;padding:0;
+            box-shadow:0 4px 12px rgba(0,0,0,.25);transition:background .2s,border-color .2s,transform .15s;
+        }
+        .cal-fiche{bottom:10px;right:10px}
+        .dr-fiche{top:10px;right:10px}
+        .cal-fiche svg,.dr-fiche svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
+        .cal-fiche:hover,.dr-fiche:hover{background:var(--gold);color:#1a1304;border-color:transparent;transform:translateY(-1px)}
+        .cal-fiche .ch-rc-file-n,.dr-fiche .ch-rc-file-n{
+            position:absolute;top:-5px;right:-5px;min-width:16px;height:16px;padding:0 4px;
+            border-radius:999px;background:#c05050;color:#fff;font:700 9px 'Montserrat',sans-serif;
+            display:inline-flex;align-items:center;justify-content:center;
+        }
+        .cal-body{
+            position:absolute;left:0;right:0;bottom:0;z-index:2;pointer-events:none;
+            padding:12px 12px 44px;display:flex;flex-direction:column;gap:7px;
+            color:#fff;
+        }
+        .cal-body h3{
+            font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:#fff;
+            line-height:1.15;margin:0;text-shadow:0 2px 10px rgba(0,0,0,.35);
+            display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+        }
+        .cal-meta{
+            display:grid;grid-template-columns:1fr 1fr;gap:5px 8px;
+            padding:7px 0 0;border-top:1px solid rgba(240,207,133,.28);
+        }
+        .cal-meta div{min-width:0}
+        .cal-meta span{
+            display:block;font:700 8px 'Montserrat',sans-serif;letter-spacing:.7px;
+            text-transform:uppercase;color:rgba(240,207,133,.9);margin-bottom:2px;
+        }
+        .cal-meta b{display:block;font-size:11px;font-weight:600;color:#fff;line-height:1.2;word-break:break-word}
+        .cal-meta .cal-price{grid-column:1/-1}
+        .cal-meta .cal-price b{font-size:12px;color:#f3d38a}
+        .cal-meta .cal-price small{font-size:9px;font-weight:500;color:rgba(255,255,255,.65)}
+        .cal-dates{
+            display:grid;grid-template-columns:1fr 1fr;gap:6px;
+            padding:7px;border-radius:10px;
+            background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+        }
+        .cal-dates span{
+            display:block;font:700 8px 'Montserrat',sans-serif;letter-spacing:.7px;
+            text-transform:uppercase;color:rgba(240,207,133,.85);margin-bottom:2px;
+        }
+        .cal-dates b{display:block;font-size:11px;font-weight:700;color:#fff;letter-spacing:.2px}
+
         /* ---- Tableau de bord : afficher/masquer + analyses ---- */
         .dr-tools{display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:10px;flex:0 0 auto}
         .dr-toggle{
             display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
-            width:40px;height:40px;padding:0;border-radius:12px;flex:0 0 auto;
+            width:40px;height:40px;padding:0;border-radius:12px;flex:0 0 auto;position:relative;
             color:#f3d38a;background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));
             border:1px solid rgba(240,207,133,.45);box-shadow:0 6px 18px rgba(8,20,51,.2);
-            transition:box-shadow .2s ease,border-color .2s ease,transform .15s ease;
+            transition:box-shadow .2s ease,border-color .2s ease,transform .15s ease,background .2s ease,color .2s ease;
         }
         .dr-toggle:hover{border-color:#f0cf85;box-shadow:0 8px 22px rgba(8,20,51,.3),0 0 16px rgba(240,207,133,.3)}
         .dr-toggle[aria-pressed="true"]{background:linear-gradient(135deg,#1a2a52,#2a3f78)}
         .dr-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+        .dr-toggle-filt{
+            flex:0 0 auto;width:30px;height:30px;border-radius:10px;
+            color:#f3d38a;background:linear-gradient(135deg,var(--tw-navy),var(--tw-indigo));
+            border:1px solid rgba(240,207,133,.45);box-shadow:0 4px 12px rgba(8,20,51,.16);
+        }
+        .dr-toggle-filt:hover{border-color:#f0cf85;box-shadow:0 6px 14px rgba(8,20,51,.22)}
+        .dr-toggle-filt[aria-pressed="true"]{
+            color:#8a6a2c;background:#fff;border-color:rgba(212,176,106,.45);
+            box-shadow:0 2px 8px rgba(212,176,106,.12);
+        }
+        .dr-toggle-filt.has-active::after{
+            content:'';position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;
+            background:var(--gold);box-shadow:0 0 0 2px #fff;
+        }
+        .dr-toggle-filt[aria-pressed="true"].has-active::after{box-shadow:0 0 0 2px #1a2a52}
+        .dr-toggle-filt svg{width:14px;height:14px}
+        .dr-tools .dr-toggle{width:34px;height:34px;border-radius:10px}
+        .dr-tools .dr-toggle svg{width:16px;height:16px}
+        @media(max-width:1100px){
+            #dashboard .dr-head{
+                grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:8px 10px;
+            }
+            #dashboard .dr-head > .dr-title{grid-column:1;grid-row:1}
+            #dashboard .dr-head > .dr-tools{grid-column:2;grid-row:1}
+            #dashboard .dr-head > .dr-filter-bar{
+                grid-column:1/-1;grid-row:2;justify-self:center;width:100%;
+            }
+            #dashboard .dr-filters{justify-content:center;width:100%}
+        }
 
         .dash-analytics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
         @media(max-width:1100px){.dash-analytics{grid-template-columns:minmax(0,1fr)}}
@@ -2755,17 +3111,32 @@
         .resa-st.st-reservee{background:#3b7be0}
         .resa-st.st-occupee{background:#2fa864}
         .resa-st.st-terminee{background:#aab3c5}
+        tr.resa-row:hover td{background:rgba(197,160,89,.06)}
 
         /* ---- Config Chambres ---- */
         #ch-dispo{max-width:100%}
+        #ch-dispo .dr-head{
+            display:flex;flex-direction:column;align-items:stretch;gap:12px;
+            position:static!important;top:auto!important;z-index:auto!important;
+            background:transparent!important;backdrop-filter:none!important;box-shadow:none!important;
+            margin:0 0 14px;padding:0 0 12px;
+        }
         #ch-dispo .cc-title{
-            font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--text-dark);
+            font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--text-dark);
             letter-spacing:1px;line-height:1.1;margin:2px 0 4px;text-align:left;
         }
         .cc-sub{font-size:12px;color:var(--muted);margin:0}
-        .cc-tools{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+        .cc-tools{
+            display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;
+            position:static!important;top:auto!important;z-index:auto!important;
+            background:transparent!important;backdrop-filter:none!important;box-shadow:none!important;
+            padding:0!important;margin:0;
+        }
         .cc-filters{
-            display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;width:100%;
+            display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;width:100%;
+        }
+        #ch-dispo .dr-chips{
+            display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;width:100%;
         }
         .cc-filters .cc-select{
             min-width:160px;padding:10px 14px;border-radius:12px;outline:none;cursor:pointer;
@@ -2811,7 +3182,10 @@
             text-transform:uppercase;color:#fff;background:var(--st);
         }
         .cc-card.st-disponible .cc-status{color:#2a1f05}
-        @media(max-width:860px){.cc-tools{align-items:stretch;width:100%}}
+        @media(max-width:860px){
+            .cc-tools{align-items:center;width:100%}
+            .cc-filters .cc-select{min-width:0;flex:1 1 140px}
+        }
 
         .cc-form-head{margin-bottom:0}
         .cc-edit-modal{
@@ -3265,18 +3639,36 @@
     }
     $managerLogins = config('admin_spaces.admin.manager_logins', ['Direction']);
     $adminProfil = session('space_admin_profil');
+    $adminNom = session('space_admin_nom');
+    $adminUser = $adminLogin ? \App\Models\HotelUser::where('login', $adminLogin)->first() : null;
+    if ($adminUser) {
+        $adminNom = $adminNom ?: $adminUser->nom;
+        $adminProfil = $adminProfil ?: $adminUser->profil;
+    }
+    $adminPhoto = $adminUser?->photo;
+    $adminLabel = $adminNom ?: ($adminProfil ?: $adminLogin ?: 'Direction');
+    $adminRoleLabel = $adminProfil ?: (in_array($adminLogin, $managerLogins, true) ? 'Direction' : 'Utilisateur');
+    $adminInitial = mb_strtoupper(mb_substr(trim($adminLabel), 0, 1, 'UTF-8'), 'UTF-8');
     $canManageRooms = $adminProfil !== null
         ? in_array($adminProfil, ['Direction', 'Administration'], true)
         : in_array($adminLogin, $managerLogins, true);
-    $adminLabel = 'Direction';
     // Profil Direction : accès total à toutes les sections (aucune restriction menu).
     if ($adminProfil === 'Direction' || $adminProfil === null) {
         $menuAuth = null;
     } else {
         $menuAuth = session('space_admin_auth') ?? [];
     }
+    $adminSession = [
+        'nom' => $adminNom ?: $adminLabel,
+        'profil' => $adminRoleLabel,
+        'kind' => $adminUser?->kind ?: 'user',
+        'login' => $adminLogin,
+    ];
 @endphp
-<script>window.AJ_MENU_AUTH=@json($menuAuth);</script>
+<script>
+window.AJ_MENU_AUTH=@json($menuAuth);
+window.AJ_SESSION=@json($adminSession);
+</script>
 <div class="admin-wrap sb-collapsed">
     <aside class="sidebar" id="sidebar">
         <div class="sb-brand">
@@ -3298,6 +3690,10 @@
             <div class="sb-item" data-target="ch-reservations">
                 <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
                 <span class="lbl">Réservations</span>
+            </div>
+            <div class="sb-item" data-target="ch-occupees">
+                <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V8h4v13M15 21V8h4v13"/><path d="M9 8V5h6v3"/><path d="M7 12h2M15 12h2M7 16h2M15 16h2"/></svg></span>
+                <span class="lbl">C-Occupées</span>
             </div>
             <div class="sb-item" data-target="ch-calendrier">
                 <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>
@@ -3435,10 +3831,16 @@
         </nav>
         <div class="sb-foot">
             <div class="sb-profile">
-                <div class="sb-profile-av">{{ strtoupper(substr($adminLabel, 0, 1)) }}</div>
+                <div class="sb-profile-av">
+                    @if($adminPhoto)
+                        <img src="{{ $adminPhoto }}" alt="{{ $adminLabel }}">
+                    @else
+                        {{ $adminInitial }}
+                    @endif
+                </div>
                 <div class="sb-profile-info">
                     <b>{{ $adminLabel }}</b>
-                    <span>Administrateur</span>
+                    <span>{{ $adminRoleLabel }}</span>
                 </div>
                 <span class="sb-profile-caret">&#9662;</span>
             </div>
@@ -3477,9 +3879,13 @@
                 </div>
             </div>
             <div class="who">
-                <div style="text-align:right"><b>{{ $adminLabel }}</b><span>Général</span></div>
-                @if(file_exists(public_path('images/profile.png')))
+                <div style="text-align:right"><b>{{ $adminLabel }}</b><span>{{ $adminRoleLabel }}</span></div>
+                @if($adminPhoto)
+                    <img src="{{ $adminPhoto }}" alt="{{ $adminLabel }}">
+                @elseif(file_exists(public_path('images/profile.png')))
                     <img src="{{ asset('images/profile.png') }}" alt="profil">
+                @else
+                    <div class="sb-profile-av" style="width:42px;height:42px;font-size:16px">{{ $adminInitial }}</div>
                 @endif
             </div>
         </div>
@@ -3615,6 +4021,16 @@
                 <div class="card"><div class="n" id="resaKpiArr">0</div><div class="l">Arrivées aujourd'hui</div></div>
                 <div class="card"><div class="n" id="resaKpiDep">0</div><div class="l">Départs aujourd'hui</div></div>
                 <div class="card"><div class="n" id="resaKpiTotal">0</div><div class="l">Total réservations</div></div>
+            </div>
+        </div>
+
+        {{-- KPI fixes — C-Occupées --}}
+        <div class="section-kpi hidden" data-for="ch-occupees" aria-hidden="true">
+            <div class="cards">
+                <div class="card"><div class="n" id="occKpiActive">0</div><div class="l">Chambres occupées</div></div>
+                <div class="card"><div class="n" id="occKpiArr">0</div><div class="l">Arrivées aujourd'hui</div></div>
+                <div class="card"><div class="n" id="occKpiDep">0</div><div class="l">Départs aujourd'hui</div></div>
+                <div class="card"><div class="n" id="occKpiTotal">0</div><div class="l">Total occupations</div></div>
             </div>
         </div>
 
@@ -4157,11 +4573,25 @@
                 <h2 class="serif">Gestion des Réservations</h2>
                 <p class="sub">Réservations clients — arrivées, séjours et départs</p>
                 <div class="block">
-                    <div class="row-head"><h3>Liste des réservations</h3><button type="button" class="btn-gold" id="resaNewBtn">+ Nouvelle réservation</button></div>
+                    <div class="row-head"><h3>Liste des réservations</h3></div>
                     <table>
-                        <thead><tr><th>N° Résa</th><th>Client</th><th>Chambre</th><th>Arrivée</th><th>Départ</th><th>Nuits</th><th>Montant</th><th>Statut</th></tr></thead>
+                        <thead><tr><th>N° Résa</th><th>Client</th><th>Commercial</th><th>Chambre</th><th>Arrivée</th><th>Départ</th><th>Nuits</th><th>Montant</th><th>Statut</th><th class="no-print">Actions</th></tr></thead>
                         <tbody id="resaTbody">
-                            <tr class="empty-row"><td colspan="8">Aucune réservation.</td></tr>
+                            <tr class="empty-row"><td colspan="10">Aucune réservation.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel" id="ch-occupees">
+                <h2 class="serif">C-Occupées</h2>
+                <p class="sub">Chambres occupées — séjours validés en cours</p>
+                <div class="block">
+                    <div class="row-head"><h3>Liste des chambres occupées</h3></div>
+                    <table>
+                        <thead><tr><th>N° Résa</th><th>Client</th><th>Commercial</th><th>Chambre</th><th>Arrivée</th><th>Départ</th><th>Nuits</th><th>Montant</th><th>Statut</th><th class="no-print">Actions</th></tr></thead>
+                        <tbody id="occTbody">
+                            <tr class="empty-row"><td colspan="10">Aucune chambre occupée.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -4169,8 +4599,13 @@
 
             <section class="panel" id="ch-calendrier">
                 <h2 class="serif">Calendrier</h2>
-                <p class="sub">Vue calendrier des réservations et disponibilités</p>
-                <div class="block"><p class="hint">Calendrier des arrivées, départs et occupation — à venir.</p></div>
+                <p class="sub">Chambres occupées et réservées — occupation et disponibilité</p>
+                <div class="block cal-block">
+                    <div class="cal-head">
+                        <div class="cal-chips" id="calChips" role="toolbar" aria-label="Filtre calendrier"></div>
+                    </div>
+                    <div class="cal-grid" id="calGrid"></div>
+                </div>
             </section>
 
             <section class="panel" id="ch-etat">
@@ -4234,6 +4669,7 @@
                         <select id="etFloorFilter" class="ch-select" aria-label="Filtrer par étage">
                             <option value="">Étage : Tous</option>
                         </select>
+                        <button type="button" class="btn-add-et" id="etAddBtn" title="Ajouter un étage ou une chambre">+ Ajouter</button>
                     </div>
                     <div class="table-wrap">
                         <table>
@@ -4767,7 +5203,7 @@
                             <div class="field" style="flex:1 1 180px"><label>Profil</label>
                                 <select id="cu_profil">
                                     <option value="">— Sélectionner —</option>
-                                    @foreach(\App\Models\HotelUser::PROFILS as $profilOpt)
+                                    @foreach(\App\Models\HotelUser::USER_PROFILS as $profilOpt)
                                         <option value="{{ $profilOpt }}">{{ $profilOpt }}</option>
                                     @endforeach
                                 </select>
@@ -4825,31 +5261,61 @@
 
                 <div class="subpanel" id="cfg-commerciaux">
                     <div class="block">
-                        <h3>Commercial</h3>
-                        <div class="form-flex">
-                            <div class="field cfg-id-field" style="flex:0 0 100px"><label>ID</label><input type="text" id="cc_id" readonly></div>
-                            <div class="field" style="flex:2 1 200px"><label>Nom et Prénom</label><input type="text" id="cc_nom" placeholder="Nom complet"></div>
-                            <div class="field" style="flex:1 1 140px"><label>N° CIN</label><input type="text" id="cc_cin" placeholder="AB123456"></div>
-                            <div class="field" style="flex:1 1 140px"><label>N° Téléphone</label><input type="tel" id="cc_tel" placeholder="06 XX XX XX XX"></div>
-                            <div class="field" style="flex:2 1 220px"><label>Adresse</label><input type="text" id="cc_adresse" placeholder="Adresse"></div>
-                            <div class="field" style="flex:1 1 150px"><label>Profil</label>
-                                <select id="cc_profil">
-                                    <option>Commercial junior</option><option>Commercial senior</option><option>Responsable commercial</option>
-                                </select>
+                        <div class="row-head"><h3>Commercial</h3><button type="button" class="btn-gold" onclick="CFG.newCommercial()">+ Ajouter</button></div>
+                        <div class="cc-comm-layout">
+                            <div class="cc-comm-fields">
+                                <div class="form-flex">
+                                    <div class="field cfg-id-field"><label>ID</label><input type="text" id="cc_id" readonly placeholder="Co0001"></div>
+                                    <div class="field" style="flex:2 1 200px"><label>Nom et Prénom</label><input type="text" id="cc_nom" placeholder="Nom complet"></div>
+                                    <div class="field" style="flex:1 1 140px"><label>N° CIN</label><input type="text" id="cc_cin" placeholder="AB123456"></div>
+                                    <div class="field" style="flex:1 1 140px"><label>N° Téléphone</label><input type="tel" id="cc_tel" placeholder="06 XX XX XX XX"></div>
+                                    <div class="field" style="flex:2 1 220px"><label>Adresse</label><input type="text" id="cc_adresse" placeholder="Adresse"></div>
+                                    <div class="field" style="flex:1 1 180px"><label>Profil</label>
+                                        <select id="cc_profil">
+                                            <option value="">— Profil —</option>
+                                            <option>Accueil</option>
+                                            <option>Administration</option>
+                                            <option>Facturation</option>
+                                            <option>Service Achats</option>
+                                            <option>Service Technique</option>
+                                        </select>
+                                    </div>
+                                    <div class="field" style="flex:1 1 150px"><label>Type Contrat</label>
+                                        <select id="cc_contrat">
+                                            <option>CDI</option><option>CDD</option><option>Stage</option><option>Formation</option><option>Vacataire</option>
+                                        </select>
+                                    </div>
+                                    <div class="field" style="flex:0 0 140px"><label>Date Début</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cc_debut"></div>
+                                    <div class="field" style="flex:0 0 140px"><label>Date Fin</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cc_fin"></div>
+                                    <div class="field" style="flex:1 1 180px"><label>Formation</label><input type="text" id="cc_formation" placeholder="Formation / diplôme"></div>
+                                    <div class="field cc-sal-field" style="flex:0 0 140px"><label>Salaire (DH)</label><input type="number" id="cc_salaire" placeholder="0.00" step="0.01" min="0"></div>
+                                    <div class="field" style="flex:1 1 180px"><label>Login</label><input type="text" id="cc_login" value="" placeholder="Identifiant de connexion" autocomplete="off" data-lpignore="true" data-1p-ignore></div>
+                                    <div class="field" style="flex:1 1 180px"><label>Mot de passe</label><input type="text" id="cc_password" value="" placeholder="Saisie manuelle" autocomplete="off" data-lpignore="true" data-1p-ignore spellcheck="false" style="-webkit-text-security:disc"></div>
+                                    <div class="actions cc-comm-actions">
+                                        <button type="button" class="btn ghost" id="ccAuthBtn" onclick="CFG.openCommAuth()">Autorisations</button>
+                                        <button type="button" class="btn gold" onclick="CFG.saveCommercial()">Valider</button>
+                                        <button type="button" class="btn ghost" id="ccPrintBtn" onclick="CFG.printCommercial()">Imprimer</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="field" style="flex:1 1 150px"><label>Type Contrat</label>
-                                <select id="cc_contrat">
-                                    <option>CDI</option><option>CDD</option><option>Stage</option><option>Formation</option><option>Vacataire</option>
-                                </select>
+                            <div class="cc-comm-docs">
+                                <div class="pe-copy cc-doc" id="ccPhotoCard">
+                                    <div class="pe-copy-head">Photo</div>
+                                    <button type="button" class="pe-copy-zone" id="ccPhotoBtn" title="Importer la photo">
+                                        <span class="pe-copy-preview" id="ccPhotoPreview"></span>
+                                        <span class="pe-copy-name" id="ccPhotoName">Importer photo</span>
+                                    </button>
+                                    <input type="file" id="ccPhotoFile" accept="image/*" hidden>
+                                </div>
+                                <div class="pe-copy cc-doc" id="ccDipCard">
+                                    <div class="pe-copy-head">Photo diplôme</div>
+                                    <button type="button" class="pe-copy-zone" id="ccDipBtn" title="Importer le diplôme">
+                                        <span class="pe-copy-preview" id="ccDipPreview"></span>
+                                        <span class="pe-copy-name" id="ccDipName">Importer diplôme</span>
+                                    </button>
+                                    <input type="file" id="ccDipFile" accept="image/*,.pdf,application/pdf" hidden>
+                                </div>
                             </div>
-                            <div class="field" style="flex:0 0 140px"><label>Date Début</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cc_debut"></div>
-                            <div class="field" style="flex:0 0 140px"><label>Date Fin</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cc_fin"></div>
-                            <div class="field" style="flex:1 1 180px"><label>Formation</label><input type="text" id="cc_formation" placeholder="Formation / diplôme"></div>
-                            <div class="field" style="flex:0 0 120px"><label>Salaire (DH)</label><input type="number" id="cc_salaire" placeholder="0" step="0.01" min="0"></div>
-                        </div>
-                        <div class="actions">
-                            <button type="button" class="btn gold" onclick="CFG.saveCommercial()">Valider</button>
-                            <button type="button" class="btn ghost" onclick="CFG.newCommercial()">Ajouter</button>
                         </div>
                     </div>
                     <div class="block">
@@ -5051,6 +5517,7 @@
             'ch-etages':'Étages',
             'ch-dispo':'Config Chambres',
             'ch-reservations':'Réservations',
+            'ch-occupees':'C-Occupées',
             'ch-calendrier':'Calendrier'
         };
         if(pageLabels[targetId])title.textContent=pageLabels[targetId];
@@ -5066,7 +5533,8 @@
         if(targetId==='ch-etat'&&typeof CHETAT!=='undefined')CHETAT.render();
         if(targetId==='ch-etages'&&typeof CHETAT!=='undefined')CHETAT.renderEtages();
         if(targetId==='ch-dispo'&&typeof CHDISPO!=='undefined')CHDISPO.render();
-        if(targetId==='ch-reservations'&&window.RESA)window.RESA.render();
+        if((targetId==='ch-reservations'||targetId==='ch-occupees')&&window.RESA)window.RESA.render();
+        if(targetId==='ch-calendrier'&&window.CALEND)window.CALEND.render();
         if(targetId==='adm-balance-clients'&&window.BCL)window.BCL.render();
         if(targetId==='adm-balance-paiement'&&window.BPY)window.BPY.render();
         if(targetId==='configuration'&&typeof CFG!=='undefined'){
@@ -6339,7 +6807,7 @@ ETAT.init();
 </script>
 
 <script>window.AJ_HOTEL_DEFAULTS=@json(config('hotel_rooms'));</script>
-<script src="{{ asset('js/hotel-content.js') }}"></script>
+<script src="{{ asset('js/hotel-content.js') }}?v={{ filemtime(public_path('js/hotel-content.js')) }}"></script>
 <script>
 /* ===== Liste du personnel (source de la fiche Utilisateur) ===== */
 const PERS=(function(){
@@ -6586,6 +7054,7 @@ const CFG=(function(){
         {id:'dash-tableaux',label:'Tableaux',section:'Tableau de bord'},
         {id:'dash-rooms',label:'Cadres chambres',section:'Tableau de bord'},
         {id:'ch-reservations',label:'Réservations',section:'Pilotage'},
+        {id:'ch-occupees',label:'C-Occupées',section:'Pilotage'},
         {id:'fiche',label:'Fiche fournisseur',section:'Achats & Stock'},
         {id:'bon',label:'Bon Achats',section:'Achats & Stock'},
         {id:'regl',label:'Règlement Achats',section:'Achats & Stock'},
@@ -7248,7 +7717,8 @@ const CFG=(function(){
         alert('Fiche hôtel enregistrée.');
     }
 
-    let authUserId=null;
+    let authUserId=null,authCommId=null;
+    let ccPhotoData=null,ccDipData=null;
     const todayISO=()=>new Date().toISOString().slice(0,10);
     function personnelList(){return window.PERS?window.PERS.list():[];}
 
@@ -7326,10 +7796,14 @@ const CFG=(function(){
         pwd.value='';
     }
 
+    function staffUsers(){return usersCache.filter(u=>(u.kind||'user')!=='commercial');}
+    function staffCommerciaux(){return usersCache.filter(u=>(u.kind||'user')==='commercial');}
+
     function drawUsers(){
         const tb=document.getElementById('cu_tbody');
-        if(!usersCache.length){tb.innerHTML='<tr class="empty-row"><td colspan="5">Aucun utilisateur enregistré</td></tr>';return;}
-        tb.innerHTML=usersCache.map(u=>`<tr>
+        const list=staffUsers();
+        if(!list.length){tb.innerHTML='<tr class="empty-row"><td colspan="5">Aucun utilisateur enregistré</td></tr>';return;}
+        tb.innerHTML=list.map(u=>`<tr>
             <td>${esc(u.date||'')}</td><td>${esc(u.nom)}</td><td>${esc(u.profil)}</td><td>${esc(u.login)}</td>
             <td class="no-print">
                 <button class="ibtn" title="Modifier" onclick="CFG.editUser('${esc(u.id)}')">&#9998;</button>
@@ -7344,6 +7818,7 @@ const CFG=(function(){
         try{
             await usersApi('GET');
             drawUsers();
+            renderCommerciaux();
         }catch(e){
             tb.innerHTML=`<tr class="empty-row"><td colspan="5">${esc(e.message)}</td></tr>`;
         }
@@ -7358,6 +7833,7 @@ const CFG=(function(){
     function openAuth(id){
         const u=usersCache.find(x=>x.id===id);
         if(!u)return;
+        authCommId=null;
         authUserId=u.id;
         const who=document.getElementById('cfg_auth_who');
         if(who)who.textContent='Autorisations de '+u.nom+' ('+u.profil+'). Cochez les droits, puis enregistrez.';
@@ -7406,7 +7882,59 @@ const CFG=(function(){
         drawUsers();
     }
 
+    const COMM_PROFILS=@json(\App\Models\HotelUser::COMM_PROFILS);
+    const K_COMM_DOCS='aj_cfg_commerciaux_docs';
+    function loadCommDocs(){try{return JSON.parse(localStorage.getItem(K_COMM_DOCS)||'{}')||{};}catch(e){return{};}}
+    function saveCommDocs(map){localStorage.setItem(K_COMM_DOCS,JSON.stringify(map||{}));}
+    function getCommDocs(id){return loadCommDocs()[id]||{};}
+    function setCommDocs(id,photo,diplome){
+        if(!id)return;
+        const map=loadCommDocs();
+        map[id]={photo:photo||null,diplome:diplome||null};
+        saveCommDocs(map);
+    }
+    function setCcDocPreview(kind,data){
+        const preview=document.getElementById(kind==='photo'?'ccPhotoPreview':'ccDipPreview');
+        const name=document.getElementById(kind==='photo'?'ccPhotoName':'ccDipName');
+        const card=document.getElementById(kind==='photo'?'ccPhotoCard':'ccDipCard');
+        if(!preview)return;
+        const isPdf=!!(data?.data&&(String(data.data).startsWith('data:application/pdf')||/\.pdf$/i.test(data.name||'')));
+        if(data?.data){
+            preview.innerHTML=isPdf?`<span class="pe-copy-pdf">PDF</span>`:`<img src="${data.data}" alt="">`;
+            if(name)name.textContent=data.name||(kind==='photo'?'Photo':'Diplôme');
+            card?.classList.add('has-file');
+        }else{
+            preview.innerHTML='';
+            if(name)name.textContent=kind==='photo'?'Importer photo':'Importer diplôme';
+            card?.classList.remove('has-file');
+        }
+    }
+    function bindCcDocUploads(){
+        const bind=(btnId,fileId,kind)=>{
+            const btn=document.getElementById(btnId);
+            const file=document.getElementById(fileId);
+            if(!btn||!file||btn.dataset.bound)return;
+            btn.dataset.bound='1';
+            btn.addEventListener('click',()=>{file.value='';file.click();});
+            file.addEventListener('change',()=>{
+                const f=file.files&&file.files[0];
+                if(!f)return;
+                if(f.size>5*1024*1024){alert('Fichier trop volumineux (max 5 Mo).');return;}
+                const reader=new FileReader();
+                reader.onload=()=>{
+                    const payload={data:String(reader.result||''),name:f.name||''};
+                    if(kind==='photo')ccPhotoData=payload;else ccDipData=payload;
+                    setCcDocPreview(kind,payload);
+                };
+                reader.readAsDataURL(f);
+            });
+        };
+        bind('ccPhotoBtn','ccPhotoFile','photo');
+        bind('ccDipBtn','ccDipFile','dip');
+    }
+
     function readCommForm(){
+        const docs=editCommId?getCommDocs(editCommId):{};
         return{
             id:document.getElementById('cc_id').value.trim(),
             nom:document.getElementById('cc_nom').value.trim(),
@@ -7418,7 +7946,11 @@ const CFG=(function(){
             debut:ajIso(document.getElementById('cc_debut').value),
             fin:ajIso(document.getElementById('cc_fin').value),
             formation:document.getElementById('cc_formation').value.trim(),
-            salaire:document.getElementById('cc_salaire').value
+            salaire:document.getElementById('cc_salaire').value,
+            login:document.getElementById('cc_login').value.trim(),
+            password:document.getElementById('cc_password').value,
+            photo:ccPhotoData||docs.photo||null,
+            diplome:ccDipData||docs.diplome||null
         };
     }
 
@@ -7428,65 +7960,136 @@ const CFG=(function(){
         document.getElementById('cc_cin').value=u?.cin||'';
         document.getElementById('cc_tel').value=u?.tel||'';
         document.getElementById('cc_adresse').value=u?.adresse||'';
-        document.getElementById('cc_profil').value=u?.profil||'Commercial junior';
+        const profilEl=document.getElementById('cc_profil');
+        const profil=u?.profil||'';
+        if(profilEl){
+            if(profil&&![...profilEl.options].some(o=>o.value===profil||o.textContent===profil)){
+                const opt=document.createElement('option');
+                opt.value=profil;opt.textContent=profil;
+                profilEl.appendChild(opt);
+            }
+            profilEl.value=profil||'';
+        }
         document.getElementById('cc_contrat').value=u?.contrat||'CDI';
         document.getElementById('cc_debut').value=ajDate(u?.debut||'');
         document.getElementById('cc_fin').value=ajDate(u?.fin||'');
         document.getElementById('cc_formation').value=u?.formation||'';
         document.getElementById('cc_salaire').value=u?.salaire||'';
+        const loginEl=document.getElementById('cc_login');
+        const pwdEl=document.getElementById('cc_password');
+        if(loginEl)loginEl.value=u?.login||'';
+        if(pwdEl){pwdEl.value='';pwdEl.placeholder=u?.id?'Laisser vide pour conserver':'Saisie manuelle';}
+        const docs=u?.id?getCommDocs(u.id):{};
+        ccPhotoData=u?.photo||docs.photo||null;
+        ccDipData=docs.diplome||u?.diplome||null;
+        setCcDocPreview('photo',ccPhotoData);
+        setCcDocPreview('dip',ccDipData);
+        bindCcDocUploads();
     }
 
     function renderCommerciaux(){
-        const list=load(K_COMM)||[];
+        const list=staffCommerciaux();
+        try{localStorage.setItem(K_COMM,JSON.stringify(list.map(u=>({id:u.id,nom:u.nom,profil:u.profil}))));}catch(e){}
         const tb=document.getElementById('cc_tbody');
+        if(!tb)return;
         if(!list.length){tb.innerHTML='<tr class="empty-row"><td colspan="8">Aucun commercial enregistré</td></tr>';return;}
         tb.innerHTML=list.map(u=>`<tr>
-            <td>${esc(u.id)}</td><td>${esc(u.nom)}</td><td>${esc(u.cin)}</td><td>${esc(u.tel)}</td>
-            <td>${esc(u.profil)}</td><td>${esc(u.contrat)}</td><td>${fmtSal(u.salaire)}</td>
+            <td>${esc(u.id)}</td><td>${esc(u.nom)}</td><td>${esc(u.cin||'')}</td><td>${esc(u.tel||'')}</td>
+            <td>${esc(u.profil)}</td><td>${esc(u.contrat||'')}</td><td>${fmtSal(u.salaire)}</td>
             <td class="no-print">
-                <button class="ibtn" title="Modifier" onclick="CFG.editCommercial('${u.id}')">&#9998;</button>
-                <button class="ibtn del" title="Supprimer" onclick="CFG.delCommercial('${u.id}')">&#128465;</button>
+                <button class="ibtn" title="Modifier" onclick="CFG.editCommercial('${esc(u.id)}')">&#9998;</button>
+                <button class="ibtn" title="Autorisations" onclick="CFG.openCommAuth('${esc(u.id)}')">&#128065;</button>
+                <button class="ibtn del" title="Supprimer" onclick="CFG.delCommercial('${esc(u.id)}')">&#128465;</button>
             </td>
         </tr>`).join('');
     }
 
-    function newCommercial(){
-        editCommId=null;
-        const list=load(K_COMM)||[];
-        fillCommForm({id:nextId(list,'Co')});
+    function previewCommId(){
+        return nextId(staffCommerciaux().map(u=>({id:u.id})),'Co');
     }
 
-    function saveCommercial(){
+    function newCommercial(){
+        editCommId=null;
+        authCommId=null;
+        fillCommForm({id:previewCommId()});
+        document.getElementById('cc_nom')?.focus();
+    }
+
+    function printCommercial(){
+        const id=document.getElementById('cc_id')?.value.trim();
+        if(!id){alert('Sélectionnez ou validez un commercial.');return;}
+        // Feuille d'impression : à venir
+    }
+
+    async function saveCommercial(){
         const data=readCommForm();
         if(!data.nom){alert('Le nom est obligatoire.');return;}
-        let list=load(K_COMM)||[];
-        if(editCommId){
-            const i=list.findIndex(x=>x.id===editCommId);
-            if(i>=0)list[i]={...data,id:editCommId};
-        }else{
-            if(!data.id)data.id=nextId(list,'Co');
-            if(list.some(x=>x.id===data.id)){alert('Cet ID existe déjà.');return;}
-            list.push(data);
+        if(!data.profil){alert('Choisissez un profil.');return;}
+        if(!data.login){alert('Le login est obligatoire.');return;}
+        if(!editCommId&&!data.password){alert('Le mot de passe est obligatoire.');return;}
+        const editing=editCommId;
+        const payload={
+            kind:'commercial',
+            fiche_date:todayISO(),
+            nom:data.nom,
+            cin:data.cin||null,
+            tel:data.tel||null,
+            adresse:data.adresse||null,
+            profil:data.profil,
+            contrat:data.contrat||null,
+            debut:data.debut||null,
+            fin:data.fin||null,
+            formation:data.formation||null,
+            salaire:data.salaire||null,
+            login:data.login,
+            password:data.password||undefined,
+            photo:data.photo||undefined,
+            edit:editCommId||undefined
+        };
+        try{
+            await usersApi('POST','',payload);
+        }catch(e){alert(e.message);return;}
+        const saved=staffCommerciaux().find(u=>u.id===editing)||staffCommerciaux().find(u=>u.login===data.login);
+        if(saved){
+            setCommDocs(saved.id,data.photo,data.diplome);
+            editCommId=saved.id;
+            fillCommForm({...saved,photo:data.photo,diplome:data.diplome});
         }
-        save(K_COMM,list);
-        editCommId=null;
-        newCommercial();
         renderCommerciaux();
-        alert('Commercial enregistré.');
+        if(saved)openCommAuth(saved.id);
+        else alert(editing?'Commercial modifié.':'Commercial ajouté.');
     }
 
     function editCommercial(id){
-        const u=(load(K_COMM)||[]).find(x=>x.id===id);
+        const u=staffCommerciaux().find(x=>x.id===id)||usersCache.find(x=>x.id===id);
         if(!u)return;
         editCommId=id;
         fillCommForm(u);
     }
 
-    function delCommercial(id){
+    async function delCommercial(id){
         if(!confirm('Supprimer ce commercial ?'))return;
-        save(K_COMM,(load(K_COMM)||[]).filter(x=>x.id!==id));
+        try{
+            await usersApi('DELETE','/'+encodeURIComponent(id));
+        }catch(e){alert(e.message);return;}
+        const docs=loadCommDocs();
+        if(docs[id]){delete docs[id];saveCommDocs(docs);}
         if(editCommId===id)newCommercial();
+        if(authCommId===id)authCommId=null;
         renderCommerciaux();
+    }
+
+    function openCommAuth(id){
+        let commId=id||editCommId||document.getElementById('cc_id')?.value.trim();
+        const u=staffCommerciaux().find(x=>x.id===commId)||usersCache.find(x=>x.id===commId);
+        if(!u){alert('Validez d’abord le commercial (login et mot de passe).');return;}
+        authUserId=null;
+        authCommId=u.id;
+        const who=document.getElementById('cfg_auth_who');
+        if(who)who.textContent='Autorisations du commercial '+u.nom+' ('+(u.profil||'')+'). Cochez les droits, puis enregistrez.';
+        renderAuth(u.autorisations||{});
+        if(typeof activatePanel==='function')activatePanel('configuration','Autorisations','auth');
+        else switchTab('auth');
     }
 
     const closedSecs=new Set(MENUS.map(m=>m.section));
@@ -7538,7 +8141,7 @@ const CFG=(function(){
     }
 
     async function saveAuth(){
-        if(!authUserId){alert('Validez d’abord un utilisateur.');return;}
+        if(!authUserId&&!authCommId){alert('Validez d’abord un utilisateur ou un commercial.');return;}
         const auth={};
         MENUS.forEach(m=>{
             auth[m.id]={};
@@ -7547,15 +8150,18 @@ const CFG=(function(){
                 auth[m.id][k]=!!(cb&&cb.checked);
             });
         });
+        const backTo=authCommId?'commerciaux':'users';
+        const targetId=authCommId||authUserId;
         try{
-            await usersApi('POST','/'+encodeURIComponent(authUserId)+'/auth',{autorisations:auth});
+            await usersApi('POST','/'+encodeURIComponent(targetId)+'/auth',{autorisations:auth});
         }catch(e){alert(e.message);return;}
-        const btn=document.querySelector('#cfg-auth .btn.gold');
-        if(btn){
-            const label=btn.textContent;
-            btn.textContent='Enregistré';
-            setTimeout(()=>{btn.textContent=label;},1200);
-        }
+        authUserId=null;
+        authCommId=null;
+        const who=document.getElementById('cfg_auth_who');
+        if(who)who.textContent='Validez un utilisateur pour régler ses droits.';
+        switchTab(backTo);
+        if(backTo==='commerciaux')renderCommerciaux();
+        else drawUsers();
     }
 
     function getCarouselData(){
@@ -7726,7 +8332,7 @@ const CFG=(function(){
             if(editUserId)fillUserSelects(usersCache.find(u=>u.id===editUserId)||null);
             else fillUserSelects(null);
         },
-        saveCommercial,newCommercial,editCommercial,delCommercial,
+        saveCommercial,newCommercial,editCommercial,delCommercial,openCommAuth,printCommercial,
         saveAuth,
         renderCarousel,saveCarousel,addCarouselSlide
     };
@@ -7743,7 +8349,7 @@ const CHDISPO=(function(){
     const FILTERS=[['','Toutes'],['disponible','Disponibles'],['occupee','Occupées'],['reservee','Réservées'],['nettoyage','Nettoyage'],['maintenance','Maintenance']];
     const TYPE_LBL={'grand-suite':'Grand Suite','suite-junior':'Suite Junior',single:'Single',double:'Double',suite:'Grand Suite',familiale:'Double'};
     const TYPE_OPTS=[['grand-suite','Grand Suite'],['suite-junior','Suite Junior'],['single','Single'],['double','Double']];
-    const FLOOR_OPTS=[1,2,3];
+    const FLOOR_OPTS=()=>window.AJ_HOTEL?.getFloors?.()?.length?window.AJ_HOTEL.getFloors():[1,2,3];
     const META_DEF={
         'grand-suite':{guests:4,size:'55 m²',view:'Vue panoramique',bed:'Lit King Size'},
         'suite-junior':{guests:3,size:'45 m²',view:'Vue mer',bed:'Lit King Size'},
@@ -7779,9 +8385,17 @@ const CHDISPO=(function(){
         store(K_STATUS,statuses);
         const resas=load(K_RESA);
         if(resas[num]){
-            if(st==='occupee'||st==='reservee')resas[num].statusChambre=st;
-            else delete resas[num];
+            if(st==='occupee'||st==='reservee'){
+                resas[num]={...resas[num],statusChambre:st,validated:true};
+            }else delete resas[num];
             store(K_RESA,resas);
+        }
+        window.RESA?.render();
+        window.CALEND?.render();
+        window.DASH?.render();
+        window.AJ_RESA_SYNC?.syncToServer();
+        if((st==='occupee'||st==='reservee')&&typeof activatePanel==='function'){
+            activatePanel(st==='occupee'?'ch-occupees':'ch-reservations',st==='occupee'?'C-Occupées':'Réservations');
         }
     }
 
@@ -7820,7 +8434,8 @@ const CHDISPO=(function(){
         const box=document.getElementById('rmModalContent');
         if(!box)return;
         const type=normalizeType(room.type);
-        const floor=FLOOR_OPTS.includes(Number(room.floor))?Number(room.floor):1;
+        const floors=FLOOR_OPTS();
+        const floor=floors.includes(Number(room.floor))?Number(room.floor):(floors[0]||1);
         const meta=META_DEF[type]||META_DEF.single;
         let pickedStatus=STATUS[room.status]?room.status:'disponible';
         box.innerHTML=`<div class="cc-edit-hero">
@@ -7843,7 +8458,7 @@ const CHDISPO=(function(){
                     <select id="cc_type">${TYPE_OPTS.map(([k,l])=>`<option value="${k}"${k===type?' selected':''}>${l}</option>`).join('')}</select>
                 </div>
                 <div class="field"><label for="cc_floor">Étage</label>
-                    <select id="cc_floor">${FLOOR_OPTS.map(f=>`<option value="${f}"${f===floor?' selected':''}>Étage ${f}</option>`).join('')}</select>
+                    <select id="cc_floor">${floors.map(f=>`<option value="${f}"${f===floor?' selected':''}>Étage ${f}</option>`).join('')}</select>
                 </div>
                 <div class="field"><label for="cc_price">Prix / nuit (DH)</label><input type="number" id="cc_price" min="0" step="0.01" value="${Number(room.price||0).toFixed(2)}"></div>
             </form>
@@ -7948,6 +8563,60 @@ window.CHDISPO=CHDISPO;
 
 <script>
 window.ADMIN_CAN_MANAGE_ROOMS={{ $canManageRooms ? 'true' : 'false' }};
+window.AJ_RESA_API=@json(url('admin/api/reservations'));
+window.AJ_RESA_SYNC=(function(){
+    const API=window.AJ_RESA_API;
+    const csrf=()=>document.querySelector('meta[name="csrf-token"]')?.content||'';
+    const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catch(e){return d;}};
+    async function pull(){
+        try{
+            const res=await fetch(API,{credentials:'same-origin',headers:{Accept:'application/json'}});
+            if(!res.ok)return false;
+            const data=await res.json();
+            if(data.resas&&typeof data.resas==='object')localStorage.setItem('aj_ch_resa',JSON.stringify(data.resas));
+            if(Array.isArray(data.log))localStorage.setItem('aj_resa_log',JSON.stringify(data.log));
+            if(data.statuses&&typeof data.statuses==='object')localStorage.setItem('aj_ch_status',JSON.stringify(data.statuses));
+            return true;
+        }catch(e){return false;}
+    }
+    async function push(){
+        try{
+            const body={
+                resas:read('aj_ch_resa',{}),
+                log:read('aj_resa_log',[]),
+                statuses:read('aj_ch_status',{})
+            };
+            const res=await fetch(API,{
+                method:'POST',credentials:'same-origin',
+                headers:{
+                    Accept:'application/json',
+                    'Content-Type':'application/json',
+                    'X-CSRF-TOKEN':csrf()
+                },
+                body:JSON.stringify(body)
+            });
+            return res.ok;
+        }catch(e){return false;}
+    }
+    function refreshUi(){
+        window.DASH?.render();
+        window.RESA?.render();
+        window.CALEND?.render();
+        window.CHETAT?.render();
+        window.CHDISPO?.render();
+        window.BCL?.render();
+        window.BPY?.render();
+    }
+    async function syncFromServer(){
+        const ok=await pull();
+        if(ok)refreshUi();
+        return ok;
+    }
+    async function syncToServer(){
+        return push();
+    }
+    return{pull,push,syncFromServer,syncToServer,refreshUi};
+})();
 window.ADMIN_ROLE='{{ $adminLogin }}';
 /* ===== Module État Chambres ===== */
 const CHETAT=(function(){
@@ -8032,13 +8701,20 @@ const CHETAT=(function(){
         return `<button type="button" class="ch-rc-file" title="Contenu de la chambre" aria-label="Contenu de la chambre ${esc(num)}">${FILE_ICO}${n?`<span class="ch-rc-file-n">${n}</span>`:''}</button>`;
     }
     function paintFileBadge(num){
-        const btn=document.querySelector(`.ch-room-card[data-num="${num}"] .ch-rc-file`);
-        if(!btn)return;
         const n=itemsOf(num).length;
-        let badge=btn.querySelector('.ch-rc-file-n');
-        if(!n){badge?.remove();return;}
-        if(!badge){badge=document.createElement('span');badge.className='ch-rc-file-n';btn.appendChild(badge);}
-        badge.textContent=String(n);
+        document.querySelectorAll(`.ch-room-card[data-num="${num}"] .ch-rc-file, .cal-fiche[data-num="${num}"], .dr-fiche[data-num="${num}"]`).forEach(btn=>{
+            let badge=btn.querySelector('.ch-rc-file-n');
+            if(!n){badge?.remove();return;}
+            if(!badge){badge=document.createElement('span');badge.className='ch-rc-file-n';btn.appendChild(badge);}
+            badge.textContent=String(n);
+        });
+    }
+
+    function openRoomFiche(num){
+        syncFromStorage();
+        const room=roomByNum(num)||(window.AJ_HOTEL?window.AJ_HOTEL.getRoom(num):null);
+        if(!room)return;
+        openContenu({...room,num:String(num)});
     }
     function groupItems(list){
         const map=new Map();
@@ -8069,7 +8745,7 @@ const CHETAT=(function(){
         if(sub)sub.textContent=room.title||'';
         const groups=groupItems(itemsOf(room.num));
         if(!groups.length){
-            body.innerHTML='<p class="ch-inv-empty">Aucun contenu pour cette chambre.<br>Cliquez la photo pour ajouter un équipement.</p>';
+            body.innerHTML='<p class="ch-inv-empty">Aucun contenu enregistré pour cette chambre.<br>Les équipements seront saisis ultérieurement.</p>';
             return;
         }
         body.innerHTML=groups.map(g=>`<section class="ch-inv-piece"><h4>${esc(g.label)}</h4><ul>${g.items.map(it=>`<li><span>${esc(it.item)}</span><button type="button" class="ch-inv-del" data-id="${esc(it.id)}">Retirer</button></li>`).join('')}</ul></section>`).join('');
@@ -8242,8 +8918,16 @@ const CHETAT=(function(){
         return true;
     }
 
-    function openModal(){document.getElementById('rmModalOverlay')?.classList.add('show');}
-    function closeModal(){document.getElementById('rmModalOverlay')?.classList.remove('show');currentRoom=null;}
+    function openModal(wide){
+        const modal=document.getElementById('rmModal');
+        modal?.classList.toggle('rm-resa-wide',!!wide);
+        document.getElementById('rmModalOverlay')?.classList.add('show');
+    }
+    function closeModal(){
+        document.getElementById('rmModalOverlay')?.classList.remove('show');
+        document.getElementById('rmModal')?.classList.remove('rm-resa-wide','cc-edit-modal');
+        currentRoom=null;
+    }
 
     function populateDetailFloorSelects(activeRoom){
         const floorSel=document.getElementById('chDpFloorSelect');
@@ -8406,107 +9090,312 @@ const CHETAT=(function(){
         openModal();
     }
 
+    const PAY_TYPES=['Espèces','Chèque','Effet','Virement'];
+    const ID_TYPES=['CIN','Passport','Carte séjour'];
+    const PAY_EXTRA=['rf_nreg','rf_bnq','rf_tire','rf_encaisse'];
+    const isCashPay=t=>{
+        const v=String(t||'').trim().toLowerCase();
+        return v==='espèces'||v==='especes'||v==='esp';
+    };
+    const dateFr=v=>{
+        if(!v)return typeof ajDate==='function'?ajDate(today()):today();
+        if(typeof ajDate==='function'&&/^\d{4}-\d{2}-\d{2}/.test(String(v)))return ajDate(v);
+        return String(v);
+    };
+    function commercialNames(){
+        let list=[];
+        try{list=JSON.parse(localStorage.getItem('aj_cfg_commerciaux')||'[]')||[];}catch(e){}
+        return [...new Set((list||[]).map(c=>c&&String(c.nom||'').trim()).filter(Boolean))]
+            .sort((a,b)=>String(a).localeCompare(String(b),'fr',{sensitivity:'base'}));
+    }
+    function sessionCommercialName(){
+        const s=window.AJ_SESSION||{};
+        return(s.kind==='commercial'&&s.nom)?String(s.nom).trim():'';
+    }
+
+    function commercialSelectHtml(selected){
+        const noms=commercialNames();
+        const cur=selected&&noms.includes(selected)?selected:'';
+        if(!noms.length){
+            return`<select id="rf_commercial"><option value="">Aucun commercial — saisissez-en dans Configuration</option></select>`;
+        }
+        return`<select id="rf_commercial"><option value="">— Commercial —</option>${noms.map(n=>`<option value="${esc(n)}"${n===cur?' selected':''}>${esc(n)}</option>`).join('')}</select>`;
+    }
+
+    function commercialFieldHtml(selected){
+        const me=sessionCommercialName();
+        if(me){
+            return`<input type="text" id="rf_commercial" class="is-locked-comm" value="${esc(me)}" readonly tabindex="-1" title="Commercial connecté">`;
+        }
+        return commercialSelectHtml(selected);
+    }
+
     function formHtml(room,data){
         const d=data||{};
-        return`<div class="rm-form-head"><h3>Réservation — Chambre ${esc(room.num)}</h3><p>${esc(room.title)} · Tarif ${fmtP(room.price)} / nuit</p></div>
-        <form id="rfForm" class="rm-form-grid" onsubmit="return false">
-            <div class="field"><label>N° Chambre</label><input type="text" id="rf_num" value="${esc(room.num)}" readonly></div>
-            <div class="field"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="rf_date" value="${esc(d.date||today())}"></div>
-            <div class="field span2"><label>Nom Client</label><input type="text" id="rf_nom" value="${esc(d.nom||'')}" placeholder="Nom complet du client"></div>
-            <div class="field span2"><label>N° CIN / Passport</label><input type="text" id="rf_cin" value="${esc(d.cin||'')}" placeholder="AB123456"></div>
-            <div class="field"><label>Nbrs Personnes</label><input type="number" id="rf_personnes" min="1" value="${esc(d.personnes||1)}"></div>
-            <div class="field"><label>Nbrs Nuités</label><input type="number" id="rf_nuits" min="1" value="${esc(d.nuits||1)}"></div>
-            <div class="field span2"><label>Tarif Nuités (DH)</label><input type="number" id="rf_tarif" min="0" step="0.01" value="${esc(d.tarif!=null?d.tarif:room.price)}"></div>
-            <div class="field"><label>Réf° Rég</label><input type="text" id="rf_ref" value="${esc(d.ref||'')}" placeholder="RG0001"></div>
-            <div class="field"><label>Mnt payé (DH)</label><input type="number" id="rf_mnt" min="0" step="0.01" value="${esc(d.mnt!=null?d.mnt:(d.paye!=null?d.paye:0))}"></div>
-            <div class="field"><label>Type</label>
-                <select id="rf_type">${['','Espèces','Carte bancaire','Virement','Chèque'].map(t=>`<option value="${esc(t)}"${(d.type||'')===t?' selected':''}>${t||'— Type —'}</option>`).join('')}</select>
+        const typeVal=d.type&&PAY_TYPES.includes(d.type)?d.type:(d.type==='Carte bancaire'?'Virement':(d.type||''));
+        const idType=ID_TYPES.includes(d.idType)?d.idType:(d.idType||'CIN');
+        const commercial=d.commercial||sessionCommercialName()||'';
+        const docPreview=d.idDoc
+            ?(String(d.idDoc).startsWith('data:application/pdf')||String(d.idDocName||'').toLowerCase().endsWith('.pdf')
+                ?`<div class="rf-doc-pdf">PDF · ${esc(d.idDocName||'document.pdf')}</div>`
+                :`<img src="${esc(d.idDoc)}" alt="Pièce d'identité">`)
+            :`<div class="rf-doc-ph"><em>Importer</em><span>Photo ou PDF du document</span></div>`;
+        return`<div class="rm-form-head simple"><h3>Réservation — Chambre ${esc(room.num)}</h3></div>
+        <form id="rfForm" onsubmit="return false">
+            <div class="rm-form-sec">
+                <h4 class="rm-form-sec-title">Info technique</h4>
+                <div class="rm-form-grid cols-4">
+                    <div class="field"><label>N° Chambre</label><input type="text" id="rf_num" value="${esc(room.num)}" readonly></div>
+                    <div class="field"><label>N° Étage</label><input type="text" id="rf_floor" value="${esc(floorLbl(room.floor))}" readonly></div>
+                    <div class="field"><label>Date saisie</label><input type="text" id="rf_date" value="${esc(dateFr(d.date||today()))}" readonly></div>
+                    <div class="field"><label>Commercial</label>${commercialFieldHtml(commercial)}</div>
+                </div>
             </div>
-            <div class="field"><label>N° Rég</label><input type="text" id="rf_nreg" value="${esc(d.nreg||'')}" placeholder="N° chèque / virement"></div>
-            <div class="field"><label>Banque</label><input type="text" id="rf_bnq" value="${esc(d.bnq||'')}" placeholder="Banque"></div>
-            <div class="field span2"><label>Nom Tiré</label><input type="text" id="rf_tire" value="${esc(d.tire||'')}" placeholder="Nom du tiré"></div>
-            <div class="field span2"><label>Date Encaissement</label><input type="text" class="js-date" id="rf_encaisse" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" value="${esc(d.encaisse&&typeof ajDate==='function'?ajDate(d.encaisse): (d.encaisse||''))}"></div>
+            <div class="rm-pers-doc">
+                <div class="rm-form-sec">
+                    <h4 class="rm-form-sec-title">Infos personnel</h4>
+                    <div class="rm-form-grid pers-line">
+                        <div class="field"><label>Nom complet</label><input type="text" id="rf_nom" value="${esc(d.nom||'')}" placeholder="Nom et prénom"></div>
+                        <div class="field"><label>Nationalité</label><input type="text" id="rf_nationalite" value="${esc(d.nationalite||'')}" placeholder="Marocaine"></div>
+                        <div class="field"><label>Identifiant</label>
+                            <select id="rf_idType">${ID_TYPES.map(t=>`<option value="${esc(t)}"${idType===t?' selected':''}>${esc(t)}</option>`).join('')}</select>
+                        </div>
+                        <div class="field"><label>N°</label><input type="text" id="rf_cin" value="${esc(d.cin||'')}" placeholder="N° document"></div>
+                    </div>
+                </div>
+                <div class="rm-form-sec">
+                    <h4 class="rm-form-sec-title">Cadre photo</h4>
+                    <div class="rf-doc${d.idDoc?' has-file':''}" id="rfDocBox">
+                        <div class="rf-doc-head">CIN / Passport / Carte séjour</div>
+                        <div class="rf-doc-body">
+                            <div class="rf-doc-preview" id="rfDocPreview">${docPreview}</div>
+                            <input type="hidden" id="rf_idDoc" value="${d.idDoc?esc(d.idDoc):''}">
+                            <input type="hidden" id="rf_idDocName" value="${esc(d.idDocName||'')}">
+                            <input type="file" id="rf_doc" accept="image/*,application/pdf,.pdf" hidden>
+                            <div class="rf-doc-actions">
+                                <button type="button" class="is-gold" id="rfDocImport">Importer</button>
+                                <button type="button" id="rfDocClear"${d.idDoc?'':' disabled'}>Retirer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rm-form-sec">
+                <h4 class="rm-form-sec-title">Hébergement</h4>
+                <div class="rm-form-grid cols-4">
+                    <div class="field"><label>Nbrs Personnes</label><input type="number" id="rf_personnes" min="1" value="${esc(d.personnes||1)}"></div>
+                    <div class="field"><label>Nbrs Nuités</label><input type="number" id="rf_nuits" min="1" value="${esc(d.nuits||1)}"></div>
+                    <div class="field"><label>Tarif / Nuité</label><input type="number" id="rf_tarif" min="0" step="0.01" value="${esc(d.tarif!=null?d.tarif:room.price)}"></div>
+                    <div class="field"><label>Sous-total</label><input type="text" id="rf_sous" readonly></div>
+                </div>
+            </div>
+            <div class="rm-form-sec">
+                <h4 class="rm-form-sec-title">Paiement</h4>
+                <div class="rm-form-grid pay-line" id="rfPayGrid">
+                    <div class="field pay-type"><label>Type Paie</label>
+                        <select id="rf_type"><option value="">— Type —</option>${PAY_TYPES.map(t=>`<option value="${esc(t)}"${typeVal===t?' selected':''}>${esc(t)}</option>`).join('')}</select>
+                    </div>
+                    <div class="field"><label>Rég N°</label><input type="text" id="rf_nreg" value="${esc(d.nreg||'')}" placeholder="N° règlement"></div>
+                    <div class="field"><label>Bnq</label><input type="text" id="rf_bnq" value="${esc(d.bnq||'')}" placeholder="Banque"></div>
+                    <div class="field pay-tire"><label>Nom Tiré</label><input type="text" id="rf_tire" value="${esc(d.tire||'')}" placeholder="Nom du tiré"></div>
+                    <div class="field"><label>Date Encaiss</label><input type="text" class="js-date" id="rf_encaisse" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" value="${esc(d.encaisse?dateFr(d.encaisse):'')}"></div>
+                    <input type="hidden" id="rf_ref" value="${esc(d.ref||'')}">
+                    <input type="hidden" id="rf_mnt" value="${esc(d.mnt!=null?d.mnt:(d.paye!=null?d.paye:0))}">
+                </div>
+            </div>
         </form>
         <div class="rm-form-totals">
             <div class="ttl"><label>Total HT</label><input type="text" id="rf_ht" readonly></div>
-            <div class="ttl"><label>Total TVA (10%)</label><input type="text" id="rf_tva" readonly></div>
+            <div class="ttl"><label>TVA (10%)</label><input type="text" id="rf_tva" readonly></div>
             <div class="ttl"><label>Total TTC</label><input type="text" id="rf_ttc" readonly></div>
         </div>
         <div class="rm-form-actions">
             <button type="button" class="btn gold" id="rfValider">Valider</button>
-            <button type="button" class="btn ghost" id="rfModifier">Modifier</button>
+            <button type="button" class="btn ghost" id="rfAnnuler">Annuler</button>
             <button type="button" class="btn ghost" id="rfImprimer">Imprimer</button>
-            <button type="button" class="btn ghost" id="rfPdf">Exporter PDF</button>
+            <button type="button" class="btn ghost" id="rfPdf">PDF</button>
         </div>`;
     }
 
     function calcTotals(){
         const nuits=num(document.getElementById('rf_nuits')?.value);
         const tarif=num(document.getElementById('rf_tarif')?.value);
-        const ht=nuits*tarif,tva=ht*TVA_RATE,ttc=ht+tva;
+        const sous=nuits*tarif,ht=sous,tva=ht*TVA_RATE,ttc=ht+tva;
+        const sousEl=document.getElementById('rf_sous');
         const htEl=document.getElementById('rf_ht'),tvaEl=document.getElementById('rf_tva'),ttcEl=document.getElementById('rf_ttc');
+        if(sousEl)sousEl.value=fmtAmt(sous)+' DH';
         if(htEl)htEl.value=fmtAmt(ht)+' DH';
         if(tvaEl)tvaEl.value=fmtAmt(tva)+' DH';
         if(ttcEl)ttcEl.value=fmtAmt(ttc)+' DH';
-        return{ht,tva,ttc};
+        const mntEl=document.getElementById('rf_mnt');
+        if(mntEl&&!mntEl.dataset.manual)mntEl.value=String(ttc);
+        return{sous,ht,tva,ttc};
+    }
+
+    function syncPayFields(){
+        const cash=isCashPay(document.getElementById('rf_type')?.value);
+        PAY_EXTRA.forEach(id=>{
+            const el=document.getElementById(id);
+            if(!el)return;
+            el.disabled=cash;
+            el.readOnly=cash;
+            el.closest('.field')?.classList.toggle('is-off',cash);
+            if(cash)el.value='';
+        });
     }
 
     function getFormData(){
+        const totals=calcTotals();
+        const type=document.getElementById('rf_type')?.value||'';
+        const cash=isCashPay(type);
         return{
             num:document.getElementById('rf_num')?.value,
-            date:ajIso(document.getElementById('rf_date')?.value),
+            floor:document.getElementById('rf_floor')?.value||'',
+            date:typeof ajIso==='function'?ajIso(document.getElementById('rf_date')?.value):today(),
+            commercial:sessionCommercialName()||document.getElementById('rf_commercial')?.value.trim()||'',
             nom:document.getElementById('rf_nom')?.value.trim(),
+            nationalite:document.getElementById('rf_nationalite')?.value.trim()||'',
+            idType:document.getElementById('rf_idType')?.value||'CIN',
             cin:document.getElementById('rf_cin')?.value.trim(),
             personnes:num(document.getElementById('rf_personnes')?.value),
             nuits:num(document.getElementById('rf_nuits')?.value),
             tarif:num(document.getElementById('rf_tarif')?.value),
-            mnt:num(document.getElementById('rf_mnt')?.value),
-            type:document.getElementById('rf_type')?.value||'',
-            ref:document.getElementById('rf_ref')?.value.trim(),
-            nreg:document.getElementById('rf_nreg')?.value.trim(),
-            bnq:document.getElementById('rf_bnq')?.value.trim(),
-            tire:document.getElementById('rf_tire')?.value.trim(),
-            encaisse:typeof ajIso==='function'?ajIso(document.getElementById('rf_encaisse')?.value):'',
-            ...calcTotals()
+            mnt:num(document.getElementById('rf_mnt')?.value)||totals.ttc,
+            type,
+            ref:document.getElementById('rf_ref')?.value.trim()||'',
+            nreg:cash?'':(document.getElementById('rf_nreg')?.value.trim()||''),
+            bnq:cash?'':(document.getElementById('rf_bnq')?.value.trim()||''),
+            tire:cash?'':(document.getElementById('rf_tire')?.value.trim()||''),
+            encaisse:cash?'':(typeof ajIso==='function'?ajIso(document.getElementById('rf_encaisse')?.value):''),
+            idDoc:document.getElementById('rf_idDoc')?.value||'',
+            idDocName:document.getElementById('rf_idDocName')?.value||'',
+            ...totals
         };
     }
 
-    function setFormReadonly(ro){
-        ['rf_date','rf_nom','rf_cin','rf_personnes','rf_nuits','rf_tarif','rf_ref','rf_mnt','rf_nreg','rf_bnq','rf_tire','rf_encaisse'].forEach(id=>{
-            const el=document.getElementById(id);if(el)el.readOnly=ro;
-        });
-        const typeEl=document.getElementById('rf_type');
-        if(typeEl)typeEl.disabled=ro;
+    function renderIdDocPreview(dataUrl,name){
+        const box=document.getElementById('rfDocBox');
+        const preview=document.getElementById('rfDocPreview');
+        const clearBtn=document.getElementById('rfDocClear');
+        if(!preview)return;
+        const isPdf=!!(dataUrl&&(dataUrl.startsWith('data:application/pdf')||/\.pdf$/i.test(name||'')));
+        if(dataUrl){
+            preview.innerHTML=isPdf?`<div class="rf-doc-pdf">PDF · ${esc(name||'document.pdf')}</div>`:`<img src="${dataUrl}" alt="Pièce d'identité">`;
+            box?.classList.add('has-file');
+            if(clearBtn)clearBtn.disabled=false;
+        }else{
+            preview.innerHTML=`<div class="rf-doc-ph"><em>Importer</em><span>Photo ou PDF du document</span></div>`;
+            box?.classList.remove('has-file');
+            if(clearBtn)clearBtn.disabled=true;
+        }
     }
 
-    function logReservation(room,d){
+    function bindIdDocUpload(ro){
+        const file=document.getElementById('rf_doc');
+        const hidden=document.getElementById('rf_idDoc');
+        const nameEl=document.getElementById('rf_idDocName');
+        const setDoc=(data,name)=>{
+            if(hidden)hidden.value=data||'';
+            if(nameEl)nameEl.value=name||'';
+            renderIdDocPreview(data,name);
+        };
+        document.getElementById('rfDocImport')?.addEventListener('click',()=>{
+            if(ro||!file)return;
+            file.removeAttribute('capture');
+            file.accept='image/*,application/pdf,.pdf';
+            file.value='';
+            file.click();
+        });
+        document.getElementById('rfDocClear')?.addEventListener('click',()=>{if(!ro)setDoc('','');});
+        file?.addEventListener('change',()=>{
+            const f=file.files&&file.files[0];
+            if(!f)return;
+            if(f.size>5*1024*1024){alert('Fichier trop volumineux (max 5 Mo).');file.value='';return;}
+            const reader=new FileReader();
+            reader.onload=()=>setDoc(String(reader.result||''),f.name||'');
+            reader.readAsDataURL(f);
+        });
+        ['rfDocImport','rfDocClear'].forEach(id=>{
+            const btn=document.getElementById(id);
+            if(btn)btn.disabled=!!ro||(id==='rfDocClear'&&!(hidden&&hidden.value));
+        });
+    }
+
+    function setFormReadonly(ro){
+        ['rf_nom','rf_nationalite','rf_cin','rf_personnes','rf_nuits','rf_tarif','rf_nreg','rf_bnq','rf_tire','rf_encaisse'].forEach(id=>{
+            const el=document.getElementById(id);if(el)el.readOnly=ro;
+        });
+        ['rf_type','rf_idType'].forEach(id=>{
+            const el=document.getElementById(id);if(el)el.disabled=ro;
+        });
+        const comm=document.getElementById('rf_commercial');
+        if(comm){
+            if(comm.classList.contains('is-locked-comm')){comm.readOnly=true;comm.disabled=false;}
+            else comm.disabled=ro;
+        }
+        ['rfDocImport','rfDocClear'].forEach(id=>{
+            const btn=document.getElementById(id);
+            if(btn)btn.disabled=!!ro||(id==='rfDocClear'&&!document.getElementById('rf_idDoc')?.value);
+        });
+        if(!ro)syncPayFields();
+        else PAY_EXTRA.forEach(id=>document.getElementById(id)?.closest('.field')?.classList.remove('is-off'));
+    }
+
+    function logReservation(room,d,status){
         let log=[];
         try{log=JSON.parse(localStorage.getItem('aj_resa_log')||'[]')||[];}catch(e){}
-        const seq=log.reduce((m,x)=>Math.max(m,parseInt(String(x.id).replace(/\D/g,''),10)||0),0)+1;
-        log.push({
-            id:'R'+String(seq).padStart(4,'0'),
-            date:d.date||today(),num:room.num,nom:d.nom,cin:d.cin||'',
-            nuits:num(d.nuits)||1,tarif:num(d.tarif),montant:num(d.ttc),
-            paye:num(d.mnt),type:d.type||'',
-            ref:d.ref||('RG'+String(seq).padStart(4,'0')),
+        const payload={
+            date:d.date||today(),num:room.num,floor:d.floor||floorLbl(room.floor),
+            commercial:d.commercial||'',nom:d.nom,nationalite:d.nationalite||'',
+            idType:d.idType||'CIN',cin:d.cin||'',
+            personnes:num(d.personnes)||1,nuits:num(d.nuits)||1,tarif:num(d.tarif),
+            sous:num(d.sous||d.ht),montant:num(d.ttc),
+            paye:num(d.mnt)||num(d.ttc),type:d.type||'',
             nreg:d.nreg||'',bnq:d.bnq||'',tire:d.tire||'',encaisse:d.encaisse||'',
+            idDoc:d.idDoc||'',idDocName:d.idDocName||'',
+            statusChambre:status||d.statusChambre||'reservee',
             at:Date.now()
-        });
+        };
+        let idx=-1;
+        for(let i=log.length-1;i>=0;i--){
+            if(String(log[i].num)===String(room.num)&&!log[i].cancelled){idx=i;break;}
+        }
+        if(idx>=0){
+            log[idx]={...log[idx],...payload,id:log[idx].id,ref:log[idx].ref||d.ref||log[idx].ref};
+        }else{
+            const seq=log.reduce((m,x)=>Math.max(m,parseInt(String(x.id).replace(/\D/g,''),10)||0),0)+1;
+            log.push({
+                ...payload,
+                id:'R'+String(seq).padStart(4,'0'),
+                ref:d.ref||('RG'+String(seq).padStart(4,'0'))
+            });
+        }
         localStorage.setItem('aj_resa_log',JSON.stringify(log));
+    }
+
+    function syncResaLists(status){
+        window.DASH?.render();
+        window.RESA?.render();
+        window.CALEND?.render();
+        window.BCL?.render();
+        window.BPY?.render();
+        window.AJ_RESA_SYNC?.syncToServer();
+        if(typeof activatePanel==='function'){
+            if(status==='occupee')activatePanel('ch-occupees','C-Occupées');
+            else if(status==='reservee')activatePanel('ch-reservations','Réservations');
+        }
     }
 
     function confirmReservation(room,d,status){
         const resas=getResas();
         resas[room.num]={...d,validated:true,title:room.title,statusChambre:status};
         setResas(resas);
-        logReservation(room,d);
+        logReservation(room,d,status);
         room.status=status;
         saveRoomStatus(room.num,status);
         closeModal();
         render();
-        window.RESA?.render();
-        window.BCL?.render();
-        window.BPY?.render();
+        syncResaLists(status);
         alert('Réservation validée — Statut : '+STATUS[status]);
     }
 
@@ -8515,9 +9404,22 @@ const CHETAT=(function(){
         room.status=newStatus;
         saveRoomStatus(room.num,newStatus);
         const resas=getResas();
-        if(newStatus==='disponible'||newStatus==='nettoyage'||newStatus==='maintenance'){delete resas[room.num];setResas(resas);}
+        if(newStatus==='occupee'||newStatus==='reservee'){
+            if(resas[room.num]){
+                resas[room.num]={...resas[room.num],statusChambre:newStatus,validated:true};
+                setResas(resas);
+                let log=[];
+                try{log=JSON.parse(localStorage.getItem('aj_resa_log')||'[]')||[];}catch(e){}
+                const i=log.findIndex(x=>String(x.num)===String(room.num)&&!x.cancelled);
+                if(i>=0){log[i]={...log[i],statusChambre:newStatus};localStorage.setItem('aj_resa_log',JSON.stringify(log));}
+            }
+        }else if(newStatus==='disponible'||newStatus==='nettoyage'||newStatus==='maintenance'){
+            delete resas[room.num];
+            setResas(resas);
+        }
         closeModal();
         render();
+        syncResaLists(newStatus);
     }
 
     function showAdminStatusPanel(room){
@@ -8556,30 +9458,35 @@ const CHETAT=(function(){
         box.querySelectorAll('.rm-st-btn').forEach(btn=>{
             btn.addEventListener('click',()=>confirmReservation(room,d,btn.dataset.st));
         });
-        document.getElementById('rfRetour')?.addEventListener('click',()=>showForm(room,d));
+        document.getElementById('rfRetour')?.addEventListener('click',()=>showForm(room,d,{edit:true}));
         openModal();
     }
 
-    function showForm(room,prefill){
+    function showForm(room,prefill,opts){
         currentRoom=room;
         const saved=getResas()[room.num],data=prefill||saved;
         const box=document.getElementById('rmModalContent');
         if(!box)return;
         box.innerHTML=formHtml(room,data);
         calcTotals();
-        if(saved?.validated&&!prefill)setFormReadonly(true);
+        syncPayFields();
+        const locked=!!(saved?.validated&&!prefill&&!(opts&&opts.edit));
+        bindIdDocUpload(locked);
+        if(locked)setFormReadonly(true);
         ['rf_nuits','rf_tarif','rf_personnes'].forEach(id=>document.getElementById(id)?.addEventListener('input',calcTotals));
+        document.getElementById('rf_type')?.addEventListener('change',syncPayFields);
         document.getElementById('rfValider')?.addEventListener('click',()=>{
             const d=getFormData();
-            if(!d.nom){alert('Veuillez saisir le nom du client.');return;}
-            if(!d.cin){alert('Veuillez saisir le N° CIN / Passport.');return;}
+            if(!d.nom){alert('Veuillez saisir le nom complet.');return;}
+            if(!d.cin){alert('Veuillez saisir le N° '+((d.idType||'CIN'))+'.');return;}
             if(d.nuits<1){alert('Le nombre de nuités doit être au moins 1.');return;}
+            if(!d.type){alert('Veuillez choisir le type de paiement.');return;}
             showStatusChoice(room,d);
         });
-        document.getElementById('rfModifier')?.addEventListener('click',()=>setFormReadonly(false));
+        document.getElementById('rfAnnuler')?.addEventListener('click',closeModal);
         document.getElementById('rfImprimer')?.addEventListener('click',()=>printForm(room,false));
         document.getElementById('rfPdf')?.addEventListener('click',()=>printForm(room,true));
-        openModal();
+        openModal(true);
     }
 
     function printForm(room,isPdf){
@@ -8589,17 +9496,30 @@ const CHETAT=(function(){
         <h1>Al Jazeera Hotel — Réservation</h1>
         <h2>Chambre ${esc(room.num)} — ${esc(room.title)}</h2>
         <table><tr><th>Champ</th><th>Valeur</th></tr>
-        <tr><td>Date</td><td>${esc(d.date)}</td></tr><tr><td>Nom</td><td>${esc(d.nom)}</td></tr>
-        <tr><td>CIN</td><td>${esc(d.cin)}</td></tr><tr><td>Nuitées</td><td>${d.nuits}</td></tr>
-        <tr><td>TTC</td><td>${fmtAmt(d.ttc)} DH</td></tr>
-        <tr><td>Réf° Rég</td><td>${esc(d.ref||'')}</td></tr>
-        <tr><td>Mnt payé</td><td>${fmtAmt(d.mnt)} DH</td></tr>
-        <tr><td>Type</td><td>${esc(d.type||'')}</td></tr>
-        <tr><td>N° Rég</td><td>${esc(d.nreg||'')}</td></tr>
-        <tr><td>Banque</td><td>${esc(d.bnq||'')}</td></tr>
-        <tr><td>Nom Tiré</td><td>${esc(d.tire||'')}</td></tr>
-        <tr><td>Date encaissement</td><td>${esc(d.encaisse||'')}</td></tr></table></body></html>`;
-        const w=window.open('','',isPdf?'width=800,height=700':'width=800,height=700');
+        <tr><td>N° Chambre</td><td>${esc(d.num||room.num)}</td></tr>
+        <tr><td>Étage</td><td>${esc(d.floor||floorLbl(room.floor))}</td></tr>
+        <tr><td>Date saisie</td><td>${esc(dateFr(d.date))}</td></tr>
+        <tr><td>Commercial</td><td>${esc(d.commercial||'—')}</td></tr>
+        <tr><td>Nom complet</td><td>${esc(d.nom)}</td></tr>
+        <tr><td>Nationalité</td><td>${esc(d.nationalite||'—')}</td></tr>
+        <tr><td>Identifiant</td><td>${esc(d.idType||'CIN')}</td></tr>
+        <tr><td>N°</td><td>${esc(d.cin)}</td></tr>
+        <tr><td>Personnes</td><td>${d.personnes}</td></tr>
+        <tr><td>Nuitées</td><td>${d.nuits}</td></tr>
+        <tr><td>Tarif / nuit</td><td>${fmtAmt(d.tarif)} DH</td></tr>
+        <tr><td>Sous-total</td><td>${fmtAmt(d.sous||d.ht)} DH</td></tr>
+        <tr><td>Total HT</td><td>${fmtAmt(d.ht)} DH</td></tr>
+        <tr><td>TVA</td><td>${fmtAmt(d.tva)} DH</td></tr>
+        <tr><td>Total TTC</td><td>${fmtAmt(d.ttc)} DH</td></tr>
+        <tr><td>Type Paie</td><td>${esc(d.type||'')}</td></tr>
+        <tr><td>Rég N°</td><td>${esc(d.nreg||'—')}</td></tr>
+        <tr><td>Banque</td><td>${esc(d.bnq||'—')}</td></tr>
+        <tr><td>Nom Tiré</td><td>${esc(d.tire||'—')}</td></tr>
+        <tr><td>Date encaissement</td><td>${esc(d.encaisse?dateFr(d.encaisse):'—')}</td></tr>
+        <tr><td>Pièce d'identité</td><td>${d.idDoc?(d.idDocName||'Document joint'):'—'}</td></tr></table>
+        ${d.idDoc&&String(d.idDoc).startsWith('data:image')?`<p style="margin-top:18px"><img src="${d.idDoc}" alt="Pièce" style="max-width:100%;max-height:360px;border:1px solid #ccc"></p>`:''}
+        </body></html>`;
+        const w=window.open('','','width=800,height=700');
         w.document.write(html);w.document.close();w.focus();setTimeout(()=>w.print(),300);
     }
 
@@ -8670,7 +9590,12 @@ const CHETAT=(function(){
         saveRoomStatus(room.num,status);
         if(status!==old){
             const resas=getResas();
-            if(status==='disponible'||status==='nettoyage'||status==='maintenance'){
+            if(status==='occupee'||status==='reservee'){
+                if(resas[room.num]){
+                    resas[room.num]={...resas[room.num],statusChambre:status,validated:true};
+                    setResas(resas);
+                }
+            }else if(status==='disponible'||status==='nettoyage'||status==='maintenance'){
                 delete resas[room.num];
                 setResas(resas);
             }
@@ -8680,6 +9605,12 @@ const CHETAT=(function(){
         renderStats();
         applyFilters();
         if(selectedNum===room.num)showDetail(room);
+        window.RESA?.render();
+        window.CALEND?.render();
+        window.DASH?.render();
+        if(status!==old&&(status==='occupee'||status==='reservee')&&typeof activatePanel==='function'){
+            activatePanel(status==='occupee'?'ch-occupees':'ch-reservations',status==='occupee'?'C-Occupées':'Réservations');
+        }
         alert('Chambre mise à jour.');
     }
 
@@ -8779,12 +9710,32 @@ const CHETAT=(function(){
 
     let etagesFloorFilter='',etagesFloorQ='',etagesBound=false;
 
+    function listFloors(){
+        if(window.AJ_HOTEL?.getFloors)return window.AJ_HOTEL.getFloors();
+        return [...new Set(ROOMS.map(r=>Number(r.floor)).filter(f=>f>0))].sort((a,b)=>a-b);
+    }
+
+    function refreshAfterCatalogChange(){
+        syncFromStorage();
+        try{renderEtages();}catch(e){console.error(e);}
+        try{render();}catch(e){console.error(e);}
+        try{window.CHDISPO?.render?.();}catch(e){console.error(e);}
+        try{window.DASH?.render?.();}catch(e){console.error(e);}
+    }
+
     function matchesEtageSearch(floor){
+        const f=Number(floor);
         const q=etagesFloorQ.trim().toLowerCase();
-        if(etagesFloorFilter&&String(floor)!==String(etagesFloorFilter))return false;
+        if(etagesFloorFilter!==''&&etagesFloorFilter!=null&&Number(etagesFloorFilter)!==f)return false;
         if(!q)return true;
-        const lbl=floorLbl(floor).toLowerCase();
-        return lbl.includes(q)||String(floor).includes(q)||`${floor}e`.includes(q)||`${floor}er`.includes(q);
+        const lbl=floorLbl(f).toLowerCase();
+        return lbl.includes(q)||String(f).includes(q)||`${f}e`.includes(q)||`${f}er`.includes(q);
+    }
+
+    function clearEtageSearch(){
+        etagesFloorQ='';
+        const search=document.getElementById('etFloorSearch');
+        if(search)search.value='';
     }
 
     function renderEtagesTable(){
@@ -8793,11 +9744,15 @@ const CHETAT=(function(){
         const sorted=ROOMS.slice()
             .filter(r=>matchesEtageSearch(r.floor))
             .sort((a,b)=>{
-                if(a.floor!==b.floor)return a.floor-b.floor;
+                const fa=Number(a.floor)||0,fb=Number(b.floor)||0;
+                if(fa!==fb)return fa-fb;
                 return String(a.num).localeCompare(String(b.num),undefined,{numeric:true});
             });
         if(!sorted.length){
-            tbody.innerHTML='<tr class="empty-row"><td colspan="6">Aucune chambre pour cet étage.</td></tr>';
+            const emptyMsg=etagesFloorFilter
+                ?`Aucune chambre pour le ${esc(floorLbl(etagesFloorFilter))}.`
+                :'Aucune chambre pour cet étage.';
+            tbody.innerHTML=`<tr class="empty-row"><td colspan="6">${emptyMsg}</td></tr>`;
             return;
         }
         tbody.innerHTML=sorted.map(r=>`<tr>
@@ -8810,39 +9765,170 @@ const CHETAT=(function(){
         </tr>`).join('');
     }
 
+    function showAddModal(){
+        const box=document.getElementById('rmModalContent');
+        const modal=document.getElementById('rmModal');
+        const overlay=document.getElementById('rmModalOverlay');
+        if(!box||!modal||!overlay){
+            alert('Fenêtre d\'ajout indisponible. Rechargez la page.');
+            return;
+        }
+        if(!window.AJ_HOTEL||typeof window.AJ_HOTEL.addRoom!=='function'||typeof window.AJ_HOTEL.addFloor!=='function'){
+            alert('Module chambres non chargé. Rechargez la page (Ctrl+F5).');
+            return;
+        }
+        const floors=listFloors();
+        const nextFloor=(floors[floors.length-1]||0)+1;
+        const preferredFloor=etagesFloorFilter&&floors.some(f=>Number(f)===Number(etagesFloorFilter))
+            ?Number(etagesFloorFilter)
+            :nextFloor;
+        const typeOpts=[['grand-suite','Grand Suite'],['suite-junior','Suite Junior'],['single','Single'],['double','Double']];
+        modal.classList.add('cc-edit-modal');
+        let mode='room';
+        const floorOptions=[...floors];
+        if(!floorOptions.some(f=>Number(f)===Number(nextFloor)))floorOptions.push(nextFloor);
+        box.innerHTML=`
+            <div class="cc-edit-body" style="padding-top:22px">
+                <p class="cc-edit-kicker">Hébergement</p>
+                <h3 style="margin:0 0 14px;font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--text-dark)">Ajouter</h3>
+                <div class="et-add-mode" role="tablist">
+                    <button type="button" class="is-on" data-et-mode="room" aria-selected="true">Chambre</button>
+                    <button type="button" data-et-mode="floor" aria-selected="false">Étage</button>
+                </div>
+                <div class="et-add-pane is-on" data-et-pane="room">
+                    <div class="field"><label for="et_room_num">N° chambre</label><input type="text" id="et_room_num" placeholder="Ex. 401" autocomplete="off"></div>
+                    <div class="field"><label for="et_room_title">Titre</label><input type="text" id="et_room_title" placeholder="Nom de la chambre"></div>
+                    <div class="field"><label for="et_room_type">Catégorie</label>
+                        <select id="et_room_type">${typeOpts.map(([k,l])=>`<option value="${k}">${l}</option>`).join('')}</select>
+                    </div>
+                    <div class="field"><label for="et_room_floor">Étage</label>
+                        <select id="et_room_floor">
+                            ${floorOptions.map(f=>`<option value="${f}"${Number(f)===Number(preferredFloor)?' selected':''}>${floorLbl(f)}${Number(f)===Number(nextFloor)&&!floors.includes(Number(f))?' (nouveau)':''}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="field"><label for="et_room_price">Prix / nuit (DH)</label><input type="number" id="et_room_price" min="0" step="0.01" value="0.00"></div>
+                </div>
+                <div class="et-add-pane" data-et-pane="floor">
+                    <div class="field"><label for="et_floor_num">N° d'étage</label><input type="number" id="et_floor_num" min="1" step="1" value="${nextFloor}" placeholder="Ex. 4"></div>
+                    <p class="hint" style="text-align:left;margin:0">L'étage apparaîtra même sans chambre. Vous pourrez y ajouter des chambres ensuite.</p>
+                </div>
+                <p id="etAddErr" class="hint" style="display:none;text-align:left;color:#c0392b;margin:8px 0 0"></p>
+                <div class="et-add-actions">
+                    <button type="button" class="btn gold" id="etAddSave">Enregistrer</button>
+                    <button type="button" class="btn ghost" id="etAddCancel">Annuler</button>
+                </div>
+            </div>`;
+        const showErr=msg=>{
+            const el=box.querySelector('#etAddErr');
+            if(!el){alert(msg);return;}
+            el.style.display='block';
+            el.textContent=msg;
+        };
+        const setMode=m=>{
+            mode=m==='floor'?'floor':'room';
+            box.querySelectorAll('[data-et-mode]').forEach(b=>{
+                const on=b.getAttribute('data-et-mode')===mode;
+                b.classList.toggle('is-on',on);
+                b.setAttribute('aria-selected',on?'true':'false');
+            });
+            box.querySelectorAll('[data-et-pane]').forEach(p=>{
+                p.classList.toggle('is-on',p.getAttribute('data-et-pane')===mode);
+            });
+        };
+        const close=()=>{
+            overlay.classList.remove('show');
+            modal.classList.remove('cc-edit-modal');
+        };
+        box.onclick=e=>{
+            const modeBtn=e.target.closest('[data-et-mode]');
+            if(modeBtn){
+                e.preventDefault();
+                setMode(modeBtn.getAttribute('data-et-mode'));
+                return;
+            }
+            if(e.target.closest('#etAddCancel')){
+                e.preventDefault();
+                close();
+                return;
+            }
+            if(!e.target.closest('#etAddSave'))return;
+            e.preventDefault();
+            e.stopPropagation();
+            try{
+                if(mode==='floor'){
+                    const f=Number(box.querySelector('#et_floor_num')?.value);
+                    if(!(f>0)){showErr('Indiquez un numéro d\'étage valide.');return;}
+                    window.AJ_HOTEL.addFloor(f);
+                    clearEtageSearch();
+                    etagesFloorFilter=String(f);
+                    close();
+                    refreshAfterCatalogChange();
+                    alert(floorLbl(f)+' ajouté.');
+                }else{
+                    const num=(box.querySelector('#et_room_num')?.value||'').trim();
+                    const title=(box.querySelector('#et_room_title')?.value||'').trim();
+                    const type=box.querySelector('#et_room_type')?.value||'single';
+                    const floor=Number(box.querySelector('#et_room_floor')?.value)||1;
+                    const price=Number(box.querySelector('#et_room_price')?.value)||0;
+                    if(!num){showErr('Indiquez le numéro de chambre.');return;}
+                    if(!title){showErr('Indiquez le titre.');return;}
+                    const created=window.AJ_HOTEL.addRoom({num,title,type,floor,price});
+                    if(!created||!window.AJ_HOTEL.getRoom(num)){
+                        showErr('Chambre enregistrée mais introuvable au rechargement.');
+                        return;
+                    }
+                    clearEtageSearch();
+                    etagesFloorFilter=String(created.floor||floor);
+                    close();
+                    refreshAfterCatalogChange();
+                    alert('Chambre '+num+' ajoutée — '+floorLbl(created.floor||floor)+'.');
+                }
+            }catch(err){
+                console.error(err);
+                showErr(err&&err.message?err.message:'Impossible d\'enregistrer.');
+            }
+        };
+        overlay.classList.add('show');
+        setTimeout(()=>box.querySelector('#et_room_num')?.focus(),50);
+    }
+
     function renderEtages(){
         const box=document.getElementById('chEtagesGrid');
         const tbody=document.getElementById('chEtagesTableBody');
         if(!box&&!tbody)return;
         syncFromStorage();
-        const floors=[...new Set(ROOMS.map(r=>r.floor))].sort((a,b)=>a-b);
+        const floors=listFloors();
         const floorSel=document.getElementById('etFloorFilter');
         if(floorSel){
-            const cur=etagesFloorFilter||floorSel.value;
+            const cur=etagesFloorFilter!==''&&etagesFloorFilter!=null?String(etagesFloorFilter):(floorSel.value||'');
             floorSel.innerHTML='<option value="">Étage : Tous</option>'+floors.map(f=>`<option value="${f}">${floorLbl(f)}</option>`).join('');
-            if(cur&&floors.some(f=>String(f)===String(cur)))floorSel.value=cur;
-            else{floorSel.value='';etagesFloorFilter='';}
+            if(cur&&floors.some(f=>Number(f)===Number(cur))){
+                floorSel.value=String(Number(cur));
+                etagesFloorFilter=String(Number(cur));
+            }else{
+                floorSel.value='';
+                etagesFloorFilter='';
+            }
         }
         if(box){
             box.innerHTML=floors.map(f=>{
-                const list=ROOMS.filter(r=>r.floor===f);
+                const list=ROOMS.filter(r=>Number(r.floor)===Number(f));
                 const dispo=list.filter(r=>r.status==='disponible').length;
                 const occu=list.filter(r=>r.status==='occupee').length;
                 const active=matchesEtageSearch(f);
-                return`<article class="ch-etage-card${active?'':' is-dimmed'}${String(etagesFloorFilter)===String(f)?' is-active':''}" data-floor="${f}" role="button" tabindex="0">
+                const selected=etagesFloorFilter!==''&&Number(etagesFloorFilter)===Number(f);
+                return`<article class="ch-etage-card${active?'':' is-dimmed'}${selected?' is-active':''}" data-floor="${f}" role="button" tabindex="0">
                     <h3>${floorLbl(f)}</h3>
                     <div class="et-count">${list.length}</div>
-                    <p class="et-meta">${dispo} dispo · ${occu} occupée(s)</p>
+                    <p class="et-meta">${list.length?`${dispo} dispo · ${occu} occupée(s)`:'Aucune chambre'}</p>
                 </article>`;
             }).join('');
             box.querySelectorAll('.ch-etage-card').forEach(el=>{
                 const pick=()=>{
-                    etagesFloorFilter=el.dataset.floor;
-                    etagesFloorQ='';
+                    etagesFloorFilter=String(el.dataset.floor||'');
+                    clearEtageSearch();
                     const sel=document.getElementById('etFloorFilter');
-                    const search=document.getElementById('etFloorSearch');
-                    if(sel)sel.value=el.dataset.floor;
-                    if(search)search.value='';
+                    if(sel)sel.value=etagesFloorFilter;
                     renderEtages();
                 };
                 el.addEventListener('click',pick);
@@ -8856,12 +9942,18 @@ const CHETAT=(function(){
                 renderEtages();
             });
             document.getElementById('etFloorFilter')?.addEventListener('change',e=>{
-                etagesFloorFilter=e.target.value;
+                etagesFloorFilter=e.target.value||'';
+                clearEtageSearch();
                 renderEtages();
             });
             etagesBound=true;
         }
     }
+
+    document.getElementById('etAddBtn')?.addEventListener('click',e=>{
+        e.preventDefault();
+        showAddModal();
+    });
 
     function select(num){
         const r=roomByNum(num);
@@ -8873,7 +9965,45 @@ const CHETAT=(function(){
         const r=roomByNum(num);
         if(r)showForm(r);
     }
-    return{render,renderEtages,select,reserve};
+
+    function goResaPanel(status){
+        const occ=status==='occupee';
+        if(typeof activatePanel==='function'){
+            activatePanel(occ?'ch-occupees':'ch-reservations',occ?'C-Occupées':'Réservations');
+        }
+    }
+
+    /** Clic photo : formulaire rempli + transfert Réservations / C-Occupées */
+    function openDashRoom(num){
+        syncFromStorage();
+        const r=roomByNum(num);
+        if(!r)return;
+        const saved=getResas()[r.num];
+        if(r.status==='disponible'&&!saved?.validated){
+            showForm(r);
+            return;
+        }
+        if(saved?.validated){
+            const st=saved.statusChambre||r.status||'reservee';
+            goResaPanel(st);
+            showForm(r,saved,{edit:true});
+            return;
+        }
+        if(r.status==='reservee'||r.status==='occupee'){
+            goResaPanel(r.status);
+            showForm(r,saved||null,{edit:true});
+            return;
+        }
+        if(r.status==='nettoyage'||r.status==='maintenance'){
+            if(CAN_MANAGE)showAdminStatusPanel(r);
+            else if(MSG[r.status])showMessage(r,r.status);
+            else showForm(r);
+            return;
+        }
+        showForm(r,null,{edit:true});
+    }
+
+    return{render,renderEtages,select,reserve,openDashRoom,showAddModal,openContenu,openRoomFiche};
 })();
 window.CHETAT=CHETAT;
 
@@ -8883,10 +10013,12 @@ const DASH=(function(){
     const FILTERS=[['','Toutes'],['disponible','Disponibles'],['occupee','Occupées'],['reservee','Réservées'],['nettoyage','Nettoyage'],['maintenance','Maintenance']];
     const CAT_CARDS=[['suite','Suites','Grand Suite & Junior'],['single','Single','Chambres singles'],['double','Double','Chambres doubles']];
     const CAT_LBL={suite:'Suite',single:'Single',double:'Double'};
-    const K_HIDDEN='aj_dash_rooms_hidden',K_HIST='aj_ch_hist',K_LOG='aj_resa_log';
+    const K_HIDDEN='aj_dash_rooms_hidden',K_FILT='aj_dash_filters_hidden',K_HIST='aj_ch_hist',K_LOG='aj_resa_log';
     const MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
     const PERIODS=[['jour','Jour'],['mois','Mois'],['annee','Année']];
-    let filter='',catFilter='',floorFilter='',roomsHidden=localStorage.getItem(K_HIDDEN)==='1',pRooms='jour',pFin='mois';
+    let filter='',catFilter='',floorFilter='',roomsHidden=localStorage.getItem(K_HIDDEN)==='1',filtersHidden=localStorage.getItem(K_FILT)==='1',pRooms='jour',pFin='mois';
+    const eyeOn='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    const eyeOff='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><path d="M1 1l22 22"/></svg>';
     const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
     const catOf=t=>t==='grand-suite'||t==='suite-junior'||t==='suite'?'suite':(t==='familiale'||t==='double'?'double':'single');
     const floorLbl=f=>Number(f)===1?'1er étage':`${f}e étage`;
@@ -9094,10 +10226,10 @@ const DASH=(function(){
         const canRooms=window.ajDashOn('dash-rooms');
         const canAnalytics=window.ajDashOn('dash-cartes')||window.ajDashOn('dash-tableaux');
         const showRooms=canRooms&&(!canAnalytics||!roomsHidden);
-        const eye=roomsHidden
-            ?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
-            :'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><path d="M1 1l22 22"/></svg>';
-        const toggle=canRooms&&canAnalytics?`<button type="button" class="dr-toggle" id="drToggle" aria-pressed="${roomsHidden}" title="${roomsHidden?'Afficher les chambres':'Masquer les chambres'}" aria-label="${roomsHidden?'Afficher les chambres':'Masquer les chambres'}">${eye}</button>`:'';
+        const filtActive=!!(filter||catFilter||floorFilter);
+        const filtToggle=`<button type="button" class="dr-toggle dr-toggle-filt${filtActive?' has-active':''}" id="drFiltToggle" aria-pressed="${filtersHidden}" title="${filtersHidden?'Afficher les pastilles de recherche':'Masquer les pastilles de recherche'}" aria-label="${filtersHidden?'Afficher les pastilles de recherche':'Masquer les pastilles de recherche'}">${filtersHidden?eyeOn:eyeOff}</button>`;
+        const roomsToggle=canRooms&&canAnalytics?`<button type="button" class="dr-toggle" id="drToggle" aria-pressed="${roomsHidden}" title="${roomsHidden?'Afficher les chambres':'Masquer les chambres'}" aria-label="${roomsHidden?'Afficher les chambres':'Masquer les chambres'}">${roomsHidden?eyeOn:eyeOff}</button>`:'';
+        const toggle=roomsToggle;
 
         if(!canRooms&&!canAnalytics){
             box.innerHTML='<p class="dr-empty">Aucune partie du tableau de bord n\'est autorisée.</p>';
@@ -9150,20 +10282,19 @@ const DASH=(function(){
             const n=k?(count[k]||0):all.length;
             return`<button type="button" class="dr-chip${filter===k?' is-on':''}${k?' st-'+k:''}" data-f="${k}">${l}<b>${n}</b></button>`;
         }).join('');
-        let cards='',lastFloor=null;
+        let cards='';
+        const ficheIco='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>';
         list.forEach(r=>{
-            const floor=Number(r.floor)||0;
-            if(floor!==lastFloor){
-                cards+=`<div class="dr-floor-label">${esc(floorLbl(floor))}</div>`;
-                lastFloor=floor;
-            }
             const cat=catOf(r.type);
+            let contenuN=0;
+            try{const c=JSON.parse(localStorage.getItem('aj_ch_contenu')||'{}');contenuN=Array.isArray(c[r.num])?c[r.num].length:0;}catch(e){}
             cards+=`
             <article class="dr-card st-${r.status}" data-num="${esc(r.num)}" role="button" tabindex="0">
                 <div class="dr-img">
                     <img src="${esc(r.img)}" alt="${esc(r.title)}" loading="lazy">
                     <span class="dr-badge st-${r.status}">${STATUS[r.status]}</span>
                     <span class="dr-num">N° ${esc(r.num)}</span>
+                    <button type="button" class="dr-fiche" data-num="${esc(r.num)}" title="Fiche contenu" aria-label="Fiche contenu chambre ${esc(r.num)}">${ficheIco}${contenuN?`<span class="ch-rc-file-n">${contenuN}</span>`:''}</button>
                 </div>
                 <div class="dr-body">
                     <span class="dr-cat-tag">${esc(CAT_LBL[cat]||cat)}</span>
@@ -9179,26 +10310,29 @@ const DASH=(function(){
         box.innerHTML=`
             <div class="dash-rooms">
                 <div class="dr-head">
-                    <div>
-                        <span class="dr-eyebrow">Hébergement</span>
-                        <h2 class="dr-title">Nos chambres</h2>
+                    <h2 class="dr-title">Nos chambres</h2>
+                    <div class="dr-filter-bar${filtersHidden?' is-collapsed':''}">
+                        ${filtToggle}
+                        <div class="dr-filters${filtersHidden?' is-hidden':''}" role="toolbar" aria-label="Filtres chambres"${filtersHidden?' hidden':''}>
+                            ${floorPills}
+                            <span class="dr-sep" aria-hidden="true"></span>
+                            ${catPills}
+                            <span class="dr-sep" aria-hidden="true"></span>
+                            ${statusPills}
+                            <button type="button" class="dr-reset" id="drReset" title="Réinitialiser les filtres" aria-label="Réinitialiser les filtres"${(!filter&&!catFilter&&!floorFilter)?' disabled':''}>
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                            </button>
+                        </div>
                     </div>
-                    <div class="dr-tools">${toggle}</div>
-                </div>
-                <div class="dr-filters" role="toolbar" aria-label="Filtres chambres">
-                    ${floorPills}
-                    <span class="dr-sep" aria-hidden="true"></span>
-                    ${catPills}
-                    <span class="dr-sep" aria-hidden="true"></span>
-                    ${statusPills}
-                    <button type="button" class="dr-reset" id="drReset" title="Réinitialiser les filtres" aria-label="Réinitialiser les filtres"${(!filter&&!catFilter&&!floorFilter)?' disabled':''}>
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
-                    </button>
+                    <div class="dr-tools">${toggle||''}</div>
                 </div>
                 <div class="dr-grid">${cards||'<p class="dr-empty">Aucune chambre pour ce filtre.</p>'}</div>
             </div>`;
 
         box.querySelector('#drToggle')?.addEventListener('click',()=>{roomsHidden=true;localStorage.setItem(K_HIDDEN,'1');render();});
+        box.querySelector('#drFiltToggle')?.addEventListener('click',()=>{
+            filtersHidden=!filtersHidden;localStorage.setItem(K_FILT,filtersHidden?'1':'0');render();
+        });
         box.querySelector('#drReset')?.addEventListener('click',()=>{
             filter='';catFilter='';floorFilter='';
             render();
@@ -9209,12 +10343,19 @@ const DASH=(function(){
             catFilter=b.dataset.cat||'';
             render();
         }));
+        box.querySelectorAll('.dr-fiche').forEach(btn=>{
+            btn.addEventListener('click',e=>{
+                e.preventDefault();e.stopPropagation();
+                window.CHETAT?.openRoomFiche?.(btn.dataset.num);
+            });
+        });
         box.querySelectorAll('.dr-card').forEach(c=>{
             const open=()=>{
-                activatePanel('ch-etat','Chambres');
-                if(window.CHETAT)window.CHETAT.select(c.dataset.num);
+                const num=c.dataset.num;
+                if(window.CHETAT?.openDashRoom)window.CHETAT.openDashRoom(num);
+                else if(window.CHETAT?.reserve)window.CHETAT.reserve(num);
             };
-            c.addEventListener('click',open);
+            c.addEventListener('click',e=>{if(e.target.closest('.dr-fiche'))return;open();});
             c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
         });
     }
@@ -9248,32 +10389,123 @@ const RESA=(function(){
     }
 
     function list(){
-        const log=load('aj_resa_log',[]),resas=load('aj_ch_resa',{});
-        return log.map(x=>{
+        const log=load('aj_resa_log',[]);
+        const resas=load('aj_ch_resa',{});
+        const rows=[];
+        const activeNums=new Set();
+        Object.keys(resas).forEach(roomNum=>{
+            const cur=resas[roomNum];
+            if(!cur?.validated)return;
+            const st=cur.statusChambre||'reservee';
+            if(st!=='occupee'&&st!=='reservee')return;
+            const match=[...log].reverse().find(x=>String(x.num)===String(roomNum)&&!x.cancelled)||{};
+            const nuits=num(cur.nuits)||num(match.nuits)||1;
+            rows.push({
+                ...match,
+                ...cur,
+                id:match.id||('R-'+roomNum),
+                num:roomNum,
+                nom:cur.nom||match.nom||'—',
+                commercial:cur.commercial||match.commercial||'—',
+                date:cur.date||match.date||'',
+                nuits,
+                montant:(cur.ttc!=null&&cur.ttc!=='')?num(cur.ttc):num(match.montant),
+                depart:addDays(cur.date||match.date,nuits),
+                active:true,
+                statut:st
+            });
+            activeNums.add(String(roomNum));
+        });
+        log.forEach(x=>{
+            if(x.cancelled)return;
             const cur=resas[x.num];
-            const nuits=num(x.nuits)||num(cur&&cur.date===x.date&&cur.nom===x.nom?cur.nuits:0)||1;
-            const active=!!(cur&&cur.validated&&cur.date===x.date&&cur.nom===x.nom);
-            return{...x,nuits,depart:addDays(x.date,nuits),active,statut:active?(cur.statusChambre||'reservee'):'terminee'};
-        }).sort((a,b)=>(b.date||'').localeCompare(a.date||'')||num(b.at)-num(a.at));
+            if(cur?.validated&&activeNums.has(String(x.num))){
+                if(cur.date===x.date&&cur.nom===x.nom)return;
+            }
+            if(activeNums.has(String(x.num))&&cur?.validated)return;
+            const nuits=num(x.nuits)||1;
+            rows.push({...x,nuits,depart:addDays(x.date,nuits),active:false,statut:'terminee'});
+        });
+        return rows.sort((a,b)=>(b.date||'').localeCompare(a.date||'')||num(b.at)-num(a.at));
+    }
+
+    function editRow(num){
+        if(num&&window.CHETAT?.openDashRoom)window.CHETAT.openDashRoom(num);
+    }
+
+    function cancelRow(num){
+        if(!num)return;
+        if(!confirm('Annuler cette réservation / occupation et libérer la chambre '+num+' ?'))return;
+        const resas=load('aj_ch_resa',{});
+        delete resas[num];
+        localStorage.setItem('aj_ch_resa',JSON.stringify(resas));
+        const statuses=load('aj_ch_status',{});
+        statuses[num]='disponible';
+        localStorage.setItem('aj_ch_status',JSON.stringify(statuses));
+        let log=load('aj_resa_log',[]);
+        log=log.map(x=>{
+            if(String(x.num)===String(num)&&!x.cancelled)return{...x,cancelled:true,cancelledAt:Date.now()};
+            return x;
+        });
+        localStorage.setItem('aj_resa_log',JSON.stringify(log));
+        render();
+        window.DASH?.render();
+        window.CALEND?.render();
+        window.CHETAT?.render();
+        window.BCL?.render();
+        window.BPY?.render();
+        window.AJ_RESA_SYNC?.syncToServer();
+    }
+
+    function rowHtml(r){
+        const actions=r.active?`<td class="no-print">
+                <button type="button" class="ibtn" data-resa-edit="${esc(r.num)}" title="Modifier" aria-label="Modifier">&#9998;</button>
+                <button type="button" class="ibtn del" data-resa-cancel="${esc(r.num)}" title="Annuler" aria-label="Annuler">&#10005;</button>
+            </td>`:`<td class="no-print">—</td>`;
+        return`<tr class="resa-row" data-num="${esc(r.num)}" data-statut="${esc(r.statut)}">
+            <td>${esc(r.id)}</td><td>${esc(r.nom||'—')}</td><td>${esc(r.commercial||'—')}</td><td>${esc(r.num)}</td>
+            <td>${frDate(r.date)}</td><td>${frDate(r.depart)}</td><td>${r.nuits}</td>
+            <td>${fmtDH(r.montant)}</td>
+            <td><span class="resa-st st-${esc(r.statut)}">${r.active?STATUS[r.statut]||'Réservée':'Terminée'}</span></td>
+            ${actions}
+        </tr>`;
+    }
+
+    function bindRows(tb){
+        if(!tb)return;
+        tb.querySelectorAll('[data-resa-edit]').forEach(btn=>{
+            btn.addEventListener('click',e=>{e.stopPropagation();editRow(btn.dataset.resaEdit);});
+        });
+        tb.querySelectorAll('[data-resa-cancel]').forEach(btn=>{
+            btn.addEventListener('click',e=>{e.stopPropagation();cancelRow(btn.dataset.resaCancel);});
+        });
     }
 
     function render(){
-        const tb=document.getElementById('resaTbody');
         const all=list();
-        if(tb){
-            tb.innerHTML=all.length?all.map(r=>`<tr>
-                <td>${esc(r.id)}</td><td>${esc(r.nom||'—')}</td><td>${esc(r.num)}</td>
-                <td>${frDate(r.date)}</td><td>${frDate(r.depart)}</td><td>${r.nuits}</td>
-                <td>${fmtDH(r.montant)}</td>
-                <td><span class="resa-st st-${esc(r.statut)}">${r.active?STATUS[r.statut]||'Réservée':'Terminée'}</span></td>
-            </tr>`).join(''):'<tr class="empty-row"><td colspan="8">Aucune réservation.</td></tr>';
+        const reserved=all.filter(r=>r.statut==='reservee'||r.statut==='terminee');
+        const occupied=all.filter(r=>r.statut==='occupee');
+        const resaTb=document.getElementById('resaTbody');
+        const occTb=document.getElementById('occTbody');
+        if(resaTb){
+            resaTb.innerHTML=reserved.length?reserved.map(rowHtml).join(''):'<tr class="empty-row"><td colspan="10">Aucune réservation.</td></tr>';
+            bindRows(resaTb);
+        }
+        if(occTb){
+            occTb.innerHTML=occupied.length?occupied.map(rowHtml).join(''):'<tr class="empty-row"><td colspan="10">Aucune chambre occupée.</td></tr>';
+            bindRows(occTb);
         }
         const today=iso(new Date());
         const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-        set('resaKpiActive',all.filter(r=>r.active).length);
-        set('resaKpiArr',all.filter(r=>r.date===today).length);
-        set('resaKpiDep',all.filter(r=>r.depart===today).length);
-        set('resaKpiTotal',all.length);
+        const resaActive=reserved.filter(r=>r.active);
+        set('resaKpiActive',resaActive.length);
+        set('resaKpiArr',resaActive.filter(r=>r.date===today).length);
+        set('resaKpiDep',resaActive.filter(r=>r.depart===today).length);
+        set('resaKpiTotal',reserved.length);
+        set('occKpiActive',occupied.length);
+        set('occKpiArr',occupied.filter(r=>r.date===today).length);
+        set('occKpiDep',occupied.filter(r=>r.depart===today).length);
+        set('occKpiTotal',occupied.length);
     }
 
     function openPicker(){
@@ -9300,8 +10532,6 @@ const RESA=(function(){
         document.getElementById('resaPickCancel')?.addEventListener('click',()=>document.getElementById('rmModalOverlay')?.classList.remove('show'));
         document.getElementById('rmModalOverlay')?.classList.add('show');
     }
-
-    document.getElementById('resaNewBtn')?.addEventListener('click',openPicker);
 
     const overlay=document.getElementById('rmModalOverlay');
     const closeAnyModal=()=>overlay?.classList.remove('show');
@@ -9683,6 +10913,106 @@ const BPY=(function(){
     return{render};
 })();
 window.BPY=BPY;
+
+/* ===== Calendrier — cadres occupées / réservées ===== */
+const CALEND=(function(){
+    const STATUS={occupee:'Occupée',reservee:'Réservée'};
+    const CAT_LBL={'grand-suite':'Grand Suite','suite-junior':'Suite Junior',single:'Single',double:'Double',suite:'Grand Suite',familiale:'Double'};
+    const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
+    const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catch(e){return d;}};
+    const num=v=>Number(v)||0;
+    const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const frDate=s=>s&&/^\d{4}-\d{2}-\d{2}/.test(String(s))?`${String(s).slice(8,10)}/${String(s).slice(5,7)}/${String(s).slice(0,4)}`:(s||'—');
+    const addDays=(s,n)=>{if(!s)return'';const d=new Date(String(s).slice(0,10)+'T00:00:00');if(Number.isNaN(d.getTime()))return'';d.setDate(d.getDate()+(num(n)||0));return iso(d);};
+    const floorLbl=f=>!f&&f!==0?'—':(Number(f)===1?'1er étage':Number(f)+'e étage');
+    const money=v=>typeof ajMoneyDH==='function'?ajMoneyDH(v||0):(Number(v||0).toFixed(2)+' DH');
+    let filter='';
+
+    function rooms(){
+        const base=window.AJ_HOTEL?window.AJ_HOTEL.getCatalog():[];
+        const statuses=load('aj_ch_status',{});
+        const resas=load('aj_ch_resa',{});
+        return base.map(r=>{
+            const resa=resas[r.num];
+            let st=r.status||'disponible';
+            if(resa?.validated)st=resa.statusChambre||'reservee';
+            else if(statuses[r.num])st=statuses[r.num];
+            if(st!=='occupee'&&st!=='reservee')return null;
+            const nuits=num(resa?.nuits)||1;
+            const occupation=resa?.date||'';
+            const disponibilite=occupation?addDays(occupation,nuits):'';
+            const tarif=resa?.tarif!=null&&resa.tarif!==''?resa.tarif:r.price;
+            return{
+                ...r,
+                status:st,
+                occupation,
+                disponibilite,
+                tarif,
+                cat:CAT_LBL[r.type]||r.type||'—'
+            };
+        }).filter(Boolean).sort((a,b)=>num(a.floor)-num(b.floor)||String(a.num).localeCompare(String(b.num),'fr',{numeric:true}));
+    }
+
+    function render(){
+        const grid=document.getElementById('calGrid');
+        const chips=document.getElementById('calChips');
+        if(!grid)return;
+        const all=rooms();
+        const count={occupee:0,reservee:0};
+        all.forEach(r=>{if(count[r.status]!=null)count[r.status]++;});
+        const list=filter?all.filter(r=>r.status===filter):all;
+        if(chips){
+            chips.innerHTML=`
+                <button type="button" class="cal-chip${!filter?' is-on':''}" data-f="">Toutes<b>${all.length}</b></button>
+                <button type="button" class="cal-chip st-occupee${filter==='occupee'?' is-on':''}" data-f="occupee">Occupées<b>${count.occupee}</b></button>
+                <button type="button" class="cal-chip st-reservee${filter==='reservee'?' is-on':''}" data-f="reservee">Réservées<b>${count.reservee}</b></button>
+            `;
+            chips.querySelectorAll('.cal-chip').forEach(btn=>{
+                btn.addEventListener('click',()=>{filter=btn.dataset.f||'';render();});
+            });
+        }
+        if(!list.length){
+            grid.innerHTML=`<p class="cal-empty">${filter==='occupee'?'Aucune chambre occupée.':filter==='reservee'?'Aucune chambre réservée.':'Aucune chambre occupée ou réservée.'}</p>`;
+            return;
+        }
+        const ficheIco='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>';
+        grid.innerHTML=list.map(r=>{
+            let contenuN=0;
+            try{const c=JSON.parse(localStorage.getItem('aj_ch_contenu')||'{}');contenuN=Array.isArray(c[r.num])?c[r.num].length:0;}catch(e){}
+            return`
+            <article class="cal-card st-${esc(r.status)}" data-num="${esc(r.num)}" aria-label="${esc(r.title)}">
+                <div class="cal-img">
+                    <img src="${esc(r.img||'')}" alt="${esc(r.title)}" loading="lazy" onerror="this.style.opacity=.35">
+                </div>
+                <span class="cal-badge">${STATUS[r.status]||r.status}</span>
+                <span class="cal-num">N° ${esc(r.num)}</span>
+                <button type="button" class="cal-fiche" data-num="${esc(r.num)}" title="Fiche contenu" aria-label="Fiche contenu chambre ${esc(r.num)}">${ficheIco}${contenuN?`<span class="ch-rc-file-n">${contenuN}</span>`:''}</button>
+                <div class="cal-body">
+                    <h3>${esc(r.title)}</h3>
+                    <div class="cal-meta">
+                        <div><span>Étage</span><b>${esc(floorLbl(r.floor))}</b></div>
+                        <div><span>Catégorie</span><b>${esc(r.cat)}</b></div>
+                        <div class="cal-price"><span>Tarif / nuitée</span><b>${money(r.tarif)} <small>/ nuit</small></b></div>
+                    </div>
+                    <div class="cal-dates">
+                        <div><span>Occupation</span><b>${esc(frDate(r.occupation))}</b></div>
+                        <div><span>Disponibilité</span><b>${esc(frDate(r.disponibilite))}</b></div>
+                    </div>
+                </div>
+            </article>`;
+        }).join('');
+        grid.querySelectorAll('.cal-fiche').forEach(btn=>{
+            btn.addEventListener('click',e=>{
+                e.preventDefault();e.stopPropagation();
+                window.CHETAT?.openRoomFiche?.(btn.dataset.num);
+            });
+        });
+    }
+
+    return{render};
+})();
+window.CALEND=CALEND;
+window.AJ_RESA_SYNC?.syncFromServer();
 </script>
 </body>
 </html>

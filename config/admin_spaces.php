@@ -31,10 +31,11 @@ return [
     ],
 
     'commercial' => [
-        'label'    => 'Commercial',
+        'label'    => 'Accueil',
         'login'    => env('SPACE_COMMERCIAL_LOGIN'),
         'password' => env('SPACE_COMMERCIAL_PASSWORD'),
-        'route'    => 'commercial',
+        'route'    => 'admin',
+        'gate'     => 'admin',
     ],
 
 ];

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Commercial')
+@section('title','Accueil')
 @include('partials.page-hero')
 @push('styles')
 <style>
@@ -19,8 +19,8 @@
 @endpush
 @section('content')
 <header class="page-hero"><img class="hb-photo" src="{{ !empty($habillage['saved']) ? $habillage['image_url'] : asset('images/hotel-facade.png') }}" alt=""><div class="ph-inner">
-    <div class="crumb">Espace Commercial</div>
-    <h1 class="serif">Suivi commercial</h1>
+    <div class="crumb">Espace Accueil</div>
+    <h1 class="serif">Espace Accueil</h1>
     <form method="POST" action="{{ route('space.logout', 'commercial') }}" style="margin-top:14px">
         @csrf
         <button type="submit" style="background:transparent;border:1px solid rgba(201,162,39,.5);color:var(--gold);padding:9px 20px;border-radius:6px;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">Déconnexion</button>

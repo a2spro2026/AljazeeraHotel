@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HabillageController;
+use App\Http\Controllers\HotelReservationController;
 use App\Http\Controllers\HotelUserController;
 use App\Models\HotelUser;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ Route::post('/contact', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Espaces d'administration protégés (Direction / Facturation / Commercial)
+| Espaces d'administration protégés (Direction / Facturation / Accueil)
 |--------------------------------------------------------------------------
 */
 
@@ -107,6 +108,11 @@ Route::prefix('admin/api/users')->controller(HotelUserController::class)->group(
     Route::post('/', 'store');
     Route::post('/{code}/auth', 'saveAuth');
     Route::delete('/{code}', 'destroy');
+});
+
+Route::prefix('admin/api/reservations')->controller(HotelReservationController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'store');
 });
 
 // Pages protégées

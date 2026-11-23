@@ -146,4 +146,27 @@ class HotelUserTest extends TestCase
             ->assertSessionHas('space_admin_profil', 'Commercial')
             ->assertSessionHas('space_admin_auth', fn ($auth) => ($auth['ch-etat']['voir'] ?? false) === true);
     }
+
+    public function test_accueil_commercial_logs_in_with_autorisations(): void
+    {
+        $this->asDirection()->postJson('/admin/api/users', [
+            'kind' => 'commercial',
+            'nom' => 'Amine Accueil',
+            'profil' => 'Accueil',
+            'login' => 'amine.accueil',
+            'password' => 'secret123',
+        ])->assertOk()->assertJsonPath('users.0.id', 'Co0001');
+
+        HotelUser::where('login', 'amine.accueil')->update([
+            'autorisations' => [
+                'dashboard' => ['saisir' => false, 'modifier' => false, 'supprimer' => false, 'imprimer' => false, 'voir' => true],
+            ],
+        ]);
+
+        $this->post('/espace/commercial/login', ['login' => 'amine.accueil', 'password' => 'secret123'])
+            ->assertRedirect(route('admin'))
+            ->assertSessionHas('space_admin', true)
+            ->assertSessionHas('space_admin_profil', 'Accueil')
+            ->assertSessionHas('space_admin_auth', fn ($auth) => ($auth['dashboard']['voir'] ?? false) === true);
+    }
 }
