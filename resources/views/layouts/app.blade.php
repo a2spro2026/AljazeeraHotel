@@ -128,7 +128,7 @@
             regs.forEach(function(r){r.unregister();});
         });
     }
-    var V='aj_reset_v4';
+    var V='aj_reset_v5';
     if(localStorage.getItem('aj_data_version')!==V){
         for(var i=localStorage.length-1;i>=0;i--){
             var k=localStorage.key(i);

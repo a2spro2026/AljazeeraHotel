@@ -467,13 +467,13 @@
 
 @section('content')
 @php
-    $featuredNums = ['101', '201', '301', '302', '402'];
+    $featuredNums = ['101', '201', '301', '302', '120'];
     $featuredLabels = [
         '101' => ['label' => 'Chambre Deluxe', 'guests' => 2, 'size' => '28 m²', 'view' => 'Vue ville'],
         '201' => ['label' => 'Chambre Supérieure', 'guests' => 2, 'size' => '32 m²', 'view' => 'Vue jardin'],
         '301' => ['label' => 'Suite Junior', 'guests' => 3, 'size' => '45 m²', 'view' => 'Vue mer', 'popular' => true],
         '302' => ['label' => 'Suite Executive', 'guests' => 3, 'size' => '50 m²', 'view' => 'Vue panoramique'],
-        '402' => ['label' => 'Suite Présidentielle', 'guests' => 4, 'size' => '65 m²', 'view' => 'Vue premium'],
+        '120' => ['label' => 'Familiale Premium', 'guests' => 4, 'size' => '45 m²', 'view' => 'Vue jardin'],
     ];
     $allRooms = collect(config('hotel_rooms.rooms'))->keyBy('num');
 @endphp
@@ -625,9 +625,9 @@
         '201':{label:'Chambre Supérieure',guests:2,size:'32 m²',view:'Vue jardin'},
         '301':{label:'Suite Junior',guests:3,size:'45 m²',view:'Vue mer',popular:true},
         '302':{label:'Suite Executive',guests:3,size:'50 m²',view:'Vue panoramique'},
-        '402':{label:'Suite Présidentielle',guests:4,size:'65 m²',view:'Vue premium'}
+        '120':{label:'Familiale Premium',guests:4,size:'45 m²',view:'Vue jardin'}
     };
-    const nums=['101','201','301','302','402'];
+    const nums=['101','201','301','302','120'];
     nums.forEach(num=>{
         const room=window.AJ_HOTEL.getRoom(num);
         const card=document.querySelector(`.home-room[data-num="${num}"]`);
