@@ -2728,12 +2728,15 @@
         }
         .cc-sub{font-size:12px;color:var(--muted);margin:0}
         .cc-tools{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
-        .cc-search{
-            width:100%;min-width:260px;padding:10px 16px;border-radius:40px;outline:none;
-            border:1px solid rgba(212,176,106,.35);background:rgba(255,255,255,.9);
-            font:500 12px 'Montserrat',sans-serif;color:var(--text-dark);
+        .cc-filters{
+            display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;width:100%;
         }
-        .cc-search:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,176,106,.15)}
+        .cc-filters .cc-select{
+            min-width:160px;padding:10px 14px;border-radius:12px;outline:none;cursor:pointer;
+            border:1px solid rgba(212,176,106,.35);background:rgba(255,255,255,.95);
+            font:600 12px 'Montserrat',sans-serif;color:var(--text-dark);
+        }
+        .cc-filters .cc-select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,176,106,.15)}
         .cc-card{
             --st:#d4b06a;
             display:flex;flex-direction:column;background:#fff;border-radius:14px;overflow:hidden;cursor:pointer;
@@ -2746,8 +2749,22 @@
         .cc-card.st-reservee{--st:#3b7be0}
         .cc-card.st-nettoyage{--st:#8a93a3}
         .cc-card.st-maintenance{--st:#d9534f}
-        .cc-img{aspect-ratio:4/3;background:#e9e5dc;overflow:hidden}
+        .cc-img{position:relative;aspect-ratio:4/3;background:#e9e5dc;overflow:hidden}
         .cc-img img{width:100%;height:100%;object-fit:cover;display:block}
+        .cc-img::after{
+            content:'';position:absolute;inset:0;pointer-events:none;
+            background:linear-gradient(180deg,rgba(8,20,51,.08) 0%,rgba(8,20,51,.15) 40%,rgba(8,20,51,.72) 100%);
+        }
+        .cc-img-title{
+            position:absolute;left:12px;right:12px;bottom:12px;z-index:1;margin:0;text-align:center;
+            font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(15px,1.7vw,20px);
+            letter-spacing:.06em;line-height:1.15;color:#fff6d8;
+            text-shadow:0 2px 10px rgba(0,0,0,.55),0 0 18px rgba(240,198,110,.35);
+        }
+        .cc-img-title span{
+            display:block;font:600 9px 'Montserrat',sans-serif;letter-spacing:.28em;text-transform:uppercase;
+            color:rgba(240,198,110,.95);margin-bottom:4px;text-shadow:0 1px 6px rgba(0,0,0,.45);
+        }
         .cc-info{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(212,176,106,.2)}
         .cc-info>div{padding:6px 4px;text-align:center;min-width:0}
         .cc-info>div+div{border-left:1px solid rgba(212,176,106,.18)}
@@ -4158,7 +4175,17 @@
                         <p class="cc-sub">Cliquez sur une chambre pour modifier son statut, sa photo, ses descriptions, son prix et ses caractéristiques.</p>
                     </div>
                     <div class="cc-tools">
-                        <input type="search" id="ccSearch" class="cc-search" placeholder="Rechercher (n°, titre…)" autocomplete="off">
+                        <div class="cc-filters">
+                            <select id="ccFloor" class="cc-select" aria-label="Filtrer par étage">
+                                <option value="">Étage : Tous</option>
+                            </select>
+                            <select id="ccType" class="cc-select" aria-label="Filtrer par catégorie">
+                                <option value="">Catégorie : Toutes</option>
+                                <option value="suite">Suite</option>
+                                <option value="familiale">Familiale</option>
+                                <option value="single">Single</option>
+                            </select>
+                        </div>
                         <div class="dr-chips" id="ccChips"></div>
                     </div>
                 </div>
@@ -7632,7 +7659,7 @@ const CHDISPO=(function(){
         single:{guests:2,size:'28 m²',view:'Vue ville',bed:'Lit Queen'}
     };
     const K_STATUS='aj_ch_status',K_RESA='aj_ch_resa';
-    let filter='',query='',bound=false;
+    let filter='',floorFilter='',typeFilter='',bound=false;
     const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));};
     const fmtP=n=>Number(n).toLocaleString('fr-FR')+' DH';
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{};}catch(e){return{};}};
@@ -7666,7 +7693,10 @@ const CHDISPO=(function(){
 
     function cardHtml(r){
         return`<article class="cc-card st-${r.status}" data-num="${esc(r.num)}" role="button" tabindex="0" title="Modifier la chambre ${esc(r.num)}">
-            <div class="cc-img"><img src="${esc(r.img)}" alt="${esc(r.title)}" loading="lazy"></div>
+            <div class="cc-img">
+                <img src="${esc(r.img)}" alt="${esc(r.title)}" loading="lazy">
+                <h3 class="cc-img-title"><span>Chambre ${esc(r.num)}</span>${esc(r.title)}</h3>
+            </div>
             <div class="cc-info">
                 <div><small>N°</small><b>${esc(r.num)}</b></div>
                 <div><small>Type</small><b>${TYPE_LBL[r.type]||esc(r.type)}</b></div>
@@ -7764,8 +7794,18 @@ const CHDISPO=(function(){
     function render(){
         const grid=document.getElementById('ccGrid');
         const chipsBox=document.getElementById('ccChips');
+        const floorSel=document.getElementById('ccFloor');
+        const typeSel=document.getElementById('ccType');
         if(!grid||!window.AJ_HOTEL)return;
         const all=rooms().sort((a,b)=>String(a.num).localeCompare(String(b.num),undefined,{numeric:true}));
+        const floors=[...new Set(all.map(r=>r.floor).filter(f=>f!=null&&f!==''))].sort((a,b)=>Number(a)-Number(b));
+        if(floorSel){
+            const cur=floorFilter||floorSel.value;
+            floorSel.innerHTML='<option value="">Étage : Tous</option>'+floors.map(f=>`<option value="${esc(f)}">${floorLbl(f)}</option>`).join('');
+            if(cur&&floors.some(f=>String(f)===String(cur))){floorSel.value=cur;floorFilter=String(cur);}
+            else{floorSel.value='';floorFilter='';}
+        }
+        if(typeSel&&typeFilter)typeSel.value=typeFilter;
         const count={};
         all.forEach(r=>{count[r.status]=(count[r.status]||0)+1;});
         if(chipsBox){
@@ -7774,8 +7814,11 @@ const CHDISPO=(function(){
                 return`<button type="button" class="dr-chip${filter===k?' is-on':''}${k?' st-'+k:''}" data-f="${k}">${l}<b>${n}</b></button>`;
             }).join('');
         }
-        const q=query.toLowerCase();
-        const list=all.filter(r=>(!filter||r.status===filter)&&(!q||`${r.num} ${r.title} ${r.desc||''}`.toLowerCase().includes(q)));
+        const list=all.filter(r=>
+            (!filter||r.status===filter)&&
+            (!floorFilter||String(r.floor)===String(floorFilter))&&
+            (!typeFilter||r.type===typeFilter)
+        );
         grid.innerHTML=list.length?list.map(cardHtml).join(''):'<p class="dr-empty">Aucune chambre ne correspond.</p>';
         if(!bound){
             const open=el=>{
@@ -7792,7 +7835,8 @@ const CHDISPO=(function(){
                 filter=chip.dataset.f||'';
                 render();
             });
-            document.getElementById('ccSearch')?.addEventListener('input',e=>{query=e.target.value.trim();render();});
+            floorSel?.addEventListener('change',e=>{floorFilter=e.target.value;render();});
+            typeSel?.addEventListener('change',e=>{typeFilter=e.target.value;render();});
             bound=true;
         }
     }
