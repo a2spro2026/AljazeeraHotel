@@ -359,7 +359,64 @@
         .topbar .who{display:flex;align-items:center;gap:12px}
         .topbar .who img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
         .topbar .who b{font-size:14px;color:var(--text-dark);display:block}
-        .topbar .who span{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1px}
+        .topbar .who > div > span{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1px}
+        .aj-bell-wrap{position:relative}
+        .aj-bell{
+            position:relative;width:42px;height:42px;border-radius:12px;cursor:pointer;
+            border:1px solid rgba(197,160,89,.35);background:rgba(255,255,255,.9);
+            color:var(--navy-mid);display:inline-flex;align-items:center;justify-content:center;
+            transition:border-color .2s,background .2s,box-shadow .2s;
+        }
+        .aj-bell svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+        .aj-bell:hover{border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.12)}
+        .aj-bell-dot{
+            position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 5px;
+            border-radius:999px;background:#c45454;color:#fff;font-size:10px;font-weight:700;
+            display:inline-flex;align-items:center;justify-content:center;line-height:1;
+            border:2px solid #fff;
+        }
+        .aj-bell.is-alert{
+            animation:ajBellPulse 1s ease-in-out infinite;
+            border-color:#e07070;color:#b45309;background:#fff7f5;
+            box-shadow:0 0 0 0 rgba(196,84,84,.45);
+        }
+        .aj-bell.is-alert .aj-bell-dot{animation:ajBellBlink .8s ease-in-out infinite}
+        @keyframes ajBellPulse{
+            0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(196,84,84,.35)}
+            50%{transform:scale(1.06);box-shadow:0 0 0 8px rgba(196,84,84,0)}
+        }
+        @keyframes ajBellBlink{
+            0%,100%{opacity:1}
+            50%{opacity:.35}
+        }
+        .aj-bell-panel{
+            position:absolute;top:calc(100% + 10px);right:0;z-index:60;
+            width:min(360px,84vw);max-height:420px;overflow:hidden;
+            background:#fff;border:1px solid rgba(197,160,89,.35);border-radius:14px;
+            box-shadow:0 18px 48px rgba(8,20,51,.18);display:flex;flex-direction:column;
+        }
+        .aj-bell-panel[hidden]{display:none!important}
+        .aj-bell-head{
+            display:flex;align-items:center;justify-content:space-between;gap:10px;
+            padding:12px 14px;border-bottom:1px solid rgba(197,160,89,.2);
+            background:linear-gradient(180deg,#fff,#f8f3e8);
+        }
+        .aj-bell-head strong{font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:var(--navy-mid)}
+        .aj-bell-mark{
+            border:none;background:transparent;color:var(--gold);font-size:11px;font-weight:700;
+            cursor:pointer;letter-spacing:.4px;text-transform:uppercase;
+        }
+        .aj-bell-mark:hover{color:var(--navy-mid)}
+        .aj-bell-list{overflow:auto;max-height:360px;padding:8px}
+        .aj-bell-item{
+            padding:10px 12px;border-radius:10px;border:1px solid rgba(197,160,89,.15);
+            margin-bottom:8px;background:#fff;cursor:pointer;
+        }
+        .aj-bell-item:hover{background:#fbf7ef}
+        .aj-bell-item.is-unread{border-color:rgba(196,84,84,.35);background:#fff8f6}
+        .aj-bell-item b{display:block;font-size:13px;color:var(--navy-mid);margin-bottom:4px}
+        .aj-bell-item span{display:block;font-size:11px;color:var(--muted);line-height:1.4}
+        .aj-bell-empty{text-align:center;color:var(--muted);font-size:13px;padding:28px 12px;margin:0}
         .hamb{display:none;background:none;border:none;color:var(--gold);font-size:24px;cursor:pointer;padding:4px}
         .sb-toggle{
             flex-shrink:0;width:42px;height:42px;border-radius:11px;cursor:pointer;
@@ -502,6 +559,13 @@
             position:sticky;top:calc(var(--lock-top) + 52px);z-index:16;
             background:#f8f3e8 !important;
             box-shadow:0 1px 0 rgba(197,160,89,.28);
+        }
+        /* C-Occupées : jamais de sticky (filtres + thead) — évite en-têtes masqués / décalés */
+        #ch-occupees .occ-filters,
+        #ch-occupees.panel table thead th,
+        #ch-occupees .table-wrap thead th{
+            position:static!important;top:auto!important;z-index:auto!important;
+            backdrop-filter:none!important;
         }
         /* Si une barre sticky précède le tableau, l'offset 52px évite le chevauchement */
 
@@ -1109,21 +1173,30 @@
         .pe-copy-frame img,.pe-copy-frame iframe{width:100%;height:280px;object-fit:contain;border:0;border-radius:10px;background:#f7f4ee}
         .pe-copy-empty{margin:0;min-height:120px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px}
         .cc-comm-layout{
-            display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:16px;align-items:start;
+            display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:16px;align-items:start;
         }
-        @media(max-width:900px){.cc-comm-layout{grid-template-columns:1fr}}
-        .cc-comm-docs{display:flex;flex-direction:column;gap:12px;width:220px;max-width:100%}
-        .cc-doc{width:100%}
+        .cc-comm-docs{display:flex;flex-direction:column;gap:12px;width:200px;max-width:100%}
+        .cc-doc{width:100%;min-width:0}
         .cc-doc .pe-copy-zone{min-height:132px;padding:10px}
         .cc-doc .pe-copy-preview{height:88px}
         .cc-doc.has-file .pe-copy-preview{border-style:solid}
-        #cfg-commerciaux .form-flex{align-items:flex-end}
+        #cfg-commerciaux .form-flex{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(158px,1fr));
+            gap:12px 14px;
+            align-items:end;
+            justify-content:stretch;
+        }
+        #cfg-commerciaux .form-flex .field{min-width:0;margin:0}
+        #cfg-commerciaux .form-flex .field input,
+        #cfg-commerciaux .form-flex .field select{width:100%;min-width:0;box-sizing:border-box}
+        #cfg-commerciaux .field.cc-span-2{grid-column:span 2}
         .cc-comm-actions{
-            display:flex;flex-wrap:nowrap;align-items:stretch;gap:10px;
-            flex:2 1 340px;margin:0;min-width:280px;padding-bottom:0;
+            display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;
+            grid-column:1 / -1;margin:2px 0 0;min-width:0;padding-bottom:0;
         }
         .cc-comm-actions .btn{
-            flex:1 1 0;min-width:0;white-space:nowrap;justify-content:center;
+            flex:1 1 120px;min-width:0;white-space:nowrap;justify-content:center;
             height:42px;padding-top:0;padding-bottom:0;
         }
         #cfg-commerciaux .field.cc-sal-field label{color:#7c3aed}
@@ -1135,10 +1208,21 @@
         #cfg-commerciaux .field.cc-sal-field input:focus{
             border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.18);
         }
-        #cfg-commerciaux .field.cfg-id-field{flex:0 0 118px}
+        #cfg-commerciaux .field.cfg-id-field{max-width:120px}
         #cfg-commerciaux .field.cfg-id-field input{
             font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:.04em;
             color:var(--navy-mid);text-align:center;
+        }
+        @media(max-width:1280px){
+            .cc-comm-layout{grid-template-columns:1fr}
+            .cc-comm-docs{flex-direction:row;flex-wrap:wrap;width:100%;max-width:100%}
+            .cc-doc{flex:1 1 200px;max-width:280px}
+        }
+        @media(max-width:700px){
+            #cfg-commerciaux .form-flex{grid-template-columns:1fr}
+            #cfg-commerciaux .field.cc-span-2,
+            #cfg-commerciaux .field.cfg-id-field{grid-column:auto;max-width:none}
+            .cc-doc{max-width:none}
         }
         .pe-photo-wrap{display:grid;grid-template-columns:240px minmax(0,1fr);gap:18px;align-items:center;margin:2px 0 18px}
         .pe-photo{width:100%}
@@ -1209,6 +1293,60 @@
         @media(max-width:820px){
             .rm-form-grid.pay-line{grid-template-columns:repeat(2,minmax(0,1fr))}
             .rm-form-grid.pay-line .field.pay-type{max-width:none}
+        }
+        .rf-pay-pills{
+            display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;
+        }
+        .rf-pay-pill{
+            appearance:none;border:1px solid rgba(197,160,89,.4);
+            background:#fff;color:#1a2332;cursor:pointer;
+            padding:9px 14px;border-radius:999px;
+            font:700 11px 'Montserrat',sans-serif;letter-spacing:.6px;text-transform:uppercase;
+            transition:border-color .2s,background .2s,color .2s,box-shadow .2s;
+        }
+        .rf-pay-pill:hover{border-color:var(--gold);color:var(--tw-navy)}
+        .rf-pay-pill.is-on{
+            background:linear-gradient(135deg,var(--gold),var(--gold-light));
+            border-color:transparent;color:#1a1304;
+            box-shadow:0 6px 16px rgba(197,160,89,.28);
+        }
+        .rf-pay-pill:disabled{opacity:.45;cursor:default;box-shadow:none}
+        .rf-pay-summary{
+            display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+            margin:0 0 10px;padding:10px 12px;border-radius:10px;
+            background:rgba(197,160,89,.08);border:1px solid rgba(197,160,89,.22);
+            font:600 12px 'Montserrat',sans-serif;color:#3a2a12;
+        }
+        .rf-pay-summary.is-on{display:flex}
+        .rf-pay-summary b{font-weight:700;color:var(--tw-navy)}
+        .rf-pay-panel{
+            display:none;margin-top:4px;padding:14px 14px 12px;border-radius:12px;
+            background:linear-gradient(180deg,#fffdf8,#f7f2e8);
+            border:1px solid rgba(197,160,89,.35);
+            box-shadow:0 10px 24px rgba(10,23,54,.06);
+        }
+        .rf-pay-panel.is-open{display:block;animation:fade .2s ease}
+        .rf-pay-panel-title{
+            margin:0 0 12px;font:700 11px 'Montserrat',sans-serif;
+            letter-spacing:1.2px;text-transform:uppercase;color:#8a6a2c;
+        }
+        .rf-pay-panel-grid{
+            display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
+        }
+        .rf-pay-panel-grid.is-inst{grid-template-columns:repeat(3,minmax(0,1fr))}
+        .rf-pay-panel-grid .field{min-width:0}
+        .rf-pay-panel-grid .field input[readonly]{
+            opacity:.85;cursor:default;background:rgba(247,245,240,.95);
+        }
+        .rf-pay-panel-actions{
+            display:flex;justify-content:flex-end;gap:8px;margin-top:12px;
+        }
+        .rf-pay-panel-actions .btn{min-width:110px}
+        @media(max-width:720px){
+            .rf-pay-panel-grid,.rf-pay-panel-grid.is-inst{grid-template-columns:1fr 1fr}
+        }
+        @media(max-width:480px){
+            .rf-pay-panel-grid,.rf-pay-panel-grid.is-inst{grid-template-columns:1fr}
         }
         .rm-form-head.simple h3{margin:0 0 14px}
         .rm-form-head.simple p{display:none}
@@ -1294,19 +1432,27 @@
         }
         .rm-form-actions{display:flex;flex-wrap:wrap;gap:10px}
         .rm-status-pick{text-align:center;padding:24px 8px 12px}
-        .rm-status-pick h4{font-family:'Cormorant Garamond',serif;font-size:26px;color:#fff;margin:0 0 8px}
+        .rm-status-pick h4{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--text-dark);margin:0 0 8px}
         .rm-status-pick .rm-status-sub{color:var(--muted);font-size:14px;margin:0 0 28px}
         .rm-status-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
         .rm-st-btn{
             flex:1;min-width:150px;padding:20px 22px;border-radius:12px;
             border:2px solid;cursor:pointer;font-family:'Montserrat',sans-serif;
             font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
-            transition:all .25s ease;background:rgba(0,0,0,.25);
+            transition:all .25s ease;background:#fff;
         }
-        .rm-st-btn.st-occupee{color:#9ee8b8;border-color:rgba(69,200,120,.5);box-shadow:0 0 16px rgba(69,200,120,.15)}
-        .rm-st-btn.st-occupee:hover{background:rgba(69,200,120,.18);box-shadow:0 0 28px rgba(69,200,120,.4);transform:translateY(-2px)}
-        .rm-st-btn.st-reservee{color:#a8c8ff;border-color:rgba(91,158,245,.5);box-shadow:0 0 16px rgba(91,158,245,.15)}
-        .rm-st-btn.st-reservee:hover{background:rgba(91,158,245,.18);box-shadow:0 0 28px rgba(91,158,245,.4);transform:translateY(-2px)}
+        .rm-st-btn.st-occupee{color:#1f7a45;border-color:rgba(47,168,100,.55);box-shadow:0 0 16px rgba(69,200,120,.12)}
+        .rm-st-btn.st-occupee:hover{background:rgba(69,200,120,.14);box-shadow:0 0 28px rgba(69,200,120,.28);transform:translateY(-2px)}
+        .rm-st-btn.st-reservee{color:#2f5fad;border-color:rgba(91,158,245,.55);box-shadow:0 0 16px rgba(91,158,245,.12)}
+        .rm-st-btn.st-reservee:hover{background:rgba(91,158,245,.14);box-shadow:0 0 28px rgba(91,158,245,.28);transform:translateY(-2px)}
+        .rm-st-btn:disabled{opacity:.55;cursor:wait;transform:none;pointer-events:none}
+        .rm-status-ok{
+            text-align:center;padding:28px 12px 10px;
+        }
+        .rm-status-ok h4{
+            font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--text-dark);margin:0 0 8px;
+        }
+        .rm-status-ok p{color:var(--muted);font-size:14px;margin:0}
         .rm-st-btn.st-disponible{color:#f3e4a8;border-color:rgba(230,199,90,.5);box-shadow:0 0 16px rgba(230,199,90,.12)}
         .rm-st-btn.st-disponible:hover{background:rgba(230,199,90,.15);box-shadow:0 0 28px rgba(230,199,90,.35);transform:translateY(-2px)}
         .rm-st-btn.st-nettoyage{color:#c0c8d8;border-color:rgba(138,148,168,.5);box-shadow:0 0 16px rgba(138,148,168,.12)}
@@ -1343,29 +1489,63 @@
         .btn.del:hover{border-color:#e89;color:#fff;background:rgba(230,120,120,.15)}
         .ba-lines-hint{font-size:12px;color:var(--muted);margin:0 0 10px}
         .cfg-auth-wrap{
-            overflow:auto;margin-top:8px;max-height:calc(100vh - var(--topbar-h) - 230px);
-            border:1px solid var(--border-gold);border-radius:12px;background:#fff;
+            overflow:auto;margin-top:0;max-height:min(560px,calc(100vh - var(--topbar-h) - 220px));
+            border:1px solid rgba(197,160,89,.28);border-radius:0 0 12px 12px;background:#fff;
         }
-        .cfg-auth-table{width:100%;border-collapse:separate;border-spacing:0}
-        .cfg-auth-table th,.cfg-auth-table td{text-align:center;vertical-align:middle;background:#fff}
+        .cfg-auth-toolbar{
+            display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+            padding:10px 14px;background:linear-gradient(180deg,#fbf8f1,#f4eee2);
+            border-bottom:1px solid rgba(197,160,89,.22);
+        }
+        .cfg-auth-legend{display:flex;flex-wrap:wrap;gap:8px}
+        .cfg-auth-legend span{
+            display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;
+            background:#fff;border:1px solid rgba(197,160,89,.28);color:#5c4a28;
+            font:600 10px 'Montserrat',sans-serif;letter-spacing:.3px;
+        }
+        .cfg-auth-legend i{font-style:normal;opacity:.85}
+        .cfg-auth-stats{
+            display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+            font:700 10px 'Montserrat',sans-serif;letter-spacing:.6px;text-transform:uppercase;color:#8a6a2c;
+        }
+        .cfg-auth-stats b{
+            display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;
+            background:rgba(15,42,92,.06);border:1px solid rgba(15,42,92,.12);color:#0a1736;
+            font:700 11px 'Montserrat',sans-serif;letter-spacing:0;text-transform:none;
+        }
+        .cfg-auth-stats b em{font-style:normal;color:#8a6a2c}
+        .cfg-auth-table{width:100%;border-collapse:separate;border-spacing:0;min-width:720px}
+        .cfg-auth-table th,.cfg-auth-table td{text-align:center;vertical-align:middle;background:#fff;padding:10px 8px}
         .cfg-auth-table thead th{
-            position:sticky;top:0;z-index:3;
-            background:#f8f3e8;color:var(--gold);
-            box-shadow:inset 0 -1px 0 rgba(197,160,89,.45);
+            position:sticky;top:0;z-index:3;padding:12px 8px;
+            background:linear-gradient(180deg,#122a58,#0a1736);color:#f3e4a8;
+            box-shadow:0 1px 0 rgba(197,160,89,.45);
+            font:700 10px 'Montserrat',sans-serif;letter-spacing:.4px;
         }
         .cfg-auth-table th:first-child,.cfg-auth-table td:first-child{
-            position:sticky;left:0;z-index:2;text-align:left;min-width:220px;
-            background:#fff;box-shadow:inset -1px 0 0 rgba(197,160,89,.28);
+            position:sticky;left:0;z-index:2;text-align:left;min-width:260px;padding-left:14px;padding-right:12px;
+            background:#fff;box-shadow:inset -1px 0 0 rgba(197,160,89,.22);
         }
-        .cfg-auth-table thead th:first-child{z-index:4;text-align:center;background:#f8f3e8}
+        .cfg-auth-table thead th:first-child{z-index:4;text-align:left;background:linear-gradient(180deg,#122a58,#0a1736)}
         .cfg-auth-table tr.auth-sec td{
-            background:#f3ead6;color:var(--gold);font-weight:600;font-size:11px;
-            letter-spacing:1px;text-transform:uppercase;text-align:left;
+            background:linear-gradient(90deg,#f3ead6,#f8f3e8);color:#8a6a2c;font-weight:700;font-size:11px;
+            letter-spacing:.8px;text-transform:uppercase;text-align:left;padding:10px 14px;
+            border-top:1px solid rgba(197,160,89,.28);border-bottom:1px solid rgba(197,160,89,.18);
+        }
+        .auth-sec-inner{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+        .auth-sec-title{font:700 11px 'Montserrat',sans-serif;letter-spacing:1px}
+        .auth-sec-meta{
+            display:inline-flex;align-items:center;gap:6px;margin-left:auto;flex-wrap:wrap;
+            font:600 10px 'Montserrat',sans-serif;letter-spacing:.2px;text-transform:none;color:#6b5a3a;
+        }
+        .auth-sec-meta span{
+            padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.7);
+            border:1px solid rgba(197,160,89,.3);
         }
         .auth-fold{
-            width:28px;height:28px;margin-right:10px;padding:0;vertical-align:middle;
+            width:30px;height:30px;padding:0;flex:none;
             display:inline-flex;align-items:center;justify-content:center;
-            border:1px solid rgba(197,160,89,.5);border-radius:8px;background:#fff;color:#8a6a2f;cursor:pointer;
+            border:1px solid rgba(197,160,89,.5);border-radius:9px;background:#fff;color:#8a6a2f;cursor:pointer;
         }
         .auth-fold:hover{border-color:var(--gold);background:rgba(197,160,89,.1)}
         .auth-fold svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
@@ -1373,13 +1553,38 @@
         .auth-sec.is-closed .auth-fold .eye-on{display:none}
         .auth-sec.is-closed .auth-fold .eye-off{display:block}
         .cfg-auth-table tr.auth-row.is-hidden{display:none}
+        .cfg-auth-table tr.auth-row td{border-bottom:1px solid rgba(197,160,89,.1)}
+        .cfg-auth-table tr.auth-row:nth-child(even) td{background:#fcfaf6}
+        .cfg-auth-table tr.auth-row:nth-child(even) td:first-child{background:#fcfaf6}
         .cfg-auth-table tr:hover td{background:#fbf7ef}
         .cfg-auth-table tr:hover td:first-child{background:#f6f0e4}
-        .cfg-auth-table tr.auth-sec:hover td{background:#f3ead6}
-        .cfg-auth-table th .perm-hdr{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;line-height:1.2}
-        .cfg-auth-table th .perm-ic{font-size:16px;line-height:1}
-        .cfg-auth-table th .auth-all-lbl{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+        .cfg-auth-table tr.auth-sec:hover td{background:linear-gradient(90deg,#efe4cd,#f6f0e4)}
+        .auth-item{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left}
+        .auth-item strong{font:700 12.5px 'Montserrat',sans-serif;color:#1a2332;letter-spacing:.1px}
+        .auth-item small{font:600 10px 'Montserrat',sans-serif;color:#8a6a2c;letter-spacing:.2px}
+        .auth-item .auth-code{
+            display:inline-flex;align-items:center;gap:5px;padding:2px 7px;border-radius:6px;
+            background:rgba(15,42,92,.05);border:1px solid rgba(15,42,92,.08);
+            color:#4a5568;font:600 9.5px ui-monospace,Consolas,monospace;letter-spacing:0;
+        }
+        .auth-row-count{
+            margin-top:2px;font:600 10px 'Montserrat',sans-serif;color:#6b7280;
+        }
+        .auth-row-count em{font-style:normal;color:#8a6a2c;font-weight:700}
+        .cfg-auth-table th .perm-hdr{display:flex;flex-direction:column;align-items:center;gap:5px;line-height:1.15}
+        .cfg-auth-table th .perm-ic{font-size:15px;line-height:1;opacity:.95}
+        .cfg-auth-table th .perm-name{font:700 10px 'Montserrat',sans-serif;letter-spacing:.7px;text-transform:uppercase;color:#f3e4a8}
+        .cfg-auth-table th .perm-hint{font:500 9px 'Montserrat',sans-serif;color:rgba(243,228,168,.72);text-transform:none;letter-spacing:0;font-weight:500}
+        .cfg-auth-table th .auth-all-lbl{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+        .cfg-auth-table th .auth-all-lbl .auth-all-title{font:700 10px 'Montserrat',sans-serif;letter-spacing:.8px;text-transform:uppercase;color:#f3e4a8}
+        .cfg-auth-table th .auth-all-lbl .auth-all-sub{font:500 9px 'Montserrat',sans-serif;color:rgba(243,228,168,.7);text-transform:none;letter-spacing:0}
         .cfg-auth-table input[type=checkbox]{width:18px;height:18px;accent-color:var(--gold);cursor:pointer}
+        .cfg-auth-table td .auth-check{
+            width:34px;height:34px;margin:0 auto;display:inline-flex;align-items:center;justify-content:center;
+            border-radius:9px;border:1px solid transparent;transition:background .15s,border-color .15s;
+        }
+        .cfg-auth-table td .auth-check:hover{background:rgba(197,160,89,.1);border-color:rgba(197,160,89,.28)}
+        .cfg-auth-table td .auth-check:has(input:checked){background:rgba(197,160,89,.16);border-color:rgba(197,160,89,.4)}
 
         /* ===== CHAMBRES DISPONIBLES & CARROUSEL ===== */
         .cd-section{margin-bottom:36px}
@@ -2660,7 +2865,18 @@
             background:rgba(255,255,255,.06);border:1px solid rgba(212,176,106,.25);
         }
         .topbar .who b{color:#fff}
-        .topbar .who span{color:var(--gold-light)}
+        .topbar .who > div > span{color:var(--gold-light)}
+        .aj-bell{background:rgba(255,255,255,.08);border-color:rgba(212,176,106,.35);color:#f3d38a}
+        .aj-bell:hover{background:rgba(212,176,106,.16);border-color:rgba(240,207,133,.55)}
+        .aj-bell.is-alert{background:rgba(196,84,84,.18);border-color:#e07070;color:#ffb4a8}
+        .aj-bell-panel{background:#122a58;border-color:rgba(212,176,106,.3)}
+        .aj-bell-head{background:linear-gradient(180deg,#16305f,#0f234c);border-bottom-color:rgba(212,176,106,.25)}
+        .aj-bell-head strong{color:#fff}
+        .aj-bell-item{background:rgba(255,255,255,.04);border-color:rgba(212,176,106,.2)}
+        .aj-bell-item:hover{background:rgba(255,255,255,.08)}
+        .aj-bell-item.is-unread{background:rgba(196,84,84,.12);border-color:rgba(224,112,112,.4)}
+        .aj-bell-item b{color:#fff}
+        .aj-bell-item span,.aj-bell-empty{color:rgba(255,255,255,.65)}
         .topbar .who img{border-color:#f0cf85;box-shadow:0 0 14px rgba(240,207,133,.35)}
         .sb-toggle{
             background:rgba(255,255,255,.06);border:1px solid rgba(212,176,106,.3);color:var(--gold-light);
@@ -3495,6 +3711,138 @@
         /* Fiche utilisateur : champs emploi grisés pour le profil Direction */
         #cfg-users .field.is-off{opacity:.45;transition:opacity .2s}
         #cfg-users .field.is-off input,#cfg-users .field.is-off select{cursor:not-allowed;background:rgba(120,120,120,.12);filter:grayscale(1)}
+        .cfg-inline-msg{
+            display:none;margin:10px 0 0;padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.35;
+            border:1px solid transparent;
+        }
+        .cfg-inline-msg.is-on{display:block}
+        .cfg-inline-msg.is-ok{background:#ecfdf5;border-color:#6ee7b7;color:#065f46}
+        .cfg-inline-msg.is-err{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
+        .cfg-inline-msg.is-info{background:#fffbeb;border-color:#fcd34d;color:#92400e}
+        #cuSaveBtn[disabled]{opacity:.65;cursor:wait;transform:none;box-shadow:none}
+        #cuModal.cu-modal{width:min(1080px,100%);max-height:94vh;overflow-y:auto;padding:18px 18px 16px}
+        #cuModal .rm-form-head{margin-bottom:10px;padding-right:36px}
+        #cuModal .rm-form-head h3{font-size:22px;margin:0 0 2px}
+        #cuModal .rm-form-head p{font-size:12px}
+        #cuModal .pe-photo-wrap{
+            grid-template-columns:150px minmax(0,1fr);gap:12px;margin:0 0 8px;align-items:stretch;
+        }
+        #cuModal .pe-photo .pe-copy-preview{height:96px;border-radius:8px}
+        #cuModal .pe-copy-head{padding:6px 10px;font-size:9px}
+        #cuModal .pe-copy-zone{padding:8px;min-height:0}
+        #cuModal .pe-copy-name{font-size:10px}
+        #cuModal .pe-photo-side .field{margin-bottom:8px}
+        #cuModal .pe-photo-side .field label{margin-bottom:4px;font-size:9px}
+        #cuModal .pe-photo-side .field input{padding:7px 10px;font-size:12px}
+        .cu-sec{margin:8px 0 0;padding:8px 10px 4px;border:1px solid rgba(197,160,89,.2);border-radius:10px;background:rgba(247,245,240,.45)}
+        .cu-sec h4{
+            margin:0 0 6px;font:700 10px 'Montserrat',sans-serif;letter-spacing:1px;
+            text-transform:uppercase;color:#8a6a2c;
+        }
+        #cuModal .cu-sec .rm-form-grid{gap:8px}
+        #cuModal .cu-sec .field{margin-bottom:6px}
+        #cuModal .cu-sec .field label{
+            margin-bottom:3px;font-size:9px;letter-spacing:.7px;
+        }
+        #cuModal .cu-sec .field input,
+        #cuModal .cu-sec .field select{
+            padding:7px 9px;font-size:12px;border-radius:7px;min-height:0;
+        }
+        .cu-sec .rm-form-grid .field.span2{grid-column:span 2}
+        @media(max-width:700px){.cu-sec .rm-form-grid .field.span2{grid-column:auto}}
+        .cu-auth-sec{padding:0;overflow:hidden;border:1px solid rgba(197,160,89,.28);border-radius:12px;background:#fff;margin-top:10px}
+        .cu-auth-sec .cu-auth-head{
+            display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;
+            padding:10px 12px;background:linear-gradient(135deg,#122a58,#0a1736);color:#fff;
+        }
+        .cu-auth-sec .cu-auth-head h4{margin:0 0 2px;color:#f3e4a8;font:700 11px 'Montserrat',sans-serif;letter-spacing:1.1px;text-transform:uppercase}
+        .cu-auth-sec .cu-auth-head .hint{margin:0;color:rgba(255,255,255,.78);font-size:11px;max-width:560px;line-height:1.35}
+        .cu-auth-sec .cfg-auth-wrap{
+            margin:0;border:0;border-radius:0;
+            max-height:min(520px,calc(94vh - 300px));
+            min-height:280px;
+        }
+        #cuModal .rm-form-actions{
+            display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+            margin:14px 0 0;padding:12px 0 2px;
+            border-top:1px solid rgba(197,160,89,.22);
+            background:#fff;position:relative;z-index:2;
+        }
+        #cuModal .rm-form-actions .btn{min-width:120px}
+        .cu-list-block{padding:0;overflow:hidden}
+        .cu-list-head{
+            display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+            padding:16px 18px;border-bottom:1px solid rgba(197,160,89,.18);
+            background:linear-gradient(180deg,rgba(247,245,240,.9),#fff);
+        }
+        .cu-list-head h3{margin:0;font-size:15px;letter-spacing:.4px}
+        .cu-list-head .cu-count{
+            font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+            color:#8a6a2c;background:rgba(197,160,89,.12);border:1px solid rgba(197,160,89,.28);
+            padding:5px 10px;border-radius:999px;
+        }
+        .cu-table-wrap{border:0;border-radius:0;overflow:auto}
+        .cu-table{width:100%;border-collapse:separate;border-spacing:0;min-width:640px}
+        .cu-table thead th{
+            position:sticky;top:0;z-index:1;
+            background:linear-gradient(180deg,#0f2a5c,#0a1736);color:#f3e4a8;
+            font:700 10px 'Montserrat',sans-serif;letter-spacing:1.1px;text-transform:uppercase;
+            padding:12px 14px;border:0;text-align:left;white-space:nowrap;
+        }
+        .cu-table tbody td{
+            padding:13px 14px;border-bottom:1px solid rgba(197,160,89,.12);
+            font-size:13px;color:var(--text-dark);vertical-align:middle;background:#fff;
+        }
+        .cu-table tbody tr:hover td{background:#fbf7ef}
+        .cu-table tbody tr.is-active td{
+            background:linear-gradient(90deg,rgba(197,160,89,.14),rgba(255,255,255,.9));
+            box-shadow:inset 3px 0 0 var(--gold);
+        }
+        .cu-table .cu-date{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+        .cu-table .cu-nom{font-weight:700;color:var(--navy-mid)}
+        .cu-table .cu-login{
+            font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;letter-spacing:.3px;
+            color:#0f2a5c;background:rgba(15,42,92,.06);border:1px solid rgba(15,42,92,.1);
+            padding:4px 8px;border-radius:7px;display:inline-block;
+        }
+        .cu-pill{
+            display:inline-flex;align-items:center;gap:6px;
+            padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;
+            letter-spacing:.4px;text-transform:uppercase;border:1px solid transparent;white-space:nowrap;
+        }
+        .cu-pill::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.9}
+        .cu-pill.p-direction{color:#8a6a2c;background:rgba(224,180,58,.16);border-color:rgba(224,180,58,.35)}
+        .cu-pill.p-administration{color:#1d4ed8;background:rgba(91,141,239,.14);border-color:rgba(91,141,239,.35)}
+        .cu-pill.p-reception{color:#047857;background:rgba(47,168,100,.14);border-color:rgba(47,168,100,.35)}
+        .cu-pill.p-commercial{color:#c2410c;background:rgba(224,122,59,.14);border-color:rgba(224,122,59,.35)}
+        .cu-pill.p-maintenance,.cu-pill.p-housekeeping{color:#5b21b6;background:rgba(139,124,246,.14);border-color:rgba(139,124,246,.35)}
+        .cu-pill.p-restauration{color:#9a3412;background:rgba(234,88,12,.12);border-color:rgba(234,88,12,.3)}
+        .cu-pill.p-comptabilite{color:#0f766e;background:rgba(45,212,191,.12);border-color:rgba(20,184,166,.3)}
+        .cu-pill.p-technique{color:#0e7490;background:rgba(46,183,201,.14);border-color:rgba(46,183,201,.35)}
+        .cu-pill.p-default{color:#475569;background:rgba(100,116,139,.1);border-color:rgba(100,116,139,.25)}
+        .cu-actions{display:flex;gap:6px;flex-wrap:wrap}
+        .cu-actions .ibtn{
+            width:34px;height:34px;border-radius:9px;margin:0;
+            display:inline-flex;align-items:center;justify-content:center;
+            border:1px solid rgba(197,160,89,.3);background:#fff;color:#8a6a2c;
+        }
+        .cu-actions .ibtn:hover{background:rgba(197,160,89,.12);border-color:var(--gold);color:var(--navy-mid)}
+        .cu-actions .ibtn.auth{color:#1d4ed8;border-color:rgba(91,141,239,.35)}
+        .cu-actions .ibtn.auth:hover{background:rgba(91,141,239,.12);color:#1e3a8a}
+        .cu-actions .ibtn.del{color:#b45309;border-color:rgba(245,158,11,.35)}
+        .cu-actions .ibtn.del:hover{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.4);color:#b91c1c}
+        .cu-auth-block{
+            margin-top:16px;border:1px solid rgba(197,160,89,.22);border-radius:14px;overflow:hidden;
+            background:#fff;box-shadow:0 10px 28px rgba(10,23,54,.05);
+        }
+        .cu-auth-block .cu-auth-head{
+            display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+            padding:14px 16px;background:linear-gradient(135deg,#0f2a5c,#0a1736);color:#fff;
+        }
+        .cu-auth-block .cu-auth-head h3{margin:0;font-size:14px;letter-spacing:.4px;color:#f3e4a8}
+        .cu-auth-block .cu-auth-head .hint{margin:0;color:rgba(255,255,255,.75);font-size:12px}
+        .cu-auth-block .cfg-auth-wrap{margin:0;border:0;border-radius:0;max-height:420px}
+        .cu-auth-block .actions{padding:12px 16px 16px;margin:0;justify-content:flex-end}
 
         /* Balance Clients — occupe toute la zone de travail */
         .content:has(#adm-balance-clients.active),
@@ -3571,6 +3919,99 @@
         #adm-balance-clients .empty-row td,
         #adm-balance-paiement .empty-row td{height:100%;vertical-align:middle}
         .bp-filters{grid-template-columns:repeat(5,minmax(0,1fr)) auto}
+        /* ===== C-Occupées — layout page (scopé, sans sticky) ===== */
+        #ch-occupees.panel > h2.serif{
+            text-align:left;margin:0 0 12px;padding:0;
+            font-size:28px;letter-spacing:.4px;line-height:1.15;color:var(--navy-mid);
+        }
+        #ch-occupees .occ-filters{
+            display:grid;
+            grid-template-columns:repeat(5,minmax(140px,1fr)) auto;
+            gap:12px;align-items:end;
+            position:static !important;top:auto !important;z-index:auto !important;
+            width:100%;margin:0 0 28px;padding:14px 16px;
+            background:#fff !important;
+            border:1px solid var(--border-gold);
+            border-radius:14px;
+            box-shadow:0 8px 22px rgba(8,20,51,.08);
+            backdrop-filter:none !important;
+        }
+        #ch-occupees .occ-filters label{
+            display:flex;flex-direction:column;gap:6px;min-width:0;
+            font-size:10px;font-weight:700;letter-spacing:1.2px;
+            text-transform:uppercase;color:var(--gold);
+        }
+        #ch-occupees .occ-filters input,
+        #ch-occupees .occ-filters select{
+            height:42px;width:100%;box-sizing:border-box;
+            border:1px solid rgba(197,160,89,.35);border-radius:10px;padding:0 12px;
+            font-family:inherit;font-size:14px;color:var(--text-dark);background:#fff;
+        }
+        #ch-occupees .occ-filters input:focus,
+        #ch-occupees .occ-filters select:focus{
+            outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.15);
+        }
+        #ch-occupees .occ-filters .bc-reset{flex-shrink:0;white-space:nowrap}
+        @media(max-width:1200px){
+            #ch-occupees .occ-filters{grid-template-columns:repeat(3,minmax(140px,1fr)) auto}
+        }
+        @media(max-width:800px){
+            #ch-occupees .occ-filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+            #ch-occupees .occ-filters .bc-reset{grid-column:1 / -1;width:100%}
+        }
+        @media(max-width:560px){
+            #ch-occupees .occ-filters{grid-template-columns:1fr}
+        }
+        #ch-occupees .occ-table-panel{
+            display:block;width:100%;margin:0 0 22px;padding:0;
+            background:#fff;border:1px solid rgba(197,160,89,.4);
+            border-radius:16px;box-shadow:var(--shadow-soft);
+            overflow-x:auto;overflow-y:visible;
+        }
+        #ch-occupees .occ-table-panel .table-wrap{
+            width:100%;margin:0;padding:0;
+            overflow:visible !important;
+            border:none;border-radius:0;background:transparent;box-shadow:none;
+        }
+        #ch-occupees table.occ-table{
+            width:100%;min-width:1180px;height:auto;
+            table-layout:fixed;border-collapse:collapse !important;border-spacing:0;
+        }
+        #ch-occupees table.occ-table thead{
+            display:table-header-group !important;
+            visibility:visible !important;
+            opacity:1 !important;
+        }
+        #ch-occupees.panel table.occ-table thead th,
+        #ch-occupees .table-wrap table.occ-table thead th,
+        #ch-occupees.panel table thead th{
+            display:table-cell !important;
+            visibility:visible !important;
+            opacity:1 !important;
+            position:static !important;top:auto !important;left:auto !important;z-index:auto !important;
+            white-space:nowrap;padding:14px 10px;height:auto !important;min-height:48px;
+            max-height:none !important;line-height:1.3;
+            font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;
+            letter-spacing:1.1px;text-transform:uppercase;text-align:center;
+            color:#f3e6c4 !important;
+            background:#0a1736 !important;
+            border-bottom:2px solid var(--gold) !important;
+            border-right:1px solid rgba(243,230,196,.14);
+            box-shadow:none !important;transform:none !important;
+        }
+        #ch-occupees.panel table.occ-table thead th:last-child{border-right:none}
+        #ch-occupees table.occ-table td{
+            white-space:nowrap;padding:13px 10px;font-size:12.5px;vertical-align:middle;
+            border-bottom:1px solid rgba(10,23,54,.06);
+            border-right:1px solid rgba(10,23,54,.035);
+            background:#fff;
+            position:static !important;
+        }
+        #ch-occupees table.occ-table td:last-child{border-right:none}
+        #ch-occupees table.occ-table tbody tr:last-child td{border-bottom:none}
+        #ch-occupees table.occ-table tbody tr:hover td{background:rgba(197,160,89,.05)}
+        #ch-occupees table.occ-table th:last-child,
+        #ch-occupees table.occ-table td:last-child{width:132px}
         #adm-balance-clients th{white-space:nowrap}
         .bc-money{font-variant-numeric:tabular-nums;font-weight:600}
         .bc-solde.ok{color:#1f8a4c}
@@ -3652,11 +4093,24 @@
     $canManageRooms = $adminProfil !== null
         ? in_array($adminProfil, ['Direction', 'Administration'], true)
         : in_array($adminLogin, $managerLogins, true);
-    // Profil Direction : accès total à toutes les sections (aucune restriction menu).
-    if ($adminProfil === 'Direction' || $adminProfil === null) {
+    // Profil Direction : accès total. Sinon, toujours recharger les droits depuis la BDD
+    // (évite une session figée quand la Direction met à jour les autorisations).
+    if ($adminProfil === 'Direction' || ($adminProfil === null && ! $adminUser)) {
         $menuAuth = null;
+        session(['space_admin_auth' => null]);
     } else {
-        $menuAuth = session('space_admin_auth') ?? [];
+        $menuAuth = is_array($adminUser?->autorisations) ? $adminUser->autorisations : [];
+        session(['space_admin_auth' => $menuAuth]);
+        if ($adminUser) {
+            session([
+                'space_admin_profil' => $adminUser->profil,
+                'space_admin_nom' => $adminUser->nom,
+            ]);
+            $adminProfil = $adminUser->profil;
+            $adminNom = $adminUser->nom;
+            $adminRoleLabel = $adminProfil ?: $adminRoleLabel;
+            $adminLabel = $adminNom ?: ($adminProfil ?: $adminLogin ?: 'Direction');
+        }
     }
     $adminSession = [
         'nom' => $adminNom ?: $adminLabel,
@@ -3817,7 +4271,7 @@ window.AJ_SESSION=@json($adminSession);
                 <div class="sb-parent" id="cfgParent">
                     <span class="ic-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
                     <span class="lbl">Configuration</span>
-                    <span class="sb-badge">5</span>
+                    <span class="sb-badge">4</span>
                     <span class="caret">&#9662;</span>
                 </div>
                 <div class="sb-sub" id="cfgSub">
@@ -3825,7 +4279,6 @@ window.AJ_SESSION=@json($adminSession);
                     <div class="sb-item" data-target="configuration" data-cfg="carrousel"><span class="sb-dot"></span><span class="lbl">Carrousel</span></div>
                     <div class="sb-item" data-target="configuration" data-cfg="habillage"><span class="sb-dot"></span><span class="lbl">Habillage</span></div>
                     <div class="sb-item" data-target="configuration" data-cfg="users"><span class="sb-dot"></span><span class="lbl">Utilisateurs</span></div>
-                    <div class="sb-item" data-target="configuration" data-cfg="commerciaux"><span class="sb-dot"></span><span class="lbl">Commerciaux</span></div>
                 </div>
             </div>
         </nav>
@@ -3879,6 +4332,24 @@ window.AJ_SESSION=@json($adminSession);
                 </div>
             </div>
             <div class="who">
+                <div class="aj-bell-wrap" id="ajBellWrap">
+                    <button type="button" class="aj-bell" id="ajBellBtn" aria-label="Notifications" aria-expanded="false" title="Notifications">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5"/>
+                            <path d="M9.5 17a2.5 2.5 0 005 0"/>
+                        </svg>
+                        <span class="aj-bell-dot" id="ajBellDot" hidden>0</span>
+                    </button>
+                    <div class="aj-bell-panel" id="ajBellPanel" hidden>
+                        <div class="aj-bell-head">
+                            <strong>Alertes réservations web</strong>
+                            <button type="button" class="aj-bell-mark" id="ajBellMarkAll">Tout lu</button>
+                        </div>
+                        <div class="aj-bell-list" id="ajBellList">
+                            <p class="aj-bell-empty">Aucune alerte.</p>
+                        </div>
+                    </div>
+                </div>
                 <div style="text-align:right"><b>{{ $adminLabel }}</b><span>{{ $adminRoleLabel }}</span></div>
                 @if($adminPhoto)
                     <img src="{{ $adminPhoto }}" alt="{{ $adminLabel }}">
@@ -4028,9 +4499,9 @@ window.AJ_SESSION=@json($adminSession);
         <div class="section-kpi hidden" data-for="ch-occupees" aria-hidden="true">
             <div class="cards">
                 <div class="card"><div class="n" id="occKpiActive">0</div><div class="l">Chambres occupées</div></div>
-                <div class="card"><div class="n" id="occKpiArr">0</div><div class="l">Arrivées aujourd'hui</div></div>
-                <div class="card"><div class="n" id="occKpiDep">0</div><div class="l">Départs aujourd'hui</div></div>
-                <div class="card"><div class="n" id="occKpiTotal">0</div><div class="l">Total occupations</div></div>
+                <div class="card"><div class="n" id="occKpiMontant">0 DH</div><div class="l">Montant total</div></div>
+                <div class="card"><div class="n" id="occKpiPaye">0 DH</div><div class="l">Montant payé</div></div>
+                <div class="card"><div class="n" id="occKpiSolde">0 DH</div><div class="l">Solde dû</div></div>
             </div>
         </div>
 
@@ -4575,7 +5046,7 @@ window.AJ_SESSION=@json($adminSession);
                 <div class="block">
                     <div class="row-head"><h3>Liste des réservations</h3></div>
                     <table>
-                        <thead><tr><th>N° Résa</th><th>Client</th><th>Commercial</th><th>Chambre</th><th>Arrivée</th><th>Départ</th><th>Nuits</th><th>Montant</th><th>Statut</th><th class="no-print">Actions</th></tr></thead>
+                        <thead><tr><th>N° Résa</th><th>Client</th><th>Responsable</th><th>Chambre</th><th>Arrivée</th><th>Départ</th><th>Nuits</th><th>Montant</th><th>Statut</th><th class="no-print">Actions</th></tr></thead>
                         <tbody id="resaTbody">
                             <tr class="empty-row"><td colspan="10">Aucune réservation.</td></tr>
                         </tbody>
@@ -4585,15 +5056,47 @@ window.AJ_SESSION=@json($adminSession);
 
             <section class="panel" id="ch-occupees">
                 <h2 class="serif">C-Occupées</h2>
-                <p class="sub">Chambres occupées — séjours validés en cours</p>
-                <div class="block">
-                    <div class="row-head"><h3>Liste des chambres occupées</h3></div>
-                    <table>
-                        <thead><tr><th>N° Résa</th><th>Client</th><th>Commercial</th><th>Chambre</th><th>Arrivée</th><th>Départ</th><th>Nuits</th><th>Montant</th><th>Statut</th><th class="no-print">Actions</th></tr></thead>
-                        <tbody id="occTbody">
-                            <tr class="empty-row"><td colspan="10">Aucune chambre occupée.</td></tr>
-                        </tbody>
-                    </table>
+                <div class="occ-filters" role="search" aria-label="Filtres C-Occupées">
+                    <label>Mois
+                        <select id="occMonth">
+                            <option value="">Tous les mois</option>
+                        </select>
+                    </label>
+                    <label>N° Chambre<input type="search" id="occChambre" placeholder="Ex. 201" autocomplete="off"></label>
+                    <label>Nom Client<input type="search" id="occNom" placeholder="Rechercher un client" autocomplete="off"></label>
+                    <label>N° Identité<input type="search" id="occCin" placeholder="CIN / Passeport" autocomplete="off"></label>
+                    <label>Responsable
+                        <select id="occResp">
+                            <option value="">Tous</option>
+                        </select>
+                    </label>
+                    <button type="button" class="bc-reset" id="occReset">Effacer</button>
+                </div>
+                <div class="occ-table-panel">
+                    <div class="table-wrap" id="occBodyWrap">
+                        <table class="occ-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date Rés</th>
+                                    <th scope="col">Réf Rés</th>
+                                    <th scope="col">Nom Client</th>
+                                    <th scope="col">N° Identité</th>
+                                    <th scope="col">Arrivée</th>
+                                    <th scope="col">Départ</th>
+                                    <th scope="col">Nuits</th>
+                                    <th scope="col">Tarifs</th>
+                                    <th scope="col">Montant</th>
+                                    <th scope="col">Payé</th>
+                                    <th scope="col">Solde</th>
+                                    <th scope="col">Responsable</th>
+                                    <th scope="col" class="no-print">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="occTbody">
+                                <tr class="empty-row"><td colspan="13">Aucune chambre occupée.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -4928,9 +5431,12 @@ window.AJ_SESSION=@json($adminSession);
                         <div class="form-grid">
                             <div class="field"><label>Raison Sociale</label><input type="text" id="cfg_raison" placeholder="Raison sociale"></div>
                             <div class="field"><label>Nom Gérant</label><input type="text" id="cfg_gerant" placeholder="Nom du gérant"></div>
+                            <div class="field"><label>Ville</label><input type="text" id="cfg_ville" placeholder="Laâyoune"></div>
+                            <div class="field"><label>Adresse</label><input type="text" id="cfg_adresse" placeholder="Av. Mohammed V"></div>
                             <div class="field"><label>N° Contact</label><input type="tel" id="cfg_contact" placeholder="06 XX XX XX XX"></div>
                             <div class="field"><label>N° Fixe</label><input type="tel" id="cfg_fixe" placeholder="05 XX XX XX XX"></div>
                             <div class="field"><label>E-mail</label><input type="email" id="cfg_email" placeholder="contact@hotel.com"></div>
+                            <div class="field"><label>Site web</label><input type="text" id="cfg_siteweb" placeholder="www.aljazeera-hotel.com"></div>
                             <div class="field"><label>Statut</label>
                                 <select id="cfg_statut">
                                     <option value="3">3 étoiles</option>
@@ -5191,146 +5697,145 @@ window.AJ_SESSION=@json($adminSession);
                 </div>
 
                 <div class="subpanel" id="cfg-users">
-                    <div class="block">
-                        <h3>Utilisateur</h3>
-                        <p class="hint" id="cu_hint">Saisissez le nom, le profil, un login unique et le mot de passe, puis validez.</p>
-                        <div class="form-flex">
-                            <div class="field" style="flex:0 0 160px"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cu_date"></div>
-                            <div class="field" style="flex:2 1 220px"><label>Nom complet</label>
-                                <input type="text" id="cu_nom" list="cu_nom_list" placeholder="Nom et prénom" autocomplete="off">
-                                <datalist id="cu_nom_list"></datalist>
+                    <div class="block cu-list-block">
+                        <div class="cu-list-head">
+                            <div>
+                                <h3>Utilisateurs enregistrés</h3>
+                                <p class="hint" id="cu_hint" style="margin:6px 0 0">Ajoutez un compte, puis réglez ses autorisations dans le panneau.</p>
                             </div>
-                            <div class="field" style="flex:1 1 180px"><label>Profil</label>
-                                <select id="cu_profil">
-                                    <option value="">— Sélectionner —</option>
-                                    @foreach(\App\Models\HotelUser::USER_PROFILS as $profilOpt)
-                                        <option value="{{ $profilOpt }}">{{ $profilOpt }}</option>
-                                    @endforeach
-                                </select>
+                            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                                <span class="cu-count" id="cu_count">0 compte</span>
+                                <button type="button" class="btn gold" id="cuNewBtn">+ Ajouter</button>
                             </div>
-                            <div class="field" style="flex:1 1 180px"><label>Login</label><input type="text" id="cu_login" value="" placeholder="Identifiant de connexion" autocomplete="off" data-lpignore="true" data-1p-ignore></div>
-                            <div class="field" style="flex:1 1 180px"><label>Mot de passe</label><input type="text" id="cu_password" value="" placeholder="Saisie manuelle" autocomplete="off" data-lpignore="true" data-1p-ignore spellcheck="false" style="-webkit-text-security:disc"></div>
                         </div>
-                        <div class="actions">
-                            <button type="button" class="btn gold" onclick="CFG.saveUser()">Valider</button>
-                            <button type="button" class="btn ghost" onclick="CFG.newUser()">Ajouter</button>
-                        </div>
-                    </div>
-                    <div class="block">
-                        <div class="cfg-list-head"><h3>Liste des utilisateurs</h3></div>
-                        <div class="table-wrap">
-                            <table>
+                        <p class="cfg-inline-msg" id="cu_msg" role="status" aria-live="polite" style="margin:12px 18px 0"></p>
+                        <div class="table-wrap cu-table-wrap">
+                            <table class="cu-table">
                                 <thead><tr>
-                                    <th>Date</th><th>Nom complet</th><th>Profil</th><th>Login</th><th class="no-print">Actions</th>
+                                    <th>ID</th><th>Date</th><th>Nom complet</th><th>Profil</th><th>Login</th><th class="no-print">Actions</th>
                                 </tr></thead>
                                 <tbody id="cu_tbody"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <div class="subpanel" id="cfg-auth">
-                    <div class="block">
-                        <h3>Tableau des autorisations</h3>
-                        <p class="hint" id="cfg_auth_who">Validez un utilisateur pour régler ses droits.</p>
+            <div class="rm-modal-overlay" id="cuModalOverlay">
+                <div class="rm-modal cu-modal" id="cuModal" role="dialog" aria-modal="true" aria-labelledby="cuTitle">
+                    <button type="button" class="rm-modal-close" id="cuClose" aria-label="Fermer">&times;</button>
+                    <div class="rm-form-head">
+                        <h3 id="cuTitle">Nouvel utilisateur</h3>
+                        <p id="cuSub">Fiche complète · connexion · autorisations</p>
+                    </div>
+                    <div class="pe-photo-wrap">
+                        <div class="pe-copy pe-photo" id="cuPhotoCard">
+                            <div class="pe-copy-head">Photo</div>
+                            <button type="button" class="pe-copy-zone" id="cuPhotoBtn" title="Importer la photo">
+                                <span class="pe-copy-preview" id="cuPhotoPreview"></span>
+                                <span class="pe-copy-name" id="cuPhotoName">Importer une photo</span>
+                            </button>
+                            <input type="file" id="cuPhotoFile" accept="image/*" hidden>
+                        </div>
+                        <div class="pe-photo-side">
+                            <div class="field"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cu_date" readonly></div>
+                            <div class="field"><label>ID</label><input type="text" id="cu_id" readonly placeholder="Ut0001"></div>
+                        </div>
+                    </div>
+
+                    <div class="cu-sec">
+                        <h4>Infos personnelles &amp; formation</h4>
+                        <div class="rm-form-grid rm-edit-simple">
+                            <div class="field"><label>Nom complet</label><input type="text" id="cu_nom" list="cu_nom_list" placeholder="Nom et prénom" autocomplete="off"></div>
+                            <datalist id="cu_nom_list"></datalist>
+                            <div class="field"><label>CIN</label><input type="text" id="cu_cin" placeholder="AB123456" autocomplete="off"></div>
+                            <div class="field"><label>Contact</label><input type="tel" id="cu_tel" placeholder="06 XX XX XX XX" inputmode="tel" autocomplete="off"></div>
+                            <div class="field"><label>Adresse</label><input type="text" id="cu_adresse" placeholder="Adresse" autocomplete="off"></div>
+                            <div class="field span2"><label>Type formation</label><input type="text" id="cu_formation" placeholder="Formation / diplôme" autocomplete="off"></div>
+                        </div>
+                    </div>
+
+                    <div class="cu-sec">
+                        <h4>Infos professionnelles</h4>
+                        <div class="rm-form-grid rm-edit-simple">
+                            <div class="field"><label>Profil</label>
+                                <select id="cu_profil">
+                                    <option value="">— Statut —</option>
+                                    @foreach(\App\Models\HotelUser::USER_PROFILS as $profilOpt)
+                                        <option value="{{ $profilOpt }}">{{ $profilOpt }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="field"><label>Type contrat</label>
+                                <select id="cu_contrat">
+                                    <option value="">— Sélectionner —</option>
+                                    @foreach(\App\Models\HotelUser::CONTRATS as $contratOpt)
+                                        <option value="{{ $contratOpt }}">{{ $contratOpt }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="field"><label>Date début</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cu_debut"></div>
+                            <div class="field"><label>Date fin</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cu_fin"></div>
+                            <div class="field"><label>Type rémunération</label>
+                                <select id="cu_remu_type">
+                                    <option value="">— Sélectionner —</option>
+                                    @foreach(\App\Models\HotelUser::REMU_TYPES as $remuOpt)
+                                        <option value="{{ $remuOpt }}">{{ $remuOpt }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="field"><label>Rémunération</label><input type="number" id="cu_salaire" placeholder="0.00" step="0.01" min="0"></div>
+                        </div>
+                    </div>
+
+                    <div class="cu-sec">
+                        <h4>Connexion</h4>
+                        <div class="rm-form-grid rm-edit-simple">
+                            <div class="field"><label>Login</label><input type="text" id="cu_login" value="" placeholder="Identifiant de connexion" autocomplete="off" data-lpignore="true" data-1p-ignore></div>
+                            <div class="field"><label>Mot de passe</label><input type="password" id="cu_password" value="" placeholder="Saisie manuelle" autocomplete="new-password" data-lpignore="true" data-1p-ignore spellcheck="false"></div>
+                        </div>
+                    </div>
+
+                    <div class="cu-sec cu-auth-sec">
+                        <div class="cu-auth-head">
+                            <div>
+                                <h4>Matrice des autorisations</h4>
+                                <p class="hint" id="cfg_auth_who">Définissez les droits par module : saisir, modifier, supprimer, imprimer et voir.</p>
+                            </div>
+                            <div class="cfg-auth-stats" id="cfg_auth_stats" aria-live="polite">
+                                <b><em id="cfg_auth_on">0</em> / <span id="cfg_auth_total">0</span> droits</b>
+                                <b><em id="cfg_auth_modules">0</em> modules actifs</b>
+                            </div>
+                        </div>
                         <div class="cfg-auth-wrap">
                             <table class="cfg-auth-table" id="cfg_auth_table">
                                 <thead>
                                     <tr>
                                         <th>
                                             <label class="auth-all-lbl" title="Cocher ou décocher toutes les cases">
-                                                <span>Tout cocher</span>
-                                                <input type="checkbox" id="auth_check_all" aria-label="Tout cocher">
+                                                <span class="auth-all-title">Modules / écrans</span>
+                                                <span class="auth-all-sub">Tout cocher · <input type="checkbox" id="auth_check_all" aria-label="Tout cocher"></span>
                                             </label>
                                         </th>
-                                        <th><span class="perm-hdr"><span class="perm-ic">&#9998;</span>Saisir<input type="checkbox" class="auth-col-all" data-perm="saisir" title="Tout saisir" aria-label="Tout saisir"></span></th>
-                                        <th><span class="perm-hdr"><span class="perm-ic">&#128394;</span>Modifier<input type="checkbox" class="auth-col-all" data-perm="modifier" title="Tout modifier" aria-label="Tout modifier"></span></th>
-                                        <th><span class="perm-hdr"><span class="perm-ic">&#128465;</span>Supprimer<input type="checkbox" class="auth-col-all" data-perm="supprimer" title="Tout supprimer" aria-label="Tout supprimer"></span></th>
-                                        <th><span class="perm-hdr"><span class="perm-ic">&#128424;</span>Imprimer<input type="checkbox" class="auth-col-all" data-perm="imprimer" title="Tout imprimer" aria-label="Tout imprimer"></span></th>
-                                        <th><span class="perm-hdr"><span class="perm-ic">&#128065;</span>Voir<input type="checkbox" class="auth-col-all" data-perm="voir" title="Tout voir" aria-label="Tout voir"></span></th>
+                                        <th><span class="perm-hdr"><span class="perm-ic">&#9998;</span><span class="perm-name">Saisir</span><span class="perm-hint">Créer</span><input type="checkbox" class="auth-col-all" data-perm="saisir" title="Tout saisir" aria-label="Tout saisir"></span></th>
+                                        <th><span class="perm-hdr"><span class="perm-ic">&#128394;</span><span class="perm-name">Modifier</span><span class="perm-hint">Éditer</span><input type="checkbox" class="auth-col-all" data-perm="modifier" title="Tout modifier" aria-label="Tout modifier"></span></th>
+                                        <th><span class="perm-hdr"><span class="perm-ic">&#128465;</span><span class="perm-name">Supprimer</span><span class="perm-hint">Effacer</span><input type="checkbox" class="auth-col-all" data-perm="supprimer" title="Tout supprimer" aria-label="Tout supprimer"></span></th>
+                                        <th><span class="perm-hdr"><span class="perm-ic">&#128424;</span><span class="perm-name">Imprimer</span><span class="perm-hint">Export</span><input type="checkbox" class="auth-col-all" data-perm="imprimer" title="Tout imprimer" aria-label="Tout imprimer"></span></th>
+                                        <th><span class="perm-hdr"><span class="perm-ic">&#128065;</span><span class="perm-name">Voir</span><span class="perm-hint">Lecture</span><input type="checkbox" class="auth-col-all" data-perm="voir" title="Tout voir" aria-label="Tout voir"></span></th>
                                     </tr>
                                 </thead>
                                 <tbody id="cfg_auth_tbody"></tbody>
                             </table>
                         </div>
-                        <div class="actions" style="margin-top:16px">
-                            <button type="button" class="btn gold" onclick="CFG.saveAuth()">Enregistrer les autorisations</button>
-                        </div>
                     </div>
-                </div>
 
-                <div class="subpanel" id="cfg-commerciaux">
-                    <div class="block">
-                        <div class="row-head"><h3>Commercial</h3><button type="button" class="btn-gold" onclick="CFG.newCommercial()">+ Ajouter</button></div>
-                        <div class="cc-comm-layout">
-                            <div class="cc-comm-fields">
-                                <div class="form-flex">
-                                    <div class="field cfg-id-field"><label>ID</label><input type="text" id="cc_id" readonly placeholder="Co0001"></div>
-                                    <div class="field" style="flex:2 1 200px"><label>Nom et Prénom</label><input type="text" id="cc_nom" placeholder="Nom complet"></div>
-                                    <div class="field" style="flex:1 1 140px"><label>N° CIN</label><input type="text" id="cc_cin" placeholder="AB123456"></div>
-                                    <div class="field" style="flex:1 1 140px"><label>N° Téléphone</label><input type="tel" id="cc_tel" placeholder="06 XX XX XX XX"></div>
-                                    <div class="field" style="flex:2 1 220px"><label>Adresse</label><input type="text" id="cc_adresse" placeholder="Adresse"></div>
-                                    <div class="field" style="flex:1 1 180px"><label>Profil</label>
-                                        <select id="cc_profil">
-                                            <option value="">— Profil —</option>
-                                            <option>Accueil</option>
-                                            <option>Administration</option>
-                                            <option>Facturation</option>
-                                            <option>Service Achats</option>
-                                            <option>Service Technique</option>
-                                        </select>
-                                    </div>
-                                    <div class="field" style="flex:1 1 150px"><label>Type Contrat</label>
-                                        <select id="cc_contrat">
-                                            <option>CDI</option><option>CDD</option><option>Stage</option><option>Formation</option><option>Vacataire</option>
-                                        </select>
-                                    </div>
-                                    <div class="field" style="flex:0 0 140px"><label>Date Début</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cc_debut"></div>
-                                    <div class="field" style="flex:0 0 140px"><label>Date Fin</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="cc_fin"></div>
-                                    <div class="field" style="flex:1 1 180px"><label>Formation</label><input type="text" id="cc_formation" placeholder="Formation / diplôme"></div>
-                                    <div class="field cc-sal-field" style="flex:0 0 140px"><label>Salaire (DH)</label><input type="number" id="cc_salaire" placeholder="0.00" step="0.01" min="0"></div>
-                                    <div class="field" style="flex:1 1 180px"><label>Login</label><input type="text" id="cc_login" value="" placeholder="Identifiant de connexion" autocomplete="off" data-lpignore="true" data-1p-ignore></div>
-                                    <div class="field" style="flex:1 1 180px"><label>Mot de passe</label><input type="text" id="cc_password" value="" placeholder="Saisie manuelle" autocomplete="off" data-lpignore="true" data-1p-ignore spellcheck="false" style="-webkit-text-security:disc"></div>
-                                    <div class="actions cc-comm-actions">
-                                        <button type="button" class="btn ghost" id="ccAuthBtn" onclick="CFG.openCommAuth()">Autorisations</button>
-                                        <button type="button" class="btn gold" onclick="CFG.saveCommercial()">Valider</button>
-                                        <button type="button" class="btn ghost" id="ccPrintBtn" onclick="CFG.printCommercial()">Imprimer</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="cc-comm-docs">
-                                <div class="pe-copy cc-doc" id="ccPhotoCard">
-                                    <div class="pe-copy-head">Photo</div>
-                                    <button type="button" class="pe-copy-zone" id="ccPhotoBtn" title="Importer la photo">
-                                        <span class="pe-copy-preview" id="ccPhotoPreview"></span>
-                                        <span class="pe-copy-name" id="ccPhotoName">Importer photo</span>
-                                    </button>
-                                    <input type="file" id="ccPhotoFile" accept="image/*" hidden>
-                                </div>
-                                <div class="pe-copy cc-doc" id="ccDipCard">
-                                    <div class="pe-copy-head">Photo diplôme</div>
-                                    <button type="button" class="pe-copy-zone" id="ccDipBtn" title="Importer le diplôme">
-                                        <span class="pe-copy-preview" id="ccDipPreview"></span>
-                                        <span class="pe-copy-name" id="ccDipName">Importer diplôme</span>
-                                    </button>
-                                    <input type="file" id="ccDipFile" accept="image/*,.pdf,application/pdf" hidden>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="block">
-                        <div class="cfg-list-head"><h3>Liste des commerciaux</h3></div>
-                        <div class="table-wrap">
-                            <table>
-                                <thead><tr>
-                                    <th>ID</th><th>Nom et Prénom</th><th>CIN</th><th>Téléphone</th><th>Profil</th><th>Contrat</th><th>Salaire</th><th class="no-print">Actions</th>
-                                </tr></thead>
-                                <tbody id="cc_tbody"></tbody>
-                            </table>
-                        </div>
+                    <p class="cfg-inline-msg" id="cu_modal_msg" role="status" aria-live="polite"></p>
+                    <div class="rm-form-actions" style="margin-top:18px">
+                        <button type="button" class="btn gold" id="cuSaveBtn">Valider</button>
+                        <button type="button" class="btn ghost" id="cuCancelBtn">Fermer</button>
                     </div>
                 </div>
-            </section>
+            </div>
 
         </div>
     </div>
@@ -5417,7 +5922,7 @@ window.AJ_SESSION=@json($adminSession);
     (function(){
         const auth=window.AJ_MENU_AUTH;
         if(auth==null)return;
-        const cfg={hotel:'cfg-hotel',carrousel:'cfg-carrousel',habillage:'cfg-habillage',users:'cfg-users',commerciaux:'cfg-commerciaux'};
+        const cfg={hotel:'cfg-hotel',carrousel:'cfg-carrousel',habillage:'cfg-habillage',users:'cfg-users'};
         const dashParts=['dashboard','dash-cartes','dash-tableaux','dash-rooms'];
         document.querySelectorAll('.sb-item[data-target]').forEach(el=>{
             const id=el.dataset.target==='configuration'?(cfg[el.dataset.cfg]||''):el.dataset.target;
@@ -5462,7 +5967,7 @@ window.AJ_SESSION=@json($adminSession);
     }
     function activatePanel(targetId,label,cfgTab){
         if(window.AJ_MENU_AUTH!=null){
-            const cfg={hotel:'cfg-hotel',carrousel:'cfg-carrousel',habillage:'cfg-habillage',users:'cfg-users',commerciaux:'cfg-commerciaux',auth:'cfg-users'};
+            const cfg={hotel:'cfg-hotel',carrousel:'cfg-carrousel',habillage:'cfg-habillage',users:'cfg-users',auth:'cfg-users'};
             const id=targetId==='configuration'?(cfg[cfgTab]||''):targetId;
             const dashParts=['dashboard','dash-cartes','dash-tableaux','dash-rooms'];
             const allowed=id==='dashboard'?dashParts.some(window.ajMenuOn):window.ajMenuOn(id);
@@ -7045,52 +7550,51 @@ window.PERS=PERS;
 window.AJ_HABILLAGE=@json($habillage ?? null);
 const CFG=(function(){
     const K_HOTEL='aj_cfg_hotel';
-    const K_COMM='aj_cfg_commerciaux';
     let carTab='suite';
     const PERMS=['saisir','modifier','supprimer','imprimer','voir'];
+    const PERM_HINT={saisir:'Créer / ajouter',modifier:'Éditer les fiches',supprimer:'Retirer des données',imprimer:'Imprimer / PDF',voir:'Accès en lecture'};
     const MENUS=[
-        {id:'dashboard',label:'Tableau de bord',section:'Pilotage'},
-        {id:'dash-cartes',label:'Cartes analytiques',section:'Tableau de bord'},
-        {id:'dash-tableaux',label:'Tableaux',section:'Tableau de bord'},
-        {id:'dash-rooms',label:'Cadres chambres',section:'Tableau de bord'},
-        {id:'ch-reservations',label:'Réservations',section:'Pilotage'},
-        {id:'ch-occupees',label:'C-Occupées',section:'Pilotage'},
-        {id:'fiche',label:'Fiche fournisseur',section:'Achats & Stock'},
-        {id:'bon',label:'Bon Achats',section:'Achats & Stock'},
-        {id:'regl',label:'Règlement Achats',section:'Achats & Stock'},
-        {id:'balance',label:'Balance',section:'Achats & Stock'},
-        {id:'stock-mouvement',label:'Mouvement Stock',section:'Achats & Stock'},
-        {id:'stock-etat',label:'Etat Produit',section:'Achats & Stock'},
-        {id:'stock-fiscal',label:'Stock Fiscal',section:'Achats & Stock'},
-        {id:'fact-frns',label:'Facture Fournisseur',section:'Facturation'},
-        {id:'regl-frns',label:'Règl Fournisseur',section:'Facturation'},
-        {id:'releve-frns',label:'Relevé Compte Frns',section:'Facturation'},
-        {id:'fact-clt',label:'Facture client',section:'Facturation'},
-        {id:'regl-clt',label:'Règl Client',section:'Facturation'},
-        {id:'releve-clt',label:'Relevé Compte Clt',section:'Facturation'},
-        {id:'adm-balance-clients',label:'Balance Clients',section:'Administration'},
-        {id:'adm-balance-paiement',label:'Balance Paiement',section:'Administration'},
-        {id:'adm-archive',label:'Archive',section:'Administration'},
-        {id:'adm-chambres',label:'Gestion Chambres',section:'Administration'},
-        {id:'ch-etat',label:'Chambres',section:'Hébergement'},
-        {id:'ch-etages',label:'Étages',section:'Hébergement'},
-        {id:'ch-dispo',label:'Config Chambres',section:'Hébergement'},
-        {id:'ch-calendrier',label:'Calendrier',section:'Pilotage'},
-        {id:'pers-fiche',label:'Fiche Personnel',section:'Exploitation'},
-        {id:'pers-taches',label:'Gestion des Taches',section:'Exploitation'},
-        {id:'pers-suivi',label:'Suivi Journalier',section:'Exploitation'},
-        {id:'pers-paiement',label:'Etat Paiement',section:'Exploitation'},
-        {id:'mon-caisse',label:'Caisse',section:'Finance'},
-        {id:'mon-tresorerie',label:'Trésorerie',section:'Finance'},
-        {id:'mon-salaires',label:'Salaires',section:'Finance'},
-        {id:'mon-charges',label:'Charges',section:'Finance'},
-        {id:'cfg-hotel',label:'Fiche hôtel',section:'Système'},
-        {id:'cfg-carrousel',label:'Carrousel',section:'Système'},
-        {id:'cfg-habillage',label:'Habillage',section:'Système'},
-        {id:'cfg-users',label:'Utilisateurs',section:'Système'},
-        {id:'cfg-commerciaux',label:'Commerciaux',section:'Système'}
+        {id:'dashboard',label:'Tableau de bord',section:'Pilotage',hint:'Vue synthétique de l’activité'},
+        {id:'dash-cartes',label:'Cartes analytiques',section:'Tableau de bord',hint:'Indicateurs KPI'},
+        {id:'dash-tableaux',label:'Tableaux',section:'Tableau de bord',hint:'Synthèses tabulaires'},
+        {id:'dash-rooms',label:'Cadres chambres',section:'Tableau de bord',hint:'Aperçu visuel des chambres'},
+        {id:'ch-reservations',label:'Réservations',section:'Pilotage',hint:'Liste et suivi des réservations'},
+        {id:'ch-occupees',label:'C-Occupées',section:'Pilotage',hint:'Chambres actuellement occupées'},
+        {id:'fiche',label:'Fiche fournisseur',section:'Achats & Stock',hint:'Fiches fournisseurs'},
+        {id:'bon',label:'Bon Achats',section:'Achats & Stock',hint:'Bons de commande / achat'},
+        {id:'regl',label:'Règlement Achats',section:'Achats & Stock',hint:'Paiements fournisseurs'},
+        {id:'balance',label:'Balance',section:'Achats & Stock',hint:'Soldes achats'},
+        {id:'stock-mouvement',label:'Mouvement Stock',section:'Achats & Stock',hint:'Entrées / sorties stock'},
+        {id:'stock-etat',label:'Etat Produit',section:'Achats & Stock',hint:'État des produits'},
+        {id:'stock-fiscal',label:'Stock Fiscal',section:'Achats & Stock',hint:'Stock à valeur fiscale'},
+        {id:'fact-frns',label:'Facture Fournisseur',section:'Facturation',hint:'Factures reçues'},
+        {id:'regl-frns',label:'Règl Fournisseur',section:'Facturation',hint:'Règlements fournisseurs'},
+        {id:'releve-frns',label:'Relevé Compte Frns',section:'Facturation',hint:'Relevé compte fournisseur'},
+        {id:'fact-clt',label:'Facture client',section:'Facturation',hint:'Factures clients'},
+        {id:'regl-clt',label:'Règl Client',section:'Facturation',hint:'Encaissements clients'},
+        {id:'releve-clt',label:'Relevé Compte Clt',section:'Facturation',hint:'Relevé compte client'},
+        {id:'adm-balance-clients',label:'Balance Clients',section:'Administration',hint:'Soldes clients'},
+        {id:'adm-balance-paiement',label:'Balance Paiement',section:'Administration',hint:'Suivi des encaissements'},
+        {id:'adm-archive',label:'Archive',section:'Administration',hint:'Archives documentaires'},
+        {id:'adm-chambres',label:'Gestion Chambres',section:'Administration',hint:'Administration du parc'},
+        {id:'ch-etat',label:'Chambres',section:'Hébergement',hint:'État opérationnel des chambres'},
+        {id:'ch-etages',label:'Étages',section:'Hébergement',hint:'Organisation par étage'},
+        {id:'ch-dispo',label:'Config Chambres',section:'Hébergement',hint:'Paramétrage chambres'},
+        {id:'ch-calendrier',label:'Calendrier',section:'Pilotage',hint:'Planning d’occupation'},
+        {id:'pers-fiche',label:'Fiche Personnel',section:'Exploitation',hint:'Dossiers du personnel'},
+        {id:'pers-taches',label:'Gestion des Taches',section:'Exploitation',hint:'Affectation des tâches'},
+        {id:'pers-suivi',label:'Suivi Journalier',section:'Exploitation',hint:'Suivi quotidien'},
+        {id:'pers-paiement',label:'Etat Paiement',section:'Exploitation',hint:'Paiements du personnel'},
+        {id:'mon-caisse',label:'Caisse',section:'Finance',hint:'Mouvements de caisse'},
+        {id:'mon-tresorerie',label:'Trésorerie',section:'Finance',hint:'Suivi trésorerie'},
+        {id:'mon-salaires',label:'Salaires',section:'Finance',hint:'Paie et salaires'},
+        {id:'mon-charges',label:'Charges',section:'Finance',hint:'Charges d’exploitation'},
+        {id:'cfg-hotel',label:'Fiche hôtel',section:'Système',hint:'Identité et contacts hôtel'},
+        {id:'cfg-carrousel',label:'Carrousel',section:'Système',hint:'Photos du site'},
+        {id:'cfg-habillage',label:'Habillage',section:'Système',hint:'Apparence du site'},
+        {id:'cfg-users',label:'Utilisateurs',section:'Système',hint:'Comptes et droits d’accès'}
     ];
-    let editUserId=null,editCommId=null;
+    let editUserId=null;
 
     const esc=s=>{let t=s==null?'':String(s);const m=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)t=m[3]+'/'+m[2]+'/'+m[1];return t.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));};
     const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}};
@@ -7695,13 +8199,16 @@ const CFG=(function(){
 
     function loadHotelForm(){
         const h=load(K_HOTEL)||{
-            raison:'Al Jazeera Hotel',gerant:'',contact:'',fixe:'',email:'contact@aljazeerahotel.com',statut:'5'
+            raison:'Al Jazeera Hotel',gerant:'',ville:'',adresse:'',contact:'',fixe:'',email:'contact@aljazeerahotel.com',siteweb:'',statut:'5'
         };
         document.getElementById('cfg_raison').value=h.raison||'';
         document.getElementById('cfg_gerant').value=h.gerant||'';
+        document.getElementById('cfg_ville').value=h.ville||'';
+        document.getElementById('cfg_adresse').value=h.adresse||'';
         document.getElementById('cfg_contact').value=h.contact||'';
         document.getElementById('cfg_fixe').value=h.fixe||'';
         document.getElementById('cfg_email').value=h.email||'';
+        document.getElementById('cfg_siteweb').value=h.siteweb||'';
         document.getElementById('cfg_statut').value=h.statut||'5';
     }
 
@@ -7709,16 +8216,18 @@ const CFG=(function(){
         save(K_HOTEL,{
             raison:document.getElementById('cfg_raison').value.trim(),
             gerant:document.getElementById('cfg_gerant').value.trim(),
+            ville:document.getElementById('cfg_ville').value.trim(),
+            adresse:document.getElementById('cfg_adresse').value.trim(),
             contact:document.getElementById('cfg_contact').value.trim(),
             fixe:document.getElementById('cfg_fixe').value.trim(),
             email:document.getElementById('cfg_email').value.trim(),
+            siteweb:document.getElementById('cfg_siteweb').value.trim(),
             statut:document.getElementById('cfg_statut').value
         });
         alert('Fiche hôtel enregistrée.');
     }
 
-    let authUserId=null,authCommId=null;
-    let ccPhotoData=null,ccDipData=null;
+    let authUserId=null;
     const todayISO=()=>new Date().toISOString().slice(0,10);
     function personnelList(){return window.PERS?window.PERS.list():[];}
 
@@ -7729,57 +8238,128 @@ const CFG=(function(){
         dl.innerHTML=noms.map(n=>`<option value="${esc(n)}"></option>`).join('');
     }
 
-    function fillUserSelects(selected){
-        const nom=document.getElementById('cu_nom');
-        const profil=document.getElementById('cu_profil');
-        const login=document.getElementById('cu_login');
-        const pwd=document.getElementById('cu_password');
-        const hint=document.getElementById('cu_hint');
-        if(!nom||!profil)return;
-        refreshUserNameList();
-        nom.value=selected?.nom||'';
-        profil.value=selected?.profil||'';
-        if(login)login.value=selected?.login||'';
-        if(pwd){pwd.value='';pwd.placeholder=selected?'Laisser vide pour conserver':'Saisie manuelle';}
-        if(hint)hint.textContent=selected
-            ?'Modification de '+selected.nom+' — validez pour enregistrer, ou Ajouter pour un nouveau compte.'
-            :'Saisissez le nom, le profil, un login unique et le mot de passe, puis validez.';
+    let cuPhotoData=null;
+    function cuOverlay(){return document.getElementById('cuModalOverlay');}
+    function openUserModal(){cuOverlay()?.classList.add('show');}
+    function closeUserModal(){cuOverlay()?.classList.remove('show');}
+
+    function previewUserId(){
+        return nextId(staffUsers().map(u=>({id:u.id})),'Ut');
+    }
+
+    function setCuPhotoPreview(data){
+        const preview=document.getElementById('cuPhotoPreview');
+        const name=document.getElementById('cuPhotoName');
+        const card=document.getElementById('cuPhotoCard');
+        if(!preview)return;
+        if(data?.data){
+            preview.innerHTML=`<img src="${data.data}" alt="">`;
+            if(name)name.textContent=data.name||'Photo';
+            card?.classList.add('has-file');
+        }else{
+            preview.innerHTML='';
+            if(name)name.textContent='Importer une photo';
+            card?.classList.remove('has-file');
+        }
+    }
+
+    function bindCuPhotoUpload(){
+        const btn=document.getElementById('cuPhotoBtn');
+        const file=document.getElementById('cuPhotoFile');
+        if(!btn||!file||btn.dataset.bound)return;
+        btn.dataset.bound='1';
+        btn.addEventListener('click',()=>{file.value='';file.click();});
+        file.addEventListener('change',()=>{
+            const f=file.files&&file.files[0];
+            if(!f)return;
+            if(f.size>5*1024*1024){userMsg('Photo trop volumineuse (max 5 Mo).','err');return;}
+            const reader=new FileReader();
+            reader.onload=()=>{
+                cuPhotoData={data:String(reader.result||''),name:f.name||''};
+                setCuPhotoPreview(cuPhotoData);
+            };
+            reader.readAsDataURL(f);
+        });
+    }
+
+    function readAuthForm(){
+        const auth={};
+        MENUS.forEach(m=>{
+            auth[m.id]={};
+            PERMS.forEach(k=>{
+                const cb=document.querySelector(`#cfg_auth_tbody input[data-menu="${m.id}"][data-perm="${k}"]`);
+                auth[m.id][k]=!!(cb&&cb.checked);
+            });
+        });
+        return auth;
     }
 
     function onUserName(){
         const nom=document.getElementById('cu_nom')?.value.trim()||'';
         const person=personnelList().find(p=>p.nom===nom);
+        if(!person)return;
+        const set=(id,val)=>{const el=document.getElementById(id);if(el&&val!=null&&val!=='')el.value=val;};
+        set('cu_cin',person.cin);
+        set('cu_tel',person.mobile);
+        set('cu_adresse',person.adresse);
+        set('cu_formation',person.formation);
         const profil=document.getElementById('cu_profil');
-        if(person&&profil&&person.profil){
-            if([...profil.options].some(o=>o.value===person.profil))profil.value=person.profil;
-        }
+        if(person.profil&&profil&&[...profil.options].some(o=>o.value===person.profil))profil.value=person.profil;
+        if(person.contrat)set('cu_contrat',person.contrat);
+        if(person.debut)set('cu_debut',typeof ajDate==='function'?ajDate(person.debut):person.debut);
+        if(person.fin)set('cu_fin',typeof ajDate==='function'?ajDate(person.fin):person.fin);
+        if(person.remu!=null&&person.remu!=='')set('cu_salaire',person.remu);
     }
 
     function readUserForm(){
-        return{
-            fiche_date:ajIso(document.getElementById('cu_date').value),
-            nom:document.getElementById('cu_nom').value.trim(),
-            profil:document.getElementById('cu_profil').value,
-            login:document.getElementById('cu_login').value.trim(),
-            password:document.getElementById('cu_password').value
+        const rawDate=document.getElementById('cu_date')?.value||'';
+        const parsed=typeof ajIso==='function'?ajIso(rawDate):'';
+        const photoData=cuPhotoData?.data||(typeof cuPhotoData==='string'?cuPhotoData:'');
+        const payload={
+            kind:'user',
+            fiche_date:parsed||todayISO(),
+            nom:(document.getElementById('cu_nom')?.value||'').trim(),
+            cin:(document.getElementById('cu_cin')?.value||'').trim()||null,
+            tel:(document.getElementById('cu_tel')?.value||'').trim()||null,
+            adresse:(document.getElementById('cu_adresse')?.value||'').trim()||null,
+            formation:(document.getElementById('cu_formation')?.value||'').trim()||null,
+            profil:document.getElementById('cu_profil')?.value||'',
+            contrat:document.getElementById('cu_contrat')?.value||null,
+            debut:(typeof ajIso==='function'?ajIso(document.getElementById('cu_debut')?.value||''):'')||null,
+            fin:(typeof ajIso==='function'?ajIso(document.getElementById('cu_fin')?.value||''):'')||null,
+            remu_type:document.getElementById('cu_remu_type')?.value||null,
+            salaire:document.getElementById('cu_salaire')?.value===''||document.getElementById('cu_salaire')?.value==null
+                ?null:document.getElementById('cu_salaire').value,
+            login:(document.getElementById('cu_login')?.value||'').trim(),
+            password:document.getElementById('cu_password')?.value||'',
+            autorisations:readAuthForm()
         };
+        if(photoData&&photoData.length<=180000)payload.photo=photoData;
+        return payload;
     }
 
     const USERS_API=@json(url('admin/api/users'));
     let usersCache=[];
     async function usersApi(method,path,body){
-        const res=await fetch(USERS_API+(path||''),{
-            method,
-            credentials:'same-origin',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json',
-                'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]')?.content||''
-            },
-            body:body?JSON.stringify(body):undefined
-        });
+        let res;
+        try{
+            res=await fetch(USERS_API+(path||''),{
+                method,
+                credentials:'same-origin',
+                headers:{
+                    'Accept':'application/json',
+                    'Content-Type':'application/json',
+                    'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]')?.content||''
+                },
+                body:body?JSON.stringify(body):undefined
+            });
+        }catch(e){
+            throw new Error('Réseau indisponible. Vérifiez la connexion.');
+        }
         const data=await res.json().catch(()=>({}));
         if(!res.ok){
+            if(res.status===419)throw new Error('Session expirée. Rechargez la page (Ctrl+F5) puis réessayez.');
+            if(res.status===403)throw new Error(data.message||'Gestion réservée à la Direction / Administration.');
             const msg=data.errors?Object.values(data.errors).flat().join('\n'):(data.message||'Erreur serveur ('+res.status+').');
             throw new Error(msg);
         }
@@ -7788,29 +8368,78 @@ const CFG=(function(){
     }
 
     function fillUserForm(u){
+        refreshUserNameList();
+        bindCuPhotoUpload();
+        const set=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val??'';};
+        set('cu_id',u?.id||previewUserId());
+        set('cu_date',typeof ajDate==='function'?ajDate(u?.date||todayISO()):(u?.date||todayISO()));
+        set('cu_nom',u?.nom||'');
+        set('cu_cin',u?.cin||'');
+        set('cu_tel',u?.tel||'');
+        set('cu_adresse',u?.adresse||'');
+        set('cu_formation',u?.formation||'');
+        set('cu_profil',u?.profil||'');
+        set('cu_contrat',u?.contrat||'');
+        set('cu_debut',u?.debut?(typeof ajDate==='function'?ajDate(u.debut):u.debut):'');
+        set('cu_fin',u?.fin?(typeof ajDate==='function'?ajDate(u.fin):u.fin):'');
+        set('cu_remu_type',u?.remu_type||'');
+        set('cu_salaire',u?.salaire!=null&&u?.salaire!==''?u.salaire:'');
+        set('cu_login',u?.login||'');
         const pwd=document.getElementById('cu_password');
-        pwd.value='';
-        pwd.placeholder='Saisie manuelle';
-        document.getElementById('cu_date').value=ajDate(u?.date||todayISO());
-        fillUserSelects(u||null);
-        pwd.value='';
+        if(pwd){pwd.value='';pwd.placeholder=u?'Laisser vide pour conserver':'Saisie manuelle';}
+        cuPhotoData=u?.photo?{data:u.photo,name:'Photo'}:null;
+        setCuPhotoPreview(cuPhotoData);
+        const title=document.getElementById('cuTitle');
+        const sub=document.getElementById('cuSub');
+        if(title)title.textContent=u?'Modifier utilisateur':'Nouvel utilisateur';
+        if(sub)sub.textContent=u?(u.nom+' · '+(u.profil||'')):'Fiche complète · connexion · autorisations';
+        const who=document.getElementById('cfg_auth_who');
+        if(who)who.textContent=u
+            ?('Autorisations de '+u.nom+' ('+(u.profil||'')+').')
+            :'Cochez les droits du nouveau compte.';
+        renderAuth(u?.autorisations||{});
     }
 
-    function staffUsers(){return usersCache.filter(u=>(u.kind||'user')!=='commercial');}
-    function staffCommerciaux(){return usersCache.filter(u=>(u.kind||'user')==='commercial');}
+    function staffUsers(){return usersCache.slice();}
+
+    function profilPillClass(profil){
+        const p=String(profil||'').toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+            .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+        const map={
+            direction:'direction',administration:'administration',reception:'reception',
+            's-commercial':'commercial',commercial:'commercial',
+            'house-keeping':'housekeeping',maintenance:'maintenance',
+            's-technique':'technique',restauration:'restauration',comptabilite:'comptabilite'
+        };
+        return 'cu-pill p-'+(map[p]||'default');
+    }
 
     function drawUsers(){
         const tb=document.getElementById('cu_tbody');
+        const count=document.getElementById('cu_count');
         const list=staffUsers();
-        if(!list.length){tb.innerHTML='<tr class="empty-row"><td colspan="5">Aucun utilisateur enregistré</td></tr>';return;}
-        tb.innerHTML=list.map(u=>`<tr>
-            <td>${esc(u.date||'')}</td><td>${esc(u.nom)}</td><td>${esc(u.profil)}</td><td>${esc(u.login)}</td>
+        if(count)count.textContent=list.length+(list.length>1?' comptes':' compte');
+        try{localStorage.setItem('aj_cfg_users_noms',JSON.stringify(list.map(u=>({id:u.id,nom:u.nom,profil:u.profil}))));}catch(e){}
+        if(!tb)return;
+        if(!list.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Aucun utilisateur enregistré</td></tr>';return;}
+        tb.innerHTML=list.map(u=>{
+            const dateTxt=u.date?(typeof ajDate==='function'?ajDate(u.date):u.date):'—';
+            return`<tr data-user-id="${esc(u.id)}">
+            <td><span class="cu-login">${esc(u.id)}</span></td>
+            <td class="cu-date">${esc(dateTxt)}</td>
+            <td class="cu-nom">${esc(u.nom)}</td>
+            <td><span class="${profilPillClass(u.profil)}">${esc(u.profil||'—')}</span></td>
+            <td><span class="cu-login">${esc(u.login)}</span></td>
             <td class="no-print">
-                <button class="ibtn" title="Modifier" onclick="CFG.editUser('${esc(u.id)}')">&#9998;</button>
-                <button class="ibtn" title="Autorisations" onclick="CFG.openAuth('${esc(u.id)}')">&#128065;</button>
-                <button class="ibtn del" title="Supprimer" onclick="CFG.delUser('${esc(u.id)}')">&#128465;</button>
+                <div class="cu-actions">
+                    <button type="button" class="ibtn" title="Modifier" onclick="CFG.editUser('${esc(u.id)}')">&#9998;</button>
+                    <button type="button" class="ibtn auth" title="Autorisations" onclick="CFG.openAuth('${esc(u.id)}')">&#128065;</button>
+                    <button type="button" class="ibtn del" title="Supprimer" onclick="CFG.delUser('${esc(u.id)}')">&#128465;</button>
+                </div>
             </td>
-        </tr>`).join('');
+        </tr>`;
+        }).join('');
     }
 
     async function renderUsers(){
@@ -7818,285 +8447,146 @@ const CFG=(function(){
         try{
             await usersApi('GET');
             drawUsers();
-            renderCommerciaux();
         }catch(e){
-            tb.innerHTML=`<tr class="empty-row"><td colspan="5">${esc(e.message)}</td></tr>`;
+            if(tb)tb.innerHTML=`<tr class="empty-row"><td colspan="6">${esc(e.message)}</td></tr>`;
         }
     }
 
     function newUser(){
         editUserId=null;
+        authUserId=null;
         fillUserForm(null);
+        userMsg('');
+        openUserModal();
         document.getElementById('cu_nom')?.focus();
     }
 
     function openAuth(id){
         const u=usersCache.find(x=>x.id===id);
         if(!u)return;
-        authCommId=null;
-        authUserId=u.id;
-        const who=document.getElementById('cfg_auth_who');
-        if(who)who.textContent='Autorisations de '+u.nom+' ('+u.profil+'). Cochez les droits, puis enregistrez.';
-        renderAuth(u.autorisations||{});
-        if(typeof activatePanel==='function')activatePanel('configuration','Autorisations','auth');
-        else switchTab('auth');
+        editUser(id);
+    }
+
+    function userMsg(text,kind){
+        const open=!!cuOverlay()?.classList.contains('show');
+        const el=document.getElementById(open?'cu_modal_msg':'cu_msg')||document.getElementById('cu_msg');
+        const other=document.getElementById(open?'cu_msg':'cu_modal_msg');
+        if(other){other.className='cfg-inline-msg';other.textContent='';}
+        if(!el){if(text)console.warn('[Utilisateur]',text);return;}
+        el.className='cfg-inline-msg'+(text?' is-on is-'+(kind||'info'):'');
+        el.textContent=text||'';
     }
 
     async function saveUser(){
-        const data=readUserForm();
-        if(!data.fiche_date){alert('La date est obligatoire.');return;}
-        if(!data.nom){alert('Le nom est obligatoire.');return;}
-        if(!data.profil){alert('Choisissez un profil.');return;}
-        if(!data.login){alert('Le login est obligatoire.');return;}
-        if(!editUserId&&!data.password){alert('Le mot de passe est obligatoire.');return;}
-        const editing=editUserId;
+        const btn=document.getElementById('cuSaveBtn');
+        if(btn?.dataset.busy==='1')return;
         try{
-            await usersApi('POST','',{...data,edit:editUserId||undefined});
-        }catch(e){alert(e.message);return;}
-        const saved=usersCache.find(u=>u.id===editing)||usersCache.find(u=>u.login===data.login);
-        editUserId=null;
-        newUser();
-        drawUsers();
-        if(saved&&saved.profil!=='Direction')openAuth(saved.id);
-        else alert(editing?'Utilisateur modifié.':'Utilisateur ajouté.');
+            if(btn){btn.dataset.busy='1';btn.disabled=true;btn.textContent='Enregistrement…';}
+            const data=readUserForm();
+            if(!data.nom){userMsg('Le nom est obligatoire.','err');return;}
+            if(!data.profil){userMsg('Choisissez un profil / statut.','err');return;}
+            if(!data.login){userMsg('Le login est obligatoire.','err');return;}
+            if(data.login.length<3){userMsg('Le login doit contenir au moins 3 caractères.','err');return;}
+            if(!editUserId&&!data.password){userMsg('Le mot de passe est obligatoire.','err');return;}
+            if(data.password&&data.password.length<6){userMsg('Le mot de passe doit contenir au moins 6 caractères.','err');return;}
+            const editing=editUserId;
+            const authPayload=data.autorisations||readAuthForm();
+            const payload={...data,edit:editUserId||undefined,autorisations:authPayload};
+            if(!payload.password)delete payload.password;
+            const res=await usersApi('POST','',payload);
+            const saved=(res.users||[]).find(u=>String(u.login).toLowerCase()===String(data.login).toLowerCase())
+                ||(editing?(res.users||[]).find(u=>u.id===editing):null);
+            /* Double filet : enregistre aussi via l’endpoint dédié aux autorisations */
+            if(saved?.id){
+                try{
+                    await usersApi('POST','/'+encodeURIComponent(saved.id)+'/auth',{autorisations:authPayload});
+                }catch(authErr){
+                    userMsg(authErr.message||'Utilisateur enregistré, mais autorisations non appliquées.','err');
+                    drawUsers();
+                    return;
+                }
+            }
+            editUserId=null;
+            authUserId=null;
+            closeUserModal();
+            drawUsers();
+            const rights=Object.values(authPayload||{}).reduce((n,row)=>n+PERMS.filter(k=>row&&row[k]).length,0);
+            userMsg((editing?'Utilisateur modifié.':'Utilisateur ajouté.')+' '+rights+' droit(s) enregistré(s).','ok');
+        }catch(e){
+            userMsg(e.message||'Enregistrement impossible.','err');
+        }finally{
+            if(btn){btn.dataset.busy='';btn.disabled=false;btn.textContent='Valider';}
+        }
     }
 
     function editUser(id){
         const u=usersCache.find(x=>x.id===id);
         if(!u)return;
         editUserId=id;
+        authUserId=id;
         fillUserForm(u);
+        userMsg('');
+        openUserModal();
+        document.getElementById('cu_nom')?.focus();
     }
 
     async function delUser(id){
         if(!confirm('Supprimer cet utilisateur ?'))return;
         try{
             await usersApi('DELETE','/'+encodeURIComponent(id));
-        }catch(e){alert(e.message);return;}
-        if(editUserId===id)newUser();
-        if(authUserId===id){
+        }catch(e){userMsg(e.message||'Suppression impossible.','err');return;}
+        if(editUserId===id||authUserId===id){
+            editUserId=null;
             authUserId=null;
-            const who=document.getElementById('cfg_auth_who');
-            if(who)who.textContent='Validez un utilisateur pour régler ses droits.';
+            closeUserModal();
         }
         drawUsers();
+        userMsg('Utilisateur supprimé.','ok');
     }
 
-    const COMM_PROFILS=@json(\App\Models\HotelUser::COMM_PROFILS);
-    const K_COMM_DOCS='aj_cfg_commerciaux_docs';
-    function loadCommDocs(){try{return JSON.parse(localStorage.getItem(K_COMM_DOCS)||'{}')||{};}catch(e){return{};}}
-    function saveCommDocs(map){localStorage.setItem(K_COMM_DOCS,JSON.stringify(map||{}));}
-    function getCommDocs(id){return loadCommDocs()[id]||{};}
-    function setCommDocs(id,photo,diplome){
-        if(!id)return;
-        const map=loadCommDocs();
-        map[id]={photo:photo||null,diplome:diplome||null};
-        saveCommDocs(map);
-    }
-    function setCcDocPreview(kind,data){
-        const preview=document.getElementById(kind==='photo'?'ccPhotoPreview':'ccDipPreview');
-        const name=document.getElementById(kind==='photo'?'ccPhotoName':'ccDipName');
-        const card=document.getElementById(kind==='photo'?'ccPhotoCard':'ccDipCard');
-        if(!preview)return;
-        const isPdf=!!(data?.data&&(String(data.data).startsWith('data:application/pdf')||/\.pdf$/i.test(data.name||'')));
-        if(data?.data){
-            preview.innerHTML=isPdf?`<span class="pe-copy-pdf">PDF</span>`:`<img src="${data.data}" alt="">`;
-            if(name)name.textContent=data.name||(kind==='photo'?'Photo':'Diplôme');
-            card?.classList.add('has-file');
-        }else{
-            preview.innerHTML='';
-            if(name)name.textContent=kind==='photo'?'Importer photo':'Importer diplôme';
-            card?.classList.remove('has-file');
-        }
-    }
-    function bindCcDocUploads(){
-        const bind=(btnId,fileId,kind)=>{
-            const btn=document.getElementById(btnId);
-            const file=document.getElementById(fileId);
-            if(!btn||!file||btn.dataset.bound)return;
-            btn.dataset.bound='1';
-            btn.addEventListener('click',()=>{file.value='';file.click();});
-            file.addEventListener('change',()=>{
-                const f=file.files&&file.files[0];
-                if(!f)return;
-                if(f.size>5*1024*1024){alert('Fichier trop volumineux (max 5 Mo).');return;}
-                const reader=new FileReader();
-                reader.onload=()=>{
-                    const payload={data:String(reader.result||''),name:f.name||''};
-                    if(kind==='photo')ccPhotoData=payload;else ccDipData=payload;
-                    setCcDocPreview(kind,payload);
-                };
-                reader.readAsDataURL(f);
-            });
-        };
-        bind('ccPhotoBtn','ccPhotoFile','photo');
-        bind('ccDipBtn','ccDipFile','dip');
-    }
-
-    function readCommForm(){
-        const docs=editCommId?getCommDocs(editCommId):{};
-        return{
-            id:document.getElementById('cc_id').value.trim(),
-            nom:document.getElementById('cc_nom').value.trim(),
-            cin:document.getElementById('cc_cin').value.trim(),
-            tel:document.getElementById('cc_tel').value.trim(),
-            adresse:document.getElementById('cc_adresse').value.trim(),
-            profil:document.getElementById('cc_profil').value,
-            contrat:document.getElementById('cc_contrat').value,
-            debut:ajIso(document.getElementById('cc_debut').value),
-            fin:ajIso(document.getElementById('cc_fin').value),
-            formation:document.getElementById('cc_formation').value.trim(),
-            salaire:document.getElementById('cc_salaire').value,
-            login:document.getElementById('cc_login').value.trim(),
-            password:document.getElementById('cc_password').value,
-            photo:ccPhotoData||docs.photo||null,
-            diplome:ccDipData||docs.diplome||null
-        };
-    }
-
-    function fillCommForm(u){
-        document.getElementById('cc_id').value=u?.id||'';
-        document.getElementById('cc_nom').value=u?.nom||'';
-        document.getElementById('cc_cin').value=u?.cin||'';
-        document.getElementById('cc_tel').value=u?.tel||'';
-        document.getElementById('cc_adresse').value=u?.adresse||'';
-        const profilEl=document.getElementById('cc_profil');
-        const profil=u?.profil||'';
-        if(profilEl){
-            if(profil&&![...profilEl.options].some(o=>o.value===profil||o.textContent===profil)){
-                const opt=document.createElement('option');
-                opt.value=profil;opt.textContent=profil;
-                profilEl.appendChild(opt);
-            }
-            profilEl.value=profil||'';
-        }
-        document.getElementById('cc_contrat').value=u?.contrat||'CDI';
-        document.getElementById('cc_debut').value=ajDate(u?.debut||'');
-        document.getElementById('cc_fin').value=ajDate(u?.fin||'');
-        document.getElementById('cc_formation').value=u?.formation||'';
-        document.getElementById('cc_salaire').value=u?.salaire||'';
-        const loginEl=document.getElementById('cc_login');
-        const pwdEl=document.getElementById('cc_password');
-        if(loginEl)loginEl.value=u?.login||'';
-        if(pwdEl){pwdEl.value='';pwdEl.placeholder=u?.id?'Laisser vide pour conserver':'Saisie manuelle';}
-        const docs=u?.id?getCommDocs(u.id):{};
-        ccPhotoData=u?.photo||docs.photo||null;
-        ccDipData=docs.diplome||u?.diplome||null;
-        setCcDocPreview('photo',ccPhotoData);
-        setCcDocPreview('dip',ccDipData);
-        bindCcDocUploads();
-    }
-
-    function renderCommerciaux(){
-        const list=staffCommerciaux();
-        try{localStorage.setItem(K_COMM,JSON.stringify(list.map(u=>({id:u.id,nom:u.nom,profil:u.profil}))));}catch(e){}
-        const tb=document.getElementById('cc_tbody');
-        if(!tb)return;
-        if(!list.length){tb.innerHTML='<tr class="empty-row"><td colspan="8">Aucun commercial enregistré</td></tr>';return;}
-        tb.innerHTML=list.map(u=>`<tr>
-            <td>${esc(u.id)}</td><td>${esc(u.nom)}</td><td>${esc(u.cin||'')}</td><td>${esc(u.tel||'')}</td>
-            <td>${esc(u.profil)}</td><td>${esc(u.contrat||'')}</td><td>${fmtSal(u.salaire)}</td>
-            <td class="no-print">
-                <button class="ibtn" title="Modifier" onclick="CFG.editCommercial('${esc(u.id)}')">&#9998;</button>
-                <button class="ibtn" title="Autorisations" onclick="CFG.openCommAuth('${esc(u.id)}')">&#128065;</button>
-                <button class="ibtn del" title="Supprimer" onclick="CFG.delCommercial('${esc(u.id)}')">&#128465;</button>
-            </td>
-        </tr>`).join('');
-    }
-
-    function previewCommId(){
-        return nextId(staffCommerciaux().map(u=>({id:u.id})),'Co');
-    }
-
-    function newCommercial(){
-        editCommId=null;
-        authCommId=null;
-        fillCommForm({id:previewCommId()});
-        document.getElementById('cc_nom')?.focus();
-    }
-
-    function printCommercial(){
-        const id=document.getElementById('cc_id')?.value.trim();
-        if(!id){alert('Sélectionnez ou validez un commercial.');return;}
-        // Feuille d'impression : à venir
-    }
-
-    async function saveCommercial(){
-        const data=readCommForm();
-        if(!data.nom){alert('Le nom est obligatoire.');return;}
-        if(!data.profil){alert('Choisissez un profil.');return;}
-        if(!data.login){alert('Le login est obligatoire.');return;}
-        if(!editCommId&&!data.password){alert('Le mot de passe est obligatoire.');return;}
-        const editing=editCommId;
-        const payload={
-            kind:'commercial',
-            fiche_date:todayISO(),
-            nom:data.nom,
-            cin:data.cin||null,
-            tel:data.tel||null,
-            adresse:data.adresse||null,
-            profil:data.profil,
-            contrat:data.contrat||null,
-            debut:data.debut||null,
-            fin:data.fin||null,
-            formation:data.formation||null,
-            salaire:data.salaire||null,
-            login:data.login,
-            password:data.password||undefined,
-            photo:data.photo||undefined,
-            edit:editCommId||undefined
-        };
-        try{
-            await usersApi('POST','',payload);
-        }catch(e){alert(e.message);return;}
-        const saved=staffCommerciaux().find(u=>u.id===editing)||staffCommerciaux().find(u=>u.login===data.login);
-        if(saved){
-            setCommDocs(saved.id,data.photo,data.diplome);
-            editCommId=saved.id;
-            fillCommForm({...saved,photo:data.photo,diplome:data.diplome});
-        }
-        renderCommerciaux();
-        if(saved)openCommAuth(saved.id);
-        else alert(editing?'Commercial modifié.':'Commercial ajouté.');
-    }
-
-    function editCommercial(id){
-        const u=staffCommerciaux().find(x=>x.id===id)||usersCache.find(x=>x.id===id);
-        if(!u)return;
-        editCommId=id;
-        fillCommForm(u);
-    }
-
-    async function delCommercial(id){
-        if(!confirm('Supprimer ce commercial ?'))return;
-        try{
-            await usersApi('DELETE','/'+encodeURIComponent(id));
-        }catch(e){alert(e.message);return;}
-        const docs=loadCommDocs();
-        if(docs[id]){delete docs[id];saveCommDocs(docs);}
-        if(editCommId===id)newCommercial();
-        if(authCommId===id)authCommId=null;
-        renderCommerciaux();
-    }
-
-    function openCommAuth(id){
-        let commId=id||editCommId||document.getElementById('cc_id')?.value.trim();
-        const u=staffCommerciaux().find(x=>x.id===commId)||usersCache.find(x=>x.id===commId);
-        if(!u){alert('Validez d’abord le commercial (login et mot de passe).');return;}
-        authUserId=null;
-        authCommId=u.id;
-        const who=document.getElementById('cfg_auth_who');
-        if(who)who.textContent='Autorisations du commercial '+u.nom+' ('+(u.profil||'')+'). Cochez les droits, puis enregistrez.';
-        renderAuth(u.autorisations||{});
-        if(typeof activatePanel==='function')activatePanel('configuration','Autorisations','auth');
-        else switchTab('auth');
-    }
-
-    const closedSecs=new Set(MENUS.map(m=>m.section));
+    /* Sections ouvertes par défaut pour pouvoir cocher / vérifier avant Valider */
+    const closedSecs=new Set();
     const eyeOn='<svg class="eye-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
     const eyeOff='<svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><path d="M1 1l22 22"/></svg>';
     function authBoxes(){
         return [...document.querySelectorAll('#cfg_auth_tbody input[type=checkbox][data-menu]')];
+    }
+    function syncAuthStats(){
+        const boxes=authBoxes();
+        const total=boxes.length;
+        const on=boxes.filter(b=>b.checked).length;
+        const byMenu={};
+        boxes.forEach(b=>{
+            if(!byMenu[b.dataset.menu])byMenu[b.dataset.menu]={on:0,total:0};
+            byMenu[b.dataset.menu].total++;
+            if(b.checked)byMenu[b.dataset.menu].on++;
+        });
+        const modules=Object.values(byMenu).filter(x=>x.on>0).length;
+        const elOn=document.getElementById('cfg_auth_on');
+        const elTotal=document.getElementById('cfg_auth_total');
+        const elMod=document.getElementById('cfg_auth_modules');
+        if(elOn)elOn.textContent=String(on);
+        if(elTotal)elTotal.textContent=String(total);
+        if(elMod)elMod.textContent=String(modules);
+        document.querySelectorAll('#cfg_auth_tbody tr.auth-row').forEach(tr=>{
+            const id=tr.dataset.menu;
+            const meta=byMenu[id]||{on:0,total:PERMS.length};
+            const count=tr.querySelector('.auth-row-count');
+            if(count)count.innerHTML=`<em>${meta.on}</em> / ${meta.total} droits`;
+        });
+        document.querySelectorAll('#cfg_auth_tbody tr.auth-sec').forEach(sec=>{
+            const name=sec.dataset.sec;
+            const rows=[...document.querySelectorAll(`#cfg_auth_tbody tr.auth-row[data-sec="${CSS.escape(name)}"]`)];
+            let secOn=0,secTotal=0;
+            rows.forEach(tr=>{
+                tr.querySelectorAll('input[type=checkbox][data-menu]').forEach(cb=>{
+                    secTotal++;
+                    if(cb.checked)secOn++;
+                });
+            });
+            const meta=sec.querySelector('.auth-sec-meta');
+            if(meta)meta.innerHTML=`<span>${rows.length} écran${rows.length>1?'s':''}</span><span>${secOn}/${secTotal} droits</span>`;
+        });
     }
     function syncAuthMasters(){
         const boxes=authBoxes();
@@ -8112,6 +8602,7 @@ const CFG=(function(){
             col.checked=list.length>0&&on===list.length;
             col.indeterminate=on>0&&on<list.length;
         });
+        syncAuthStats();
     }
     function setAllAuth(on){
         authBoxes().forEach(b=>{b.checked=!!on;});
@@ -8129,19 +8620,21 @@ const CFG=(function(){
             if(m.section!==lastSection){
                 lastSection=m.section;
                 const closed=closedSecs.has(m.section);
-                sectionRow=`<tr class="auth-sec${closed?' is-closed':''}"><td colspan="6"><button type="button" class="auth-fold" data-sec="${esc(m.section)}" aria-expanded="${closed?'false':'true'}" title="${closed?'Afficher le module':'Masquer le module'}">${eyeOn}${eyeOff}</button>${esc(m.section)}</td></tr>`;
+                const count=MENUS.filter(x=>x.section===m.section).length;
+                sectionRow=`<tr class="auth-sec${closed?' is-closed':''}" data-sec="${esc(m.section)}"><td colspan="6"><div class="auth-sec-inner"><button type="button" class="auth-fold" data-sec="${esc(m.section)}" aria-expanded="${closed?'false':'true'}" title="${closed?'Afficher le module':'Masquer le module'}">${eyeOn}${eyeOff}</button><span class="auth-sec-title">${esc(m.section)}</span><span class="auth-sec-meta"><span>${count} écran${count>1?'s':''}</span><span>0/${count*PERMS.length} droits</span></span></div></td></tr>`;
             }
             const p=source[m.id]||{};
-            const cells=PERMS.map(k=>`<td><input type="checkbox" data-menu="${m.id}" data-perm="${k}" ${p[k]?'checked':''}></td>`).join('');
+            const onCount=PERMS.reduce((n,k)=>n+(p[k]?1:0),0);
+            const cells=PERMS.map(k=>`<td><label class="auth-check" title="${esc(PERM_HINT[k]||k)}"><input type="checkbox" data-menu="${m.id}" data-perm="${k}" ${p[k]?'checked':''} aria-label="${esc(m.label)} — ${esc(k)}"></label></td>`).join('');
             const hidden=closedSecs.has(m.section)?' is-hidden':'';
-            return sectionRow+`<tr class="auth-row${hidden}" data-sec="${esc(m.section)}"><td style="text-align:left">${esc(m.label)}</td>${cells}</tr>`;
+            return sectionRow+`<tr class="auth-row${hidden}" data-sec="${esc(m.section)}" data-menu="${esc(m.id)}"><td><div class="auth-item"><strong>${esc(m.label)}</strong><span class="auth-code">${esc(m.id)}</span>${m.hint?`<small>${esc(m.hint)}</small>`:''}<span class="auth-row-count"><em>${onCount}</em> / ${PERMS.length} droits</span></div></td>${cells}</tr>`;
         }).join('');
         document.getElementById('cfg_auth_tbody').innerHTML=rows;
         syncAuthMasters();
     }
 
     async function saveAuth(){
-        if(!authUserId&&!authCommId){alert('Validez d’abord un utilisateur ou un commercial.');return;}
+        if(!authUserId){userMsg('Sélectionnez d’abord un utilisateur (icône œil).','err');return;}
         const auth={};
         MENUS.forEach(m=>{
             auth[m.id]={};
@@ -8150,18 +8643,17 @@ const CFG=(function(){
                 auth[m.id][k]=!!(cb&&cb.checked);
             });
         });
-        const backTo=authCommId?'commerciaux':'users';
-        const targetId=authCommId||authUserId;
+        const targetId=authUserId;
         try{
             await usersApi('POST','/'+encodeURIComponent(targetId)+'/auth',{autorisations:auth});
-        }catch(e){alert(e.message);return;}
-        authUserId=null;
-        authCommId=null;
+        }catch(e){userMsg(e.message||'Enregistrement des autorisations impossible.','err');return;}
         const who=document.getElementById('cfg_auth_who');
-        if(who)who.textContent='Validez un utilisateur pour régler ses droits.';
-        switchTab(backTo);
-        if(backTo==='commerciaux')renderCommerciaux();
-        else drawUsers();
+        const u=usersCache.find(x=>x.id===targetId);
+        if(who)who.textContent=u
+            ?('Autorisations de '+u.nom+' enregistrées.')
+            :'Autorisations enregistrées.';
+        userMsg('Autorisations enregistrées.','ok');
+        drawUsers();
     }
 
     function getCarouselData(){
@@ -8285,11 +8777,7 @@ const CFG=(function(){
 
     function render(){
         loadHotelForm();
-        if(!editUserId)newUser();
-        if(!editCommId)newCommercial();
         renderUsers();
-        renderCommerciaux();
-        renderAuth();
         renderCarousel();
         bindHabillage();
     }
@@ -8297,11 +8785,16 @@ const CFG=(function(){
     function init(){
         loadHotelForm();
         document.getElementById('cu_nom')?.addEventListener('change',onUserName);
+        document.getElementById('cuSaveBtn')?.addEventListener('click',e=>{e.preventDefault();saveUser();});
+        document.getElementById('cuNewBtn')?.addEventListener('click',e=>{e.preventDefault();userMsg('');newUser();});
+        document.getElementById('cuCancelBtn')?.addEventListener('click',e=>{e.preventDefault();closeUserModal();});
+        document.getElementById('cuClose')?.addEventListener('click',e=>{e.preventDefault();closeUserModal();});
+        cuOverlay()?.addEventListener('click',e=>{if(e.target===cuOverlay())closeUserModal();});
+        document.addEventListener('keydown',e=>{
+            if(e.key==='Escape'&&cuOverlay()?.classList.contains('show'))closeUserModal();
+        });
         window.PERS?.init();
-        newUser();
-        newCommercial();
         renderUsers();
-        renderCommerciaux();
         renderAuth();
         document.getElementById('auth_check_all')?.addEventListener('change',e=>setAllAuth(e.target.checked));
         document.querySelectorAll('.auth-col-all').forEach(col=>{
@@ -8329,10 +8822,8 @@ const CFG=(function(){
         init,render,switchTab,
         saveHotel,
         saveUser,newUser,editUser,delUser,openAuth,refreshUserSources:()=>{
-            if(editUserId)fillUserSelects(usersCache.find(u=>u.id===editUserId)||null);
-            else fillUserSelects(null);
+            if(editUserId)fillUserForm(usersCache.find(u=>u.id===editUserId)||null);
         },
-        saveCommercial,newCommercial,editCommercial,delCommercial,openCommAuth,printCommercial,
         saveAuth,
         renderCarousel,saveCarousel,addCarouselSlide
     };
@@ -8564,15 +9055,243 @@ window.CHDISPO=CHDISPO;
 <script>
 window.ADMIN_CAN_MANAGE_ROOMS={{ $canManageRooms ? 'true' : 'false' }};
 window.AJ_RESA_API=@json(url('admin/api/reservations'));
+window.AJ_WEB_RESA_API=@json(url('admin/api/web-reservations'));
+window.AJ_BELL=(function(){
+    const API=window.AJ_WEB_RESA_API;
+    const csrf=()=>document.querySelector('meta[name="csrf-token"]')?.content||'';
+    const btn=document.getElementById('ajBellBtn');
+    const dot=document.getElementById('ajBellDot');
+    const panel=document.getElementById('ajBellPanel');
+    const list=document.getElementById('ajBellList');
+    const markAll=document.getElementById('ajBellMarkAll');
+    let items=[];
+    let open=false;
+    let lastUnread=-1;
+    let pollTimer=null;
+    let busy=false;
+    const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    const frDate=iso=>{
+        if(typeof ajDate==='function'){const d=ajDate(iso);if(d)return d;}
+        const m=String(iso||'').match(/^(\d{4})-(\d{2})-(\d{2})/);
+        return m?`${m[3]}/${m[2]}/${m[1]}`:(iso||'—');
+    };
+    function unread(){return items.filter(i=>!i.read).length;}
+    function paintBell(n){
+        const count=typeof n==='number'?n:unread();
+        if(!btn||!dot)return;
+        if(count>0){
+            btn.classList.add('is-alert');
+            dot.hidden=false;
+            dot.textContent=String(count>99?'99+':count);
+        }else{
+            btn.classList.remove('is-alert');
+            dot.hidden=true;
+            dot.textContent='0';
+        }
+        lastUnread=count;
+    }
+    function paintList(){
+        if(!list)return;
+        const pending=items.filter(i=>!i.transferred);
+        if(!pending.length){
+            list.innerHTML='<p class="aj-bell-empty">Aucune alerte.</p>';
+            return;
+        }
+        list.innerHTML=pending.slice(0,40).map(i=>`
+            <article class="aj-bell-item${!i.read?' is-unread':''}" data-id="${esc(i.id)}" title="Transférer vers Réservations">
+                <b>${esc(i.ref||'Demande web')} · Ch. ${esc(i.num)}</b>
+                <span>${esc(i.nom||'Client')} · ${esc(i.tel||'—')}</span>
+                <span>Arrivée ${esc(frDate(i.arrivee))} · ${esc(String(i.nuits||1))} nuit(s)</span>
+                <span style="margin-top:4px;color:var(--gold);font-weight:700">Transférer → Réservations</span>
+            </article>`).join('');
+        list.querySelectorAll('.aj-bell-item').forEach(el=>{
+            el.addEventListener('click',()=>transferToResa(el.dataset.id));
+        });
+    }
+    function readLS(k,d){try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catch(e){return d;}}
+    function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v));}
+    async function transferToResa(id){
+        const item=items.find(i=>i.id===id);
+        if(!item)return;
+        const num=String(item.num||'').trim();
+        if(!num){alert('Chambre manquante sur cette demande.');return;}
+        const nuits=Math.max(1,Number(item.nuits)||1);
+        const tarif=Number(item.price)||0;
+        const montant=tarif*nuits;
+        const arrivee=String(item.arrivee||item.date||'').slice(0,10);
+        const resas=readLS('aj_ch_resa',{});
+        const cur=resas[num];
+        if(cur?.validated&&(cur.statusChambre==='occupee'||cur.statusChambre==='reservee')){
+            if(!confirm('La chambre '+num+' est déjà '+(cur.statusChambre==='occupee'?'occupée':'réservée')+'. Remplacer par cette demande web ?'))return;
+        }
+        const payload={
+            num,
+            date:arrivee,
+            nom:item.nom||'',
+            nationalite:item.nationalite||'',
+            idType:item.idType||'CIN',
+            cin:item.cin||'',
+            personnes:Math.max(1,Number(item.personnes)||1),
+            nuits,
+            tarif,
+            ttc:montant,
+            montant,
+            sous:montant,
+            ht:montant,
+            mnt:0,
+            paye:0,
+            tel:item.tel||'',
+            email:item.email||'',
+            commercial:'Web',
+            ref:item.ref||'',
+            title:item.title||'',
+            validated:true,
+            statusChambre:'reservee',
+            source:'web',
+            webId:item.id,
+            pendingArrival:true,
+            at:Date.now()
+        };
+        resas[num]={...(cur||{}),...payload};
+        writeLS('aj_ch_resa',resas);
+        const statuses=readLS('aj_ch_status',{});
+        statuses[num]='reservee';
+        writeLS('aj_ch_status',statuses);
+        let log=readLS('aj_resa_log',[]);
+        if(!Array.isArray(log))log=[];
+        const seq=log.reduce((m,x)=>Math.max(m,parseInt(String(x.id).replace(/\D/g,''),10)||0),0)+1;
+        const logId=item.ref||('R'+String(seq).padStart(4,'0'));
+        const existing=log.findIndex(x=>String(x.num)===num&&!x.cancelled&&(x.ref===item.ref||x.webId===item.id));
+        const row={
+            id:existing>=0?(log[existing].id||logId):logId,
+            ref:item.ref||logId,
+            date:arrivee,
+            num,
+            floor:'',
+            commercial:'Web',
+            nom:payload.nom,
+            nationalite:payload.nationalite,
+            idType:payload.idType,
+            cin:payload.cin,
+            personnes:payload.personnes,
+            nuits,
+            tarif,
+            montant,
+            paye:0,
+            type:'',
+            tel:payload.tel,
+            email:payload.email,
+            statusChambre:'reservee',
+            source:'web',
+            webId:item.id,
+            pendingArrival:true,
+            at:Date.now()
+        };
+        if(existing>=0)log[existing]={...log[existing],...row};
+        else log.push(row);
+        writeLS('aj_resa_log',log);
+        window.AJ_RESA_SYNC?.touchLocal?.();
+        window.AJ_RESA_SYNC?.syncToServer?.();
+        try{
+            await fetch(API+'/remove',{
+                method:'POST',credentials:'same-origin',
+                headers:{
+                    Accept:'application/json',
+                    'Content-Type':'application/json',
+                    'X-CSRF-TOKEN':csrf()
+                },
+                body:JSON.stringify({ids:[id]})
+            });
+        }catch(e){}
+        items=items.filter(i=>i.id!==id);
+        paintBell(unread());
+        paintList();
+        toggle(false);
+        window.RESA?.render?.();
+        window.CHETAT?.render?.();
+        window.DASH?.render?.();
+        window.CALEND?.render?.();
+        window.BCL?.render?.();
+        if(typeof activatePanel==='function')activatePanel('ch-reservations','Réservations');
+    }
+    async function refresh(){
+        if(busy)return;
+        busy=true;
+        try{
+            const res=await fetch(API,{credentials:'same-origin',headers:{Accept:'application/json'},cache:'no-store'});
+            if(!res.ok)return;
+            const data=await res.json();
+            items=Array.isArray(data.items)?data.items:[];
+            paintBell(typeof data.unread==='number'?data.unread:unread());
+            if(open)paintList();
+        }catch(e){}
+        finally{busy=false;}
+    }
+    async function mark(ids){
+        try{
+            await fetch(API+'/read',{
+                method:'POST',credentials:'same-origin',
+                headers:{
+                    Accept:'application/json',
+                    'Content-Type':'application/json',
+                    'X-CSRF-TOKEN':csrf()
+                },
+                body:JSON.stringify(ids?{ids}:{})
+            });
+        }catch(e){}
+        await refresh();
+    }
+    function toggle(force){
+        open=typeof force==='boolean'?force:!open;
+        if(!panel||!btn)return;
+        panel.hidden=!open;
+        btn.setAttribute('aria-expanded',open?'true':'false');
+        if(open)refresh();
+    }
+    function schedulePoll(){
+        clearInterval(pollTimer);
+        const ms=document.hidden?10000:2500;
+        pollTimer=setInterval(refresh,ms);
+    }
+    btn?.addEventListener('click',e=>{e.stopPropagation();toggle();});
+    markAll?.addEventListener('click',e=>{e.stopPropagation();mark(null);});
+    document.addEventListener('click',e=>{
+        if(!open)return;
+        if(e.target.closest('#ajBellWrap'))return;
+        toggle(false);
+    });
+    window.addEventListener('storage',e=>{
+        if(e.key==='aj_web_resa_ping')refresh();
+    });
+    document.addEventListener('visibilitychange',()=>{
+        schedulePoll();
+        if(!document.hidden)refresh();
+    });
+    window.addEventListener('focus',()=>refresh());
+    try{
+        if(typeof BroadcastChannel!=='undefined'){
+            const ch=new BroadcastChannel('aj_web_resa');
+            ch.onmessage=()=>refresh();
+        }
+    }catch(e){}
+    refresh();
+    schedulePoll();
+    return{refresh,toggle};
+})();
 window.AJ_RESA_SYNC=(function(){
     const API=window.AJ_RESA_API;
     const csrf=()=>document.querySelector('meta[name="csrf-token"]')?.content||'';
     const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catch(e){return d;}};
+    let localWriteAt=0;
+    const touchLocal=()=>{localWriteAt=Date.now();};
     async function pull(){
+        const startedAt=Date.now();
         try{
             const res=await fetch(API,{credentials:'same-origin',headers:{Accept:'application/json'}});
             if(!res.ok)return false;
             const data=await res.json();
+            /* Ne pas écraser une saisie locale faite pendant le fetch */
+            if(localWriteAt>startedAt)return false;
             if(data.resas&&typeof data.resas==='object')localStorage.setItem('aj_ch_resa',JSON.stringify(data.resas));
             if(Array.isArray(data.log))localStorage.setItem('aj_resa_log',JSON.stringify(data.log));
             if(data.statuses&&typeof data.statuses==='object')localStorage.setItem('aj_ch_status',JSON.stringify(data.statuses));
@@ -8615,7 +9334,7 @@ window.AJ_RESA_SYNC=(function(){
     async function syncToServer(){
         return push();
     }
-    return{pull,push,syncFromServer,syncToServer,refreshUi};
+    return{pull,push,syncFromServer,syncToServer,refreshUi,touchLocal};
 })();
 window.ADMIN_ROLE='{{ $adminLogin }}';
 /* ===== Module État Chambres ===== */
@@ -8663,11 +9382,17 @@ const CHETAT=(function(){
         const base=window.AJ_HOTEL?window.AJ_HOTEL.getCatalog():[];
         return base.map(r=>({...r,status:r.status||'disponible',longDesc:r.longDesc||r.desc}));
     }
-    const getResas=()=>JSON.parse(localStorage.getItem(K_RESA)||'{}');
-    const setResas=o=>localStorage.setItem(K_RESA,JSON.stringify(o));
-    const getStatuses=()=>JSON.parse(localStorage.getItem(K_STATUS)||'{}');
-    const setStatuses=o=>localStorage.setItem(K_STATUS,JSON.stringify(o));
-    const saveRoomStatus=(n,st)=>{const s=getStatuses();s[n]=st;setStatuses(s);};
+    const getResas=()=>{try{return JSON.parse(localStorage.getItem(K_RESA)||'{}')||{};}catch(e){return{};}};
+    const setResas=o=>{
+        localStorage.setItem(K_RESA,JSON.stringify(o));
+        window.AJ_RESA_SYNC?.touchLocal?.();
+    };
+    const getStatuses=()=>{try{return JSON.parse(localStorage.getItem(K_STATUS)||'{}')||{};}catch(e){return{};}};
+    const setStatuses=o=>{
+        localStorage.setItem(K_STATUS,JSON.stringify(o));
+        window.AJ_RESA_SYNC?.touchLocal?.();
+    };
+    const saveRoomStatus=(n,st)=>{const s=getStatuses();s[String(n)]=st;setStatuses(s);};
     const saveRoomData=(n,d)=>{if(window.AJ_HOTEL)window.AJ_HOTEL.saveRoom(n,d);};
     const roomByNum=n=>ROOMS.find(r=>r.num===n);
     const metaFor=r=>{
@@ -8678,12 +9403,15 @@ const CHETAT=(function(){
 
     function syncFromStorage(){
         const statuses=getStatuses(),resas=getResas(),statusMap={};
-        ROOMS.forEach(r=>{statusMap[r.num]=r.status;});
+        ROOMS.forEach(r=>{statusMap[String(r.num)]=r.status;});
         ROOMS=loadCatalogRooms();
         ROOMS.forEach(r=>{
-            if(resas[r.num]?.validated)r.status=resas[r.num].statusChambre||'reservee';
-            else if(statuses[r.num])r.status=statuses[r.num];
-            else if(statusMap[r.num])r.status=statusMap[r.num];
+            const key=String(r.num);
+            const resa=resas[key]||resas[r.num];
+            const st=statuses[key]||statuses[r.num];
+            if(resa?.validated)r.status=resa.statusChambre||'reservee';
+            else if(st)r.status=st;
+            else if(statusMap[key])r.status=statusMap[key];
         });
     }
 
@@ -9090,13 +9818,35 @@ const CHETAT=(function(){
         openModal();
     }
 
-    const PAY_TYPES=['Espèces','Chèque','Effet','Virement'];
+    const PAY_PILLS=[
+        {id:'Esp',label:'Esp',mode:'simple'},
+        {id:'Carte Visa',label:'Carte Visa',mode:'simple'},
+        {id:'Vir mobile',label:'Vir mobile',mode:'simple'},
+        {id:'Chq',label:'Chq',mode:'inst'},
+        {id:'Eff',label:'Eff',mode:'inst'},
+        {id:'Vers',label:'Vers',mode:'inst'}
+    ];
+    const PAY_TYPES=PAY_PILLS.map(p=>p.id);
     const ID_TYPES=['CIN','Passport','Carte séjour'];
     const PAY_EXTRA=['rf_nreg','rf_bnq','rf_tire','rf_encaisse'];
-    const isCashPay=t=>{
-        const v=String(t||'').trim().toLowerCase();
-        return v==='espèces'||v==='especes'||v==='esp';
+    const normalizePayType=t=>{
+        const v=String(t||'').trim();
+        if(!v)return '';
+        if(PAY_TYPES.includes(v))return v;
+        const low=v.toLowerCase();
+        if(low==='espèces'||low==='especes'||low==='esp')return 'Esp';
+        if(low==='carte visa'||low==='carte bancaire'||low==='carte'||low==='visa')return 'Carte Visa';
+        if(low==='vir mobile'||low==='virmobile'||low==='mobile')return 'Vir mobile';
+        if(low==='chq'||low==='chèque'||low==='cheque')return 'Chq';
+        if(low==='eff'||low==='effet')return 'Eff';
+        if(low==='vers'||low==='versement'||low==='vir'||low==='virement')return 'Vers';
+        return v;
     };
+    const payModeOf=t=>{
+        const id=normalizePayType(t);
+        return PAY_PILLS.find(p=>p.id===id)?.mode||'simple';
+    };
+    const isCashPay=t=>payModeOf(t)==='simple';
     const dateFr=v=>{
         if(!v)return typeof ajDate==='function'?ajDate(today()):today();
         if(typeof ajDate==='function'&&/^\d{4}-\d{2}-\d{2}/.test(String(v)))return ajDate(v);
@@ -9104,37 +9854,26 @@ const CHETAT=(function(){
     };
     function commercialNames(){
         let list=[];
-        try{list=JSON.parse(localStorage.getItem('aj_cfg_commerciaux')||'[]')||[];}catch(e){}
+        try{list=JSON.parse(localStorage.getItem('aj_cfg_users_noms')||localStorage.getItem('aj_cfg_commerciaux')||'[]')||[];}catch(e){}
         return [...new Set((list||[]).map(c=>c&&String(c.nom||'').trim()).filter(Boolean))]
             .sort((a,b)=>String(a).localeCompare(String(b),'fr',{sensitivity:'base'}));
     }
     function sessionCommercialName(){
         const s=window.AJ_SESSION||{};
-        return(s.kind==='commercial'&&s.nom)?String(s.nom).trim():'';
-    }
-
-    function commercialSelectHtml(selected){
-        const noms=commercialNames();
-        const cur=selected&&noms.includes(selected)?selected:'';
-        if(!noms.length){
-            return`<select id="rf_commercial"><option value="">Aucun commercial — saisissez-en dans Configuration</option></select>`;
-        }
-        return`<select id="rf_commercial"><option value="">— Commercial —</option>${noms.map(n=>`<option value="${esc(n)}"${n===cur?' selected':''}>${esc(n)}</option>`).join('')}</select>`;
+        return String(s.nom||s.login||'').trim();
     }
 
     function commercialFieldHtml(selected){
-        const me=sessionCommercialName();
-        if(me){
-            return`<input type="text" id="rf_commercial" class="is-locked-comm" value="${esc(me)}" readonly tabindex="-1" title="Commercial connecté">`;
-        }
-        return commercialSelectHtml(selected);
+        const me=sessionCommercialName()||selected||'';
+        return`<input type="text" id="rf_commercial" class="is-locked-comm" value="${esc(me)}" readonly tabindex="-1" title="Responsable connecté (login)">`;
     }
 
     function formHtml(room,data){
         const d=data||{};
-        const typeVal=d.type&&PAY_TYPES.includes(d.type)?d.type:(d.type==='Carte bancaire'?'Virement':(d.type||''));
+        const typeVal=normalizePayType(d.type||'');
         const idType=ID_TYPES.includes(d.idType)?d.idType:(d.idType||'CIN');
         const commercial=d.commercial||sessionCommercialName()||'';
+        const mntVal=d.mnt!=null?d.mnt:(d.paye!=null?d.paye:'');
         const docPreview=d.idDoc
             ?(String(d.idDoc).startsWith('data:application/pdf')||String(d.idDocName||'').toLowerCase().endsWith('.pdf')
                 ?`<div class="rf-doc-pdf">PDF · ${esc(d.idDocName||'document.pdf')}</div>`
@@ -9148,7 +9887,7 @@ const CHETAT=(function(){
                     <div class="field"><label>N° Chambre</label><input type="text" id="rf_num" value="${esc(room.num)}" readonly></div>
                     <div class="field"><label>N° Étage</label><input type="text" id="rf_floor" value="${esc(floorLbl(room.floor))}" readonly></div>
                     <div class="field"><label>Date saisie</label><input type="text" id="rf_date" value="${esc(dateFr(d.date||today()))}" readonly></div>
-                    <div class="field"><label>Commercial</label>${commercialFieldHtml(commercial)}</div>
+                    <div class="field"><label>Responsable</label>${commercialFieldHtml(commercial)}</div>
                 </div>
             </div>
             <div class="rm-pers-doc">
@@ -9191,23 +9930,42 @@ const CHETAT=(function(){
             </div>
             <div class="rm-form-sec">
                 <h4 class="rm-form-sec-title">Paiement</h4>
-                <div class="rm-form-grid pay-line" id="rfPayGrid">
-                    <div class="field pay-type"><label>Type Paie</label>
-                        <select id="rf_type"><option value="">— Type —</option>${PAY_TYPES.map(t=>`<option value="${esc(t)}"${typeVal===t?' selected':''}>${esc(t)}</option>`).join('')}</select>
-                    </div>
-                    <div class="field"><label>Rég N°</label><input type="text" id="rf_nreg" value="${esc(d.nreg||'')}" placeholder="N° règlement"></div>
-                    <div class="field"><label>Bnq</label><input type="text" id="rf_bnq" value="${esc(d.bnq||'')}" placeholder="Banque"></div>
-                    <div class="field pay-tire"><label>Nom Tiré</label><input type="text" id="rf_tire" value="${esc(d.tire||'')}" placeholder="Nom du tiré"></div>
-                    <div class="field"><label>Date Encaiss</label><input type="text" class="js-date" id="rf_encaisse" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" value="${esc(d.encaisse?dateFr(d.encaisse):'')}"></div>
-                    <input type="hidden" id="rf_ref" value="${esc(d.ref||'')}">
-                    <input type="hidden" id="rf_mnt" value="${esc(d.mnt!=null?d.mnt:(d.paye!=null?d.paye:0))}">
+                <div class="rf-pay-pills" id="rfPayPills" role="group" aria-label="Type de paiement">
+                    ${PAY_PILLS.map(p=>`<button type="button" class="rf-pay-pill${typeVal===p.id?' is-on':''}" data-pay="${esc(p.id)}" data-mode="${p.mode}">${esc(p.label)}</button>`).join('')}
                 </div>
+                <div class="rf-pay-summary${typeVal?' is-on':''}" id="rfPaySummary">
+                    <span>Type : <b id="rfPaySumType">${esc(typeVal||'—')}</b></span>
+                    <span>Payé : <b id="rfPaySumMnt">${mntVal!==''?esc(fmtAmt(num(mntVal)))+' DH':'—'}</b></span>
+                </div>
+                <div class="rf-pay-panel" id="rfPayPanel" aria-hidden="true">
+                    <p class="rf-pay-panel-title" id="rfPayPanelTitle">Paiement</p>
+                    <div class="rf-pay-panel-grid" id="rfPayPanelGrid">
+                        <div class="field"><label>Total Du</label><input type="text" id="pp_total" readonly></div>
+                        <div class="field"><label>Montant payé</label><input type="number" id="pp_paye" min="0" step="0.01" placeholder="0.00"></div>
+                        <div class="field" data-simple-only><label>Solde</label><input type="text" id="pp_solde" readonly></div>
+                        <div class="field" data-inst-only hidden><label>N° Rég</label><input type="text" id="pp_nreg" placeholder="N° règlement"></div>
+                        <div class="field" data-inst-only hidden><label>Nom Tiré</label><input type="text" id="pp_tire" placeholder="Nom du tiré"></div>
+                        <div class="field" data-inst-only hidden><label>Bnq</label><input type="text" id="pp_bnq" placeholder="Banque"></div>
+                        <div class="field" data-inst-only hidden><label>Date Encaiss</label><input type="text" class="js-date" id="pp_encaisse" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off"></div>
+                    </div>
+                    <div class="rf-pay-panel-actions">
+                        <button type="button" class="btn ghost" id="ppClose">Fermer</button>
+                        <button type="button" class="btn gold" id="ppValider">Valider</button>
+                    </div>
+                </div>
+                <input type="hidden" id="rf_type" value="${esc(typeVal)}">
+                <input type="hidden" id="rf_ref" value="${esc(d.ref||'')}">
+                <input type="hidden" id="rf_mnt" value="${esc(mntVal!==''?mntVal:0)}"${mntVal!==''?' data-manual="1"':''}>
+                <input type="hidden" id="rf_nreg" value="${esc(d.nreg||'')}">
+                <input type="hidden" id="rf_bnq" value="${esc(d.bnq||'')}">
+                <input type="hidden" id="rf_tire" value="${esc(d.tire||'')}">
+                <input type="hidden" id="rf_encaisse" value="${esc(d.encaisse?dateFr(d.encaisse):'')}">
             </div>
         </form>
         <div class="rm-form-totals">
-            <div class="ttl"><label>Total HT</label><input type="text" id="rf_ht" readonly></div>
-            <div class="ttl"><label>TVA (10%)</label><input type="text" id="rf_tva" readonly></div>
-            <div class="ttl"><label>Total TTC</label><input type="text" id="rf_ttc" readonly></div>
+            <div class="ttl"><label>Total Du</label><input type="text" id="rf_total_du" readonly></div>
+            <div class="ttl"><label>Mnt Payé</label><input type="text" id="rf_mnt_paye" readonly></div>
+            <div class="ttl"><label>Solde</label><input type="text" id="rf_solde" readonly></div>
         </div>
         <div class="rm-form-actions">
             <button type="button" class="btn gold" id="rfValider">Valider</button>
@@ -9220,34 +9978,164 @@ const CHETAT=(function(){
     function calcTotals(){
         const nuits=num(document.getElementById('rf_nuits')?.value);
         const tarif=num(document.getElementById('rf_tarif')?.value);
-        const sous=nuits*tarif,ht=sous,tva=ht*TVA_RATE,ttc=ht+tva;
-        const sousEl=document.getElementById('rf_sous');
-        const htEl=document.getElementById('rf_ht'),tvaEl=document.getElementById('rf_tva'),ttcEl=document.getElementById('rf_ttc');
-        if(sousEl)sousEl.value=fmtAmt(sous)+' DH';
-        if(htEl)htEl.value=fmtAmt(ht)+' DH';
-        if(tvaEl)tvaEl.value=fmtAmt(tva)+' DH';
-        if(ttcEl)ttcEl.value=fmtAmt(ttc)+' DH';
+        const sous=nuits*tarif;
+        const total=sous;
         const mntEl=document.getElementById('rf_mnt');
-        if(mntEl&&!mntEl.dataset.manual)mntEl.value=String(ttc);
-        return{sous,ht,tva,ttc};
+        if(mntEl&&!mntEl.dataset.manual)mntEl.value=String(total);
+        const paye=num(mntEl?.value);
+        const solde=Math.max(0,total-paye);
+        const sousEl=document.getElementById('rf_sous');
+        const duEl=document.getElementById('rf_total_du');
+        const payeEl=document.getElementById('rf_mnt_paye');
+        const soldeEl=document.getElementById('rf_solde');
+        if(sousEl)sousEl.value=fmtAmt(sous)+' DH';
+        if(duEl)duEl.value=fmtAmt(total)+' DH';
+        if(payeEl)payeEl.value=fmtAmt(paye)+' DH';
+        if(soldeEl)soldeEl.value=fmtAmt(solde)+' DH';
+        /* Compat : ht/ttc = total dû (sans TVA) */
+        return{sous,ht:total,tva:0,ttc:total,total,paye,solde};
+    }
+
+    function updatePaySummary(){
+        const type=normalizePayType(document.getElementById('rf_type')?.value||'');
+        const mnt=num(document.getElementById('rf_mnt')?.value);
+        const sum=document.getElementById('rfPaySummary');
+        const tEl=document.getElementById('rfPaySumType');
+        const mEl=document.getElementById('rfPaySumMnt');
+        if(tEl)tEl.textContent=type||'—';
+        if(mEl)mEl.textContent=type?fmtAmt(mnt)+' DH':'—';
+        sum?.classList.toggle('is-on',!!type);
+        document.querySelectorAll('.rf-pay-pill').forEach(btn=>{
+            btn.classList.toggle('is-on',btn.dataset.pay===type);
+        });
+        calcTotals();
+    }
+
+    function syncPayPanelSolde(){
+        const total=num(calcTotals().ttc);
+        const paye=num(document.getElementById('pp_paye')?.value);
+        const soldeEl=document.getElementById('pp_solde');
+        if(soldeEl)soldeEl.value=fmtAmt(Math.max(0,total-paye))+' DH';
+        const totalEl=document.getElementById('pp_total');
+        if(totalEl)totalEl.value=fmtAmt(total)+' DH';
+    }
+
+    function closePayPanel(){
+        const panel=document.getElementById('rfPayPanel');
+        if(!panel)return;
+        panel.classList.remove('is-open');
+        panel.setAttribute('aria-hidden','true');
+    }
+
+    function openPayPanel(type,opts){
+        const id=normalizePayType(type);
+        if(!id)return;
+        const mode=payModeOf(id);
+        const panel=document.getElementById('rfPayPanel');
+        const grid=document.getElementById('rfPayPanelGrid');
+        const title=document.getElementById('rfPayPanelTitle');
+        if(!panel||!grid)return;
+        const totals=calcTotals();
+        const typeEl=document.getElementById('rf_type');
+        if(typeEl)typeEl.value=id;
+        if(title)title.textContent='Paiement — '+id;
+        grid.classList.toggle('is-inst',mode==='inst');
+        grid.querySelectorAll('[data-simple-only]').forEach(el=>{
+            el.hidden=mode!=='simple';
+        });
+        grid.querySelectorAll('[data-inst-only]').forEach(el=>{
+            el.hidden=mode!=='inst';
+        });
+        const totalEl=document.getElementById('pp_total');
+        const payeEl=document.getElementById('pp_paye');
+        if(totalEl)totalEl.value=fmtAmt(totals.ttc)+' DH';
+        if(payeEl){
+            const cur=num(document.getElementById('rf_mnt')?.value);
+            payeEl.value=String(cur>0?cur:totals.ttc);
+        }
+        const nreg=document.getElementById('pp_nreg');
+        const tire=document.getElementById('pp_tire');
+        const bnq=document.getElementById('pp_bnq');
+        const enc=document.getElementById('pp_encaisse');
+        if(mode==='inst'){
+            if(nreg)nreg.value=document.getElementById('rf_nreg')?.value||'';
+            if(tire)tire.value=document.getElementById('rf_tire')?.value||'';
+            if(bnq)bnq.value=document.getElementById('rf_bnq')?.value||'';
+            if(enc)enc.value=document.getElementById('rf_encaisse')?.value||'';
+        }else{
+            if(nreg)nreg.value='';
+            if(tire)tire.value='';
+            if(bnq)bnq.value='';
+            if(enc)enc.value='';
+        }
+        syncPayPanelSolde();
+        updatePaySummary();
+        panel.classList.add('is-open');
+        panel.setAttribute('aria-hidden','false');
+        if(!(opts&&opts.focus===false))payeEl?.focus();
+    }
+
+    function validatePayPanel(){
+        const type=normalizePayType(document.getElementById('rf_type')?.value||'');
+        if(!type){alert('Veuillez choisir un type de paiement.');return false;}
+        const mode=payModeOf(type);
+        const totals=calcTotals();
+        const paye=num(document.getElementById('pp_paye')?.value);
+        if(paye<0){alert('Le montant payé est invalide.');return false;}
+        const mntEl=document.getElementById('rf_mnt');
+        if(mntEl){mntEl.value=String(paye||totals.ttc);mntEl.dataset.manual='1';}
+        if(mode==='inst'){
+            const nreg=(document.getElementById('pp_nreg')?.value||'').trim();
+            const tire=(document.getElementById('pp_tire')?.value||'').trim();
+            const bnq=(document.getElementById('pp_bnq')?.value||'').trim();
+            const enc=(document.getElementById('pp_encaisse')?.value||'').trim();
+            document.getElementById('rf_nreg').value=nreg;
+            document.getElementById('rf_tire').value=tire;
+            document.getElementById('rf_bnq').value=bnq;
+            document.getElementById('rf_encaisse').value=enc;
+        }else{
+            document.getElementById('rf_nreg').value='';
+            document.getElementById('rf_tire').value='';
+            document.getElementById('rf_bnq').value='';
+            document.getElementById('rf_encaisse').value='';
+        }
+        updatePaySummary();
+        closePayPanel();
+        return true;
     }
 
     function syncPayFields(){
-        const cash=isCashPay(document.getElementById('rf_type')?.value);
-        PAY_EXTRA.forEach(id=>{
-            const el=document.getElementById(id);
-            if(!el)return;
-            el.disabled=cash;
-            el.readOnly=cash;
-            el.closest('.field')?.classList.toggle('is-off',cash);
-            if(cash)el.value='';
+        const type=normalizePayType(document.getElementById('rf_type')?.value||'');
+        const cash=isCashPay(type);
+        if(cash){
+            PAY_EXTRA.forEach(id=>{
+                const el=document.getElementById(id);
+                if(el)el.value='';
+            });
+        }
+        updatePaySummary();
+    }
+
+    function bindPayPills(ro){
+        document.querySelectorAll('.rf-pay-pill').forEach(btn=>{
+            btn.disabled=!!ro;
+            btn.addEventListener('click',()=>{
+                if(ro)return;
+                openPayPanel(btn.dataset.pay);
+            });
         });
+        document.getElementById('pp_paye')?.addEventListener('input',syncPayPanelSolde);
+        document.getElementById('ppValider')?.addEventListener('click',()=>{if(!ro)validatePayPanel();});
+        document.getElementById('ppClose')?.addEventListener('click',closePayPanel);
+        if(ro)closePayPanel();
+        else updatePaySummary();
     }
 
     function getFormData(){
         const totals=calcTotals();
-        const type=document.getElementById('rf_type')?.value||'';
+        const type=normalizePayType(document.getElementById('rf_type')?.value||'');
         const cash=isCashPay(type);
+        const encRaw=document.getElementById('rf_encaisse')?.value||'';
         return{
             num:document.getElementById('rf_num')?.value,
             floor:document.getElementById('rf_floor')?.value||'',
@@ -9266,7 +10154,7 @@ const CHETAT=(function(){
             nreg:cash?'':(document.getElementById('rf_nreg')?.value.trim()||''),
             bnq:cash?'':(document.getElementById('rf_bnq')?.value.trim()||''),
             tire:cash?'':(document.getElementById('rf_tire')?.value.trim()||''),
-            encaisse:cash?'':(typeof ajIso==='function'?ajIso(document.getElementById('rf_encaisse')?.value):''),
+            encaisse:cash?'':(typeof ajIso==='function'?ajIso(encRaw):encRaw),
             idDoc:document.getElementById('rf_idDoc')?.value||'',
             idDocName:document.getElementById('rf_idDocName')?.value||'',
             ...totals
@@ -9322,10 +10210,10 @@ const CHETAT=(function(){
     }
 
     function setFormReadonly(ro){
-        ['rf_nom','rf_nationalite','rf_cin','rf_personnes','rf_nuits','rf_tarif','rf_nreg','rf_bnq','rf_tire','rf_encaisse'].forEach(id=>{
+        ['rf_nom','rf_nationalite','rf_cin','rf_personnes','rf_nuits','rf_tarif'].forEach(id=>{
             const el=document.getElementById(id);if(el)el.readOnly=ro;
         });
-        ['rf_type','rf_idType'].forEach(id=>{
+        ['rf_idType'].forEach(id=>{
             const el=document.getElementById(id);if(el)el.disabled=ro;
         });
         const comm=document.getElementById('rf_commercial');
@@ -9337,15 +10225,22 @@ const CHETAT=(function(){
             const btn=document.getElementById(id);
             if(btn)btn.disabled=!!ro||(id==='rfDocClear'&&!document.getElementById('rf_idDoc')?.value);
         });
-        if(!ro)syncPayFields();
-        else PAY_EXTRA.forEach(id=>document.getElementById(id)?.closest('.field')?.classList.remove('is-off'));
+        document.querySelectorAll('.rf-pay-pill').forEach(btn=>{btn.disabled=!!ro;});
+        ['pp_paye','pp_nreg','pp_tire','pp_bnq','pp_encaisse'].forEach(id=>{
+            const el=document.getElementById(id);if(el)el.readOnly=!!ro;
+        });
+        const ppVal=document.getElementById('ppValider');
+        if(ppVal)ppVal.disabled=!!ro;
+        if(ro)closePayPanel();
+        else syncPayFields();
     }
 
     function logReservation(room,d,status){
         let log=[];
         try{log=JSON.parse(localStorage.getItem('aj_resa_log')||'[]')||[];}catch(e){}
+        const key=String(room.num);
         const payload={
-            date:d.date||today(),num:room.num,floor:d.floor||floorLbl(room.floor),
+            date:d.date||today(),num:key,floor:d.floor||floorLbl(room.floor),
             commercial:d.commercial||'',nom:d.nom,nationalite:d.nationalite||'',
             idType:d.idType||'CIN',cin:d.cin||'',
             personnes:num(d.personnes)||1,nuits:num(d.nuits)||1,tarif:num(d.tarif),
@@ -9358,19 +10253,26 @@ const CHETAT=(function(){
         };
         let idx=-1;
         for(let i=log.length-1;i>=0;i--){
-            if(String(log[i].num)===String(room.num)&&!log[i].cancelled){idx=i;break;}
+            if(String(log[i].num)===key&&!log[i].cancelled){idx=i;break;}
         }
-        if(idx>=0){
-            log[idx]={...log[idx],...payload,id:log[idx].id,ref:log[idx].ref||d.ref||log[idx].ref};
-        }else{
-            const seq=log.reduce((m,x)=>Math.max(m,parseInt(String(x.id).replace(/\D/g,''),10)||0),0)+1;
-            log.push({
-                ...payload,
-                id:'R'+String(seq).padStart(4,'0'),
-                ref:d.ref||('RG'+String(seq).padStart(4,'0'))
-            });
+        const commit=list=>{
+            localStorage.setItem('aj_resa_log',JSON.stringify(list));
+            window.AJ_RESA_SYNC?.touchLocal?.();
+        };
+        const apply=p=>{
+            const next=log.slice();
+            if(idx>=0)next[idx]={...next[idx],...p,id:next[idx].id,ref:next[idx].ref||d.ref||next[idx].ref};
+            else{
+                const seq=next.reduce((m,x)=>Math.max(m,parseInt(String(x.id).replace(/\D/g,''),10)||0),0)+1;
+                next.push({...p,id:'R'+String(seq).padStart(4,'0'),ref:d.ref||('RG'+String(seq).padStart(4,'0'))});
+            }
+            commit(next);
+        };
+        try{
+            apply(payload);
+        }catch(e){
+            apply({...payload,idDoc:'',idDocName:''});
         }
-        localStorage.setItem('aj_resa_log',JSON.stringify(log));
     }
 
     function syncResaLists(status){
@@ -9386,17 +10288,50 @@ const CHETAT=(function(){
         }
     }
 
+    function persistReservation(room,d,status){
+        const key=String(room.num);
+        const payload={...d,num:key,validated:true,title:room.title,statusChambre:status};
+        const write=(data)=>{
+            const resas=getResas();
+            resas[key]=data;
+            setResas(resas);
+            logReservation(room,data,status);
+            saveRoomStatus(key,status);
+        };
+        try{
+            write(payload);
+        }catch(e){
+            /* Photo trop lourde pour localStorage : on réessaie sans le document */
+            const light={...payload,idDoc:'',idDocName:''};
+            write(light);
+            return{ok:true,strippedDoc:true};
+        }
+        return{ok:true,strippedDoc:false};
+    }
+
     function confirmReservation(room,d,status){
-        const resas=getResas();
-        resas[room.num]={...d,validated:true,title:room.title,statusChambre:status};
-        setResas(resas);
-        logReservation(room,d,status);
-        room.status=status;
-        saveRoomStatus(room.num,status);
-        closeModal();
+        const box=document.getElementById('rmModalContent');
+        box?.querySelectorAll('.rm-st-btn').forEach(btn=>{btn.disabled=true;});
+        let result;
+        try{
+            result=persistReservation(room,d,status);
+        }catch(err){
+            box?.querySelectorAll('.rm-st-btn').forEach(btn=>{btn.disabled=false;});
+            alert('Impossible d\'enregistrer la réservation (stockage plein ou erreur locale). Retirez la photo du document puis réessayez.');
+            return;
+        }
+        const roomRef=roomByNum(room.num)||room;
+        roomRef.status=status;
+        if(box){
+            box.innerHTML=`<div class="rm-status-ok">
+                <div class="rm-msg-dot" style="width:56px;height:56px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:26px;background:rgba(69,200,120,.12);color:#2a9d5c">✓</div>
+                <h4>Réservation validée</h4>
+                <p>Chambre ${esc(room.num)} — ${esc(STATUS[status]||status)}${result.strippedDoc?' · document non stocké (fichier trop lourd)':''}</p>
+            </div>`;
+        }
         render();
         syncResaLists(status);
-        alert('Réservation validée — Statut : '+STATUS[status]);
+        setTimeout(()=>closeModal(),900);
     }
 
     function changeRoomStatus(room,newStatus){
@@ -9448,7 +10383,7 @@ const CHETAT=(function(){
         if(!box)return;
         box.innerHTML=`<div class="rm-status-pick">
             <h4>Choisir le statut de la chambre</h4>
-            <p class="rm-status-sub">Chambre ${esc(room.num)} — ${esc(d.nom)} · ${d.nuits} nuit(s) · ${fmtAmt(d.ttc)} DH TTC</p>
+            <p class="rm-status-sub">Chambre ${esc(room.num)} — ${esc(d.nom)} · ${d.nuits} nuit(s) · ${fmtAmt(d.total!=null?d.total:d.ttc)} DH</p>
             <div class="rm-status-btns">
                 <button type="button" class="rm-st-btn st-occupee" data-st="occupee">Occupée</button>
                 <button type="button" class="rm-st-btn st-reservee" data-st="reservee">Réservée</button>
@@ -9456,10 +10391,20 @@ const CHETAT=(function(){
             <button type="button" class="btn ghost" id="rfRetour" style="margin-top:22px">Retour au formulaire</button>
         </div>`;
         box.querySelectorAll('.rm-st-btn').forEach(btn=>{
-            btn.addEventListener('click',()=>confirmReservation(room,d,btn.dataset.st));
+            btn.addEventListener('click',e=>{
+                e.preventDefault();
+                e.stopPropagation();
+                const st=btn.getAttribute('data-st');
+                if(!st)return;
+                confirmReservation(room,d,st);
+            });
         });
-        document.getElementById('rfRetour')?.addEventListener('click',()=>showForm(room,d,{edit:true}));
-        openModal();
+        document.getElementById('rfRetour')?.addEventListener('click',e=>{
+            e.preventDefault();
+            e.stopPropagation();
+            showForm(room,d,{edit:true});
+        });
+        openModal(true);
     }
 
     function showForm(room,prefill,opts){
@@ -9470,12 +10415,26 @@ const CHETAT=(function(){
         box.innerHTML=formHtml(room,data);
         calcTotals();
         syncPayFields();
-        const locked=!!(saved?.validated&&!prefill&&!(opts&&opts.edit));
+        const locked=!!(saved?.validated&&!prefill&&!(opts&&opts.edit))||!!(opts&&opts.view);
         bindIdDocUpload(locked);
+        bindPayPills(locked);
         if(locked)setFormReadonly(true);
-        ['rf_nuits','rf_tarif','rf_personnes'].forEach(id=>document.getElementById(id)?.addEventListener('input',calcTotals));
-        document.getElementById('rf_type')?.addEventListener('change',syncPayFields);
+        if(opts&&opts.view){
+            const valBtn=document.getElementById('rfValider');
+            if(valBtn)valBtn.disabled=true;
+        }
+        ['rf_nuits','rf_tarif','rf_personnes'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{
+            calcTotals();
+            if(document.getElementById('rfPayPanel')?.classList.contains('is-open')){
+                const totalEl=document.getElementById('pp_total');
+                if(totalEl)totalEl.value=fmtAmt(calcTotals().ttc)+' DH';
+                syncPayPanelSolde();
+            }
+        }));
         document.getElementById('rfValider')?.addEventListener('click',()=>{
+            if(document.getElementById('rfPayPanel')?.classList.contains('is-open')){
+                if(!validatePayPanel())return;
+            }
             const d=getFormData();
             if(!d.nom){alert('Veuillez saisir le nom complet.');return;}
             if(!d.cin){alert('Veuillez saisir le N° '+((d.idType||'CIN'))+'.');return;}
@@ -9489,38 +10448,340 @@ const CHETAT=(function(){
         openModal(true);
     }
 
+    function printHotelMeta(){
+        let h={raison:'Al Jazeera Hotel',gerant:'',ville:'',adresse:'',contact:'',fixe:'',email:'',siteweb:'',statut:'4'};
+        try{h={...h,...(JSON.parse(localStorage.getItem('aj_cfg_hotel')||'{}')||{})};}catch(e){}
+        return h;
+    }
+
+    function nextFicheNo(){
+        const year=String(new Date().getFullYear());
+        const key='aj_fiche_seq_'+year;
+        let n=0;
+        try{n=parseInt(localStorage.getItem(key)||'0',10)||0;}catch(e){}
+        n+=1;
+        try{localStorage.setItem(key,String(n));}catch(e){}
+        return String(n).padStart(4,'0')+'/'+year;
+    }
+
+    function printAddDays(isoDate,days){
+        const raw=String(isoDate||today()).slice(0,10);
+        const dt=new Date(raw+'T00:00:00');
+        if(Number.isNaN(dt.getTime()))return raw;
+        dt.setDate(dt.getDate()+(num(days)||0));
+        const y=dt.getFullYear();
+        const m=String(dt.getMonth()+1).padStart(2,'0');
+        const day=String(dt.getDate()).padStart(2,'0');
+        return y+'-'+m+'-'+day;
+    }
+
     function printForm(room,isPdf){
         const d=getFormData();
-        const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Réservation Chambre ${esc(room.num)}</title>
-        <style>body{font-family:Georgia,serif;padding:32px;color:#111}h1{font-size:22px}table{width:100%;border-collapse:collapse}td,th{padding:10px;border:1px solid #ccc;font-size:13px}th{background:#1a2236;color:#fff}</style></head><body>
-        <h1>Al Jazeera Hotel — Réservation</h1>
-        <h2>Chambre ${esc(room.num)} — ${esc(room.title)}</h2>
-        <table><tr><th>Champ</th><th>Valeur</th></tr>
-        <tr><td>N° Chambre</td><td>${esc(d.num||room.num)}</td></tr>
-        <tr><td>Étage</td><td>${esc(d.floor||floorLbl(room.floor))}</td></tr>
-        <tr><td>Date saisie</td><td>${esc(dateFr(d.date))}</td></tr>
-        <tr><td>Commercial</td><td>${esc(d.commercial||'—')}</td></tr>
-        <tr><td>Nom complet</td><td>${esc(d.nom)}</td></tr>
-        <tr><td>Nationalité</td><td>${esc(d.nationalite||'—')}</td></tr>
-        <tr><td>Identifiant</td><td>${esc(d.idType||'CIN')}</td></tr>
-        <tr><td>N°</td><td>${esc(d.cin)}</td></tr>
-        <tr><td>Personnes</td><td>${d.personnes}</td></tr>
-        <tr><td>Nuitées</td><td>${d.nuits}</td></tr>
-        <tr><td>Tarif / nuit</td><td>${fmtAmt(d.tarif)} DH</td></tr>
-        <tr><td>Sous-total</td><td>${fmtAmt(d.sous||d.ht)} DH</td></tr>
-        <tr><td>Total HT</td><td>${fmtAmt(d.ht)} DH</td></tr>
-        <tr><td>TVA</td><td>${fmtAmt(d.tva)} DH</td></tr>
-        <tr><td>Total TTC</td><td>${fmtAmt(d.ttc)} DH</td></tr>
-        <tr><td>Type Paie</td><td>${esc(d.type||'')}</td></tr>
-        <tr><td>Rég N°</td><td>${esc(d.nreg||'—')}</td></tr>
-        <tr><td>Banque</td><td>${esc(d.bnq||'—')}</td></tr>
-        <tr><td>Nom Tiré</td><td>${esc(d.tire||'—')}</td></tr>
-        <tr><td>Date encaissement</td><td>${esc(d.encaisse?dateFr(d.encaisse):'—')}</td></tr>
-        <tr><td>Pièce d'identité</td><td>${d.idDoc?(d.idDocName||'Document joint'):'—'}</td></tr></table>
-        ${d.idDoc&&String(d.idDoc).startsWith('data:image')?`<p style="margin-top:18px"><img src="${d.idDoc}" alt="Pièce" style="max-width:100%;max-height:360px;border:1px solid #ccc"></p>`:''}
+        const hotel=printHotelMeta();
+        const total=num(d.total!=null?d.total:(d.ttc!=null?d.ttc:d.ht));
+        const paye=num(d.mnt!=null?d.mnt:d.paye);
+        const solde=Math.max(0,total-paye);
+        const ficheNo=d.ficheNo||nextFicheNo();
+        const year=String(new Date().getFullYear());
+        const seq=String(ficheNo).split('/')[0]||'0001';
+        const recNo=d.ref||('REC-'+year+'-'+seq);
+        const dossier=d.ref||('RES-'+year+'-'+seq);
+        const checkIn=d.checkIn||d.date||today();
+        const checkOut=d.checkOut||printAddDays(checkIn,d.nuits||1);
+        const cash=isCashPay(d.type);
+        const stars=Math.max(3,Math.min(5,parseInt(hotel.statut||'4',10)||4));
+        const starStr='★'.repeat(stars);
+        const now=new Date();
+        const timeStr=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+        const logoUrl=(document.querySelector('.login-logo')?.src)
+            ||(document.querySelector('.top-logo-wrap img')?.src)
+            ||((window.location.origin||'')+'/apple-touch-icon.png');
+        const phone=hotel.contact||hotel.fixe||'';
+        const email=hotel.email||'';
+        const qrData=encodeURIComponent(recNo+'|'+String(d.nom||'')+'|CH'+String(room.num));
+        const qrUrl='https://api.qrserver.com/v1/create-qr-code/?size=110x110&margin=0&data='+qrData;
+        const payModeLabel=({Esp:'Espèces','Carte Visa':'Carte Visa','Vir mobile':'Virement mobile',Chq:'Chèque',Eff:'Effet',Vers:'Versement'})[d.type]||(d.type||'—');
+        const payExtraRows=cash?'':`
+            <tr><td>N° règlement</td><td colspan="2">${esc(d.nreg||'—')}</td><td>${esc(d.bnq||'—')}</td></tr>
+            <tr><td>Nom tiré / Date encaiss.</td><td colspan="2">${esc(d.tire||'—')}</td><td>${esc(d.encaisse?dateFr(d.encaisse):'—')}</td></tr>`;
+        const ville=hotel.ville||'Laâyoune';
+        const adresse=hotel.adresse||'Av. Mohammed V, El Ayoun, Maroc';
+        const tele=hotel.contact||'+212 6 12 34 56 78';
+        const fixe=hotel.fixe||'+212 5 28 98 76 54';
+        const mail=hotel.email||'contact@aljazeera-hotel.com';
+        const site=hotel.siteweb||'www.aljazeera-hotel.com';
+        const footBits=[
+            `Ville : ${ville}`,
+            `Adresse : ${adresse}`,
+            `Tél. : ${tele}`,
+            `Fixe : ${fixe}`,
+            `E-mail : ${mail}`,
+            `Site web : ${site}`
+        ];
+        const html=`<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
+        <title>&nbsp;</title>
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Great+Vibes&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+        <style>
+            @page{size:A4;margin:8mm 10mm 10mm}
+            :root{--navy:#0b1c3f;--gold:#c5a059;--gold2:#e0c07a;--ink:#1a2332;--muted:#6b7280;--line:#e8dfcc;--soft:#faf7f0;--ok:#1f7a45;--due:#b42318}
+            *{box-sizing:border-box}
+            html,body{margin:0;padding:0;background:#fff;color:var(--ink);font:500 11px/1.4 'Montserrat',Arial,sans-serif;min-height:100%}
+            .sheet{
+                max-width:190mm;margin:0 auto;padding:2mm;
+                min-height:277mm;display:flex;flex-direction:column;
+            }
+            .sheet-end{margin-top:auto;padding-top:10px}
+            .topbar{height:5px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));margin-bottom:10px}
+            .head{display:grid;grid-template-columns:1.15fr .95fr;gap:14px;align-items:start;margin-bottom:10px}
+            .brand{display:flex;gap:10px;align-items:center}
+            .brand img{width:52px;height:52px;object-fit:contain;border-radius:10px;border:1px solid var(--line);padding:3px}
+            .brand h1{margin:0;font:700 28px/1 'Cormorant Garamond',Georgia,serif;color:var(--navy)}
+            .stars{margin:2px 0 0;color:var(--gold);font-size:12px;letter-spacing:1px}
+            .coords{margin:6px 0 0;color:var(--muted);font-size:10px;line-height:1.45}
+            .coords b{color:var(--ink);font-weight:600}
+            .meta{text-align:right}
+            .meta h2{margin:0 0 6px;font:700 16px/1.2 'Cormorant Garamond',Georgia,serif;color:var(--navy)}
+            .meta .pill{display:inline-block;padding:4px 9px;border:1px solid var(--gold);color:var(--navy);
+                font:700 9px 'Montserrat',sans-serif;letter-spacing:1px;text-transform:uppercase;background:var(--soft)}
+            .meta p{margin:5px 0 0;color:var(--muted);font-size:10.5px}
+            .meta p b{color:var(--ink)}
+            .sec{margin:0 0 9px;border:1px solid var(--line);background:#fff}
+            .sec-h{display:flex;justify-content:space-between;align-items:center;gap:10px;
+                padding:6px 10px;background:linear-gradient(90deg,rgba(197,160,89,.16),rgba(197,160,89,.04));
+                border-bottom:1px solid var(--line)}
+            .sec-h h3{margin:0;font:700 10px 'Montserrat',sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold)}
+            .sec-h .tag{font:700 10px 'Montserrat',sans-serif;color:var(--navy)}
+            .sec-b{padding:8px 10px}
+            .client{display:grid;grid-template-columns:1fr 92px;gap:12px;align-items:center}
+            .grid2{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
+            .kv{display:flex;gap:8px;padding:3px 0;border-bottom:1px dotted #eee}
+            .kv:last-child{border-bottom:0}
+            .kv span{min-width:108px;color:var(--muted);font:600 9.5px 'Montserrat',sans-serif}
+            .kv b{font:700 11.5px 'Montserrat',sans-serif;color:var(--ink)}
+            .qr{width:88px;height:88px;border:1px solid var(--line);padding:4px;background:#fff}
+            .qr img{width:100%;height:100%;display:block}
+            .stay{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px 14px}
+            table.pay{width:100%;border-collapse:collapse}
+            table.pay th,table.pay td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;font-size:10.5px}
+            table.pay th{background:var(--soft);color:var(--muted);font:700 9px 'Montserrat',sans-serif;letter-spacing:.7px;text-transform:uppercase}
+            table.pay td:nth-child(2),table.pay td:nth-child(3),table.pay td:nth-child(4),
+            table.pay th:nth-child(2),table.pay th:nth-child(3),table.pay th:nth-child(4){text-align:right}
+            table.pay tr.total td{border-bottom:0;background:rgba(197,160,89,.08);font-weight:700;color:var(--navy)}
+            .sums{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
+            .sum{padding:8px 9px;border:1px solid var(--line);background:var(--soft);text-align:center}
+            .sum span{display:block;margin-bottom:3px;font:700 8.5px 'Montserrat',sans-serif;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+            .sum b{font:700 16px/1.1 'Cormorant Garamond',Georgia,serif}
+            .sum.ok{border-color:rgba(31,122,69,.35);background:rgba(31,122,69,.06)}
+            .sum.ok b{color:var(--ok)}
+            .sum.due{border-color:rgba(180,35,24,.3);background:rgba(180,35,24,.05)}
+            .sum.due b{color:var(--due)}
+            .mode{margin-top:7px;font-size:10.5px;color:var(--muted)}
+            .mode b{color:var(--ink)}
+            .foot{display:grid;grid-template-columns:1.4fr auto;gap:14px;align-items:center;margin:0 0 10px}
+            .thanks{font:600 22px/1.1 'Great Vibes',cursive;color:var(--navy)}
+            .thanks small{display:block;margin-top:4px;font:600 9.5px 'Montserrat',sans-serif;color:var(--muted)}
+            .seal{
+                width:72px;height:72px;margin:0;border:2px solid #2f5fad;border-radius:50%;
+                display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+                color:#2f5fad;transform:rotate(-8deg);opacity:.9;
+            }
+            .seal b{font:700 8px 'Montserrat',sans-serif;letter-spacing:.6px}
+            .seal span{font:700 14px/1 'Cormorant Garamond',Georgia,serif;margin:2px 0}
+            .seal i{font-style:normal;font-size:9px;color:var(--gold)}
+            .signs{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin:0 0 12px}
+            .signs .sig{
+                min-height:52px;border-top:1px solid var(--navy);padding-top:7px;text-align:center;
+                font:700 9px 'Montserrat',sans-serif;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);
+            }
+            .page-foot{
+                margin:0;padding-top:8px;border-top:1.5px solid var(--gold);
+                text-align:center;color:var(--muted);font:600 9.5px/1.55 'Montserrat',sans-serif;
+            }
+            .page-foot b{color:var(--navy);font-weight:700}
+            .print-hint{
+                margin:0 0 8px;padding:7px 10px;border:1px dashed var(--gold);background:#fff8e8;
+                font:600 10px 'Montserrat',sans-serif;color:#7a5a18;text-align:center;
+            }
+            @media print{
+                .sheet{padding:0;max-width:none;min-height:277mm}
+                .print-hint{display:none!important}
+                .sec,.head,.sums,.foot,.signs,.page-foot,.sheet-end{break-inside:avoid;page-break-inside:avoid}
+            }
+        </style></head><body>
+        <div class="sheet">
+            <div class="topbar"></div>
+            <header class="head">
+                <div>
+                    <div class="brand">
+                        <img src="${esc(logoUrl)}" alt="Logo">
+                        <div>
+                            <h1>${esc(hotel.raison||'Al Jazeera Hotel')}</h1>
+                            <div class="stars">${starStr}</div>
+                        </div>
+                    </div>
+                    <div class="coords">
+                        ${phone?`<div><b>Tél.</b> ${esc(phone)}</div>`:''}
+                        ${email?`<div><b>E-mail</b> ${esc(email)}</div>`:''}
+                        ${hotel.gerant?`<div><b>Gérant</b> ${esc(hotel.gerant)}</div>`:''}
+                    </div>
+                </div>
+                <div class="meta">
+                    <h2>Reçu d’Enregistrement<br>et de Paiement</h2>
+                    <div class="pill">Fiche client N° ${esc(ficheNo)}</div>
+                    <p>N° Reçu <b>${esc(recNo)}</b></p>
+                    <p>Date <b>${esc(dateFr(today()))} – ${esc(timeStr)}</b></p>
+                </div>
+            </header>
+
+            <section class="sec">
+                <div class="sec-h"><h3>Informations du Client</h3><span class="tag">Dossier ${esc(dossier)}</span></div>
+                <div class="sec-b client">
+                    <div class="grid2">
+                        <div class="kv"><span>Nom complet</span><b>${esc(d.nom||'—')}</b></div>
+                        <div class="kv"><span>${esc(d.idType||'CIN')}</span><b>${esc(d.cin||'—')}</b></div>
+                        <div class="kv"><span>Nationalité</span><b>${esc(d.nationalite||'—')}</b></div>
+                        <div class="kv"><span>Responsable</span><b>${esc(d.commercial||'—')}</b></div>
+                    </div>
+                    <div class="qr"><img src="${qrUrl}" alt="QR" crossorigin="anonymous"></div>
+                </div>
+            </section>
+
+            <section class="sec">
+                <div class="sec-h"><h3>Détails du Séjour</h3></div>
+                <div class="sec-b stay">
+                    <div class="kv"><span>Chambre</span><b>${esc(d.num||room.num)}</b></div>
+                    <div class="kv"><span>Type</span><b>${esc(room.title||'—')}</b></div>
+                    <div class="kv"><span>Nuitées</span><b>${esc(d.nuits||1)}</b></div>
+                    <div class="kv"><span>Date Check-IN</span><b>${esc(dateFr(checkIn))}</b></div>
+                    <div class="kv"><span>Date Check-OUT</span><b>${esc(dateFr(checkOut))}</b></div>
+                    <div class="kv"><span>Personnes</span><b>${esc(d.personnes||1)}</b></div>
+                </div>
+            </section>
+
+            <section class="sec">
+                <div class="sec-h"><h3>Détail du Paiement</h3></div>
+                <div class="sec-b">
+                    <table class="pay">
+                        <thead>
+                            <tr><th>Désignation</th><th>Tarif / Nuité</th><th>Nuits</th><th>Montant (DH)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Hébergement — ${esc(room.title||('Chambre '+room.num))}</td>
+                                <td>${esc(fmtAmt(d.tarif))} DH</td>
+                                <td>${esc(d.nuits||1)}</td>
+                                <td>${esc(fmtAmt(total))} DH</td>
+                            </tr>
+                            ${payExtraRows}
+                            <tr class="total"><td colspan="3">Montant Du</td><td>${esc(fmtAmt(total))} DH</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="sums">
+                        <div class="sum ok"><span>Montant payé</span><b>${esc(fmtAmt(paye))} DH</b></div>
+                        <div class="sum due"><span>Reste à payer</span><b>${esc(fmtAmt(solde))} DH</b></div>
+                        <div class="sum"><span>Mode de paiement</span><b>${esc(payModeLabel)}</b></div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="sheet-end">
+                <footer class="foot">
+                    <div class="thanks">Merci pour votre confiance !
+                        <small>Nous serons heureux de vous accueillir à nouveau.</small>
+                    </div>
+                    <div class="seal">
+                        <b>AL JAZEERA</b>
+                        <span>HOTEL</span>
+                        <i>${starStr}</i>
+                    </div>
+                </footer>
+                <div class="signs">
+                    <div class="sig">Signature client</div>
+                    <div class="sig">Signature Responsable</div>
+                </div>
+                <div class="page-foot">
+                    ${footBits.map(x=>esc(x)).join(' &nbsp;·&nbsp; ')}
+                </div>
+            </div>
+        </div>
         </body></html>`;
-        const w=window.open('','','width=800,height=700');
-        w.document.write(html);w.document.close();w.focus();setTimeout(()=>w.print(),300);
+        const fileBase='Recu-'+recNo.replace(/[^\w.-]+/g,'_');
+        if(isPdf)exportReceiptPdf(html,fileBase);
+        else printReceiptHtml(html);
+    }
+
+    function printReceiptHtml(html){
+        /* iframe même origine : pas de blob:... dans le pied Chrome */
+        let frame=document.getElementById('rfPrintFrame');
+        if(!frame){
+            frame=document.createElement('iframe');
+            frame.id='rfPrintFrame';
+            frame.setAttribute('aria-hidden','true');
+            frame.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;opacity:0;pointer-events:none';
+            document.body.appendChild(frame);
+        }
+        const doc=frame.contentDocument||frame.contentWindow?.document;
+        if(!doc){alert('Impression impossible.');return;}
+        const hinted=html.replace('<div class="sheet">','<div class="sheet"><div class="print-hint">Dans la fenêtre d’impression : décochez « En-têtes et pieds de page » pour retirer l’URL et 1/1.</div>');
+        doc.open();
+        doc.write(hinted);
+        doc.close();
+        try{doc.title=' ';}catch(e){}
+        const win=frame.contentWindow;
+        const go=()=>{
+            try{win.focus();}catch(e){}
+            setTimeout(()=>{
+                try{win.print();}catch(e){alert('Impression impossible.');}
+            },350);
+        };
+        if(doc.fonts&&doc.fonts.ready)doc.fonts.ready.then(go).catch(go);
+        else go();
+    }
+
+    function loadHtml2Pdf(){
+        if(window.html2pdf)return Promise.resolve(window.html2pdf);
+        return new Promise((resolve,reject)=>{
+            const s=document.createElement('script');
+            s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+            s.onload=()=>window.html2pdf?resolve(window.html2pdf):reject(new Error('html2pdf indisponible'));
+            s.onerror=()=>reject(new Error('Impossible de charger le moteur PDF'));
+            document.head.appendChild(s);
+        });
+    }
+
+    async function exportReceiptPdf(html,filename){
+        let host=document.getElementById('rfPdfHost');
+        if(host)host.remove();
+        host=document.createElement('div');
+        host.id='rfPdfHost';
+        host.style.cssText='position:fixed;left:0;top:0;width:794px;max-width:210mm;background:#fff;z-index:2147483646;padding:12px;box-sizing:border-box;';
+        const parsed=new DOMParser().parseFromString(html,'text/html');
+        parsed.querySelectorAll('style').forEach(st=>host.appendChild(st.cloneNode(true)));
+        const sheet=parsed.querySelector('.sheet');
+        if(sheet)host.appendChild(sheet.cloneNode(true));
+        else host.appendChild(parsed.body.cloneNode(true));
+        document.body.appendChild(host);
+        try{
+            await loadHtml2Pdf();
+            if(document.fonts&&document.fonts.ready)await document.fonts.ready.catch(()=>{});
+            await new Promise(r=>setTimeout(r,700));
+            const el=host.querySelector('.sheet')||host;
+            const opt={
+                margin:[8,8,8,8],
+                filename:(filename||'Recu')+'.pdf',
+                image:{type:'jpeg',quality:.98},
+                html2canvas:{scale:2,useCORS:true,logging:false,backgroundColor:'#ffffff',scrollX:0,scrollY:0},
+                jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+                pagebreak:{mode:['avoid-all']}
+            };
+            await window.html2pdf().set(opt).from(el).save();
+        }catch(err){
+            console.error(err);
+            printReceiptHtml(html);
+            alert('PDF indisponible : ouverture de l\'impression classique.');
+        }finally{
+            setTimeout(()=>host?.remove(),800);
+        }
     }
 
     function onRoomClick(room){
@@ -10003,7 +11264,24 @@ const CHETAT=(function(){
         showForm(r,null,{edit:true});
     }
 
-    return{render,renderEtages,select,reserve,openDashRoom,showAddModal,openContenu,openRoomFiche};
+    function viewRoom(num){
+        syncFromStorage();
+        const r=roomByNum(num);
+        if(!r)return;
+        const saved=getResas()[r.num];
+        showForm(r,saved||null,{view:true});
+    }
+
+    function printRoom(num,isPdf){
+        syncFromStorage();
+        const r=roomByNum(num);
+        if(!r)return;
+        const saved=getResas()[r.num];
+        showForm(r,saved||null,{edit:true});
+        printForm(r,!!isPdf);
+    }
+
+    return{render,renderEtages,select,reserve,openDashRoom,viewRoom,printRoom,showAddModal,openContenu,openRoomFiche};
 })();
 window.CHETAT=CHETAT;
 
@@ -10388,6 +11666,34 @@ const RESA=(function(){
         });
     }
 
+    function bcMeta(){try{return JSON.parse(localStorage.getItem('aj_bc_meta')||'{}')||{};}catch(e){return{};}}
+    function payeOf(row){
+        const m=bcMeta()[row.id];
+        if(m&&m.paye!=null)return num(m.paye);
+        if(row.mnt!=null&&row.mnt!=='')return num(row.mnt);
+        return num(row.paye);
+    }
+    function enrich(row){
+        const nuits=num(row.nuits)||1;
+        const montant=num(row.montant!=null?row.montant:(row.ttc!=null?row.ttc:0));
+        const tarif=row.tarif!=null&&row.tarif!==''?num(row.tarif):(nuits?montant/nuits:0);
+        const paye=payeOf(row);
+        const dateRes=row.at?iso(new Date(num(row.at))):(row.date||'');
+        return{
+            ...row,
+            nuits,
+            montant,
+            tarif,
+            paye,
+            solde:Math.max(0,montant-paye),
+            cin:row.cin||'',
+            ref:row.ref||row.id||('R-'+row.num),
+            dateRes,
+            depart:row.depart||addDays(row.date,nuits),
+            commercial:row.commercial||'—'
+        };
+    }
+
     function list(){
         const log=load('aj_resa_log',[]);
         const resas=load('aj_ch_resa',{});
@@ -10400,20 +11706,26 @@ const RESA=(function(){
             if(st!=='occupee'&&st!=='reservee')return;
             const match=[...log].reverse().find(x=>String(x.num)===String(roomNum)&&!x.cancelled)||{};
             const nuits=num(cur.nuits)||num(match.nuits)||1;
-            rows.push({
+            rows.push(enrich({
                 ...match,
                 ...cur,
                 id:match.id||('R-'+roomNum),
+                ref:match.ref||cur.ref||match.id||('R-'+roomNum),
                 num:roomNum,
                 nom:cur.nom||match.nom||'—',
                 commercial:cur.commercial||match.commercial||'—',
+                cin:cur.cin||match.cin||'',
                 date:cur.date||match.date||'',
+                at:match.at||cur.at||Date.now(),
                 nuits,
+                tarif:cur.tarif!=null?cur.tarif:match.tarif,
                 montant:(cur.ttc!=null&&cur.ttc!=='')?num(cur.ttc):num(match.montant),
+                mnt:cur.mnt!=null?cur.mnt:match.paye,
+                paye:cur.mnt!=null?cur.mnt:match.paye,
                 depart:addDays(cur.date||match.date,nuits),
                 active:true,
                 statut:st
-            });
+            }));
             activeNums.add(String(roomNum));
         });
         log.forEach(x=>{
@@ -10424,13 +11736,22 @@ const RESA=(function(){
             }
             if(activeNums.has(String(x.num))&&cur?.validated)return;
             const nuits=num(x.nuits)||1;
-            rows.push({...x,nuits,depart:addDays(x.date,nuits),active:false,statut:'terminee'});
+            rows.push(enrich({...x,nuits,depart:addDays(x.date,nuits),active:false,statut:'terminee'}));
         });
         return rows.sort((a,b)=>(b.date||'').localeCompare(a.date||'')||num(b.at)-num(a.at));
     }
 
     function editRow(num){
         if(num&&window.CHETAT?.openDashRoom)window.CHETAT.openDashRoom(num);
+    }
+
+    function viewRow(num){
+        if(num&&window.CHETAT?.viewRoom)window.CHETAT.viewRoom(num);
+        else editRow(num);
+    }
+
+    function printRow(num){
+        if(num&&window.CHETAT?.printRoom)window.CHETAT.printRoom(num,false);
     }
 
     function cancelRow(num){
@@ -10457,6 +11778,12 @@ const RESA=(function(){
         window.AJ_RESA_SYNC?.syncToServer();
     }
 
+    const OCC_ICO={
+        voir:'<svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+        edit:'<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L8 18l-4 1 1-4 11.5-11.5z"/></svg>',
+        print:'<svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="7"/></svg>'
+    };
+
     function rowHtml(r){
         const actions=r.active?`<td class="no-print">
                 <button type="button" class="ibtn" data-resa-edit="${esc(r.num)}" title="Modifier" aria-label="Modifier">&#9998;</button>
@@ -10471,6 +11798,72 @@ const RESA=(function(){
         </tr>`;
     }
 
+    function occRowHtml(r){
+        return`<tr class="resa-row" data-num="${esc(r.num)}" data-statut="${esc(r.statut)}">
+            <td>${frDate(r.dateRes||r.date)}</td>
+            <td>${esc(r.ref||r.id)}</td>
+            <td>${esc(r.nom||'—')}</td>
+            <td>${esc(r.cin||'—')}</td>
+            <td>${frDate(r.date)}</td>
+            <td>${frDate(r.depart)}</td>
+            <td>${r.nuits}</td>
+            <td class="bc-money">${fmtDH(r.tarif)}</td>
+            <td class="bc-money">${fmtDH(r.montant)}</td>
+            <td class="bc-money">${fmtDH(r.paye)}</td>
+            <td class="bc-money bc-solde ${r.solde<=0.009?'ok':'due'}">${fmtDH(r.solde)}</td>
+            <td>${esc(r.commercial||'—')}</td>
+            <td class="no-print"><div class="bc-actions">
+                <button type="button" class="bc-ico" data-occ="voir" data-num="${esc(r.num)}" title="Voir">${OCC_ICO.voir}</button>
+                <button type="button" class="bc-ico" data-occ="edit" data-num="${esc(r.num)}" title="Modifier">${OCC_ICO.edit}</button>
+                <button type="button" class="bc-ico" data-occ="print" data-num="${esc(r.num)}" title="Imprimer">${OCC_ICO.print}</button>
+            </div></td>
+        </tr>`;
+    }
+
+    const OCC_MOIS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+    function occMonthKey(r){
+        const raw=String(r.date||r.dateRes||'').slice(0,7);
+        return /^\d{4}-\d{2}$/.test(raw)?raw:'';
+    }
+    function occMonthLabel(ym){
+        const m=parseInt(String(ym).slice(5,7),10);
+        const y=String(ym).slice(0,4);
+        if(!m||m<1||m>12)return ym;
+        return OCC_MOIS[m-1]+' '+y;
+    }
+    function fillOccSelects(occupied){
+        const monthEl=document.getElementById('occMonth');
+        const respEl=document.getElementById('occResp');
+        if(monthEl){
+            const cur=monthEl.value;
+            const keys=[...new Set(occupied.map(occMonthKey).filter(Boolean))].sort().reverse();
+            monthEl.innerHTML='<option value="">Tous les mois</option>'+keys.map(k=>`<option value="${esc(k)}">${esc(occMonthLabel(k))}</option>`).join('');
+            if(keys.includes(cur))monthEl.value=cur;
+        }
+        if(respEl){
+            const cur=respEl.value;
+            const names=[...new Set(occupied.map(r=>String(r.commercial||'').trim()).filter(n=>n&&n!=='—'))]
+                .sort((a,b)=>a.localeCompare(b,'fr',{sensitivity:'base'}));
+            respEl.innerHTML='<option value="">Tous</option>'+names.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('');
+            if(names.includes(cur))respEl.value=cur;
+        }
+    }
+    function occFiltered(occupied){
+        const month=document.getElementById('occMonth')?.value||'';
+        const chambre=(document.getElementById('occChambre')?.value||'').trim().toLowerCase();
+        const nom=(document.getElementById('occNom')?.value||'').trim().toLowerCase();
+        const cin=(document.getElementById('occCin')?.value||'').trim().toLowerCase();
+        const resp=(document.getElementById('occResp')?.value||'').trim().toLowerCase();
+        return occupied.filter(r=>{
+            if(month&&occMonthKey(r)!==month)return false;
+            if(chambre&&!String(r.num).toLowerCase().includes(chambre))return false;
+            if(nom&&!String(r.nom||'').toLowerCase().includes(nom))return false;
+            if(cin&&!String(r.cin||'').toLowerCase().includes(cin))return false;
+            if(resp&&String(r.commercial||'').trim().toLowerCase()!==resp)return false;
+            return true;
+        });
+    }
+
     function bindRows(tb){
         if(!tb)return;
         tb.querySelectorAll('[data-resa-edit]').forEach(btn=>{
@@ -10481,10 +11874,26 @@ const RESA=(function(){
         });
     }
 
+    function bindOccRows(tb){
+        if(!tb||tb.dataset.occBound)return;
+        tb.dataset.occBound='1';
+        tb.addEventListener('click',e=>{
+            const btn=e.target.closest('[data-occ]');
+            if(!btn)return;
+            e.stopPropagation();
+            const n=btn.dataset.num;
+            if(btn.dataset.occ==='voir')viewRow(n);
+            if(btn.dataset.occ==='edit')editRow(n);
+            if(btn.dataset.occ==='print')printRow(n);
+        });
+    }
+
     function render(){
         const all=list();
         const reserved=all.filter(r=>r.statut==='reservee'||r.statut==='terminee');
         const occupied=all.filter(r=>r.statut==='occupee');
+        fillOccSelects(occupied);
+        const occList=occFiltered(occupied);
         const resaTb=document.getElementById('resaTbody');
         const occTb=document.getElementById('occTbody');
         if(resaTb){
@@ -10492,8 +11901,8 @@ const RESA=(function(){
             bindRows(resaTb);
         }
         if(occTb){
-            occTb.innerHTML=occupied.length?occupied.map(rowHtml).join(''):'<tr class="empty-row"><td colspan="10">Aucune chambre occupée.</td></tr>';
-            bindRows(occTb);
+            occTb.innerHTML=occList.length?occList.map(occRowHtml).join(''):'<tr class="empty-row"><td colspan="13">Aucune chambre occupée.</td></tr>';
+            bindOccRows(occTb);
         }
         const today=iso(new Date());
         const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
@@ -10502,11 +11911,27 @@ const RESA=(function(){
         set('resaKpiArr',resaActive.filter(r=>r.date===today).length);
         set('resaKpiDep',resaActive.filter(r=>r.depart===today).length);
         set('resaKpiTotal',reserved.length);
-        set('occKpiActive',occupied.length);
-        set('occKpiArr',occupied.filter(r=>r.date===today).length);
-        set('occKpiDep',occupied.filter(r=>r.depart===today).length);
-        set('occKpiTotal',occupied.length);
+        const mTotal=occList.reduce((s,r)=>s+num(r.montant),0);
+        const mPaye=occList.reduce((s,r)=>s+num(r.paye),0);
+        set('occKpiActive',occList.length);
+        set('occKpiMontant',fmtDH(mTotal));
+        set('occKpiPaye',fmtDH(mPaye));
+        set('occKpiSolde',fmtDH(Math.max(0,mTotal-mPaye)));
     }
+
+    function initOccFilters(){
+        ['occChambre','occNom','occCin'].forEach(id=>{
+            document.getElementById(id)?.addEventListener('input',render);
+        });
+        ['occMonth','occResp'].forEach(id=>{
+            document.getElementById(id)?.addEventListener('change',render);
+        });
+        document.getElementById('occReset')?.addEventListener('click',()=>{
+            ['occMonth','occChambre','occNom','occCin','occResp'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+            render();
+        });
+    }
+    initOccFilters();
 
     function openPicker(){
         const box=document.getElementById('rmModalContent');

@@ -48,7 +48,9 @@ class HotelUserController extends Controller
             'debut' => ['nullable', 'date'],
             'fin' => ['nullable', 'date', 'after_or_equal:debut'],
             'formation' => ['nullable', 'string', 'max:255'],
+            'remu_type' => ['nullable', Rule::in(HotelUser::REMU_TYPES)],
             'salaire' => ['nullable', 'numeric', 'min:0'],
+            'autorisations' => ['nullable', 'array'],
             'login' => [
                 'required', 'string', 'min:3', 'max:60', 'regex:/^[\p{L}0-9._@-]+$/u',
                 Rule::unique('hotel_users', 'login')->ignore($existing?->id),
@@ -65,11 +67,12 @@ class HotelUserController extends Controller
             'profil.required' => 'Le profil est obligatoire.',
             'profil.in' => 'Profil invalide.',
             'contrat.in' => 'Type de contrat invalide.',
+            'remu_type.in' => 'Type de rémunération invalide.',
             'debut.date' => 'Date de début invalide.',
             'fin.date' => 'Date de fin invalide.',
             'fin.after_or_equal' => 'La date de fin doit être après la date de début.',
-            'salaire.numeric' => 'Salaire invalide.',
-            'salaire.min' => 'Salaire invalide.',
+            'salaire.numeric' => 'Rémunération invalide.',
+            'salaire.min' => 'Rémunération invalide.',
             'login.required' => 'Le login est obligatoire.',
             'login.min' => 'Le login doit contenir au moins 3 caractères.',
             'login.max' => 'Le login est trop long.',
@@ -84,18 +87,9 @@ class HotelUserController extends Controller
         $data['kind'] = $kind;
         $data['fiche_date'] = $data['fiche_date'] ?? now()->toDateString();
         $data = array_merge(
-            array_fill_keys(['cin', 'tel', 'adresse', 'contrat', 'debut', 'fin', 'formation', 'salaire'], null),
+            array_fill_keys(['cin', 'tel', 'adresse', 'contrat', 'debut', 'fin', 'formation', 'remu_type', 'salaire', 'autorisations'], null),
             $data
         );
-
-        // Compte Direction : pas de fiche RH (contrat / dates / formation / salaire).
-        if (($data['profil'] ?? null) === 'Direction') {
-            $data['contrat'] = null;
-            $data['debut'] = null;
-            $data['fin'] = null;
-            $data['formation'] = null;
-            $data['salaire'] = null;
-        }
 
         if (blank($data['password'] ?? null)) {
             unset($data['password']);
@@ -107,11 +101,20 @@ class HotelUserController extends Controller
             unset($data['photo']);
         }
 
+        if (! array_key_exists('autorisations', $data) || $data['autorisations'] === null) {
+            unset($data['autorisations']);
+        } else {
+            $data['autorisations'] = $this->normalizeAutorisations($data['autorisations']);
+        }
+
         if ($existing) {
             $existing->update($data);
+            $user = $existing->fresh();
         } else {
-            HotelUser::create($data + ['code' => $this->nextCode($kind)]);
+            $user = HotelUser::create($data + ['code' => $this->nextCode($kind)]);
         }
+
+        $this->syncSessionAuthIfCurrent($request, $user);
 
         return response()->json(['users' => $this->list()]);
     }
@@ -124,15 +127,49 @@ class HotelUserController extends Controller
         $data = $request->validate([
             'autorisations' => ['required', 'array'],
             'autorisations.*' => ['array'],
-            'autorisations.*.saisir' => ['boolean'],
-            'autorisations.*.modifier' => ['boolean'],
-            'autorisations.*.supprimer' => ['boolean'],
-            'autorisations.*.imprimer' => ['boolean'],
-            'autorisations.*.voir' => ['boolean'],
+            'autorisations.*.saisir' => ['sometimes', 'boolean'],
+            'autorisations.*.modifier' => ['sometimes', 'boolean'],
+            'autorisations.*.supprimer' => ['sometimes', 'boolean'],
+            'autorisations.*.imprimer' => ['sometimes', 'boolean'],
+            'autorisations.*.voir' => ['sometimes', 'boolean'],
         ]);
-        $user->update(['autorisations' => $data['autorisations']]);
+        $auth = $this->normalizeAutorisations($data['autorisations']);
+        $user->update(['autorisations' => $auth]);
+        $this->syncSessionAuthIfCurrent($request, $user->fresh());
 
         return response()->json(['users' => $this->list()]);
+    }
+
+    /** @param  array<string,mixed>  $raw */
+    private function normalizeAutorisations(array $raw): array
+    {
+        $perms = ['saisir', 'modifier', 'supprimer', 'imprimer', 'voir'];
+        $out = [];
+        foreach ($raw as $menu => $row) {
+            if (! is_string($menu) || $menu === '' || ! is_array($row)) {
+                continue;
+            }
+            $out[$menu] = [];
+            foreach ($perms as $perm) {
+                $out[$menu][$perm] = filter_var($row[$perm] ?? false, FILTER_VALIDATE_BOOLEAN);
+            }
+        }
+
+        return $out;
+    }
+
+    private function syncSessionAuthIfCurrent(Request $request, HotelUser $user): void
+    {
+        $login = (string) $request->session()->get('space_admin_login', '');
+        if ($login === '' || strcasecmp($login, (string) $user->login) !== 0) {
+            return;
+        }
+        $request->session()->put('space_admin_profil', $user->profil);
+        $request->session()->put('space_admin_nom', $user->nom);
+        $request->session()->put(
+            'space_admin_auth',
+            $user->profil === 'Direction' ? null : ($user->autorisations ?? [])
+        );
     }
 
     public function destroy(Request $request, string $code): JsonResponse

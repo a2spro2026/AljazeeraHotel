@@ -6,28 +6,38 @@ use Illuminate\Database\Eloquent\Model;
 
 class HotelUser extends Model
 {
-    public const USER_PROFILS = ['Direction', 'Administration', 'Réception', 'Comptabilité', 'Commercial', 'Maintenance', 'Restauration'];
+    public const USER_PROFILS = [
+        'Direction',
+        'Administration',
+        'Réception',
+        'S. Commercial',
+        'House Keeping',
+        'S. Technique',
+    ];
 
     public const COMM_PROFILS = ['Accueil', 'Administration', 'Facturation', 'Service Achats', 'Service Technique'];
 
     public const PROFILS = [
-        'Direction', 'Administration', 'Réception', 'Comptabilité', 'Commercial', 'Maintenance', 'Restauration',
+        'Direction', 'Administration', 'Réception', 'S. Commercial', 'House Keeping', 'S. Technique',
+        'Comptabilité', 'Commercial', 'Maintenance', 'Restauration',
         'Accueil', 'Facturation', 'Service Achats', 'Service Technique',
     ];
 
-    public const CONTRATS = ['CDI', 'CDD', 'Stage', 'Formation', 'Vacataire'];
+    public const CONTRATS = ['CDI', 'CDD', 'Vacataire', 'Stage'];
+
+    public const REMU_TYPES = ['Salaire', 'Journalier', 'Par/H', 'Forfait'];
 
     /** Profils autorisés à ouvrir chaque espace. */
     public const SPACE_PROFILS = [
-        'admin' => ['Direction', 'Administration', 'Réception', 'Maintenance', 'Restauration'],
+        'admin' => ['Direction', 'Administration', 'Réception', 'House Keeping', 'Maintenance', 'Restauration'],
         'facturation' => ['Direction', 'Administration', 'Comptabilité', 'Facturation'],
-        'commercial' => ['Direction', 'Administration', 'Commercial', 'Accueil', 'Facturation', 'Service Achats', 'Service Technique'],
+        'commercial' => ['Direction', 'Administration', 'S. Commercial', 'Commercial', 'Accueil', 'Facturation', 'Service Achats', 'S. Technique', 'Service Technique'],
         'administration' => ['Direction', 'Administration'],
     ];
 
     protected $fillable = [
         'code', 'kind', 'fiche_date', 'nom', 'cin', 'tel', 'adresse', 'profil', 'contrat',
-        'debut', 'fin', 'formation', 'salaire', 'login', 'password', 'autorisations', 'photo',
+        'debut', 'fin', 'formation', 'remu_type', 'salaire', 'login', 'password', 'autorisations', 'photo',
     ];
 
     protected $hidden = ['password'];
@@ -53,9 +63,9 @@ class HotelUser extends Model
         return in_array($this->profil, self::SPACE_PROFILS[$space] ?? [], true);
     }
 
-    public function toAdminArray(): array
+    public function toAdminArray(bool $withPhoto = false): array
     {
-        return [
+        $data = [
             'id' => $this->code,
             'kind' => $this->kind ?: 'user',
             'date' => $this->fiche_date?->format('Y-m-d'),
@@ -68,10 +78,17 @@ class HotelUser extends Model
             'debut' => $this->debut?->format('Y-m-d'),
             'fin' => $this->fin?->format('Y-m-d'),
             'formation' => $this->formation,
+            'remu_type' => $this->remu_type,
             'salaire' => $this->salaire,
             'login' => $this->login,
             'autorisations' => $this->autorisations ?? new \stdClass,
-            'photo' => $this->photo,
+            'has_photo' => filled($this->photo),
         ];
+
+        if ($withPhoto) {
+            $data['photo'] = $this->photo;
+        }
+
+        return $data;
     }
 }

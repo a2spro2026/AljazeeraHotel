@@ -193,6 +193,8 @@
     }
     .ch-btn-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(197,160,89,.35)}
 
+    .ch-card{cursor:pointer}
+    .ch-card-img{cursor:pointer}
     .ch-modal-overlay{
         display:none;position:fixed;inset:0;z-index:200;
         background:rgba(10,23,54,.55);backdrop-filter:blur(8px);
@@ -200,12 +202,13 @@
     }
     .ch-modal-overlay.show{display:flex}
     .ch-modal{
-        width:min(560px,100%);max-height:92vh;overflow-y:auto;
+        width:min(720px,100%);max-height:92vh;overflow-y:auto;
         background:linear-gradient(165deg,#fff,rgba(247,245,240,.98));
         border:1px solid rgba(197,160,89,.25);border-radius:18px;
         box-shadow:0 24px 64px rgba(0,0,0,.15),0 0 60px rgba(197,160,89,.1);
         animation:chFadeIn .35s ease;position:relative;
     }
+    .ch-modal.is-form{width:min(640px,100%)}
     @keyframes chFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
     .ch-modal-close{
         position:absolute;top:16px;right:18px;z-index:10;
@@ -216,25 +219,65 @@
     .ch-modal-info{padding:28px 26px 26px}
     .ch-modal-info .ch-num{font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;font-weight:700}
     .ch-modal-info h2{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--text-dark);margin-bottom:10px}
-    .ch-modal-info .ch-desc{font-size:14px;color:var(--text-muted);line-height:1.65;margin-bottom:24px}
+    .ch-modal-info .ch-desc{font-size:14px;color:var(--text-muted);line-height:1.65;margin-bottom:18px}
+    .ch-gallery-main{
+        position:relative;width:100%;aspect-ratio:16/10;border-radius:14px;overflow:hidden;
+        background:#e5e7eb;margin-bottom:12px;border:1px solid rgba(197,160,89,.2);
+    }
+    .ch-gallery-main img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+    .ch-gallery-nav{
+        position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;
+        padding:0 10px;pointer-events:none;
+    }
+    .ch-gallery-nav button{
+        pointer-events:auto;width:40px;height:40px;border-radius:50%;border:1px solid rgba(197,160,89,.4);
+        background:rgba(255,255,255,.92);color:var(--navy-mid);font-size:20px;cursor:pointer;
+        box-shadow:0 4px 16px rgba(0,0,0,.15);
+    }
+    .ch-gallery-nav button:hover{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304}
+    .ch-gallery-thumbs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:18px}
+    .ch-gallery-thumbs button{
+        flex:0 0 auto;width:72px;height:54px;padding:0;border-radius:8px;overflow:hidden;cursor:pointer;
+        border:2px solid transparent;background:#e5e7eb;
+    }
+    .ch-gallery-thumbs button.active{border-color:var(--gold)}
+    .ch-gallery-thumbs img{width:100%;height:100%;object-fit:cover;display:block}
+    .ch-gallery-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .ch-btn-reserve,.ch-btn-send{
+        background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304;
+        border:none;padding:14px 18px;border-radius:8px;font-weight:700;font-size:13px;
+        letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;transition:transform .2s,box-shadow .2s;
+    }
+    .ch-btn-reserve:hover,.ch-btn-send:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(197,160,89,.35)}
+    .ch-btn-cancel{
+        background:#fff;color:var(--navy-mid);border:1px solid rgba(197,160,89,.4);
+        padding:14px 18px;border-radius:8px;font-weight:700;font-size:13px;
+        letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;
+    }
+    .ch-btn-cancel:hover{background:rgba(197,160,89,.08)}
     .ch-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media(max-width:500px){.ch-form{grid-template-columns:1fr}}
+    @media(max-width:560px){.ch-form{grid-template-columns:1fr}}
     .ch-form .field{display:flex;flex-direction:column}
     .ch-form .field.span2{grid-column:1/-1}
     .ch-form label{font-size:10px;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
-    .ch-form input{
+    .ch-form input,.ch-form select{
         background:var(--white);border:1px solid rgba(197,160,89,.22);border-radius:8px;
-        padding:11px 13px;color:var(--text-dark);font-family:inherit;font-size:14px;outline:none;
+        padding:11px 13px;color:var(--text-dark);font-family:inherit;font-size:14px;outline:none;height:44px;
     }
-    .ch-form input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.12)}
-    .ch-form input[readonly]{opacity:.75;background:rgba(247,245,240,.8)}
-    .ch-btn-reserve{
-        grid-column:1/-1;margin-top:6px;width:100%;
-        background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304;
-        border:none;padding:14px;border-radius:8px;font-weight:700;font-size:13px;
-        letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;transition:transform .2s,box-shadow .2s;
+    .ch-form input:focus,.ch-form select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.12)}
+    .ch-form input[readonly]{opacity:.8;background:rgba(247,245,240,.85)}
+    .ch-form-actions{grid-column:1/-1;display:flex;gap:10px;margin-top:6px}
+    .ch-form-actions .ch-btn-send,.ch-form-actions .ch-btn-cancel{flex:1}
+    .ch-thanks{text-align:center;padding:18px 8px 8px}
+    .ch-thanks .ch-thanks-ico{
+        width:64px;height:64px;margin:0 auto 16px;border-radius:50%;
+        display:flex;align-items:center;justify-content:center;
+        background:rgba(197,160,89,.12);border:1px solid rgba(197,160,89,.35);
+        color:var(--gold);font-size:28px;
     }
-    .ch-btn-reserve:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(197,160,89,.35)}
+    .ch-thanks h2{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--navy-mid);margin:0 0 10px}
+    .ch-thanks p{font-size:14px;color:var(--text-muted);line-height:1.65;margin:0 0 10px}
+    .ch-thanks .ch-ref{font-weight:700;color:var(--navy-mid);letter-spacing:.5px}
 </style>
 @endpush
 
@@ -361,7 +404,7 @@
                 <h3 class="serif">${esc(cat.title)} <span class="ch-section-count">${cat.rooms.length} chambres</span></h3>
                 <div class="ch-grid">
                     ${cat.rooms.map(room=>`
-                        <article class="ch-card">
+                        <article class="ch-card" data-num="${esc(room.num)}" role="button" tabindex="0">
                             <div class="ch-card-img">
                                 <img src="${esc(room.img)}" alt="${esc(room.title)}" width="900" height="675" loading="lazy" decoding="async">
                                 <span class="ch-card-num">Chambre ${esc(room.num)}</span>
@@ -379,11 +422,19 @@
                 </div>
             </div>
         `).join('');
+        document.querySelectorAll('.ch-card').forEach(card=>{
+            const open=()=>{const room=roomByNum(card.dataset.num);if(room)openGallery(room);};
+            card.addEventListener('click',e=>{
+                if(e.target.closest('.ch-btn-card'))return;
+                open();
+            });
+            card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
+        });
         document.querySelectorAll('.ch-btn-card').forEach(btn=>{
             btn.addEventListener('click',e=>{
                 e.stopPropagation();
                 const room=roomByNum(btn.dataset.num);
-                if(room)openModal(room);
+                if(room)openGallery(room);
             });
         });
     }
@@ -401,7 +452,7 @@
     function bindSlideOpen(el){
         const open=()=>{
             const room=roomByNum(el.dataset.num);
-            if(room)openModal(room);
+            if(room)openGallery(room);
         };
         el.addEventListener('click',open);
         el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
@@ -432,41 +483,213 @@
         });
     }
 
-    function openModal(room){
+    function roomGallery(room){
+        let photos=Array.isArray(room.imgs)?room.imgs.filter(Boolean).map(String):[];
+        if(room.img&&!photos.includes(room.img))photos.unshift(room.img);
+        if(photos.length<2){
+            const cat=CATEGORIES.find(c=>(c.rooms||[]).some(r=>String(r.num)===String(room.num)));
+            const extras=(cat?.rooms||[])
+                .filter(r=>String(r.num)!==String(room.num))
+                .flatMap(r=>[r.img].concat(Array.isArray(r.imgs)?r.imgs:[]))
+                .filter(Boolean);
+            photos=[...new Set(photos.concat(extras))].slice(0,6);
+        }
+        if(!photos.length)photos=[window.AJ_HOTEL?.PLACEHOLDER||'/images/rooms/default.svg'];
+        return photos;
+    }
+
+    function nextPublicRef(){
+        const y=String(new Date().getFullYear());
+        const key='aj_public_resa_seq_'+y;
+        let n=0;
+        try{n=parseInt(localStorage.getItem(key)||'0',10)||0;}catch(e){}
+        n+=1;
+        try{localStorage.setItem(key,String(n));}catch(e){}
+        return 'WEB'+y+'-'+String(n).padStart(4,'0');
+    }
+
+    function addDaysIso(isoDate,days){
+        const raw=String(isoDate||today()).slice(0,10);
+        const dt=new Date(raw+'T00:00:00');
+        if(Number.isNaN(dt.getTime()))return raw;
+        dt.setDate(dt.getDate()+(Number(days)||0));
+        return dt.toISOString().slice(0,10);
+    }
+
+    function showModal(){
+        modal.classList.add('show');
+        document.body.style.overflow='hidden';
+    }
+
+    function openGallery(room){
+        const photos=roomGallery(room);
+        let idx=0;
+        modal.classList.remove('is-form');
+        const paint=()=>{
+            const main=document.getElementById('chGalMain');
+            if(main)main.src=photos[idx];
+            document.querySelectorAll('.ch-gallery-thumbs button').forEach((b,i)=>b.classList.toggle('active',i===idx));
+        };
         modalContent.innerHTML=`
             <div class="ch-modal-info">
                 <div class="ch-num">Chambre ${esc(room.num)}</div>
                 <h2 class="serif">${esc(room.title)}</h2>
                 <p class="ch-desc">${esc(room.longDesc||room.desc)}</p>
-                <p class="ch-desc" style="margin-top:-12px;font-weight:700;color:var(--navy-mid)">Tarif : ${fmtP(room.price)} / nuit</p>
-                <form class="ch-form" id="chResaForm" onsubmit="return false">
-                    <div class="field"><label>N° Chambre</label><input type="text" id="rf_num" value="${esc(room.num)}" readonly></div>
-                    <div class="field"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="rf_date" value="${ajDate(today())}" required></div>
-                    <div class="field span2"><label>Nom Client</label><input type="text" id="rf_nom" placeholder="Nom complet" required></div>
-                    <div class="field"><label>N° Téléphone</label><input type="tel" id="rf_tel" placeholder="06 XX XX XX XX" required></div>
-                    <div class="field"><label>N° CIN / Passport</label><input type="text" id="rf_cin" placeholder="AB123456" required></div>
-                    <div class="field"><label>Nbrs Personnes</label><input type="number" id="rf_personnes" min="1" value="1" required></div>
-                    <div class="field"><label>Nbrs Nuités</label><input type="number" id="rf_nuits" min="1" value="1" required></div>
-                    <button type="submit" class="ch-btn-reserve">Réserver</button>
-                </form>
+                <p class="ch-desc" style="margin-top:-10px;font-weight:700;color:var(--navy-mid)">Tarif : ${fmtP(room.price)} / nuit</p>
+                <div class="ch-gallery-main">
+                    <img id="chGalMain" src="${esc(photos[0])}" alt="${esc(room.title)}">
+                    ${photos.length>1?`<div class="ch-gallery-nav">
+                        <button type="button" id="chGalPrev" aria-label="Photo précédente">&#8249;</button>
+                        <button type="button" id="chGalNext" aria-label="Photo suivante">&#8250;</button>
+                    </div>`:''}
+                </div>
+                ${photos.length>1?`<div class="ch-gallery-thumbs">
+                    ${photos.map((src,i)=>`<button type="button" data-i="${i}" class="${i===0?'active':''}" aria-label="Photo ${i+1}">
+                        <img src="${esc(src)}" alt="">
+                    </button>`).join('')}
+                </div>`:''}
+                <div class="ch-gallery-actions">
+                    <button type="button" class="ch-btn-reserve" id="chGalReserve">Réserver</button>
+                    <button type="button" class="ch-btn-cancel" id="chGalClose">Fermer</button>
+                </div>
             </div>`;
-        document.getElementById('chResaForm').addEventListener('submit',()=>{
-            const nom=document.getElementById('rf_nom').value.trim();
-            const tel=document.getElementById('rf_tel').value.trim();
-            const cin=document.getElementById('rf_cin').value.trim();
-            if(!nom||!tel||!cin){alert('Veuillez remplir tous les champs obligatoires.');return;}
-            const data={num:room.num,title:room.title,date:ajIso(document.getElementById('rf_date').value),nom,tel,cin,personnes:document.getElementById('rf_personnes').value,nuits:document.getElementById('rf_nuits').value,price:room.price,at:new Date().toISOString()};
-            const list=JSON.parse(localStorage.getItem('aj_public_resa')||'[]');
-            list.push(data);
-            localStorage.setItem('aj_public_resa',JSON.stringify(list));
-            alert('Réservation enregistrée pour la chambre '+room.num+'. Notre équipe vous contactera sous peu.');
-            closeModal();
+        document.getElementById('chGalPrev')?.addEventListener('click',()=>{idx=(idx-1+photos.length)%photos.length;paint();});
+        document.getElementById('chGalNext')?.addEventListener('click',()=>{idx=(idx+1)%photos.length;paint();});
+        document.querySelectorAll('.ch-gallery-thumbs button').forEach(btn=>{
+            btn.addEventListener('click',()=>{idx=+btn.dataset.i;paint();});
         });
-        modal.classList.add('show');
-        document.body.style.overflow='hidden';
+        document.getElementById('chGalReserve')?.addEventListener('click',()=>openReserveForm(room));
+        document.getElementById('chGalClose')?.addEventListener('click',closeModal);
+        showModal();
     }
 
-    function closeModal(){modal.classList.remove('show');document.body.style.overflow='';}
+    function openReserveForm(room){
+        modal.classList.add('is-form');
+        const dateDemande=today();
+        const ref=nextPublicRef();
+        const arrivee=today();
+        const nuits=1;
+        const depart=addDaysIso(arrivee,nuits);
+        modalContent.innerHTML=`
+            <div class="ch-modal-info">
+                <div class="ch-num">Chambre ${esc(room.num)} · ${esc(room.title)}</div>
+                <h2 class="serif">Demande de réservation</h2>
+                <p class="ch-desc">Complétez le formulaire. Notre équipe vous recontactera pour confirmer.</p>
+                <form class="ch-form" id="chResaForm" onsubmit="return false" autocomplete="off">
+                    <div class="field"><label>Date</label><input type="text" id="rf_date" value="${esc(typeof ajDate==='function'?ajDate(dateDemande):dateDemande)}" readonly></div>
+                    <div class="field"><label>Réf Réservation</label><input type="text" id="rf_ref" value="${esc(ref)}" readonly></div>
+                    <div class="field span2"><label>Nom complet</label><input type="text" id="rf_nom" placeholder="Nom et prénom" required></div>
+                    <div class="field"><label>Nationalité</label><input type="text" id="rf_nationalite" placeholder="Ex. Marocaine" required></div>
+                    <div class="field"><label>Type Identité</label>
+                        <select id="rf_idType" required>
+                            <option value="CIN">CIN</option>
+                            <option value="Passeport">Passeport</option>
+                            <option value="Carte de séjour">Carte de séjour</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="field"><label>N° Identité</label><input type="text" id="rf_cin" placeholder="N° document" required></div>
+                    <div class="field"><label>Nbrs pers</label><input type="number" id="rf_personnes" min="1" value="1" required></div>
+                    <div class="field"><label>Nuités</label><input type="number" id="rf_nuits" min="1" value="${nuits}" required></div>
+                    <div class="field"><label>Date arrivée</label><input type="text" class="js-date" id="rf_arrivee" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" value="${esc(typeof ajDate==='function'?ajDate(arrivee):arrivee)}" required></div>
+                    <div class="field"><label>Date départ</label><input type="text" class="js-date" id="rf_depart" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" value="${esc(typeof ajDate==='function'?ajDate(depart):depart)}" required></div>
+                    <div class="field"><label>Contact</label><input type="tel" id="rf_tel" placeholder="06 XX XX XX XX" required></div>
+                    <div class="field"><label>E-mail</label><input type="email" id="rf_email" placeholder="vous@email.com" required></div>
+                    <div class="ch-form-actions">
+                        <button type="submit" class="ch-btn-send">Envoyer</button>
+                        <button type="button" class="ch-btn-cancel" id="rfAnnuler">Annuler</button>
+                    </div>
+                </form>
+            </div>`;
+        const syncDepart=()=>{
+            const a=typeof ajIso==='function'?ajIso(document.getElementById('rf_arrivee')?.value):'';
+            const n=Math.max(1,parseInt(document.getElementById('rf_nuits')?.value,10)||1);
+            const d=addDaysIso(a||arrivee,n);
+            const dep=document.getElementById('rf_depart');
+            if(dep)dep.value=typeof ajDate==='function'?ajDate(d):d;
+        };
+        document.getElementById('rf_nuits')?.addEventListener('input',syncDepart);
+        document.getElementById('rf_arrivee')?.addEventListener('change',syncDepart);
+        document.getElementById('rf_arrivee')?.addEventListener('blur',syncDepart);
+        document.getElementById('rfAnnuler')?.addEventListener('click',()=>openGallery(room));
+        document.getElementById('chResaForm')?.addEventListener('submit',()=>{
+            const nom=document.getElementById('rf_nom')?.value.trim()||'';
+            const nationalite=document.getElementById('rf_nationalite')?.value.trim()||'';
+            const idType=document.getElementById('rf_idType')?.value||'CIN';
+            const cin=document.getElementById('rf_cin')?.value.trim()||'';
+            const tel=document.getElementById('rf_tel')?.value.trim()||'';
+            const email=document.getElementById('rf_email')?.value.trim()||'';
+            const personnes=Math.max(1,parseInt(document.getElementById('rf_personnes')?.value,10)||1);
+            const nuitsVal=Math.max(1,parseInt(document.getElementById('rf_nuits')?.value,10)||1);
+            const dateArr=typeof ajIso==='function'?ajIso(document.getElementById('rf_arrivee')?.value):'';
+            const dateDep=typeof ajIso==='function'?ajIso(document.getElementById('rf_depart')?.value):'';
+            if(!nom||!nationalite||!cin||!tel||!email||!dateArr||!dateDep){
+                alert('Veuillez remplir tous les champs obligatoires.');
+                return;
+            }
+            const data={
+                ref,
+                date:dateDemande,
+                num:room.num,
+                title:room.title,
+                nom,nationalite,idType,cin,
+                personnes,nuits:nuitsVal,
+                arrivee:dateArr,depart:dateDep,
+                tel,email,
+                price:room.price,
+                status:'en_attente',
+                source:'web',
+                at:Date.now()
+            };
+            let list=[];
+            try{list=JSON.parse(localStorage.getItem('aj_public_resa')||'[]')||[];}catch(e){list=[];}
+            list.push(data);
+            localStorage.setItem('aj_public_resa',JSON.stringify(list));
+            const csrf=document.querySelector('meta[name="csrf-token"]')?.content||'';
+            const pingAdmin=()=>{
+                try{localStorage.setItem('aj_web_resa_ping',String(Date.now()));}catch(e){}
+                try{
+                    if(typeof BroadcastChannel!=='undefined'){
+                        const ch=new BroadcastChannel('aj_web_resa');
+                        ch.postMessage({type:'new',at:Date.now(),ref:data.ref||''});
+                        ch.close();
+                    }
+                }catch(e){}
+            };
+            fetch(@json(route('web.reservations.store')),{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json',
+                    'Accept':'application/json',
+                    'X-CSRF-TOKEN':csrf
+                },
+                body:JSON.stringify(data)
+            }).then(()=>pingAdmin()).catch(()=>pingAdmin()).finally(()=>showThanks(room,ref));
+        });
+        showModal();
+    }
+
+    function showThanks(room,ref){
+        modal.classList.add('is-form');
+        modalContent.innerHTML=`
+            <div class="ch-modal-info ch-thanks">
+                <div class="ch-thanks-ico">✓</div>
+                <h2 class="serif">Merci pour votre demande</h2>
+                <p>Votre demande de réservation pour la <strong>chambre ${esc(room.num)}</strong> a bien été envoyée.</p>
+                <p class="ch-ref">Réf. ${esc(ref)}</p>
+                <p>Notre équipe administrative vous recontactera très bientôt pour confirmer votre séjour.</p>
+                <div class="ch-gallery-actions" style="justify-content:center;margin-top:18px">
+                    <button type="button" class="ch-btn-reserve" id="chThanksOk">Fermer</button>
+                </div>
+            </div>`;
+        document.getElementById('chThanksOk')?.addEventListener('click',closeModal);
+    }
+
+    function closeModal(){
+        modal.classList.remove('show');
+        modal.classList.remove('is-form');
+        document.body.style.overflow='';
+    }
     document.getElementById('chModalClose')?.addEventListener('click',closeModal);
     modal?.addEventListener('click',e=>{if(e.target===modal)closeModal();});
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
@@ -479,6 +702,14 @@
     renderStats();
     renderFrames();
     renderGrid();
+
+    try{
+        const focus=new URLSearchParams(window.location.search).get('room');
+        if(focus){
+            const room=roomByNum(focus);
+            if(room)setTimeout(()=>openGallery(room),350);
+        }
+    }catch(e){}
 })();
 </script>
 @endpush

@@ -3,6 +3,7 @@
 use App\Http\Controllers\HabillageController;
 use App\Http\Controllers\HotelReservationController;
 use App\Http\Controllers\HotelUserController;
+use App\Http\Controllers\HotelWebReservationController;
 use App\Models\HotelUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -113,6 +114,14 @@ Route::prefix('admin/api/users')->controller(HotelUserController::class)->group(
 Route::prefix('admin/api/reservations')->controller(HotelReservationController::class)->group(function () {
     Route::get('/', 'index');
     Route::post('/', 'store');
+});
+
+Route::post('/api/web-reservations', [HotelWebReservationController::class, 'store'])->name('web.reservations.store');
+Route::prefix('admin/api/web-reservations')->controller(HotelWebReservationController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/unread', 'unread');
+    Route::post('/read', 'markRead');
+    Route::post('/remove', 'remove');
 });
 
 // Pages protégées

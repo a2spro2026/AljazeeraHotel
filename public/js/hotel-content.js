@@ -20,8 +20,17 @@
         return global.AJ_HOTEL_DEFAULTS || { categories: [], rooms: [], carousel_count: 4 };
     }
 
+    function normalizeImgs(room, fallback, primary) {
+        const raw = room.imgs != null ? room.imgs : (fallback && fallback.imgs);
+        let list = Array.isArray(raw) ? raw.filter(Boolean).map(String) : [];
+        if (primary && !list.includes(primary)) list = [primary].concat(list);
+        if (!list.length && primary) list = [primary];
+        return [...new Set(list)];
+    }
+
     function normalizeRoom(num, room, fallback) {
         const base = fallback || {};
+        const primary = room.img || base.img || '';
         const merged = {
             num: String(num),
             title: room.title || base.title || ('Chambre ' + num),
@@ -30,7 +39,8 @@
             price: Number(room.price != null ? room.price : base.price) || 0,
             desc: room.desc != null ? room.desc : (base.desc || ''),
             longDesc: room.longDesc != null ? room.longDesc : (base.longDesc || base.desc || ''),
-            img: room.img || base.img || '',
+            img: primary,
+            imgs: normalizeImgs(room, base, primary),
             guests: room.guests != null ? room.guests : base.guests,
             size: room.size != null ? room.size : base.size,
             view: room.view != null ? room.view : base.view,
@@ -38,7 +48,9 @@
             custom: !!(room.custom || base.custom),
         };
         const hasPhoto = !!merged.img && merged.img !== PLACEHOLDER;
-        return { ...merged, img: hasPhoto ? merged.img : PLACEHOLDER, hasPhoto };
+        const img = hasPhoto ? merged.img : PLACEHOLDER;
+        const imgs = hasPhoto ? (merged.imgs.length ? merged.imgs : [img]) : [PLACEHOLDER];
+        return { ...merged, img, imgs, hasPhoto };
     }
 
     function getCatalog() {
@@ -182,6 +194,7 @@
                 longDesc: room.longDesc || room.desc,
                 price: room.price,
                 img: room.img,
+                imgs: room.imgs && room.imgs.length ? room.imgs : (room.img ? [room.img] : []),
             })),
             slides: (carousel[cat.key]?.slides || []).map((slide) => ({
                 ...slide,

@@ -24,6 +24,7 @@ class HotelUserTest extends TestCase
             'nom' => 'Test Réception',
             'profil' => 'Réception',
             'contrat' => 'CDI',
+            'remu_type' => 'Salaire',
             'login' => 'recep1',
             'password' => 'secret123',
         ], $overrides);
@@ -54,15 +55,17 @@ class HotelUserTest extends TestCase
         $this->assertTrue(Hash::check('secret123', HotelUser::first()->password));
     }
 
-    public function test_direction_profile_has_no_employment_fields(): void
+    public function test_direction_profile_can_keep_employment_fields(): void
     {
         $this->asDirection()->postJson('/admin/api/users', $this->payload([
-            'profil' => 'Direction', 'contrat' => 'CDD', 'debut' => '2026-01-01', 'formation' => 'BTS', 'salaire' => 5000,
+            'profil' => 'Direction', 'contrat' => 'CDD', 'debut' => '2026-01-01', 'formation' => 'BTS',
+            'remu_type' => 'Salaire', 'salaire' => 5000,
         ]))->assertOk()
-            ->assertJsonPath('users.0.contrat', null)
-            ->assertJsonPath('users.0.debut', null)
-            ->assertJsonPath('users.0.formation', null)
-            ->assertJsonPath('users.0.salaire', null);
+            ->assertJsonPath('users.0.contrat', 'CDD')
+            ->assertJsonPath('users.0.debut', '2026-01-01')
+            ->assertJsonPath('users.0.formation', 'BTS')
+            ->assertJsonPath('users.0.remu_type', 'Salaire')
+            ->assertJsonPath('users.0.salaire', '5000.00');
     }
 
     public function test_login_must_be_unique(): void
@@ -132,7 +135,7 @@ class HotelUserTest extends TestCase
         HotelUser::create([
             'code' => 'Ut0009',
             'nom' => 'Sara',
-            'profil' => 'Commercial',
+            'profil' => 'S. Commercial',
             'login' => 'Commercial',
             'password' => 'secret123',
             'autorisations' => [
@@ -143,7 +146,7 @@ class HotelUserTest extends TestCase
         $this->post('/espace/commercial/login', ['login' => 'Commercial', 'password' => 'secret123'])
             ->assertRedirect(route('admin'))
             ->assertSessionHas('space_admin', true)
-            ->assertSessionHas('space_admin_profil', 'Commercial')
+            ->assertSessionHas('space_admin_profil', 'S. Commercial')
             ->assertSessionHas('space_admin_auth', fn ($auth) => ($auth['ch-etat']['voir'] ?? false) === true);
     }
 

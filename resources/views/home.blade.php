@@ -467,7 +467,6 @@
 
 @section('content')
 @php
-    $featuredNums = ['101', '201', '301', '302', '120'];
     $featuredLabels = [
         '101' => ['label' => 'Chambre Deluxe', 'guests' => 2, 'size' => '28 m²', 'view' => 'Vue ville'],
         '201' => ['label' => 'Chambre Supérieure', 'guests' => 2, 'size' => '32 m²', 'view' => 'Vue jardin'],
@@ -475,7 +474,9 @@
         '302' => ['label' => 'Suite Executive', 'guests' => 3, 'size' => '50 m²', 'view' => 'Vue panoramique'],
         '120' => ['label' => 'Familiale Premium', 'guests' => 4, 'size' => '45 m²', 'view' => 'Vue jardin'],
     ];
-    $allRooms = collect(config('hotel_rooms.rooms'))->keyBy('num');
+    $allRooms = collect(config('hotel_rooms.rooms'))
+        ->sortBy([['floor', 'asc'], ['num', 'asc']])
+        ->values();
 @endphp
 
 <section class="home-hero" data-hb-zone="hero" aria-label="Hotel Al Jazzera">
@@ -494,11 +495,13 @@
         <a href="{{ route('chambres') }}#chambres-list" class="home-link">Voir toutes les chambres &rarr;</a>
     </div>
     <div class="home-rooms-track" id="homeRooms">
-        @foreach($featuredNums as $num)
+        @foreach($allRooms as $room)
         @php
-            $room = $allRooms->get($num);
+            $num = (string) ($room['num'] ?? '');
             $meta = $featuredLabels[$num] ?? [];
-            if (!$room) continue;
+            $guests = $meta['guests'] ?? ($room['guests'] ?? (str_contains((string) ($room['type'] ?? ''), 'double') ? 3 : (str_contains((string) ($room['type'] ?? ''), 'suite') ? 3 : 2)));
+            $size = $meta['size'] ?? ($room['size'] ?? '—');
+            $view = $meta['view'] ?? ($room['view'] ?? 'Vue hôtel');
         @endphp
         <article class="home-room" data-num="{{ $num }}">
             <div class="home-room-img">
@@ -510,13 +513,13 @@
             <div class="home-room-body">
                 <h3 class="serif">{{ $meta['label'] ?? $room['title'] }}</h3>
                 <div class="home-room-meta">
-                    <span>&#128101; {{ $meta['guests'] ?? 2 }}</span>
-                    <span>&#9632; {{ $meta['size'] ?? '30 m²' }}</span>
-                    <span>&#127749; {{ $meta['view'] ?? 'Vue' }}</span>
+                    <span>&#128101; {{ $guests }}</span>
+                    <span>&#9632; {{ $size }}</span>
+                    <span>&#127749; {{ $view }}</span>
                 </div>
                 <div class="home-room-foot">
                     <div class="home-room-price room-price">{{ number_format($room['price'], 2, '.', ' ') }} DH <small>/ nuit</small></div>
-                    <a href="{{ route('chambres') }}#chambres-list"><button type="button" class="btn-room">Voir les détails</button></a>
+                    <a href="{{ route('chambres') }}?room={{ $num }}"><button type="button" class="btn-room">Voir les détails</button></a>
                 </div>
             </div>
         </article>
