@@ -1381,6 +1381,10 @@
         }
         .rm-form-head.simple h3{margin:0 0 14px}
         .rm-form-head.simple p{display:none}
+        .rm-form-head.simple .rm-occ-lock{
+            display:block;margin:0 0 14px;padding:8px 12px;border-radius:8px;
+            background:#f3f1ec;color:#8a6a2f;font:600 12px 'Montserrat',sans-serif;text-align:center;
+        }
         .rf-doc{
             border:1px solid rgba(197,160,89,.4);border-radius:14px;overflow:hidden;
             background:linear-gradient(180deg,#fffdf8,#f6f1e6);
@@ -6060,6 +6064,12 @@ window.AJ_SESSION=@json($adminSession);
         const row=auth[id];
         return !!(row&&['saisir','modifier','supprimer','imprimer','voir'].some(k=>row[k]));
     };
+    window.ajCanEditOccupied=function(){
+        if(window.AJ_MENU_AUTH==null)return true;
+        if(String(window.AJ_SESSION?.profil||'')==='Direction')return true;
+        const row=window.AJ_MENU_AUTH['ch-occupees'];
+        return !!(row&&row.modifier);
+    };
     window.ajDashOn=function(id){
         const auth=window.AJ_MENU_AUTH;
         if(auth==null)return true;
@@ -9845,6 +9855,7 @@ window.ADMIN_ROLE='{{ $adminLogin }}';
 /* ===== Module État Chambres ===== */
 const CHETAT=(function(){
     const CAN_MANAGE=window.ADMIN_CAN_MANAGE_ROOMS===true;
+    let occEditOpen=false;
     const STATUS={occupee:'Occupée',disponible:'Disponible',reservee:'Réservée',nettoyage:'Nettoyage',maintenance:'Maintenance'};
     const ALL_STATUS=['disponible','occupee','reservee','nettoyage','maintenance'];
     const MSG={
@@ -10160,6 +10171,11 @@ const CHETAT=(function(){
         document.getElementById('rmModalOverlay')?.classList.remove('show');
         document.getElementById('rmModal')?.classList.remove('rm-resa-wide','cc-edit-modal');
         currentRoom=null;
+        occEditOpen=false;
+    }
+    function stayOccupied(room,saved){
+        if(saved?.validated&&(saved.statusChambre||room?.status)==='occupee')return true;
+        return room?.status==='occupee';
     }
 
     function populateDetailFloorSelects(activeRoom){
@@ -10897,6 +10913,11 @@ const CHETAT=(function(){
     }
 
     function confirmReservation(room,d,status){
+        const savedNow=getResas()[room.num];
+        if(stayOccupied(room,savedNow)&&!occEditOpen){
+            alert('Chambre occupée. La modification se fait depuis C-Occupées, par la Direction ou un utilisateur autorisé.');
+            return;
+        }
         const box=document.getElementById('rmModalContent');
         box?.querySelectorAll('.rm-st-btn').forEach(btn=>{btn.disabled=true;});
         let result;
@@ -10989,7 +11010,7 @@ const CHETAT=(function(){
         document.getElementById('rfRetour')?.addEventListener('click',e=>{
             e.preventDefault();
             e.stopPropagation();
-            showForm(room,d,{edit:true});
+            showForm(room,d,{edit:true,occEdit:occEditOpen});
         });
         openModal(true);
     }
@@ -11002,7 +11023,9 @@ const CHETAT=(function(){
         box.innerHTML=formHtml(room,data);
         calcTotals();
         syncPayFields();
-        const locked=!!(saved?.validated&&!prefill&&!(opts&&opts.edit))||!!(opts&&opts.view);
+        const occupied=stayOccupied(room,saved);
+        occEditOpen=!!(opts&&opts.occEdit&&window.ajCanEditOccupied?.());
+        const locked=!!(opts&&opts.view)||(occupied&&!occEditOpen)||(!occupied&&!!(saved?.validated&&!prefill&&!(opts&&opts.edit)));
         bindIdDocUpload(locked);
         bindPayPills(locked);
         document.getElementById('rf_canal')?.addEventListener('change',()=>{
@@ -11018,9 +11041,18 @@ const CHETAT=(function(){
             });
         });
         if(locked)setFormReadonly(true);
-        if(opts&&opts.view){
+        if(locked){
             const valBtn=document.getElementById('rfValider');
             if(valBtn)valBtn.disabled=true;
+            if(occupied){
+                const head=box.querySelector('.rm-form-head');
+                if(head&&!head.querySelector('.rm-occ-lock')){
+                    const note=document.createElement('p');
+                    note.className='rm-occ-lock';
+                    note.textContent='Chambre occupée. La modification se fait depuis C-Occupées, par la Direction ou un utilisateur autorisé.';
+                    head.appendChild(note);
+                }
+            }
         }
         ['rf_nuits','rf_tarif','rf_personnes'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{
             calcTotals();
@@ -11031,6 +11063,7 @@ const CHETAT=(function(){
             }
         }));
         document.getElementById('rfValider')?.addEventListener('click',()=>{
+            if(locked)return;
             if(document.getElementById('rfPayPanel')?.classList.contains('is-open')){
                 if(!validatePayPanel())return;
             }
@@ -11856,12 +11889,12 @@ const CHETAT=(function(){
         if(saved?.validated){
             const st=saved.statusChambre||r.status||'reservee';
             goResaPanel(st);
-            showForm(r,saved,{edit:true});
+            showForm(r,saved,st==='occupee'?{view:true}:{edit:true});
             return;
         }
         if(r.status==='reservee'||r.status==='occupee'){
             goResaPanel(r.status);
-            showForm(r,saved||null,{edit:true});
+            showForm(r,saved||null,r.status==='occupee'?{view:true}:{edit:true});
             return;
         }
         if(r.status==='nettoyage'||r.status==='maintenance'){
@@ -11871,6 +11904,18 @@ const CHETAT=(function(){
             return;
         }
         showForm(r,null,{edit:true});
+    }
+
+    function editOccupiedRoom(num){
+        syncFromStorage();
+        const r=roomByNum(num);
+        if(!r)return;
+        const saved=getResas()[r.num];
+        if(!window.ajCanEditOccupied?.()){
+            showForm(r,saved||null,{view:true});
+            return;
+        }
+        showForm(r,saved||null,{edit:true,occEdit:true});
     }
 
     function viewRoom(num){
@@ -11890,7 +11935,7 @@ const CHETAT=(function(){
         printForm(r,!!isPdf);
     }
 
-    return{render,renderEtages,select,reserve,openDashRoom,viewRoom,printRoom,showAddModal,openContenu,openRoomFiche};
+    return{render,renderEtages,select,reserve,openDashRoom,editOccupiedRoom,viewRoom,printRoom,showAddModal,openContenu,openRoomFiche};
 })();
 window.CHETAT=CHETAT;
 
@@ -12424,7 +12469,7 @@ const RESA=(function(){
             <td>${esc(r.commercial||'—')}</td>
             <td class="no-print"><div class="bc-actions">
                 <button type="button" class="bc-ico" data-occ="voir" data-num="${esc(r.num)}" title="Voir">${OCC_ICO.voir}</button>
-                <button type="button" class="bc-ico" data-occ="edit" data-num="${esc(r.num)}" title="Modifier">${OCC_ICO.edit}</button>
+                ${window.ajCanEditOccupied?.()?`<button type="button" class="bc-ico" data-occ="edit" data-num="${esc(r.num)}" title="Modifier">${OCC_ICO.edit}</button>`:''}
                 <button type="button" class="bc-ico" data-occ="print" data-num="${esc(r.num)}" title="Imprimer">${OCC_ICO.print}</button>
             </div></td>
         </tr>`;
@@ -12493,7 +12538,10 @@ const RESA=(function(){
             e.stopPropagation();
             const n=btn.dataset.num;
             if(btn.dataset.occ==='voir')viewRow(n);
-            if(btn.dataset.occ==='edit')editRow(n);
+            if(btn.dataset.occ==='edit'){
+                if(window.CHETAT?.editOccupiedRoom)window.CHETAT.editOccupiedRoom(n);
+                else editRow(n);
+            }
             if(btn.dataset.occ==='print')printRow(n);
         });
     }
