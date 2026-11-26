@@ -3173,13 +3173,14 @@
             box-shadow:0 18px 40px rgba(8,20,51,.14),0 0 0 1px var(--st);
         }
         .dr-card.st-disponible{--st:#e0b43a}
-        .dr-card.st-occupee{--st:#2fa864}
+        .dr-card.st-occupee{--st:#2fa864;cursor:default}
         .dr-card.st-reservee{--st:#3b7be0}
         .dr-card.st-nettoyage{--st:#8a93a3}
         .dr-card.st-maintenance{--st:#d9534f}
         .dr-img{position:relative;aspect-ratio:4/3;overflow:hidden;background:#e9e5dc}
         .dr-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
         .dr-card:hover .dr-img img{transform:scale(1.06)}
+        .dr-card.st-occupee:hover .dr-img img{transform:none}
         .dr-img::after{
             content:'';position:absolute;inset:0;pointer-events:none;
             background:linear-gradient(180deg,rgba(8,20,51,0) 55%,rgba(8,20,51,.55) 100%);
@@ -11018,12 +11019,13 @@ const CHETAT=(function(){
     function showForm(room,prefill,opts){
         currentRoom=room;
         const saved=getResas()[room.num],data=prefill||saved;
+        const occupied=stayOccupied(room,saved);
+        if(occupied&&!(opts&&opts.fromOcc&&window.ajCanEditOccupied?.()))return;
         const box=document.getElementById('rmModalContent');
         if(!box)return;
         box.innerHTML=formHtml(room,data);
         calcTotals();
         syncPayFields();
-        const occupied=stayOccupied(room,saved);
         occEditOpen=!!(opts&&opts.occEdit&&window.ajCanEditOccupied?.());
         const locked=!!(opts&&opts.view)||(occupied&&!occEditOpen)||(!occupied&&!!(saved?.validated&&!prefill&&!(opts&&opts.edit)));
         bindIdDocUpload(locked);
@@ -11044,7 +11046,7 @@ const CHETAT=(function(){
         if(locked){
             const valBtn=document.getElementById('rfValider');
             if(valBtn)valBtn.disabled=true;
-            if(occupied){
+            if(occupied&&!(opts&&opts.fromOcc)){
                 const head=box.querySelector('.rm-form-head');
                 if(head&&!head.querySelector('.rm-occ-lock')){
                     const note=document.createElement('p');
@@ -11427,6 +11429,7 @@ const CHETAT=(function(){
     }
 
     function onRoomClick(room){
+        if(room.status==='occupee')return;
         if(room.status==='disponible')showForm(room);
         else if((room.status==='nettoyage'||room.status==='maintenance')&&CAN_MANAGE)showAdminStatusPanel(room);
         else if(MSG[room.status])showMessage(room,room.status);
@@ -11539,6 +11542,7 @@ const CHETAT=(function(){
             const room=roomByNum(card.dataset.num);
             if(!room)return;
             if(e.target.closest('.ch-rc-file')){e.preventDefault();e.stopPropagation();openContenu(room);return;}
+            if(room.status==='occupee'){e.preventDefault();e.stopPropagation();return;}
             if(e.target.closest('.ch-rc-img')){e.preventDefault();e.stopPropagation();openAdd(room);return;}
             showDetail(room);
         });
@@ -11886,15 +11890,16 @@ const CHETAT=(function(){
             showForm(r);
             return;
         }
+        if(r.status==='occupee'||(saved?.validated&&saved.statusChambre==='occupee'))return;
         if(saved?.validated){
             const st=saved.statusChambre||r.status||'reservee';
             goResaPanel(st);
-            showForm(r,saved,st==='occupee'?{view:true}:{edit:true});
+            showForm(r,saved,{edit:true});
             return;
         }
-        if(r.status==='reservee'||r.status==='occupee'){
+        if(r.status==='reservee'){
             goResaPanel(r.status);
-            showForm(r,saved||null,r.status==='occupee'?{view:true}:{edit:true});
+            showForm(r,saved||null,{edit:true});
             return;
         }
         if(r.status==='nettoyage'||r.status==='maintenance'){
@@ -11911,11 +11916,8 @@ const CHETAT=(function(){
         const r=roomByNum(num);
         if(!r)return;
         const saved=getResas()[r.num];
-        if(!window.ajCanEditOccupied?.()){
-            showForm(r,saved||null,{view:true});
-            return;
-        }
-        showForm(r,saved||null,{edit:true,occEdit:true});
+        if(!window.ajCanEditOccupied?.())return;
+        showForm(r,saved||null,{edit:true,occEdit:true,fromOcc:true});
     }
 
     function viewRoom(num){
@@ -11923,7 +11925,8 @@ const CHETAT=(function(){
         const r=roomByNum(num);
         if(!r)return;
         const saved=getResas()[r.num];
-        showForm(r,saved||null,{view:true});
+        if(stayOccupied(r,saved)&&!window.ajCanEditOccupied?.())return;
+        showForm(r,saved||null,stayOccupied(r,saved)?{view:true,fromOcc:true}:{view:true});
     }
 
     function printRoom(num,isPdf){
@@ -11931,7 +11934,8 @@ const CHETAT=(function(){
         const r=roomByNum(num);
         if(!r)return;
         const saved=getResas()[r.num];
-        showForm(r,saved||null,{edit:true});
+        if(stayOccupied(r,saved)&&!window.ajCanEditOccupied?.())return;
+        showForm(r,saved||null,stayOccupied(r,saved)?{view:true,fromOcc:true}:{edit:true});
         printForm(r,!!isPdf);
     }
 
@@ -12221,7 +12225,7 @@ const DASH=(function(){
             let contenuN=0;
             try{const c=JSON.parse(localStorage.getItem('aj_ch_contenu')||'{}');contenuN=Array.isArray(c[r.num])?c[r.num].length:0;}catch(e){}
             cards+=`
-            <article class="dr-card st-${r.status}" data-num="${esc(r.num)}" role="button" tabindex="0">
+            <article class="dr-card st-${r.status}" data-num="${esc(r.num)}" data-status="${esc(r.status)}" role="button" tabindex="${r.status==='occupee'?'-1':'0'}">
                 <div class="dr-img">
                     <img src="${esc(r.img)}" alt="${esc(r.title)}" loading="lazy">
                     <span class="dr-badge st-${r.status}">${STATUS[r.status]}</span>
@@ -12283,6 +12287,7 @@ const DASH=(function(){
         });
         box.querySelectorAll('.dr-card').forEach(c=>{
             const open=()=>{
+                if(c.dataset.status==='occupee')return;
                 const num=c.dataset.num;
                 if(window.CHETAT?.openDashRoom)window.CHETAT.openDashRoom(num);
                 else if(window.CHETAT?.reserve)window.CHETAT.reserve(num);
@@ -12468,9 +12473,9 @@ const RESA=(function(){
             <td class="bc-money bc-solde ${r.solde<=0.009?'ok':'due'}">${fmtDH(r.solde)}</td>
             <td>${esc(r.commercial||'—')}</td>
             <td class="no-print"><div class="bc-actions">
-                <button type="button" class="bc-ico" data-occ="voir" data-num="${esc(r.num)}" title="Voir">${OCC_ICO.voir}</button>
-                ${window.ajCanEditOccupied?.()?`<button type="button" class="bc-ico" data-occ="edit" data-num="${esc(r.num)}" title="Modifier">${OCC_ICO.edit}</button>`:''}
-                <button type="button" class="bc-ico" data-occ="print" data-num="${esc(r.num)}" title="Imprimer">${OCC_ICO.print}</button>
+                ${window.ajCanEditOccupied?.()?`<button type="button" class="bc-ico" data-occ="voir" data-num="${esc(r.num)}" title="Voir">${OCC_ICO.voir}</button>
+                <button type="button" class="bc-ico" data-occ="edit" data-num="${esc(r.num)}" title="Modifier">${OCC_ICO.edit}</button>
+                <button type="button" class="bc-ico" data-occ="print" data-num="${esc(r.num)}" title="Imprimer">${OCC_ICO.print}</button>`:'—'}
             </div></td>
         </tr>`;
     }
