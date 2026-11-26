@@ -46,6 +46,7 @@
             view: room.view != null ? room.view : base.view,
             bed: room.bed != null ? room.bed : base.bed,
             custom: !!(room.custom || base.custom),
+            photosCustom: !!(room.photosCustom || base.photosCustom),
         };
         const hasPhoto = !!merged.img && merged.img !== PLACEHOLDER;
         const img = hasPhoto ? merged.img : PLACEHOLDER;
@@ -195,6 +196,7 @@
                 price: room.price,
                 img: room.img,
                 imgs: room.imgs && room.imgs.length ? room.imgs : (room.img ? [room.img] : []),
+                photosCustom: !!room.photosCustom,
             })),
             slides: (carousel[cat.key]?.slides || []).map((slide) => ({
                 ...slide,

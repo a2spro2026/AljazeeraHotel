@@ -337,6 +337,41 @@
         white-space:nowrap;transition:transform .2s,box-shadow .2s;
     }
     .btn-room:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(197,160,89,.35)}
+    .home-gal{
+        position:fixed;inset:0;z-index:80;display:none;
+        background:rgba(10,23,54,.55);backdrop-filter:blur(8px);
+        align-items:center;justify-content:center;padding:20px;
+    }
+    .home-gal.is-on{display:flex}
+    .home-gal-card{
+        width:min(760px,100%);max-height:92vh;overflow:auto;
+        background:#fff;border-radius:16px;padding:22px 22px 18px;
+        border:1px solid rgba(197,160,89,.28);
+        box-shadow:0 24px 64px rgba(8,20,51,.22);position:relative;
+    }
+    .home-gal-x{
+        position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:10px;
+        border:1px solid rgba(197,160,89,.35);background:#fff;cursor:pointer;font-size:22px;line-height:1;
+    }
+    .home-gal-kicker{margin:0 0 4px;font:700 11px 'Montserrat',sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:#c5a059}
+    .home-gal-card h3{margin:0 0 14px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:#1a2332}
+    .home-gal-main{position:relative;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:#e9e5dc}
+    .home-gal-main img{width:100%;height:100%;object-fit:cover;display:block}
+    .home-gal-nav{
+        position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 10px;pointer-events:none;
+    }
+    .home-gal-nav button{
+        pointer-events:auto;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;
+        background:rgba(255,255,255,.92);color:#0a1736;font-size:22px;
+        box-shadow:0 4px 14px rgba(0,0,0,.18);
+    }
+    .home-gal-thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:12px}
+    .home-gal-thumbs button{
+        flex:0 0 auto;width:78px;height:58px;padding:0;border-radius:8px;overflow:hidden;cursor:pointer;
+        border:2px solid transparent;background:#efe8d8;
+    }
+    .home-gal-thumbs button.is-on{border-color:#c5a059}
+    .home-gal-thumbs img{width:100%;height:100%;object-fit:cover;display:block}
 
     .home-services{
         background:var(--surface);padding:56px clamp(20px,4vw,48px);
@@ -519,7 +554,7 @@
                 </div>
                 <div class="home-room-foot">
                     <div class="home-room-price room-price">{{ number_format($room['price'], 2, '.', ' ') }} DH <small>/ nuit</small></div>
-                    <a href="{{ route('chambres') }}?room={{ $num }}"><button type="button" class="btn-room">Voir les détails</button></a>
+                    <button type="button" class="btn-room" data-room-details="{{ $num }}">Voir les détails</button>
                 </div>
             </div>
         </article>
@@ -527,6 +562,21 @@
     </div>
     @include('partials.hb-writings', ['zone' => 'chambres'])
 </section>
+<div class="home-gal" id="homeGal" hidden>
+    <div class="home-gal-card" role="dialog" aria-modal="true" aria-label="Photos de la chambre">
+        <button type="button" class="home-gal-x" id="homeGalClose" aria-label="Fermer">×</button>
+        <p class="home-gal-kicker" id="homeGalNum"></p>
+        <h3 id="homeGalTitle"></h3>
+        <div class="home-gal-main">
+            <img id="homeGalImg" alt="">
+            <div class="home-gal-nav" id="homeGalNav">
+                <button type="button" id="homeGalPrev" aria-label="Photo précédente">‹</button>
+                <button type="button" id="homeGalNext" aria-label="Photo suivante">›</button>
+            </div>
+        </div>
+        <div class="home-gal-thumbs" id="homeGalThumbs"></div>
+    </div>
+</div>
 
 @php
     $hbServices = $habillage['services'] ?? \App\Support\Habillage::defaultServices();
@@ -630,11 +680,10 @@
         '302':{label:'Suite Executive',guests:3,size:'50 m²',view:'Vue panoramique'},
         '120':{label:'Familiale Premium',guests:4,size:'45 m²',view:'Vue jardin'}
     };
-    const nums=['101','201','301','302','120'];
-    nums.forEach(num=>{
+    document.querySelectorAll('.home-room').forEach(card=>{
+        const num=card.dataset.num;
         const room=window.AJ_HOTEL.getRoom(num);
-        const card=document.querySelector(`.home-room[data-num="${num}"]`);
-        if(!room||!card)return;
+        if(!room)return;
         const m=meta[num]||{};
         const img=card.querySelector('.home-room-img img');
         const title=card.querySelector('h3');
@@ -642,6 +691,81 @@
         if(img&&room.img)img.src=room.img;
         if(title)title.textContent=m.label||room.title;
         if(price)price.innerHTML=ajMoneyDH(room.price)+' <small>/ nuit</small>';
+    });
+
+    const gal=document.getElementById('homeGal');
+    const galImg=document.getElementById('homeGalImg');
+    const galThumbs=document.getElementById('homeGalThumbs');
+    const galNav=document.getElementById('homeGalNav');
+    let photos=[],photoIdx=0;
+    function roomPhotos(room){
+        const skip=window.AJ_HOTEL.PLACEHOLDER||'/images/rooms/default.svg';
+        let list=Array.isArray(room.imgs)?room.imgs.map(String).filter(Boolean):[];
+        if(room.img&&!list.includes(room.img))list.unshift(room.img);
+        list=[...new Set(list.filter(src=>src&&src!==skip&&!src.endsWith('/default.svg')))];
+        if(!list.length&&room.img)list=[room.img];
+        return list;
+    }
+    function paintPhoto(){
+        if(!photos.length||!galImg)return;
+        galImg.src=photos[photoIdx];
+        galThumbs?.querySelectorAll('button').forEach((btn,i)=>btn.classList.toggle('is-on',i===photoIdx));
+    }
+    function openDetails(num){
+        const room=window.AJ_HOTEL.getRoom(num);
+        const card=document.querySelector('.home-room[data-num="'+num+'"]');
+        if(!room||!gal)return;
+        photos=roomPhotos(room);
+        photoIdx=0;
+        const fallback=card?.querySelector('.home-room-img img')?.src||'';
+        if(!photos.length&&fallback)photos=[fallback];
+        const numEl=document.getElementById('homeGalNum');
+        const titleEl=document.getElementById('homeGalTitle');
+        if(numEl)numEl.textContent='Chambre '+room.num;
+        if(titleEl)titleEl.textContent=(meta[num]&&meta[num].label)||room.title||'';
+        if(galImg)galImg.alt=titleEl?titleEl.textContent:'';
+        if(galNav)galNav.hidden=photos.length<2;
+        if(galThumbs){
+            galThumbs.hidden=photos.length<2;
+            galThumbs.innerHTML=photos.map((src,i)=>'<button type="button" data-i="'+i+'" class="'+(i===0?'is-on':'')+'"><img src="'+src.replace(/"/g,'')+'" alt=""></button>').join('');
+        }
+        paintPhoto();
+        gal.hidden=false;
+        gal.classList.add('is-on');
+        document.body.style.overflow='hidden';
+    }
+    function closeDetails(){
+        if(!gal)return;
+        gal.classList.remove('is-on');
+        gal.hidden=true;
+        document.body.style.overflow='';
+    }
+    document.querySelectorAll('[data-room-details]').forEach(btn=>{
+        btn.addEventListener('click',()=>openDetails(btn.dataset.roomDetails));
+    });
+    document.getElementById('homeGalClose')?.addEventListener('click',closeDetails);
+    gal?.addEventListener('click',e=>{if(e.target===gal)closeDetails();});
+    document.getElementById('homeGalPrev')?.addEventListener('click',()=>{
+        if(photos.length<2)return;
+        photoIdx=(photoIdx-1+photos.length)%photos.length;
+        paintPhoto();
+    });
+    document.getElementById('homeGalNext')?.addEventListener('click',()=>{
+        if(photos.length<2)return;
+        photoIdx=(photoIdx+1)%photos.length;
+        paintPhoto();
+    });
+    galThumbs?.addEventListener('click',e=>{
+        const btn=e.target.closest('button');
+        if(!btn)return;
+        photoIdx=Number(btn.dataset.i)||0;
+        paintPhoto();
+    });
+    document.addEventListener('keydown',e=>{
+        if(!gal||!gal.classList.contains('is-on'))return;
+        if(e.key==='Escape')closeDetails();
+        if(e.key==='ArrowLeft')document.getElementById('homeGalPrev')?.click();
+        if(e.key==='ArrowRight')document.getElementById('homeGalNext')?.click();
     });
 })();
 </script>

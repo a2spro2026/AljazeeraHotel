@@ -486,7 +486,7 @@
     function roomGallery(room){
         let photos=Array.isArray(room.imgs)?room.imgs.filter(Boolean).map(String):[];
         if(room.img&&!photos.includes(room.img))photos.unshift(room.img);
-        if(photos.length<2){
+        if(photos.length<2 && !room.photosCustom){
             const cat=CATEGORIES.find(c=>(c.rooms||[]).some(r=>String(r.num)===String(room.num)));
             const extras=(cat?.rooms||[])
                 .filter(r=>String(r.num)!==String(room.num))

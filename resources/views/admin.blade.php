@@ -1294,16 +1294,47 @@
             .rm-form-grid.pay-line{grid-template-columns:repeat(2,minmax(0,1fr))}
             .rm-form-grid.pay-line .field.pay-type{max-width:none}
         }
+        .rm-form-grid.heberg-line{
+            display:flex;flex-wrap:nowrap;align-items:flex-end;gap:8px;
+        }
+        .rm-form-grid.heberg-line .field{flex:1 1 0;min-width:0;margin:0}
+        .rm-form-grid.heberg-line .field.meals{flex:0 0 auto}
+        .rm-form-grid.heberg-line .field label{font-size:9px;letter-spacing:.35px;margin-bottom:4px}
+        .rm-form-grid.heberg-line .field input,
+        .rm-form-grid.heberg-line .field select{
+            min-height:0;padding:6px 8px;font-size:12px;border-radius:8px;
+        }
+        @media(max-width:900px){
+            .rm-form-grid.heberg-line{flex-wrap:wrap}
+            .rm-form-grid.heberg-line .field{flex:1 1 120px}
+        }
+        .rf-meals{display:flex;flex-wrap:nowrap;gap:4px;margin:0}
+        .rf-meal{
+            appearance:none;border:1px solid transparent;cursor:pointer;white-space:nowrap;
+            padding:6px 8px;border-radius:999px;font:700 10px 'Montserrat',sans-serif;letter-spacing:.1px;
+        }
+        .rf-meal.m-petit-dej{color:#1d4ed8;background:rgba(37,99,235,.12);border-color:rgba(37,99,235,.35)}
+        .rf-meal.m-petit-dej.is-on{color:#fff;background:#2563eb;border-color:#2563eb}
+        .rf-meal.m-dej{color:#047857;background:rgba(5,150,105,.12);border-color:rgba(5,150,105,.35)}
+        .rf-meal.m-dej.is-on{color:#fff;background:#059669;border-color:#059669}
+        .rf-meal.m-diner{color:#854d0e;background:rgba(234,179,8,.2);border-color:rgba(202,138,4,.45)}
+        .rf-meal.m-diner.is-on{color:#1a1304;background:#eab308;border-color:#eab308}
+        .rf-meal:disabled{opacity:.5;cursor:default}
+        .rf-pay-hint{margin:0 0 10px;font:600 12px 'Montserrat',sans-serif;color:#8a5a12}
+        .rf-pay-hint[hidden]{display:none}
         .rf-pay-pills{
-            display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;
+            display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;align-items:stretch;
         }
         .rf-pay-pill{
             appearance:none;border:1px solid rgba(197,160,89,.4);
             background:#fff;color:#1a2332;cursor:pointer;
-            padding:9px 14px;border-radius:999px;
-            font:700 11px 'Montserrat',sans-serif;letter-spacing:.6px;text-transform:uppercase;
+            width:84px;height:78px;padding:8px 4px;border-radius:14px;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+            font:600 9px 'Montserrat',sans-serif;letter-spacing:.2px;line-height:1.1;text-align:center;
             transition:border-color .2s,background .2s,color .2s,box-shadow .2s;
         }
+        .rf-pay-pill svg{width:26px;height:26px;display:block;flex:0 0 auto}
+        .rf-pay-pill span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
         .rf-pay-pill:hover{border-color:var(--gold);color:var(--tw-navy)}
         .rf-pay-pill.is-on{
             background:linear-gradient(135deg,var(--gold),var(--gold-light));
@@ -1654,22 +1685,54 @@
         }
         .panel.frns-panel .ba-lines-table .ba-inp{min-height:46px;padding:11px 14px;font-size:14px;border-radius:9px}
         .panel.frns-panel .table-wrap{width:100%;margin:0}
-        .panel.frns-panel table{table-layout:fixed;width:100%}
+        .panel.frns-panel table{table-layout:auto;width:100%}
+        .panel.frns-panel .ba-lines-table{table-layout:fixed}
         .panel.frns-panel th,
         .panel.frns-panel td{padding:15px 14px;font-size:14px}
         .panel.frns-panel .ba-lines-wrap{width:100%;margin:14px 0 18px}
         .panel.frns-panel .ba-lines-table th:nth-child(1),
-        .panel.frns-panel .ba-lines-table td:nth-child(1){width:11%}
+        .panel.frns-panel .ba-lines-table td:nth-child(1){width:10%}
         .panel.frns-panel .ba-lines-table th:nth-child(2),
-        .panel.frns-panel .ba-lines-table td:nth-child(2){width:36%}
+        .panel.frns-panel .ba-lines-table td:nth-child(2){width:24%}
         .panel.frns-panel .ba-lines-table th:nth-child(3),
-        .panel.frns-panel .ba-lines-table td:nth-child(3){width:11%}
+        .panel.frns-panel .ba-lines-table td:nth-child(3){width:9%}
         .panel.frns-panel .ba-lines-table th:nth-child(4),
-        .panel.frns-panel .ba-lines-table td:nth-child(4){width:14%}
+        .panel.frns-panel .ba-lines-table td:nth-child(4){width:18%}
         .panel.frns-panel .ba-lines-table th:nth-child(5),
-        .panel.frns-panel .ba-lines-table td:nth-child(5){width:14%}
+        .panel.frns-panel .ba-lines-table td:nth-child(5){width:12%}
         .panel.frns-panel .ba-lines-table th:nth-child(6),
-        .panel.frns-panel .ba-lines-table td:nth-child(6){width:14%}
+        .panel.frns-panel .ba-lines-table td:nth-child(6){width:13%}
+        .panel.frns-panel .ba-lines-table th:nth-child(7),
+        .panel.frns-panel .ba-lines-table td:nth-child(7){width:14%}
+        .ba-line-ops{display:flex;justify-content:center;align-items:center;gap:6px}
+        .ba-line-ico{
+            width:28px;height:28px;border-radius:8px;border:1px solid rgba(197,160,89,.45);
+            background:#fff;color:#0f2a5c;cursor:pointer;font:700 18px/1 'Montserrat',sans-serif;
+            display:inline-flex;align-items:center;justify-content:center;padding:0;
+        }
+        .ba-line-ico:hover{background:#0f2a5c;color:#f6efdd;border-color:#0f2a5c}
+        .ba-line-ico.minus{color:#9b2c2c}
+        .ba-line-ico.minus:hover{background:#9b2c2c;color:#fff;border-color:#9b2c2c}
+        #baModal .ba-lines-sheet{
+            display:flex;flex-direction:column;gap:8px;width:100%;
+            margin:0 0 14px;padding:12px;border:1px solid rgba(197,160,89,.35);border-radius:12px;background:#fff;
+        }
+        #baModal .ba-line{
+            display:grid;grid-template-columns:0.9fr 1.7fr 0.6fr 1.3fr 0.75fr 0.85fr 76px;
+            gap:8px;align-items:center;width:100%;
+        }
+        #baModal .ba-line-h span{
+            font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#c5a059;text-align:center;
+        }
+        #baModal .ba-line .ba-inp{
+            display:block;width:100%;min-height:38px;box-sizing:border-box;
+            background:#fff;color:#1a2332;border:1px solid rgba(197,160,89,.55);border-radius:8px;
+            padding:8px 10px;font:14px 'Montserrat',sans-serif;text-align:center;
+        }
+        #baModal .ba-line .ba-inp.st{font-weight:700;color:#0f2a5c;background:#f8f5ee}
+        #baModal .ba-line-total{grid-template-columns:1fr auto;margin-top:4px}
+        #baModal .ba-line-total-lbl{text-align:center;font-weight:700;color:#0f2a5c}
+        #baModal #ba_frns_nom{background:#fff;opacity:1;color:#1a2332}
         .panel.frns-panel .bal-list{width:100%}
         .panel.frns-panel .bal-row{width:100%;justify-content:space-between;padding:16px 22px;gap:18px}
         .panel.frns-panel .bal-row label.chk{flex:1 1 220px;min-width:0}
@@ -1749,9 +1812,14 @@
             width:24px;height:24px;min-width:24px;font-size:11px;margin:0;
             border-radius:5px;padding:0;line-height:1;flex-shrink:0;
         }
+        #fiche #ff_table{width:100%;table-layout:auto}
+        #fiche #ff_table th,#fiche #ff_table td{
+            color:var(--text-dark);overflow:visible;white-space:normal;text-overflow:clip;
+        }
+        #fiche #ff_table thead th{color:var(--gold)}
         .panel.frns-panel.frns-compact #ff_table th.no-print:last-child,
         .panel.frns-panel.frns-compact #ff_table td.no-print:last-child{
-            width:106px;min-width:106px;padding:8px 4px;
+            width:118px;min-width:118px;padding:8px 4px;white-space:nowrap;
         }
         .panel.frns-panel.frns-compact .tbtn{padding:6px 10px;font-size:11px}
         .panel.frns-panel.frns-compact .hint{font-size:12px;margin:0 0 12px;opacity:.9}
@@ -1787,11 +1855,11 @@
             display:grid;
             grid-template-columns:
                 minmax(108px,0.78fr)
-                minmax(52px,0.42fr)
-                minmax(58px,0.48fr)
-                minmax(0,2.1fr)
-                minmax(62px,0.46fr)
-                minmax(72px,0.56fr);
+                minmax(72px,0.5fr)
+                minmax(78px,0.5fr)
+                minmax(0,1.6fr)
+                minmax(90px,0.7fr)
+                minmax(78px,0.55fr);
             gap:8px 10px;margin-bottom:14px;align-items:end;
         }
         #bon .ba-f-date input{font-size:12px;padding:8px 6px}
@@ -1799,6 +1867,10 @@
         #bon .ba-f-frns-id input{font-size:12px;padding:8px 6px}
         #bon .ba-f-type select,
         #bon .ba-f-echeance select{font-size:12px;padding:8px 6px}
+        #baModal .field.ba-f-echeance.is-disabled select{
+            background:#f3f1ec;color:#9aa3b2;opacity:.72;cursor:not-allowed;
+            border-color:rgba(197,160,89,.28);
+        }
         @media(max-width:1200px){
             #bon .ba-form-one{
                 grid-template-columns:repeat(3,minmax(0,1fr));
@@ -2382,7 +2454,11 @@
         .ch-rc-badge.st-occupee{background:#dbeafe;color:#2563eb}
         .ch-rc-badge.st-reservee{background:#ffedd5;color:#d97706}
         .ch-rc-badge.st-nettoyage{background:#f3e8ff;color:#7c3aed}
-        .ch-rc-badge.st-maintenance{background:#fee2e2;color:#dc2626}
+        .ch-rc-badge.st-maintenance{
+            background:#fee2e2;color:#dc2626;
+            letter-spacing:0;font-size:8px;max-width:calc(100% - 48px);
+            overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+        }
         .ch-rc-file{
             position:absolute;top:8px;left:8px;z-index:3;
             width:34px;height:34px;border-radius:10px;padding:0;
@@ -3106,11 +3182,15 @@
         }
         .dr-badge{
             position:absolute;top:12px;left:12px;z-index:1;
+            max-width:calc(100% - 58px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
             padding:5px 11px;border-radius:30px;font:700 10px 'Montserrat',sans-serif;letter-spacing:.8px;
             text-transform:uppercase;color:#fff;background:var(--st);
             box-shadow:0 0 0 2px rgba(255,255,255,.35),0 4px 14px rgba(0,0,0,.25);
         }
         .dr-card.st-disponible .dr-badge{color:#2a1f05}
+        .dr-card.st-maintenance .dr-badge{
+            letter-spacing:0;font-size:8px;padding:4px 8px;
+        }
         .dr-num{
             position:absolute;left:12px;bottom:10px;z-index:1;
             font:700 13px 'Montserrat',sans-serif;letter-spacing:1px;color:#fff;
@@ -3396,8 +3476,10 @@
         .cc-status{
             padding:6px 8px;text-align:center;font:700 10px 'Montserrat',sans-serif;letter-spacing:1.2px;
             text-transform:uppercase;color:#fff;background:var(--st);
+            overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
         }
         .cc-card.st-disponible .cc-status{color:#2a1f05}
+        .cc-card.st-maintenance .cc-status{letter-spacing:.15px;font-size:9px}
         @media(max-width:860px){
             .cc-tools{align-items:center;width:100%}
             .cc-filters .cc-select{min-width:0;flex:1 1 140px}
@@ -3485,8 +3567,25 @@
         .cc-st-opt.st-occupee{--st:#2fa864}
         .cc-st-opt.st-reservee{--st:#3b7be0}
         .cc-st-opt.st-nettoyage{--st:#8a93a3}
-        .cc-st-opt.st-maintenance{--st:#d9534f}
-        #rmModal.cc-edit-modal{width:min(520px,100%)}
+        .cc-st-opt.st-maintenance{--st:#d9534f;letter-spacing:0;font-size:8px;padding:11px 3px}
+        .cc-photos{
+            display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:0 0 12px;
+        }
+        .cc-photos:empty{display:none}
+        .cc-photo{
+            position:relative;width:92px;height:68px;flex:0 0 auto;border-radius:10px;overflow:hidden;
+            border:1px solid rgba(197,160,89,.4);background:#efe8d8;
+        }
+        .cc-photo.is-cover{box-shadow:0 0 0 2px var(--gold)}
+        .cc-photo img{width:100%;height:100%;object-fit:cover;display:block}
+        .cc-photo button{
+            position:absolute;top:3px;right:3px;width:18px;height:18px;border:0;border-radius:50%;
+            background:rgba(12,20,40,.72);color:#fff;cursor:pointer;font-size:12px;line-height:18px;padding:0;
+        }
+        .cc-photo-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+        .cc-photo-actions .btn{padding:8px 14px;border-radius:999px;letter-spacing:.04em}
+        .cc-photo-note{font:600 11px 'Montserrat',sans-serif;color:var(--muted)}
+        #rmModal.cc-edit-modal{width:min(640px,100%);max-height:90vh;overflow-y:auto}
         #rmModal.cc-edit-modal .rm-modal-close{
             top:12px;right:12px;z-index:2;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);
         }
@@ -4052,6 +4151,39 @@
             font-family:inherit;font-size:14px;color:var(--text-dark);
         }
         .bc-dialog-actions{display:flex;justify-content:center;gap:10px;margin-top:16px}
+        #baModal .bc-dialog{width:min(980px,100%);max-height:92vh;overflow:auto}
+        .ba-thumb{width:46px;height:36px;object-fit:cover;border-radius:6px;display:block;margin:0 auto;background:#efe8d8}
+        .ba-photo-row{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+        .ba-photo-row img{width:72px;height:54px;object-fit:cover;border-radius:8px;border:1px solid rgba(197,160,89,.35)}
+        #bon .bc-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:16px}
+        #bon .bc-head h2{margin:0}
+        #bon .bc-add{
+            height:42px;padding:0 16px;border:0;border-radius:10px;cursor:pointer;
+            background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#1a1304;
+            font:700 12px 'Montserrat',sans-serif;letter-spacing:.4px;
+        }
+        #bon.panel.active{display:block;width:100%;max-width:none}
+        #bon .bc-cards,#bon .bc-filters,#bon .bc-table-card{width:100%}
+        #bon .bc-table-card{flex:none;min-height:0;margin:0 0 8px;overflow:visible}
+        #bon .table-wrap{width:100%;height:auto}
+        #bon #ba_table{width:100%;height:auto;table-layout:auto}
+        #bon #ba_table th,#bon #ba_table td{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        #bon #ba_table th:nth-child(1),#bon #ba_table td:nth-child(1){width:9%}
+        #bon #ba_table th:nth-child(2),#bon #ba_table td:nth-child(2){width:6%}
+        #bon #ba_table th:nth-child(3),#bon #ba_table td:nth-child(3){width:8%}
+        #bon #ba_table th:nth-child(4),#bon #ba_table td:nth-child(4){width:13%}
+        #bon #ba_table th:nth-child(5),#bon #ba_table td:nth-child(5){width:10%}
+        #bon #ba_table th:nth-child(6),#bon #ba_table td:nth-child(6){width:12%}
+        #bon #ba_table th:nth-child(7),#bon #ba_table td:nth-child(7){width:9%}
+        #bon #ba_table th:nth-child(8),#bon #ba_table td:nth-child(8){width:8%}
+        #bon #ba_table th:nth-child(9),#bon #ba_table td:nth-child(9){width:8%}
+        #bon #ba_table th:nth-child(10),#bon #ba_table td:nth-child(10){width:17%;overflow:visible;text-overflow:clip;padding-left:4px;padding-right:4px}
+        #bon .bc-ico{width:28px;height:28px}
+        #bon .ba-actions{display:flex;justify-content:center;align-items:center;gap:4px}
+        #bon .ba-thumb-empty{
+            display:inline-flex;align-items:center;justify-content:center;
+            width:46px;height:36px;border-radius:6px;background:#efe8d8;color:#8a7a55;
+        }
         @media(max-width:1100px){
             .bc-cards,.bc-filters,.bp-filters{grid-template-columns:1fr}
             .bc-grid{grid-template-columns:1fr}
@@ -4342,7 +4474,7 @@ window.AJ_SESSION=@json($adminSession);
                     </button>
                     <div class="aj-bell-panel" id="ajBellPanel" hidden>
                         <div class="aj-bell-head">
-                            <strong>Alertes réservations web</strong>
+                            <strong>Alertes</strong>
                             <button type="button" class="aj-bell-mark" id="ajBellMarkAll">Tout lu</button>
                         </div>
                         <div class="aj-bell-list" id="ajBellList">
@@ -4604,21 +4736,51 @@ window.AJ_SESSION=@json($adminSession);
 
             {{-- BON ACHATS --}}
             <section class="panel frns-panel frns-compact ba-panel" id="bon">
-                <div class="panel-stack">
-                    <div class="block">
-                        <h3>Bon d'achat</h3>
+                <div class="bc-head">
+                    <div>
+                        <div class="bc-kicker">Fournisseur</div>
+                        <h2 class="serif">Bon d'achat</h2>
+                    </div>
+                    <button type="button" class="bc-add" id="baAdd">Ajouter</button>
+                </div>
+                <div class="bc-cards">
+                    <article class="bc-card total"><span class="bc-accent"></span><div class="bc-lbl">Nbrs BA</div><div class="bc-val" id="baCount">0</div></article>
+                    <article class="bc-card paid"><span class="bc-accent"></span><div class="bc-lbl">Total</div><div class="bc-val" id="baTotalCard">0 <small>DH</small></div></article>
+                    <article class="bc-card due"><span class="bc-accent"></span><div class="bc-lbl">Solde</div><div class="bc-val" id="baSoldeCard">0 <small>DH</small></div></article>
+                </div>
+                <div class="bc-filters">
+                    <label>Mois<input type="month" id="baMonth"></label>
+                    <label>Nom fournisseur<input type="search" id="baNom" placeholder="Rechercher un fournisseur" autocomplete="off"></label>
+                    <label>N° BA<input type="search" id="baNumQ" placeholder="N° bon" autocomplete="off"></label>
+                    <button type="button" class="bc-reset" id="baReset">Effacer</button>
+                </div>
+                <div class="block bc-table-card">
+                    <div class="table-wrap">
+                        <table id="ba_table">
+                            <thead><tr>
+                                <th>Date</th><th>Photo</th><th>N° BA</th><th>Nom fournisseur</th><th>Type paiement</th><th>Destination</th>
+                                <th>Mnt</th><th>Payé</th><th>Solde</th><th class="no-print">Action</th>
+                            </tr></thead>
+                            <tbody id="ba_tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bc-modal" id="baModal" aria-hidden="true">
+                    <div class="bc-dialog" role="dialog" aria-modal="true" aria-labelledby="baPanelTitle">
+                        <h3 id="baPanelTitle">Bon d'achat</h3>
                         <div class="ba-form-one">
                             <div class="field ba-f-date"><label>Date</label><input type="text" class="js-date" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off" id="ba_date"></div>
-                            <div class="field ba-f-num"><label>N° Bon</label><input type="text" id="ba_num" placeholder="N° bon"></div>
-                            <div class="field ba-f-frns-id"><label>ID Fournisseur</label><input type="text" id="ba_frns_id" list="ba_frns_list" placeholder="FR0001" oninput="FRNS.syncBonFrns()"></div>
-                            <div class="field ba-f-frns-nom"><label>Nom Fournisseur</label><input type="text" id="ba_frns_nom" readonly placeholder="—"></div>
-                            <div class="field ba-f-type"><label>Type Règl</label>
-                                <select id="ba_type_regl">
-                                    <option value="Esp">Esp</option>
-                                    <option value="Chq">Chq</option>
-                                    <option value="Eff">Eff</option>
-                                    <option value="Vir">Vir</option>
-                                    <option value="Vers">Vers</option>
+                            <div class="field ba-f-num"><label>N° BA</label><input type="text" id="ba_num" placeholder="N° BA"></div>
+                            <div class="field ba-f-frns-id"><label>ID</label><input type="text" id="ba_frns_id" placeholder="FR0001" autocomplete="off" oninput="FRNS.syncBonFrns()" onblur="FRNS.syncBonFrns(true)"></div>
+                            <div class="field ba-f-frns-nom"><label>Nom fournisseur</label><input type="text" id="ba_frns_nom" placeholder="Nom fournisseur" autocomplete="off"></div>
+                            <select id="ba_frns_pick" hidden onchange="FRNS.pickBonFrns(this.value)"><option value="">— Fournisseur —</option></select>
+                            <div class="field ba-f-type"><label>Type règl</label>
+                                <select id="ba_type_regl" onchange="FRNS.syncBaEcheance()">
+                                    <option value="Esp">Espèces</option>
+                                    <option value="Chq">Chèque</option>
+                                    <option value="Eff">Effet</option>
+                                    <option value="Vir">Virement</option>
+                                    <option value="Vers">Versement</option>
                                 </select>
                             </div>
                             <div class="field ba-f-echeance"><label>Échéance</label>
@@ -4632,48 +4794,34 @@ window.AJ_SESSION=@json($adminSession);
                             </div>
                         </div>
                         <datalist id="ba_frns_list"></datalist>
+                        <div class="ba-photo-row">
+                            <img id="baPhotoPrev" alt="" hidden>
+                            <button type="button" class="btn ghost" id="baPhotoBtn">Photo</button>
+                            <input type="file" id="baPhotoFile" accept="image/*" hidden>
+                            <input type="hidden" id="ba_photo">
+                        </div>
 
-                        <div class="table-wrap ba-lines-wrap">
-                            <table class="ba-lines-table" id="ba_lines_table">
-                                <thead>
-                                    <tr>
-                                        <th>Réf</th>
-                                        <th>Désignation</th>
-                                        <th>Qté</th>
-                                        <th>Prix U</th>
-                                        <th>Sous-Total</th>
-                                        <th class="no-print">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ba_lines_tbody"></tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="4">Total bon</td>
-                                        <td><span class="ba-total-val" id="ba_total">0.00 DH</span></td>
-                                        <td></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                        <div class="ba-lines-sheet" id="ba_lines_table">
+                            <div class="ba-line ba-line-h">
+                                <span>Réf</span>
+                                <span>Désignation</span>
+                                <span>Qté</span>
+                                <span>Destination</span>
+                                <span>Prix/u</span>
+                                <span>Sous-total</span>
+                                <span></span>
+                            </div>
+                            <div id="ba_lines_tbody"></div>
+                            <div class="ba-line ba-line-total">
+                                <span class="ba-line-total-lbl">Total bon</span>
+                                <span class="ba-total-val" id="ba_total">0.00 DH</span>
+                            </div>
                         </div>
 
                         <div class="actions">
-                            <button type="button" class="btn ghost" onclick="FRNS.addBonLine()">+ Ligne produit</button>
-                            <button type="button" class="btn gold" id="ba_save_btn" onclick="FRNS.saveBon()">Valider le bon</button>
-                            <button type="button" class="btn ghost" onclick="FRNS.newBon()">Nouveau bon</button>
+                            <button type="button" class="btn gold" id="ba_save_btn" onclick="FRNS.saveBon()">Valider</button>
                             <button type="button" class="btn ghost del" id="ba_del_btn" style="display:none" onclick="FRNS.delBonCurrent()">Supprimer ce bon</button>
-                            <button type="button" class="btn ghost" onclick="FRNS.printBon()">Imprimer le bon</button>
-                            <button type="button" class="btn ghost" onclick="FRNS.csv('ba_table','bons_achats.csv')">Exporter</button>
                             <button type="button" class="ibtn" title="Fermer" aria-label="Fermer" onclick="FRNS.closeBon()">&#10005;</button>
-                        </div>
-                    </div>
-                    <div class="block">
-                        <h3>Liste des bons d'achats</h3>
-                        <p class="ba-lines-hint">Cliquez sur un bon pour l'afficher et le modifier dans le formulaire ci-dessus.</p>
-                        <div class="table-wrap">
-                            <table id="ba_table">
-                                <thead><tr><th>Date</th><th>N° Bon</th><th>ID Fournisseur</th><th>Nom Fournisseur</th><th>Type Règl</th><th>Échéance</th><th>Nb prod.</th><th>Total</th><th class="no-print">Actions</th></tr></thead>
-                                <tbody id="ba_tbody"></tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -6028,7 +6176,8 @@ window.AJ_SESSION=@json($adminSession);
         if(pageLabels[targetId])title.textContent=pageLabels[targetId];
         if(typeof FRNS!=='undefined'){
             if(targetId==='dashboard')FRNS.renderDashboard();
-            if(targetId==='bon'||targetId==='regl')FRNS.renderSelects();
+            if(targetId==='fiche')FRNS.renderFiche();
+            if(targetId==='bon'||targetId==='regl'||targetId==='fiche')FRNS.renderSelects();
             if(targetId==='regl')FRNS.renderReglBalances();
             if(targetId==='balance')FRNS.renderBalance();
         }
@@ -6115,7 +6264,7 @@ window.AJ_SESSION=@json($adminSession);
 /* ===== Module Fournisseur (achats) — persistance localStorage ===== */
 const FRNS = (function(){
     const K={f:'aj_frns',b:'aj_bons',r:'aj_regls'};
-    const get=k=>JSON.parse(localStorage.getItem(k)||'[]');
+    const get=k=>{try{const v=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(v)?v:[];}catch(e){return[];}};
     const set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
     const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
     const num=v=>Number(v)||0;
@@ -6129,7 +6278,17 @@ const FRNS = (function(){
     let editFiche=null;
 
     /* ---- calculs ---- */
-    const frnsById=id=>get(K.f).find(f=>f.id===id);
+    function normFrnsId(id){
+        const raw=String(id||'').trim();
+        const m=raw.match(/^(?:fr)?\s*-?\s*0*(\d+)$/i);
+        if(!m)return raw.toUpperCase();
+        return 'FR'+String(parseInt(m[1],10)).padStart(4,'0');
+    }
+    const frnsById=id=>{
+        const want=normFrnsId(id);
+        if(!want)return undefined;
+        return get(K.f).find(f=>normFrnsId(f.id)===want);
+    };
     const frnsName=id=>{const f=frnsById(id);return f?f.nom:'—';};
     const totalBons=id=>getBons().filter(b=>b.frnsId===id).reduce((s,b)=>s+num(b.total),0);
     const duTotal=f=>num(f.solde)+totalBons(f.id);
@@ -6150,9 +6309,23 @@ const FRNS = (function(){
     }
 
     function renderBonFrnsList(){
+        const list=get(K.f);
+        const sel=document.getElementById('ba_frns_pick');
+        if(sel){
+            const cur=normFrnsId(document.getElementById('ba_frns_id')?.value||sel.value);
+            sel.innerHTML='<option value="">— Fournisseur —</option>'+list.map(f=>{
+                const id=normFrnsId(f.id);
+                return `<option value="${esc(id)}">${esc(id)} — ${esc(f.nom||'Sans nom')}</option>`;
+            }).join('');
+            sel.value=list.some(f=>normFrnsId(f.id)===cur)?cur:'';
+        }
         const dl=document.getElementById('ba_frns_list');
-        if(!dl)return;
-        dl.innerHTML=get(K.f).map(f=>`<option value="${esc(f.id)}">${esc(f.nom)}</option>`).join('');
+        if(dl)dl.innerHTML=list.map(f=>`<option value="${esc(normFrnsId(f.id))}">${esc(f.nom)}</option>`).join('');
+    }
+    function pickBonFrns(id){
+        const input=document.getElementById('ba_frns_id');
+        if(input)input.value=id?normFrnsId(id):'';
+        syncBonFrns(true);
     }
 
     const reglToShort=r=>({Espèces:'Esp',Chèque:'Chq',Effet:'Eff',Virement:'Vir',Versement:'Vers'}[r]||r||'Esp');
@@ -6185,7 +6358,7 @@ const FRNS = (function(){
         const list=get(K.f);
         let id=document.getElementById('ff_id').value.trim();
         const data={
-            id: editFiche || (id || nextId()),
+            id: normFrnsId(editFiche || id || nextId()),
             date:ajIso(document.getElementById('ff_date').value),
             nom, contact:document.getElementById('ff_contact').value.trim(),
             ville:document.getElementById('ff_ville').value.trim(),
@@ -6194,9 +6367,8 @@ const FRNS = (function(){
             echeance:document.getElementById('ff_echeance').value.trim(),
             solde:num(document.getElementById('ff_solde').value)
         };
-        if(editFiche){
-            const i=list.findIndex(f=>f.id===editFiche); if(i>-1)list[i]=data;
-        }else{ list.push(data); }
+        const i=list.findIndex(f=>normFrnsId(f.id)===data.id);
+        if(i>-1)list[i]=data; else list.push(data);
         set(K.f,list); editFiche=null; newFiche(); renderFiche(); renderSelects();
     }
     function newFiche(){
@@ -6205,9 +6377,9 @@ const FRNS = (function(){
         document.getElementById('ff_id').value=nextId();
     }
     function editFicheRow(id){
-        const f=frnsById(id); if(!f)return; editFiche=id;
+        const f=frnsById(id); if(!f)return; editFiche=normFrnsId(f.id);
         document.getElementById('ff_date').value=ajDate(f.date||'');
-        document.getElementById('ff_id').value=f.id;
+        document.getElementById('ff_id').value=normFrnsId(f.id);
         document.getElementById('ff_nom').value=f.nom||'';
         document.getElementById('ff_contact').value=f.contact||'';
         document.getElementById('ff_ville').value=f.ville||'';
@@ -6219,21 +6391,27 @@ const FRNS = (function(){
     }
     function delFiche(id){
         if(!confirm('Supprimer ce fournisseur ?'))return;
-        set(K.f,get(K.f).filter(f=>f.id!==id)); renderFiche(); renderSelects();
+        const key=normFrnsId(id);
+        set(K.f,get(K.f).filter(f=>normFrnsId(f.id)!==key)); renderFiche(); renderSelects();
     }
     function renderFiche(){
-        const tb=document.getElementById('ff_tbody'); const list=get(K.f);
-        tb.innerHTML=list.length?list.map(f=>`<tr>
-            <td>${esc(f.id)}</td><td>${esc(f.nom)}</td><td>${esc(f.contact)}</td>
-            <td>${esc(f.ville)}</td><td>${esc(f.adresse)}</td><td>${esc(f.reglement)}</td><td>${esc(f.echeance)}</td>
+        const tb=document.getElementById('ff_tbody'); if(!tb)return;
+        const list=get(K.f);
+        const cell=v=>esc(String(v||'').trim()||'—');
+        tb.innerHTML=list.length?list.map(f=>{
+            const id=normFrnsId(f.id);
+            return `<tr>
+            <td>${esc(id)}</td><td>${cell(f.nom)}</td><td>${cell(f.contact)}</td>
+            <td>${cell(f.ville)}</td><td>${cell(f.adresse)}</td><td>${cell(f.reglement)}</td><td>${cell(f.echeance)}</td>
             <td>${fmt(f.solde)}</td>
             <td class="no-print"><span class="tbl-actions">
-                <button class="ibtn" title="Modifier" onclick="FRNS.edit('${f.id}')">&#9998;</button>
-                <button class="ibtn del" title="Supprimer" onclick="FRNS.del('${f.id}')">&#128465;</button>
-                <button class="ibtn" title="Imprimer" onclick="FRNS.printRow('${f.id}')">&#128424;</button>
-                <button class="ibtn" title="Exporter" onclick="FRNS.csvRow('${f.id}')">&#11015;</button>
+                <button class="ibtn" title="Modifier" onclick="FRNS.edit('${id}')">&#9998;</button>
+                <button class="ibtn del" title="Supprimer" onclick="FRNS.del('${id}')">&#128465;</button>
+                <button class="ibtn" title="Imprimer" onclick="FRNS.printRow('${id}')">&#128424;</button>
+                <button class="ibtn" title="Exporter" onclick="FRNS.csvRow('${id}')">&#11015;</button>
             </span></td>
-        </tr>`).join(''):'<tr class="empty-row"><td colspan="9">Aucun fournisseur enregistré.</td></tr>';
+        </tr>`;
+        }).join(''):'<tr class="empty-row"><td colspan="9">Aucun fournisseur enregistré.</td></tr>';
     }
     function printRow(id){
         const f=frnsById(id); if(!f)return;
@@ -6261,7 +6439,7 @@ const FRNS = (function(){
             list=list.map(b=>({
                 id:b.id,date:b.date,frnsId:b.frnsId,frnsNom:frnsName(b.frnsId),
                 num:b.ref||'',typeRegl:'Esp',echeance:'30jrs',
-                lines:[{ref:'',desig:b.desig||'',qte:num(b.qte),prix:num(b.prix),st:num(b.st)}],
+                lines:[{ref:'',desig:b.desig||'',qte:num(b.qte),dest:b.dest||'',prix:num(b.prix),st:num(b.st)}],
                 total:num(b.st)
             }));
             set(K.b,list);
@@ -6273,24 +6451,39 @@ const FRNS = (function(){
             frnsNom:b.frnsNom||frnsName(b.frnsId),
             typeRegl:b.typeRegl||'Esp',
             echeance:BA_ECHEANCES.includes(b.echeance)?b.echeance:'30jrs',
-            lines:(b.lines||[]).map(l=>({ref:l.ref||'',desig:l.desig||'',qte:num(l.qte),prix:num(l.prix),st:num(l.st)}))
+            lines:(b.lines||[]).map(l=>({ref:l.ref||'',desig:l.desig||'',qte:num(l.qte),dest:l.dest||l.destination||'',prix:num(l.prix),st:num(l.st)}))
         }));
     }
 
-    function syncBonFrns(){
-        const id=document.getElementById('ba_frns_id')?.value.trim();
+    function syncBonFrns(commit){
+        const input=document.getElementById('ba_frns_id');
         const nomEl=document.getElementById('ba_frns_nom');
         const typeEl=document.getElementById('ba_type_regl');
         const echEl=document.getElementById('ba_echeance');
+        const pick=document.getElementById('ba_frns_pick');
         if(!nomEl)return;
-        const f=frnsById(id);
+        const f=frnsById(input?.value||'');
         if(f){
+            const id=normFrnsId(f.id);
+            if(commit&&input)input.value=id;
             nomEl.value=f.nom||'';
             if(typeEl)typeEl.value=reglToShort(f.reglement);
             if(echEl)echEl.value=echeanceBonFromFrns(f);
+            if(pick)pick.value=id;
         }else{
             nomEl.value='';
+            if(pick&&commit)pick.value='';
         }
+        syncBaEcheance();
+    }
+
+    function syncBaEcheance(){
+        const typeEl=document.getElementById('ba_type_regl');
+        const echEl=document.getElementById('ba_echeance');
+        if(!echEl)return;
+        const isEsp=(typeEl?.value||'Esp')==='Esp';
+        echEl.disabled=isEsp;
+        echEl.closest('.field')?.classList.toggle('is-disabled',isEsp);
     }
 
     function calcLineRow(tr){
@@ -6301,53 +6494,63 @@ const FRNS = (function(){
 
     function calcBonTotal(){
         let tot=0;
-        document.querySelectorAll('#ba_lines_tbody tr').forEach(tr=>{tot+=num(tr.querySelector('.st')?.value);});
+        document.querySelectorAll('#ba_lines_tbody .ba-line').forEach(tr=>{tot+=num(tr.querySelector('.st')?.value);});
         const el=document.getElementById('ba_total');
         if(el)el.textContent=fmt(tot);
         return tot;
     }
 
-    function addBonLine(data){
+    function addBonLine(data,afterTr){
         const tb=document.getElementById('ba_lines_tbody');
         if(!tb)return;
-        const tr=document.createElement('tr');
+        const tr=document.createElement('div');
+        tr.className='ba-line';
         tr.dataset.lineId=++baLineSeed;
         const d=data||{};
         tr.innerHTML=`
-            <td><input type="text" class="ba-inp ref" placeholder="Réf" value="${esc(d.ref||'')}"></td>
-            <td><input type="text" class="ba-inp desig" placeholder="Désignation" value="${esc(d.desig||'')}"></td>
-            <td><input type="number" class="ba-inp qte" placeholder="0" step="1" min="0" value="${d.qte!=null&&d.qte!==''?d.qte:''}"></td>
-            <td><input type="number" class="ba-inp prix" placeholder="0.00" step="0.01" min="0" value="${d.prix!=null&&d.prix!==''?d.prix:''}"></td>
-            <td><input type="text" class="ba-inp st" readonly value="${d.st!=null?num(d.st).toFixed(2):''}"></td>
-            <td class="no-print"><button type="button" class="tbtn del" onclick="FRNS.delBonLine(this)">Suppr.</button></td>`;
+            <input type="text" class="ba-inp ref" placeholder="Réf" value="${esc(d.ref||'')}">
+            <input type="text" class="ba-inp desig" placeholder="Désignation" value="${esc(d.desig||'')}">
+            <input type="number" class="ba-inp qte" placeholder="0" step="1" min="0" value="${d.qte!=null&&d.qte!==''?d.qte:''}">
+            <input type="text" class="ba-inp dest" placeholder="Destination" value="${esc(d.dest||d.destination||'')}">
+            <input type="number" class="ba-inp prix" placeholder="0.00" step="0.01" min="0" value="${d.prix!=null&&d.prix!==''?d.prix:''}">
+            <input type="text" class="ba-inp st" readonly value="${d.st!=null?num(d.st).toFixed(2):''}">
+            <div class="ba-line-ops">
+                <button type="button" class="ba-line-ico" title="Ajouter une ligne" onclick="FRNS.addBonLineAfter(this)">+</button>
+                <button type="button" class="ba-line-ico minus" title="Retirer cette ligne" onclick="FRNS.delBonLine(this)">−</button>
+            </div>`;
         tr.querySelectorAll('.qte,.prix').forEach(inp=>inp.addEventListener('input',()=>calcLineRow(tr)));
         tr.querySelector('.prix').addEventListener('blur',()=>{const el=tr.querySelector('.prix');if(el.value!=='')el.value=num(el.value).toFixed(2);calcLineRow(tr);});
-        tb.appendChild(tr);
+        if(afterTr&&afterTr.parentNode)afterTr.after(tr);
+        else tb.appendChild(tr);
         calcLineRow(tr);
+    }
+    function addBonLineAfter(btn){
+        addBonLine(null,btn?.closest('.ba-line'));
     }
 
     function delBonLine(btn){
-        const tr=btn.closest('tr');
+        const tr=btn.closest('.ba-line');
         if(tr)tr.remove();
         calcBonTotal();
-        if(!document.querySelectorAll('#ba_lines_tbody tr').length)addBonLine();
+        if(!document.querySelectorAll('#ba_lines_tbody .ba-line').length)addBonLine();
     }
 
     function readBonLines(){
         const lines=[];
-        document.querySelectorAll('#ba_lines_tbody tr').forEach(tr=>{
+        document.querySelectorAll('#ba_lines_tbody .ba-line').forEach(tr=>{
             const ref=tr.querySelector('.ref').value.trim();
             const desig=tr.querySelector('.desig').value.trim();
             const qte=num(tr.querySelector('.qte').value);
+            const dest=tr.querySelector('.dest')?.value.trim()||'';
             const prix=num(tr.querySelector('.prix').value);
             const st=num(tr.querySelector('.st').value);
-            if(ref||desig||qte||prix)lines.push({ref,desig,qte,prix,st:st||qte*prix});
+            if(ref||desig||qte||prix||dest)lines.push({ref,desig,qte,dest,prix,st:st||qte*prix});
         });
         return lines;
     }
 
     function saveBon(){
-        const frnsId=document.getElementById('ba_frns_id').value.trim();
+        const frnsId=normFrnsId(document.getElementById('ba_frns_id').value.trim());
         if(!frnsId){alert('Saisissez l\'ID fournisseur.');return;}
         const f=frnsById(frnsId);
         if(!f){alert('ID fournisseur introuvable. Créez d\'abord la fiche fournisseur.');return;}
@@ -6355,14 +6558,17 @@ const FRNS = (function(){
         if(!lines.length){alert('Ajoutez au moins un produit au bon.');return;}
         const total=lines.reduce((s,l)=>s+num(l.st),0);
         let list=getBons();
+        const prev=editBonId?list.find(b=>b.id===editBonId):null;
         const data={
             id:editBonId||uid(),
             date:ajIso(document.getElementById('ba_date').value),
             num:document.getElementById('ba_num').value.trim(),
             frnsId,
             frnsNom:document.getElementById('ba_frns_nom').value.trim()||f.nom,
-            typeRegl:document.getElementById('ba_type_regl').value,
+            typeRegl:document.getElementById('ba_type_regl').value||'Esp',
             echeance:document.getElementById('ba_echeance').value,
+            photo:document.getElementById('ba_photo')?.value||'',
+            paye:prev&&prev.paye!=null?prev.paye:undefined,
             lines,total
         };
         if(editBonId){
@@ -6371,7 +6577,6 @@ const FRNS = (function(){
         }else{
             list.push(data);
         }
-        const wasEdit=!!editBonId;
         set(K.b,list);
         editBonId=null;
         newBon();
@@ -6379,7 +6584,7 @@ const FRNS = (function(){
         renderBalance();
         renderReglBalances();
         if(typeof STOCK!=='undefined')STOCK.syncFromBons();
-        alert(wasEdit?'Bon d\'achat mis à jour.':'Bon d\'achat enregistré.');
+        closeBaModal();
     }
 
     function updateBonFormUI(){
@@ -6387,11 +6592,11 @@ const FRNS = (function(){
         const saveBtn=document.getElementById('ba_save_btn');
         if(editBonId){
             if(delBtn)delBtn.style.display='';
-            if(saveBtn)saveBtn.textContent='Enregistrer les modifications';
         }else{
             if(delBtn)delBtn.style.display='none';
-            if(saveBtn)saveBtn.textContent='Valider le bon';
         }
+        if(saveBtn)saveBtn.textContent='Valider';
+        syncBaEcheance();
     }
 
     function delBonCurrent(){
@@ -6406,13 +6611,18 @@ const FRNS = (function(){
         if(document.getElementById('ba_date'))document.getElementById('ba_date').value=ajDate(today);
         if(document.getElementById('ba_num'))document.getElementById('ba_num').value='';
         if(document.getElementById('ba_frns_id'))document.getElementById('ba_frns_id').value='';
+        if(document.getElementById('ba_frns_pick'))document.getElementById('ba_frns_pick').value='';
         if(document.getElementById('ba_frns_nom'))document.getElementById('ba_frns_nom').value='';
         if(document.getElementById('ba_type_regl'))document.getElementById('ba_type_regl').selectedIndex=0;
         if(document.getElementById('ba_echeance'))document.getElementById('ba_echeance').value='30jrs';
+        const photo=document.getElementById('ba_photo');
+        const prev=document.getElementById('baPhotoPrev');
+        if(photo)photo.value='';
+        if(prev){prev.hidden=true;prev.removeAttribute('src');}
         const tb=document.getElementById('ba_lines_tbody');
         if(tb){
             tb.innerHTML='';
-            for(let i=0;i<3;i++)addBonLine();
+            addBonLine();
             calcBonTotal();
         }
         updateBonFormUI();
@@ -6421,6 +6631,28 @@ const FRNS = (function(){
 
     function closeBon(){
         newBon();
+        closeBaModal();
+    }
+    function openBaModal(){
+        const modal=document.getElementById('baModal');
+        if(!modal)return;
+        if(!document.querySelector('#ba_lines_tbody .ba-line'))addBonLine();
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden','false');
+    }
+    function closeBaModal(){
+        const modal=document.getElementById('baModal');
+        if(!modal)return;
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden','true');
+    }
+    function setBonPhoto(data){
+        const hidden=document.getElementById('ba_photo');
+        const img=document.getElementById('baPhotoPrev');
+        if(hidden)hidden.value=data||'';
+        if(!img)return;
+        if(data){img.src=data;img.hidden=false;}
+        else{img.hidden=true;img.removeAttribute('src');}
     }
 
     function closeFiche(){
@@ -6433,19 +6665,20 @@ const FRNS = (function(){
         editBonId=id;
         document.getElementById('ba_date').value=ajDate(b.date||'');
         document.getElementById('ba_num').value=b.num||'';
-        document.getElementById('ba_frns_id').value=b.frnsId||'';
+        document.getElementById('ba_frns_id').value=normFrnsId(b.frnsId||'');
+        if(document.getElementById('ba_frns_pick'))document.getElementById('ba_frns_pick').value=frnsById(b.frnsId)?normFrnsId(b.frnsId):'';
         document.getElementById('ba_frns_nom').value=b.frnsNom||frnsName(b.frnsId);
         document.getElementById('ba_type_regl').value=b.typeRegl||'Esp';
         document.getElementById('ba_echeance').value=BA_ECHEANCES.includes(b.echeance)?b.echeance:'30jrs';
         document.getElementById('ba_lines_tbody').innerHTML='';
         baLineSeed=0;
         (b.lines||[]).forEach(l=>addBonLine(l));
-        if(!(b.lines||[]).length)for(let i=0;i<3;i++)addBonLine();
+        if(!(b.lines||[]).length)addBonLine();
         calcBonTotal();
+        setBonPhoto(b.photo||'');
         updateBonFormUI();
         renderBons();
-        const formBlock=document.querySelector('#bon .block');
-        if(formBlock)formBlock.scrollIntoView({behavior:'smooth',block:'start'});
+        openBaModal();
     }
 
     function delBon(id){
@@ -6454,6 +6687,7 @@ const FRNS = (function(){
         if(editBonId===id){
             editBonId=null;
             newBon();
+            closeBaModal();
         }
         renderBons();
         renderBalance();
@@ -6480,24 +6714,92 @@ const FRNS = (function(){
         tb.dataset.bound='1';
     }
 
+    function bonYm(b){
+        const d=String(b.date||'');
+        let m=d.match(/^(\d{4})-(\d{2})/);
+        if(m)return m[1]+'-'+m[2];
+        m=d.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+        if(m)return m[3]+'-'+m[2];
+        return '';
+    }
+    function typeLabel(v){
+        const short=reglToShort(v);
+        return {Esp:'Espèces',Chq:'Chèque',Eff:'Effet',Vir:'Virement',Vers:'Versement'}[short]||short||'Espèces';
+    }
+    function bonFigures(bons){
+        const by={};
+        bons.forEach(b=>{(by[b.frnsId]||(by[b.frnsId]=[])).push(b);});
+        const fig={};
+        Object.keys(by).forEach(id=>{
+            const f=frnsById(id);
+            let pool=Math.max(0,totalPaye(id)-(f?num(f.solde):0));
+            by[id].slice().sort((a,c)=>String(a.date||'').localeCompare(String(c.date||''))||String(a.num||'').localeCompare(String(c.num||''))).forEach(b=>{
+                const total=num(b.total);
+                const manual=b.paye!=null&&b.paye!=='';
+                const paye=manual?Math.min(total,num(b.paye)):Math.min(total,pool);
+                if(!manual)pool=Math.max(0,pool-paye);
+                fig[b.id]={paye,solde:Math.max(0,+(total-paye).toFixed(2))};
+            });
+        });
+        return fig;
+    }
+    function bonDest(b){
+        const vals=[...new Set((b.lines||[]).map(l=>String(l.dest||l.destination||'').trim()).filter(Boolean))];
+        return vals.join(', ')||'—';
+    }
     function renderBons(){
         const tb=document.getElementById('ba_tbody');
         if(!tb)return;
-        const list=getBons();
+        const month=document.getElementById('baMonth')?.value||'';
+        const nomQ=(document.getElementById('baNom')?.value||'').trim().toLowerCase();
+        const numQ=(document.getElementById('baNumQ')?.value||'').trim().toLowerCase();
+        const all=getBons();
+        const fig=bonFigures(all);
+        const list=all.filter(b=>{
+            if(month&&bonYm(b)!==month)return false;
+            const name=(b.frnsNom||frnsName(b.frnsId)||'').toLowerCase();
+            if(nomQ&&!name.includes(nomQ))return false;
+            if(numQ&&!String(b.num||'').toLowerCase().includes(numQ))return false;
+            return true;
+        });
+        const money=v=>typeof ajMoney==='function'?ajMoney(v):Number(v||0).toFixed(2);
+        const countEl=document.getElementById('baCount');
+        const totalEl=document.getElementById('baTotalCard');
+        const soldeEl=document.getElementById('baSoldeCard');
+        if(countEl)countEl.textContent=String(list.length);
+        if(totalEl)totalEl.innerHTML=money(list.reduce((s,b)=>s+num(b.total),0))+' <small>DH</small>';
+        if(soldeEl)soldeEl.innerHTML=money(list.reduce((s,b)=>s+(fig[b.id]?fig[b.id].solde:0),0))+' <small>DH</small>';
+        const ico={
+            voir:'<svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+            edit:'<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L8 18l-4 1 1-4 11.5-11.5z"/></svg>',
+            print:'<svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="7"/></svg>',
+            del:'<svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M8 7l1 13h6l1-13"/></svg>'
+        };
         tb.innerHTML=list.length?list.map(b=>{
-            const nb=(b.lines||[]).length;
+            const f=fig[b.id]||{paye:0,solde:num(b.total)};
+            const photo=b.photo?`<img class="ba-thumb" src="${String(b.photo).replace(/"/g,'')}" alt="">`:'<span class="ba-thumb-empty">—</span>';
             const sel=editBonId===b.id?' selected':'';
-            return `<tr class="ba-main-row${sel}" data-bon-id="${b.id}" role="button" tabindex="0" title="Cliquer pour modifier">
-                <td>${esc(b.date)}</td><td>${esc(b.num)}</td><td>${esc(b.frnsId)}</td>
-                <td>${esc(b.frnsNom||frnsName(b.frnsId))}</td><td>${esc(b.typeRegl||'Esp')}</td>
-                <td>${esc(b.echeance||'30jrs')}</td>
-                <td>${nb}</td><td>${fmt(b.total)}</td>
+            const id=esc(b.id);
+            return `<tr class="ba-main-row${sel}" data-bon-id="${id}" role="button" tabindex="0" title="Cliquer pour modifier">
+                <td>${esc(b.date)}</td>
+                <td>${photo}</td>
+                <td>${esc(b.num||'—')}</td>
+                <td>${esc(b.frnsNom||frnsName(b.frnsId)||'—')}</td>
+                <td>${esc(typeLabel(b.typeRegl))}</td>
+                <td>${esc(bonDest(b))}</td>
+                <td>${fmt(b.total)}</td>
+                <td>${fmt(f.paye)}</td>
+                <td>${fmt(f.solde)}</td>
                 <td class="no-print" onclick="event.stopPropagation()">
-                    <button type="button" class="tbtn" onclick="FRNS.printBon('${b.id}')">Imprimer</button>
-                    <button type="button" class="tbtn del" onclick="FRNS.delBon('${b.id}')">Supprimer</button>
+                    <div class="ba-actions">
+                        <button type="button" class="bc-ico" title="Voir" onclick="FRNS.editBon('${id}')">${ico.voir}</button>
+                        <button type="button" class="bc-ico" title="Modifier" onclick="FRNS.editBon('${id}')">${ico.edit}</button>
+                        <button type="button" class="bc-ico" title="Imprimer" onclick="FRNS.printBon('${id}')">${ico.print}</button>
+                        <button type="button" class="bc-ico danger" title="Supprimer" onclick="FRNS.delBon('${id}')">${ico.del}</button>
+                    </div>
                 </td>
             </tr>`;
-        }).join(''):'<tr class="empty-row"><td colspan="9">Aucun bon d\'achat enregistré.</td></tr>';
+        }).join(''):'<tr class="empty-row"><td colspan="10">Aucun bon d\'achat enregistré.</td></tr>';
         bindBonList();
     }
 
@@ -6813,6 +7115,7 @@ const FRNS = (function(){
         const rows=lines.map(l=>`<tr>
             <td>${esc(l.ref)}</td><td>${esc(l.desig)}</td>
             <td style="text-align:center">${l.qte}</td>
+            <td>${esc(l.dest||'—')}</td>
             <td style="text-align:center">${fmt(l.prix)}</td>
             <td style="text-align:center">${fmt(l.st)}</td>
         </tr>`).join('');
@@ -6824,7 +7127,7 @@ const FRNS = (function(){
         const infoHtml='<table class="info">'+info.map(r=>`<tr><td>${r[0]}</td><td>${esc(r[1])}</td></tr>`).join('')+'</table>';
         const css='body{font-family:Arial,sans-serif;padding:28px;color:#111}h1{font-family:Georgia,serif;font-size:22px;text-align:center;margin:0 0 4px}.sub{text-align:center;color:#555;margin:0 0 22px;font-size:13px}.info{border-collapse:collapse;margin:0 auto 22px;width:100%;max-width:560px}.info td{border:1px solid #bbb;padding:8px 12px;font-size:13px;text-align:center}.info td:first-child{font-weight:bold;background:#0a1736;color:#fff;width:40%}table.lines{width:100%;border-collapse:collapse}table.lines th,table.lines td{border:1px solid #888;padding:9px 10px;font-size:12px;text-align:center}table.lines th{background:#0a1736;color:#fff}.total{margin-top:16px;text-align:center;font-size:16px;font-weight:bold}@media print{body{padding:12px}}';
         const w=window.open('','','width=860,height=760');
-        w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Bon d\'achat '+(b.num||'')+'</title><style>'+css+'</style></head><body><h1>Bon d\'achat</h1><p class="sub">Al Jazeera Hotel</p>'+infoHtml+'<table class="lines"><thead><tr><th>Réf</th><th>Désignation</th><th>Qté</th><th>Prix U</th><th>Sous-Total</th></tr></thead><tbody>'+rows+'</tbody></table><p class="total">Total bon : '+fmt(total)+'</p></body></html>');
+        w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Bon d\'achat '+(b.num||'')+'</title><style>'+css+'</style></head><body><h1>Bon d\'achat</h1><p class="sub">Al Jazeera Hotel</p>'+infoHtml+'<table class="lines"><thead><tr><th>Réf</th><th>Désignation</th><th>Qté</th><th>Destination</th><th>Prix/u</th><th>Sous-total</th></tr></thead><tbody>'+rows+'</tbody></table><p class="total">Total bon : '+fmt(total)+'</p></body></html>');
         w.document.close();w.focus();setTimeout(()=>w.print(),300);
     }
 
@@ -6845,11 +7148,35 @@ const FRNS = (function(){
         const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();
     }
 
-    function init(){ renderSelects(); renderFiche(); newBon(); bindBonList(); bindBalanceList(); renderBons(); renderRegls(); renderBalance(); renderDashboard(); document.getElementById('ff_id').value=nextId(); document.getElementById('ra_ref').value=nextReglRef(); syncReglTypeFields(); }
+    function bindBaPage(){
+        const add=document.getElementById('baAdd');
+        if(!add||add.dataset.bound)return;
+        add.dataset.bound='1';
+        add.addEventListener('click',()=>{newBon();openBaModal();});
+        document.getElementById('baReset')?.addEventListener('click',()=>{
+            ['baMonth','baNom','baNumQ'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+            renderBons();
+        });
+        ['baMonth','baNom','baNumQ'].forEach(id=>document.getElementById(id)?.addEventListener('input',renderBons));
+        document.getElementById('baPhotoBtn')?.addEventListener('click',()=>document.getElementById('baPhotoFile')?.click());
+        document.getElementById('baPhotoFile')?.addEventListener('change',e=>{
+            const file=e.target.files&&e.target.files[0];
+            e.target.value='';
+            if(!file)return;
+            const reader=new FileReader();
+            reader.onload=()=>setBonPhoto(String(reader.result||''));
+            reader.readAsDataURL(file);
+        });
+        document.getElementById('baModal')?.addEventListener('click',e=>{if(e.target.id==='baModal')closeBaModal();});
+        document.addEventListener('keydown',e=>{
+            if(e.key==='Escape'&&document.getElementById('baModal')?.classList.contains('show'))closeBaModal();
+        });
+    }
+    function init(){ renderSelects(); renderFiche(); newBon(); bindBonList(); bindBaPage(); bindBalanceList(); renderBons(); renderRegls(); renderBalance(); renderDashboard(); document.getElementById('ff_id').value=nextId(); document.getElementById('ra_ref').value=nextReglRef(); syncReglTypeFields(); }
 
-    return {init,renderSelects,renderReglBalances,renderBalance,renderDashboard,calcSolde,
+    return {init,renderFiche,renderSelects,renderReglBalances,renderBalance,renderDashboard,calcSolde,
         saveFiche,newFiche,edit:editFicheRow,del:delFiche,printRow,csvRow,closeFiche,
-        addBonLine,saveBon,editBon,newBon,closeBon,delBon,delBonCurrent,delBonLine,syncBonFrns,printBon,
+        addBonLine,addBonLineAfter,saveBon,editBon,newBon,closeBon,delBon,delBonCurrent,delBonLine,syncBonFrns,syncBaEcheance,pickBonFrns,printBon,
         addReglement,newReglement,closeRegl,closeBalance,delRegl,syncReglTypeFields,openBalanceDetail,closeBalanceDetail,print,csv,printBalance,exportBalancePdf};
 })();
 
@@ -8885,6 +9212,7 @@ const CHDISPO=(function(){
         window.CALEND?.render();
         window.DASH?.render();
         window.AJ_RESA_SYNC?.syncToServer();
+        window.AJ_BELL?.ping?.();
         if((st==='occupee'||st==='reservee')&&typeof activatePanel==='function'){
             activatePanel(st==='occupee'?'ch-occupees':'ch-reservations',st==='occupee'?'C-Occupées':'Réservations');
         }
@@ -8921,6 +9249,34 @@ const CHDISPO=(function(){
         document.getElementById('rmModal')?.classList.remove('cc-edit-modal');
     }
 
+    const PHOTO_PLACEHOLDER=window.AJ_HOTEL?.PLACEHOLDER||'/images/rooms/default.svg';
+    function roomPhotoList(room){
+        const raw=Array.isArray(room.imgs)?room.imgs:(room.img?[room.img]:[]);
+        return [...new Set(raw.map(String).filter(src=>src&&src!==PHOTO_PLACEHOLDER&&!src.endsWith('/default.svg')))];
+    }
+    function fileToJpeg(file){
+        return new Promise((resolve,reject)=>{
+            const reader=new FileReader();
+            reader.onerror=()=>reject(new Error('lecture'));
+            reader.onload=()=>{
+                const img=new Image();
+                img.onload=()=>{
+                    const max=1100;
+                    const scale=Math.min(1,max/Math.max(img.width||1,img.height||1));
+                    const w=Math.max(1,Math.round(img.width*scale));
+                    const h=Math.max(1,Math.round(img.height*scale));
+                    const canvas=document.createElement('canvas');
+                    canvas.width=w;canvas.height=h;
+                    canvas.getContext('2d').drawImage(img,0,0,w,h);
+                    resolve(canvas.toDataURL('image/jpeg',0.68));
+                };
+                img.onerror=()=>reject(new Error('image'));
+                img.src=String(reader.result||'');
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
     function showEdit(room){
         const box=document.getElementById('rmModalContent');
         if(!box)return;
@@ -8929,8 +9285,19 @@ const CHDISPO=(function(){
         const floor=floors.includes(Number(room.floor))?Number(room.floor):(floors[0]||1);
         const meta=META_DEF[type]||META_DEF.single;
         let pickedStatus=STATUS[room.status]?room.status:'disponible';
+        let photos=roomPhotoList(room);
+        const paintPhotos=()=>{
+            const hero=document.getElementById('ccHeroImg');
+            const strip=document.getElementById('ccPhotos');
+            if(hero)hero.src=photos[0]||room.img||PHOTO_PLACEHOLDER;
+            if(!strip)return;
+            strip.innerHTML=photos.map((src,i)=>`<div class="cc-photo${i===0?' is-cover':''}">
+                <img src="${src}" alt="Photo ${i+1}">
+                <button type="button" data-photo-del="${i}" title="Retirer" aria-label="Retirer la photo ${i+1}">×</button>
+            </div>`).join('');
+        };
         box.innerHTML=`<div class="cc-edit-hero">
-            <img src="${esc(room.img)}" alt="${esc(room.title)}">
+            <img id="ccHeroImg" src="${esc(photos[0]||room.img)}" alt="${esc(room.title)}">
             <div class="cc-edit-hero-cap"><small>Chambre ${esc(room.num)}</small>${esc(room.title)}</div>
         </div>
         <div class="cc-edit-body">
@@ -8942,6 +9309,12 @@ const CHDISPO=(function(){
                         <span class="cc-dot"></span>${STATUS[st]}
                     </button>`).join('')}
                 </div>
+            </div>
+            <div class="cc-photos" id="ccPhotos"></div>
+            <div class="cc-photo-actions">
+                <button type="button" class="btn gold" id="ccPhotoAdd">Importer des photos</button>
+                <input type="file" id="ccPhotoFile" accept="image/*" multiple hidden>
+                <span class="cc-photo-note">Une ou plusieurs photos. La première est affichée sur le site.</span>
             </div>
             <form class="cc-edit-form" id="ccForm" onsubmit="return false" autocomplete="off">
                 <div class="field"><label for="cc_title">Titre</label><input type="text" id="cc_title" value="${esc(room.title)}" placeholder="Nom de la chambre"></div>
@@ -8958,6 +9331,30 @@ const CHDISPO=(function(){
                 <button type="button" class="btn ghost" id="ccCancel">Annuler</button>
             </div>
         </div>`;
+        paintPhotos();
+        document.getElementById('ccPhotos')?.addEventListener('click',e=>{
+            const btn=e.target.closest('[data-photo-del]');
+            if(!btn)return;
+            photos.splice(Number(btn.dataset.photoDel),1);
+            paintPhotos();
+        });
+        document.getElementById('ccPhotoAdd')?.addEventListener('click',()=>document.getElementById('ccPhotoFile')?.click());
+        document.getElementById('ccPhotoFile')?.addEventListener('change',async e=>{
+            const files=[...(e.target.files||[])];
+            e.target.value='';
+            if(!files.length)return;
+            const roomLeft=8-photos.length;
+            if(roomLeft<=0){alert('8 photos maximum par chambre.');return;}
+            const batch=files.slice(0,roomLeft);
+            if(files.length>roomLeft)alert('Seules '+roomLeft+' photo(s) supplémentaire(s) ont été ajoutées (maximum 8).');
+            for(const file of batch){
+                if(!file.type.startsWith('image/'))continue;
+                if(file.size>12*1024*1024){alert(file.name+' est trop volumineux (max 12 Mo).');continue;}
+                try{photos.push(await fileToJpeg(file));}
+                catch(err){alert('Impossible de lire '+file.name+'.');}
+            }
+            paintPhotos();
+        });
 
         box.querySelectorAll('.cc-st-opt').forEach(btn=>{
             btn.addEventListener('click',()=>{
@@ -8985,9 +9382,16 @@ const CHDISPO=(function(){
                 bed:room.bed||nextMeta.bed,
                 desc:room.desc||'',
                 longDesc:room.longDesc||room.desc||'',
-                img:room.hasPhoto?room.img:''
+                img:photos[0]||'',
+                imgs:photos.slice(),
+                photosCustom:photos.length>0
             };
-            if(window.AJ_HOTEL)window.AJ_HOTEL.saveRoom(room.num,data);
+            try{
+                if(window.AJ_HOTEL)window.AJ_HOTEL.saveRoom(room.num,data);
+            }catch(err){
+                alert('Les photos sont trop lourdes pour être enregistrées. Retirez-en quelques-unes puis réessayez.');
+                return;
+            }
             if(pickedStatus!==room.status)saveStatus(room.num,pickedStatus);
             closeModal();
             render();
@@ -9067,6 +9471,7 @@ window.AJ_BELL=(function(){
     let items=[];
     let open=false;
     let lastUnread=-1;
+    let lastWebUnread=null;
     let pollTimer=null;
     let busy=false;
     const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
@@ -9076,8 +9481,74 @@ window.AJ_BELL=(function(){
         return m?`${m[3]}/${m[2]}/${m[1]}`:(iso||'—');
     };
     function unread(){return items.filter(i=>!i.read).length;}
+    function incompleteRooms(){
+        const resas=readLS('aj_ch_resa',{});
+        const statuses=readLS('aj_ch_status',{});
+        const need=[['idType','Identifiant'],['cin','N°'],['tel','Contact'],['idDoc','Copie identifiant'],['type','Type paiement']];
+        const nums=new Set([...Object.keys(resas||{}),...Object.keys(statuses||{})]);
+        const out=[];
+        nums.forEach(num=>{
+            const resa=resas[num]||{};
+            let st='disponible';
+            if(resa.validated)st=resa.statusChambre||'reservee';
+            else if(statuses[num])st=statuses[num];
+            if(st!=='occupee'&&st!=='reservee')return;
+            const missing=need.filter(([k])=>!String(resa[k]||'').trim()).map(([,label])=>label);
+            if(!missing.length)return;
+            out.push({num:String(num),nom:resa.nom||'',status:st,missing});
+        });
+        return out.sort((a,b)=>a.num.localeCompare(b.num,undefined,{numeric:true}));
+    }
+    function isoDay(d){
+        return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    }
+    function addIsoDays(iso,days){
+        const m=String(iso||'').slice(0,10).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if(!m)return '';
+        const dt=new Date(Number(m[1]),Number(m[2])-1,Number(m[3]));
+        if(Number.isNaN(dt.getTime()))return '';
+        dt.setDate(dt.getDate()+(Number(days)||0));
+        return isoDay(dt);
+    }
+    function stayStart(resa){
+        const raw=String(resa.checkIn||resa.arrivee||resa.date||'').trim();
+        if(/^\d{4}-\d{2}-\d{2}/.test(raw))return raw.slice(0,10);
+        return typeof ajIso==='function'?ajIso(raw):'';
+    }
+    function checkoutOf(resa){
+        const explicit=String(resa.checkOut||'').trim();
+        if(/^\d{4}-\d{2}-\d{2}/.test(explicit))return explicit.slice(0,10);
+        if(explicit&&typeof ajIso==='function'){
+            const iso=ajIso(explicit);
+            if(iso)return iso;
+        }
+        const start=stayStart(resa);
+        if(!start)return '';
+        return addIsoDays(start,Math.max(1,Number(resa.nuits)||1));
+    }
+    function checkoutAlerts(){
+        const resas=readLS('aj_ch_resa',{});
+        const statuses=readLS('aj_ch_status',{});
+        const tomorrow=addIsoDays(isoDay(new Date()),1);
+        const out=[];
+        Object.keys(resas||{}).forEach(num=>{
+            const resa=resas[num]||{};
+            let st='disponible';
+            if(resa.validated)st=resa.statusChambre||'reservee';
+            else if(statuses[num])st=statuses[num];
+            if(st!=='occupee'&&st!=='reservee')return;
+            const depart=checkoutOf(resa);
+            if(!depart||depart!==tomorrow)return;
+            out.push({num:String(num),nom:resa.nom||'',status:st,depart});
+        });
+        return out.sort((a,b)=>a.num.localeCompare(b.num,undefined,{numeric:true}));
+    }
+    function alertCount(webUnread){
+        const web=typeof webUnread==='number'?webUnread:(lastWebUnread!=null?lastWebUnread:unread());
+        return web+incompleteRooms().length+checkoutAlerts().length;
+    }
     function paintBell(n){
-        const count=typeof n==='number'?n:unread();
+        const count=typeof n==='number'?n:alertCount();
         if(!btn||!dot)return;
         if(count>0){
             btn.classList.add('is-alert');
@@ -9092,20 +9563,44 @@ window.AJ_BELL=(function(){
     }
     function paintList(){
         if(!list)return;
+        const gaps=incompleteRooms();
+        const departs=checkoutAlerts();
         const pending=items.filter(i=>!i.transferred);
-        if(!pending.length){
+        if(!gaps.length&&!departs.length&&!pending.length){
             list.innerHTML='<p class="aj-bell-empty">Aucune alerte.</p>';
             return;
         }
-        list.innerHTML=pending.slice(0,40).map(i=>`
-            <article class="aj-bell-item${!i.read?' is-unread':''}" data-id="${esc(i.id)}" title="Transférer vers Réservations">
+        const outHtml=departs.map(i=>`
+            <article class="aj-bell-item is-unread" data-kind="out" data-num="${esc(i.num)}" title="Départ demain">
+                <b>Départ demain · Ch. ${esc(i.num)}</b>
+                <span>${esc(i.nom||'Client')} · ${i.status==='occupee'?'Occupée':'Réservée'}</span>
+                <span>Checkout ${esc(frDate(i.depart))}</span>
+                <span style="margin-top:4px;color:var(--gold);font-weight:700">Ouvrir la fiche</span>
+            </article>`).join('');
+        const gapHtml=gaps.map(i=>`
+            <article class="aj-bell-item is-unread" data-kind="gap" data-num="${esc(i.num)}" title="Compléter la fiche client">
+                <b>Fiche incomplète · Ch. ${esc(i.num)}</b>
+                <span>${esc(i.nom||'Client')} · ${i.status==='occupee'?'Occupée':'Réservée'}</span>
+                <span>Manque : ${esc(i.missing.join(', '))}</span>
+                <span style="margin-top:4px;color:var(--gold);font-weight:700">Ouvrir la fiche</span>
+            </article>`).join('');
+        const webHtml=pending.slice(0,40).map(i=>`
+            <article class="aj-bell-item${!i.read?' is-unread':''}" data-kind="web" data-id="${esc(i.id)}" title="Transférer vers Réservations">
                 <b>${esc(i.ref||'Demande web')} · Ch. ${esc(i.num)}</b>
                 <span>${esc(i.nom||'Client')} · ${esc(i.tel||'—')}</span>
                 <span>Arrivée ${esc(frDate(i.arrivee))} · ${esc(String(i.nuits||1))} nuit(s)</span>
                 <span style="margin-top:4px;color:var(--gold);font-weight:700">Transférer → Réservations</span>
             </article>`).join('');
+        list.innerHTML=outHtml+gapHtml+webHtml;
         list.querySelectorAll('.aj-bell-item').forEach(el=>{
-            el.addEventListener('click',()=>transferToResa(el.dataset.id));
+            el.addEventListener('click',()=>{
+                if(el.dataset.kind==='gap'||el.dataset.kind==='out'){
+                    toggle(false);
+                    window.CHETAT?.openDashRoom?.(el.dataset.num);
+                    return;
+                }
+                transferToResa(el.dataset.id);
+            });
         });
     }
     function readLS(k,d){try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catch(e){return d;}}
@@ -9204,7 +9699,7 @@ window.AJ_BELL=(function(){
             });
         }catch(e){}
         items=items.filter(i=>i.id!==id);
-        paintBell(unread());
+        paintBell(alertCount(Math.max(0,(lastWebUnread||0)-1)));
         paintList();
         toggle(false);
         window.RESA?.render?.();
@@ -9222,10 +9717,18 @@ window.AJ_BELL=(function(){
             if(!res.ok)return;
             const data=await res.json();
             items=Array.isArray(data.items)?data.items:[];
-            paintBell(typeof data.unread==='number'?data.unread:unread());
+            if(typeof data.unread==='number')lastWebUnread=data.unread;
+            paintBell(alertCount(lastWebUnread));
             if(open)paintList();
-        }catch(e){}
+        }catch(e){
+            paintBell(alertCount());
+            if(open)paintList();
+        }
         finally{busy=false;}
+    }
+    function ping(){
+        paintBell(alertCount());
+        if(open)paintList();
     }
     async function mark(ids){
         try{
@@ -9262,6 +9765,7 @@ window.AJ_BELL=(function(){
     });
     window.addEventListener('storage',e=>{
         if(e.key==='aj_web_resa_ping')refresh();
+        if(e.key==='aj_ch_resa'||e.key==='aj_ch_status')ping();
     });
     document.addEventListener('visibilitychange',()=>{
         schedulePoll();
@@ -9274,9 +9778,10 @@ window.AJ_BELL=(function(){
             ch.onmessage=()=>refresh();
         }
     }catch(e){}
+    ping();
     refresh();
     schedulePoll();
-    return{refresh,toggle};
+    return{refresh,toggle,ping};
 })();
 window.AJ_RESA_SYNC=(function(){
     const API=window.AJ_RESA_API;
@@ -9818,13 +10323,26 @@ const CHETAT=(function(){
         openModal();
     }
 
+    const PAY_ICON_OPEN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+    const PAY_ICONS={
+        Esp:PAY_ICON_OPEN+'<circle cx="12" cy="12" r="8.5"/><path d="M12 7v10"/><path d="M15.1 9c-.6-.8-1.6-1.3-3.1-1.3-1.9 0-3.1 1-3.1 2.3 0 1.4 1.2 2 3.1 2.4s3.1 1 3.1 2.4c0 1.4-1.3 2.3-3.1 2.3-1.5 0-2.6-.5-3.2-1.4"/></svg>',
+        'Carte Visa':PAY_ICON_OPEN+'<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19"/><path d="M6 15h4.5"/></svg>',
+        'Vir mobile':PAY_ICON_OPEN+'<rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/><path d="M9.2 7.2c.8-.7 1.8-1 2.8-1s2 .3 2.8 1"/><path d="M10.2 9.2c.5-.4 1.1-.6 1.8-.6s1.3.2 1.8.6"/></svg>',
+        Chq:PAY_ICON_OPEN+'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h10"/><path d="M7 14h5"/><path d="M14.2 13.6c.7.5 1.5.9 2.4.9.7 0 1.2-.3 1.5-.8"/></svg>',
+        Eff:PAY_ICON_OPEN+'<path d="M7 3.5h7.2L19 8.2V20a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 20V5A1.5 1.5 0 0 1 7 3.5z"/><path d="M14 3.6V8.4h4.8"/><path d="M8.5 13h7"/><path d="M8.5 16.5h4.5"/></svg>',
+        Vers:PAY_ICON_OPEN+'<path d="M12 4v10"/><path d="M8 10.5 12 14.5l4-4"/><path d="M5 19h14"/></svg>',
+        Transfert:PAY_ICON_OPEN+'<path d="M4 8h12"/><path d="M13 5l3.5 3L13 11"/><path d="M20 16H8"/><path d="M11 13l-3.5 3L11 19"/></svg>',
+        'En compte':PAY_ICON_OPEN+'<rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg>'
+    };
     const PAY_PILLS=[
-        {id:'Esp',label:'Esp',mode:'simple'},
-        {id:'Carte Visa',label:'Carte Visa',mode:'simple'},
-        {id:'Vir mobile',label:'Vir mobile',mode:'simple'},
-        {id:'Chq',label:'Chq',mode:'inst'},
-        {id:'Eff',label:'Eff',mode:'inst'},
-        {id:'Vers',label:'Vers',mode:'inst'}
+        {id:'Esp',label:'Espèces',mode:'simple'},
+        {id:'Carte Visa',label:'Carte',mode:'simple'},
+        {id:'Vir mobile',label:'Mobile',mode:'simple'},
+        {id:'Chq',label:'Chèque',mode:'inst'},
+        {id:'Eff',label:'Effet',mode:'inst'},
+        {id:'Vers',label:'Versement',mode:'inst'},
+        {id:'Transfert',label:'Transfert',mode:'simple'},
+        {id:'En compte',label:'En compte',mode:'account'}
     ];
     const PAY_TYPES=PAY_PILLS.map(p=>p.id);
     const ID_TYPES=['CIN','Passport','Carte séjour'];
@@ -9840,6 +10358,8 @@ const CHETAT=(function(){
         if(low==='chq'||low==='chèque'||low==='cheque')return 'Chq';
         if(low==='eff'||low==='effet')return 'Eff';
         if(low==='vers'||low==='versement'||low==='vir'||low==='virement')return 'Vers';
+        if(low==='transfert'||low==='transfer')return 'Transfert';
+        if(low==='en compte'||low==='encompte'||low==='compte')return 'En compte';
         return v;
     };
     const payModeOf=t=>{
@@ -9867,13 +10387,28 @@ const CHETAT=(function(){
         const me=sessionCommercialName()||selected||'';
         return`<input type="text" id="rf_commercial" class="is-locked-comm" value="${esc(me)}" readonly tabindex="-1" title="Responsable connecté (login)">`;
     }
+    const MEALS=[{id:'petit-dej',label:'+ petit déj'},{id:'dej',label:'+ déj'},{id:'diner',label:'+ dîner'}];
+    const CANAUX=[{id:'commercial',label:'Commercial'},{id:'comptoir',label:'Comptoir'},{id:'booking',label:'Booking'}];
+    function canalOf(d){
+        const v=String((d&&d.canal)||'').toLowerCase();
+        if(v==='commercial'||v==='comptoir'||v==='booking')return v;
+        if(String((d&&d.source)||'')==='web')return 'booking';
+        return 'comptoir';
+    }
+    function repasOf(d){
+        const raw=d&&d.repas;
+        const list=Array.isArray(raw)?raw:(typeof raw==='string'&&raw?raw.split(','):[]);
+        return list.map(x=>String(x).trim()).filter(id=>MEALS.some(m=>m.id===id));
+    }
 
     function formHtml(room,data){
         const d=data||{};
         const typeVal=normalizePayType(d.type||'');
         const idType=ID_TYPES.includes(d.idType)?d.idType:(d.idType||'CIN');
         const commercial=d.commercial||sessionCommercialName()||'';
-        const mntVal=d.mnt!=null?d.mnt:(d.paye!=null?d.paye:'');
+        const canal=canalOf(d);
+        const repas=repasOf(d);
+        const mntVal=typeVal==='En compte'?0:(d.mnt!=null?d.mnt:(d.paye!=null?d.paye:''));
         const docPreview=d.idDoc
             ?(String(d.idDoc).startsWith('data:application/pdf')||String(d.idDocName||'').toLowerCase().endsWith('.pdf')
                 ?`<div class="rf-doc-pdf">PDF · ${esc(d.idDocName||'document.pdf')}</div>`
@@ -9886,7 +10421,7 @@ const CHETAT=(function(){
                 <div class="rm-form-grid cols-4">
                     <div class="field"><label>N° Chambre</label><input type="text" id="rf_num" value="${esc(room.num)}" readonly></div>
                     <div class="field"><label>N° Étage</label><input type="text" id="rf_floor" value="${esc(floorLbl(room.floor))}" readonly></div>
-                    <div class="field"><label>Date saisie</label><input type="text" id="rf_date" value="${esc(dateFr(d.date||today()))}" readonly></div>
+                    <div class="field"><label>Date saisie</label><input type="text" class="js-date" id="rf_date" value="${esc(dateFr(d.date||today()))}" placeholder="jj/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="off"></div>
                     <div class="field"><label>Responsable</label>${commercialFieldHtml(commercial)}</div>
                 </div>
             </div>
@@ -9900,6 +10435,8 @@ const CHETAT=(function(){
                             <select id="rf_idType">${ID_TYPES.map(t=>`<option value="${esc(t)}"${idType===t?' selected':''}>${esc(t)}</option>`).join('')}</select>
                         </div>
                         <div class="field"><label>N°</label><input type="text" id="rf_cin" value="${esc(d.cin||'')}" placeholder="N° document"></div>
+                        <div class="field"><label>N° contact</label><input type="tel" id="rf_tel" value="${esc(d.tel||'')}" placeholder="06 XX XX XX XX"></div>
+                        <div class="field"><label>Email</label><input type="email" id="rf_email" value="${esc(d.email||'')}" placeholder="client@email.com"></div>
                     </div>
                 </div>
                 <div class="rm-form-sec">
@@ -9921,18 +10458,31 @@ const CHETAT=(function(){
             </div>
             <div class="rm-form-sec">
                 <h4 class="rm-form-sec-title">Hébergement</h4>
-                <div class="rm-form-grid cols-4">
-                    <div class="field"><label>Nbrs Personnes</label><input type="number" id="rf_personnes" min="1" value="${esc(d.personnes||1)}"></div>
-                    <div class="field"><label>Nbrs Nuités</label><input type="number" id="rf_nuits" min="1" value="${esc(d.nuits||1)}"></div>
-                    <div class="field"><label>Tarif / Nuité</label><input type="number" id="rf_tarif" min="0" step="0.01" value="${esc(d.tarif!=null?d.tarif:room.price)}"></div>
+                <div class="rm-form-grid heberg-line">
+                    <div class="field"><label>Origine</label>
+                        <select id="rf_canal">${CANAUX.map(c=>`<option value="${c.id}"${canal===c.id?' selected':''}>${esc(c.label)}</option>`).join('')}</select>
+                    </div>
+                    <div class="field" id="rfCommercialWrap"${canal==='commercial'?'':' hidden'}>
+                        <label>Commercial</label>
+                        <input type="text" id="rf_commercial_nom" value="${esc(d.commercialNom||'')}" placeholder="Nom">
+                    </div>
+                    <div class="field"><label>Personnes</label><input type="number" id="rf_personnes" min="1" value="${esc(d.personnes||1)}"></div>
+                    <div class="field"><label>Nuités</label><input type="number" id="rf_nuits" min="1" value="${esc(d.nuits||1)}"></div>
+                    <div class="field"><label>Tarif / u</label>
+                        <input type="number" id="rf_tarif" min="0" step="0.01" value="${esc(d.tarif!=null?d.tarif:room.price)}">
+                    </div>
+                    <div class="field meals"><label>Formules</label>
+                        <div class="rf-meals" id="rfMeals">${MEALS.map(m=>`<button type="button" class="rf-meal m-${m.id}${repas.includes(m.id)?' is-on':''}" data-meal="${m.id}" aria-pressed="${repas.includes(m.id)}">${esc(m.label)}</button>`).join('')}</div>
+                    </div>
                     <div class="field"><label>Sous-total</label><input type="text" id="rf_sous" readonly></div>
                 </div>
             </div>
             <div class="rm-form-sec">
                 <h4 class="rm-form-sec-title">Paiement</h4>
                 <div class="rf-pay-pills" id="rfPayPills" role="group" aria-label="Type de paiement">
-                    ${PAY_PILLS.map(p=>`<button type="button" class="rf-pay-pill${typeVal===p.id?' is-on':''}" data-pay="${esc(p.id)}" data-mode="${p.mode}">${esc(p.label)}</button>`).join('')}
+                    ${PAY_PILLS.map(p=>`<button type="button" class="rf-pay-pill${typeVal===p.id?' is-on':''}" data-pay="${esc(p.id)}" data-mode="${p.mode}" title="${esc(p.label)}" aria-label="${esc(p.label)}">${PAY_ICONS[p.id]||''}<span>${esc(p.label)}</span></button>`).join('')}
                 </div>
+                <p class="rf-pay-hint" id="rfPayHint"${typeVal==='En compte'?'':' hidden'}>Aucun encaissement : le solde reste dû jusqu'au départ.</p>
                 <div class="rf-pay-summary${typeVal?' is-on':''}" id="rfPaySummary">
                     <span>Type : <b id="rfPaySumType">${esc(typeVal||'—')}</b></span>
                     <span>Payé : <b id="rfPaySumMnt">${mntVal!==''?esc(fmtAmt(num(mntVal)))+' DH':'—'}</b></span>
@@ -9980,9 +10530,14 @@ const CHETAT=(function(){
         const tarif=num(document.getElementById('rf_tarif')?.value);
         const sous=nuits*tarif;
         const total=sous;
+        const type=normalizePayType(document.getElementById('rf_type')?.value||'');
         const mntEl=document.getElementById('rf_mnt');
-        if(mntEl&&!mntEl.dataset.manual)mntEl.value=String(total);
-        const paye=num(mntEl?.value);
+        if(type==='En compte'){
+            if(mntEl){mntEl.value='0';mntEl.dataset.manual='1';}
+        }else if(mntEl&&!mntEl.dataset.manual){
+            mntEl.value=String(total);
+        }
+        const paye=type==='En compte'?0:num(mntEl?.value);
         const solde=Math.max(0,total-paye);
         const sousEl=document.getElementById('rf_sous');
         const duEl=document.getElementById('rf_total_du');
@@ -10003,7 +10558,9 @@ const CHETAT=(function(){
         const tEl=document.getElementById('rfPaySumType');
         const mEl=document.getElementById('rfPaySumMnt');
         if(tEl)tEl.textContent=type||'—';
-        if(mEl)mEl.textContent=type?fmtAmt(mnt)+' DH':'—';
+        if(mEl)mEl.textContent=type?fmtAmt(type==='En compte'?0:mnt)+' DH':'—';
+        const hint=document.getElementById('rfPayHint');
+        if(hint)hint.hidden=type!=='En compte';
         sum?.classList.toggle('is-on',!!type);
         document.querySelectorAll('.rf-pay-pill').forEach(btn=>{
             btn.classList.toggle('is-on',btn.dataset.pay===type);
@@ -10030,14 +10587,19 @@ const CHETAT=(function(){
     function openPayPanel(type,opts){
         const id=normalizePayType(type);
         if(!id)return;
+        const prev=normalizePayType(document.getElementById('rf_type')?.value||'');
+        const typeEl=document.getElementById('rf_type');
+        if(prev==='En compte'){
+            const lockedMnt=document.getElementById('rf_mnt');
+            if(lockedMnt)delete lockedMnt.dataset.manual;
+        }
+        if(typeEl)typeEl.value=id;
         const mode=payModeOf(id);
         const panel=document.getElementById('rfPayPanel');
         const grid=document.getElementById('rfPayPanelGrid');
         const title=document.getElementById('rfPayPanelTitle');
         if(!panel||!grid)return;
         const totals=calcTotals();
-        const typeEl=document.getElementById('rf_type');
-        if(typeEl)typeEl.value=id;
         if(title)title.textContent='Paiement — '+id;
         grid.classList.toggle('is-inst',mode==='inst');
         grid.querySelectorAll('[data-simple-only]').forEach(el=>{
@@ -10116,11 +10678,25 @@ const CHETAT=(function(){
         updatePaySummary();
     }
 
+    function applyAccountPay(){
+        const typeEl=document.getElementById('rf_type');
+        if(typeEl)typeEl.value='En compte';
+        const mntEl=document.getElementById('rf_mnt');
+        if(mntEl){mntEl.value='0';mntEl.dataset.manual='1';}
+        ['rf_nreg','rf_bnq','rf_tire','rf_encaisse'].forEach(id=>{
+            const el=document.getElementById(id);
+            if(el)el.value='';
+        });
+        closePayPanel();
+        updatePaySummary();
+    }
+
     function bindPayPills(ro){
         document.querySelectorAll('.rf-pay-pill').forEach(btn=>{
             btn.disabled=!!ro;
             btn.addEventListener('click',()=>{
                 if(ro)return;
+                if(btn.dataset.mode==='account'){applyAccountPay();return;}
                 openPayPanel(btn.dataset.pay);
             });
         });
@@ -10134,27 +10710,34 @@ const CHETAT=(function(){
     function getFormData(){
         const totals=calcTotals();
         const type=normalizePayType(document.getElementById('rf_type')?.value||'');
-        const cash=isCashPay(type);
+        const inst=payModeOf(type)==='inst';
+        const canal=document.getElementById('rf_canal')?.value||'comptoir';
         const encRaw=document.getElementById('rf_encaisse')?.value||'';
+        const mnt=type==='En compte'?0:(num(document.getElementById('rf_mnt')?.value)||totals.ttc);
         return{
             num:document.getElementById('rf_num')?.value,
             floor:document.getElementById('rf_floor')?.value||'',
             date:typeof ajIso==='function'?ajIso(document.getElementById('rf_date')?.value):today(),
             commercial:sessionCommercialName()||document.getElementById('rf_commercial')?.value.trim()||'',
+            canal,
+            commercialNom:canal==='commercial'?(document.getElementById('rf_commercial_nom')?.value.trim()||''):'',
             nom:document.getElementById('rf_nom')?.value.trim(),
             nationalite:document.getElementById('rf_nationalite')?.value.trim()||'',
             idType:document.getElementById('rf_idType')?.value||'CIN',
             cin:document.getElementById('rf_cin')?.value.trim(),
+            tel:document.getElementById('rf_tel')?.value.trim()||'',
+            email:document.getElementById('rf_email')?.value.trim()||'',
             personnes:num(document.getElementById('rf_personnes')?.value),
             nuits:num(document.getElementById('rf_nuits')?.value),
             tarif:num(document.getElementById('rf_tarif')?.value),
-            mnt:num(document.getElementById('rf_mnt')?.value)||totals.ttc,
+            repas:[...document.querySelectorAll('.rf-meal.is-on')].map(b=>b.dataset.meal),
+            mnt,
             type,
             ref:document.getElementById('rf_ref')?.value.trim()||'',
-            nreg:cash?'':(document.getElementById('rf_nreg')?.value.trim()||''),
-            bnq:cash?'':(document.getElementById('rf_bnq')?.value.trim()||''),
-            tire:cash?'':(document.getElementById('rf_tire')?.value.trim()||''),
-            encaisse:cash?'':(typeof ajIso==='function'?ajIso(encRaw):encRaw),
+            nreg:inst?(document.getElementById('rf_nreg')?.value.trim()||''):'',
+            bnq:inst?(document.getElementById('rf_bnq')?.value.trim()||''):'',
+            tire:inst?(document.getElementById('rf_tire')?.value.trim()||''):'',
+            encaisse:inst?(typeof ajIso==='function'?ajIso(encRaw):encRaw):'',
             idDoc:document.getElementById('rf_idDoc')?.value||'',
             idDocName:document.getElementById('rf_idDocName')?.value||'',
             ...totals
@@ -10210,12 +10793,13 @@ const CHETAT=(function(){
     }
 
     function setFormReadonly(ro){
-        ['rf_nom','rf_nationalite','rf_cin','rf_personnes','rf_nuits','rf_tarif'].forEach(id=>{
+        ['rf_date','rf_nom','rf_nationalite','rf_cin','rf_tel','rf_email','rf_commercial_nom','rf_personnes','rf_nuits','rf_tarif'].forEach(id=>{
             const el=document.getElementById(id);if(el)el.readOnly=ro;
         });
-        ['rf_idType'].forEach(id=>{
+        ['rf_idType','rf_canal'].forEach(id=>{
             const el=document.getElementById(id);if(el)el.disabled=ro;
         });
+        document.querySelectorAll('.rf-meal').forEach(btn=>{btn.disabled=!!ro;});
         const comm=document.getElementById('rf_commercial');
         if(comm){
             if(comm.classList.contains('is-locked-comm')){comm.readOnly=true;comm.disabled=false;}
@@ -10241,11 +10825,13 @@ const CHETAT=(function(){
         const key=String(room.num);
         const payload={
             date:d.date||today(),num:key,floor:d.floor||floorLbl(room.floor),
-            commercial:d.commercial||'',nom:d.nom,nationalite:d.nationalite||'',
-            idType:d.idType||'CIN',cin:d.cin||'',
+            commercial:d.commercial||'',canal:d.canal||'',commercialNom:d.commercialNom||'',
+            nom:d.nom,nationalite:d.nationalite||'',
+            idType:d.idType||'CIN',cin:d.cin||'',tel:d.tel||'',email:d.email||'',
             personnes:num(d.personnes)||1,nuits:num(d.nuits)||1,tarif:num(d.tarif),
+            repas:Array.isArray(d.repas)?d.repas:[],
             sous:num(d.sous||d.ht),montant:num(d.ttc),
-            paye:num(d.mnt)||num(d.ttc),type:d.type||'',
+            paye:d.type==='En compte'?0:(d.mnt!=null&&d.mnt!==''?num(d.mnt):num(d.ttc)),type:d.type||'',
             nreg:d.nreg||'',bnq:d.bnq||'',tire:d.tire||'',encaisse:d.encaisse||'',
             idDoc:d.idDoc||'',idDocName:d.idDocName||'',
             statusChambre:status||d.statusChambre||'reservee',
@@ -10282,6 +10868,7 @@ const CHETAT=(function(){
         window.BCL?.render();
         window.BPY?.render();
         window.AJ_RESA_SYNC?.syncToServer();
+        window.AJ_BELL?.ping?.();
         if(typeof activatePanel==='function'){
             if(status==='occupee')activatePanel('ch-occupees','C-Occupées');
             else if(status==='reservee')activatePanel('ch-reservations','Réservations');
@@ -10418,6 +11005,18 @@ const CHETAT=(function(){
         const locked=!!(saved?.validated&&!prefill&&!(opts&&opts.edit))||!!(opts&&opts.view);
         bindIdDocUpload(locked);
         bindPayPills(locked);
+        document.getElementById('rf_canal')?.addEventListener('change',()=>{
+            const wrap=document.getElementById('rfCommercialWrap');
+            if(wrap)wrap.hidden=document.getElementById('rf_canal')?.value!=='commercial';
+        });
+        document.querySelectorAll('.rf-meal').forEach(btn=>{
+            btn.addEventListener('click',()=>{
+                if(locked)return;
+                const on=!btn.classList.contains('is-on');
+                btn.classList.toggle('is-on',on);
+                btn.setAttribute('aria-pressed',on?'true':'false');
+            });
+        });
         if(locked)setFormReadonly(true);
         if(opts&&opts.view){
             const valBtn=document.getElementById('rfValider');
@@ -10436,8 +11035,11 @@ const CHETAT=(function(){
                 if(!validatePayPanel())return;
             }
             const d=getFormData();
+            if(!d.date){alert('Date saisie invalide. Utilisez le format jj/mm/aaaa.');return;}
             if(!d.nom){alert('Veuillez saisir le nom complet.');return;}
             if(!d.cin){alert('Veuillez saisir le N° '+((d.idType||'CIN'))+'.');return;}
+            if(d.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)){alert('E-mail invalide.');return;}
+            if(d.canal==='commercial'&&!d.commercialNom){alert('Veuillez saisir le nom du commercial.');return;}
             if(d.nuits<1){alert('Le nombre de nuités doit être au moins 1.');return;}
             if(!d.type){alert('Veuillez choisir le type de paiement.');return;}
             showStatusChoice(room,d);
@@ -10500,7 +11102,10 @@ const CHETAT=(function(){
         const email=hotel.email||'';
         const qrData=encodeURIComponent(recNo+'|'+String(d.nom||'')+'|CH'+String(room.num));
         const qrUrl='https://api.qrserver.com/v1/create-qr-code/?size=110x110&margin=0&data='+qrData;
-        const payModeLabel=({Esp:'Espèces','Carte Visa':'Carte Visa','Vir mobile':'Virement mobile',Chq:'Chèque',Eff:'Effet',Vers:'Versement'})[d.type]||(d.type||'—');
+        const payModeLabel=({Esp:'Espèces','Carte Visa':'Carte Visa','Vir mobile':'Virement mobile',Chq:'Chèque',Eff:'Effet',Vers:'Versement',Transfert:'Transfert','En compte':'En compte'})[d.type]||(d.type||'—');
+        const canalLbl=({commercial:'Commercial',comptoir:'Comptoir',booking:'Booking'})[d.canal]||'—';
+        const mealLbl={'petit-dej':'Petit déjeuner',dej:'Déjeuner',diner:'Dîner'};
+        const repasTxt=(Array.isArray(d.repas)?d.repas:[]).map(id=>mealLbl[id]||id).filter(Boolean).join(' · ')||'—';
         const payExtraRows=cash?'':`
             <tr><td>N° règlement</td><td colspan="2">${esc(d.nreg||'—')}</td><td>${esc(d.bnq||'—')}</td></tr>
             <tr><td>Nom tiré / Date encaiss.</td><td colspan="2">${esc(d.tire||'—')}</td><td>${esc(d.encaisse?dateFr(d.encaisse):'—')}</td></tr>`;
@@ -10640,6 +11245,8 @@ const CHETAT=(function(){
                         <div class="kv"><span>Nom complet</span><b>${esc(d.nom||'—')}</b></div>
                         <div class="kv"><span>${esc(d.idType||'CIN')}</span><b>${esc(d.cin||'—')}</b></div>
                         <div class="kv"><span>Nationalité</span><b>${esc(d.nationalite||'—')}</b></div>
+                        <div class="kv"><span>N° contact</span><b>${esc(d.tel||'—')}</b></div>
+                        <div class="kv"><span>E-mail</span><b>${esc(d.email||'—')}</b></div>
                         <div class="kv"><span>Responsable</span><b>${esc(d.commercial||'—')}</b></div>
                     </div>
                     <div class="qr"><img src="${qrUrl}" alt="QR" crossorigin="anonymous"></div>
@@ -10655,6 +11262,8 @@ const CHETAT=(function(){
                     <div class="kv"><span>Date Check-IN</span><b>${esc(dateFr(checkIn))}</b></div>
                     <div class="kv"><span>Date Check-OUT</span><b>${esc(dateFr(checkOut))}</b></div>
                     <div class="kv"><span>Personnes</span><b>${esc(d.personnes||1)}</b></div>
+                    <div class="kv"><span>Origine</span><b>${esc(canalLbl)}${d.canal==='commercial'&&d.commercialNom?' · '+esc(d.commercialNom):''}</b></div>
+                    <div class="kv"><span>Formules</span><b>${esc(repasTxt)}</b></div>
                 </div>
             </section>
 
@@ -10679,7 +11288,7 @@ const CHETAT=(function(){
                     <div class="sums">
                         <div class="sum ok"><span>Montant payé</span><b>${esc(fmtAmt(paye))} DH</b></div>
                         <div class="sum due"><span>Reste à payer</span><b>${esc(fmtAmt(solde))} DH</b></div>
-                        <div class="sum"><span>Mode de paiement</span><b>${esc(payModeLabel)}</b></div>
+                        <div class="sum"><span>Mode de paiement</span><b>${esc(payModeLabel)}${d.type==='En compte'?' · dû au départ':''}</b></div>
                     </div>
                 </div>
             </section>
@@ -11776,6 +12385,7 @@ const RESA=(function(){
         window.BCL?.render();
         window.BPY?.render();
         window.AJ_RESA_SYNC?.syncToServer();
+        window.AJ_BELL?.ping?.();
     }
 
     const OCC_ICO={
